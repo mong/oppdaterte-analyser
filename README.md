@@ -1,4 +1,4 @@
-## Health Atlas Updated Analyses
+# Health Atlas Updated Analyses
 
 This is the repository for the web app showing updated health atlas analyses.
 
@@ -14,7 +14,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Running Docker-version
+## Running Docker-version
 
 You can also build a local docker-image of the web app.
 
