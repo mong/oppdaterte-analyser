@@ -1,7 +1,9 @@
+import Typography from '@mui/material/Typography';
+
 export default function Home() {
   return (
     <main>
-      Se /oppdaterte-analyser 
+      <Typography variant="body1">Se /oppdaterte-analyser </Typography>
     </main>
   );
 }
