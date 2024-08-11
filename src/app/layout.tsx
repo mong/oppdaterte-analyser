@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
+import { CssBaseline } from "@mui/material";
+import skdeTheme from './themes/SkdeTheme';
+import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -17,8 +19,10 @@ export default function RootLayout({
     <html lang="no">
       <body>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={skdeTheme}>
+            <CssBaseline />
             {children}
+            <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
