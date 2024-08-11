@@ -1,9 +1,14 @@
 import { Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export default function UpdatedAnalyses() {
   return (
     <main>
-      <Typography variant="h2">Kompendium</Typography>
+      <Grid container spacing={2}>
+        <Grid xs={12}>
+          <Typography variant="h2">Kompendium</Typography>
+        </Grid>
+      </Grid>
     </main>
   );
 }

@@ -141,11 +141,17 @@ const colorTokens = {
   },
 
   footer1: {
+    main: "#333",
+    contrastText: "#fff",
+  },
+
+  footer2: {
     main: "#1a1a1a",
+    contrastText: "#fff",
   },
 
   text: {
-    primary: "#000000",
+    primary: "#000",
     secondary: "#003087",
     disabled: "#f5f5f5",
   },
