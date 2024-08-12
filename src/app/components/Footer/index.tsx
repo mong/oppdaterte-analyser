@@ -8,14 +8,12 @@ export default function Footer() {
       <Grid
         xs={12}
         sx={{ bgcolor: "footer1.main", color: "footer1.contrastText" }}
-        className="footer-section"
       >
         <Typography variant="body1">Øverste del av bunnmeny</Typography>
       </Grid>
       <Grid
         xs={12}
         sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}
-        className="footer-section"
       >
         {/* TODO: Log should switch to larger size small screens.
             See how the skde.no footer logo has a larger size for small

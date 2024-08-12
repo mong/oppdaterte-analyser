@@ -2,7 +2,9 @@
 import { styled, Box } from "@mui/material";
 
 export const PageWrapper = styled(Box)(({ theme }) => ({
-  "& main, & .footer-section": {
+  "& .MuiGrid2-container > .MuiGrid2-root": {
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(8),
     [theme.breakpoints.down("sm")]: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
