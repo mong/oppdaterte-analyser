@@ -123,7 +123,7 @@ const colorTokens = {
 
   background: {
     main: "#dedede",
-    light: "#f4f4f4",
+    light: "#fff",
     dark: "#9b9b9b",
   },
 

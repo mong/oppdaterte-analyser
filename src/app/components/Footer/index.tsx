@@ -9,7 +9,7 @@ export default function Footer() {
         xs={12}
         sx={{ bgcolor: "footer1.main", color: "footer1.contrastText" }}
       >
-        <Typography variant="body1">Øverste del av bunnmeny</Typography>
+        <Typography variant="body1"></Typography>
       </Grid>
       <Grid
         xs={12}
@@ -26,7 +26,7 @@ export default function Footer() {
           height={52}
           priority
         />
-        <Typography variant="body1">Nederste del av bunnmeny</Typography>
+        <Typography variant="body1"></Typography>
       </Grid>
     </Grid>
   );

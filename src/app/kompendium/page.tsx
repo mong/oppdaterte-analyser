@@ -6,7 +6,7 @@ export default function UpdatedAnalyses() {
     <main>
       <Grid container spacing={2}>
         <Grid xs={12}>
-          <Typography variant="h2">Kompendium</Typography>
+          <Typography variant="body1">Kompendium</Typography>
         </Grid>
       </Grid>
     </main>
