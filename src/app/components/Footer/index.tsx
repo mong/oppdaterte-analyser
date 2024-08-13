@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
 export default function Footer() {

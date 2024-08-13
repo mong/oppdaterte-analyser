@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
 export const HeaderMiddle = () => {
@@ -18,3 +18,5 @@ export const HeaderMiddle = () => {
     </Grid>
   );
 };
+
+export default HeaderMiddle;

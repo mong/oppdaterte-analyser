@@ -16,3 +16,5 @@ export const HeaderTop = () => {
     </Grid>
   );
 };
+
+export default HeaderTop;
