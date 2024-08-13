@@ -8,7 +8,8 @@ export default function Home() {
       <Grid container spacing={2}>
         <Grid xs={12}>
           <Typography>
-            Se side for <Link href="/kompendium">kompendium</Link>.
+            Benytt &ldquo;slug&rdquo; i URL for å se spesifikt kompendium, f.
+            eks. <Link href="/barn">/barn</Link>.
           </Typography>
         </Grid>
       </Grid>
