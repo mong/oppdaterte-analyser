@@ -1,6 +1,7 @@
-'use client';
-import { Plus_Jakarta_Sans } from 'next/font/google';
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+"use client";
+
+import { Plus_Jakarta_Sans } from "next/font/google";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
@@ -19,7 +20,6 @@ declare module "@mui/material/styles" {
     xl: true;
     xxl: true;
     xxxl: true;
-    desktop: true;
   }
 }
 
@@ -124,7 +124,7 @@ const colorTokens = {
 
   background: {
     main: "#dedede",
-    light: "#f4f4f4",
+    light: "#fff",
     dark: "#9b9b9b",
   },
 
@@ -194,7 +194,6 @@ export const skdeTheme = responsiveFontSizes(
     breakpoints: {
       values: {
         ...breakpoints,
-        desktop: 1300,
       },
     },
   }),
