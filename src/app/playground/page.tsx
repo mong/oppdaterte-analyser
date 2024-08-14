@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import ResultBoxList from "../components/ResultBoxList";
+import ResultBoxList from "@/app/components/ResultBoxList";
 import { Suspense } from "react";
 
 export default async function Playground() {
