@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import compendiums from "@/app/models/compendiumModel";
 
-export async function dbConnect(): Promise<any> {
+export const dbConnect = async (): Promise<any> => {
   try {
     const conn = await mongoose.connect(String(process.env.MONGO_URI));
     console.log(`Database connected : ${conn.connection.host}`);
@@ -8,4 +9,9 @@ export async function dbConnect(): Promise<any> {
   } catch (err) {
     console.error(err);
   }
-}
+};
+
+export const getCompendium = async (compendiumSlug: string, lang: string) => {
+  await dbConnect();
+  return await compendiums.findOne({ slug: compendiumSlug, lang: lang }).exec();
+};

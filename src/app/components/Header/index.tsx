@@ -2,11 +2,16 @@ import React from "react";
 import HeaderTop from "./HeaderTop";
 import HeaderMiddle from "./HeaderMiddle";
 
-export const Header = () => {
+type HeaderProps = {
+  title: string;
+  subtitle: string;
+};
+
+export const Header = ({ title, subtitle }: HeaderProps) => {
   return (
     <>
       <HeaderTop />
-      <HeaderMiddle />
+      <HeaderMiddle title={title} subtitle={subtitle} />
     </>
   );
 };

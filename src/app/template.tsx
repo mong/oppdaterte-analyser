@@ -10,7 +10,6 @@ export default function MainTemplate({
 }>) {
   return (
     <PageWrapper>
-      <Header></Header>
       {children}
       <Footer />
     </PageWrapper>

@@ -1,19 +1,16 @@
-import { dbConnect } from "@/app/services/mongo";
-import compendiums from "@/app/models/compendiumModel";
 import Paper from "@mui/material/Paper";
+import { getCompendium } from "@/app/services/mongo";
 
-const getCompendium = async (compendiumSlug: string) => {
-  await dbConnect();
-
-  return await compendiums.findOne({ slug: compendiumSlug }).exec();
+type ResultBoxListProps = {
+  compendiumSlug: string;
+  lang: string;
 };
 
 export default async function ResultBoxList({
   compendiumSlug,
-}: {
-  compendiumSlug: string;
-}) {
-  const compendium = await getCompendium(compendiumSlug);
+  lang,
+}: ResultBoxListProps) {
+  const compendium = await getCompendium(compendiumSlug, lang);
 
   return (
     <Paper>
