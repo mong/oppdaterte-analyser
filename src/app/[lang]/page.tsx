@@ -14,8 +14,8 @@ export default function Home({
       <Grid container spacing={2}>
         <Grid xs={12}>
           <Typography>
-            Se side for{" "}
-            <Link href={`/${params.lang}/kompendium`}>kompendium</Link>.
+            Benytt &ldquo;slug&rdquo; i URL for å se spesifikt kompendium, f.
+            eks. <Link href={`/${params.lang}/barn`}>/{params.lang}/barn</Link>.
           </Typography>
         </Grid>
       </Grid>

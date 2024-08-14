@@ -26,7 +26,6 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
-            <h1>HEELOOOW</h1>
             <CssBaseline />
             {children}
           </ThemeProvider>
