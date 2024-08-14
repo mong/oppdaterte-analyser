@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import skdeTheme from "./themes/SkdeTheme";
+import skdeTheme from "../themes/SkdeTheme";
+
+export const dynamicParams = false;
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "no" }];
+}
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -11,14 +16,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { lang: "en" | "no" };
 }>) {
   return (
-    <html lang="no">
+    <html lang={params.lang}>
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
+            <h1>HEELOOOW</h1>
             <CssBaseline />
             {children}
           </ThemeProvider>
