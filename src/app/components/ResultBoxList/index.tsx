@@ -1,20 +1,24 @@
-import "@mui/material";
+import { dbConnect } from "@/app/services/mongo";
+import compendiums from "@/app/models/compendiumModel";
 import Paper from "@mui/material/Paper";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const getCompendium = async (compendiumSlug: string) => {
+  await dbConnect();
 
-const getResults = async () => {
-  await delay(3000);
-  return [1, 2, 3];
+  return await compendiums.findOne({ slug: compendiumSlug }).exec();
 };
 
-export default async function ResultBoxList() {
-  const results = await getResults();
+export default async function ResultBoxList({
+  compendiumSlug,
+}: {
+  compendiumSlug: string;
+}) {
+  const compendium = await getCompendium(compendiumSlug);
 
   return (
     <Paper>
-      {results.map((result: number) => {
-        return <div key={result}>{result}</div>;
+      {compendium.boxIds.map((boxId: number) => {
+        return <div key={boxId}>{boxId}</div>;
       })}
     </Paper>
   );
