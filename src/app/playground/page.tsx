@@ -8,7 +8,7 @@ export default async function Playground() {
     <main>
       <Grid container spacing={2}>
         <Grid xs={12}>
-          <Typography variant="h3">Lekeplass for å prøve ut kode</Typography>
+          <Typography variant="h4">Lekeplass for å prøve ut kode</Typography>
           <Suspense
             fallback={
               <Typography variant="body1">Laster inn kompendium</Typography>

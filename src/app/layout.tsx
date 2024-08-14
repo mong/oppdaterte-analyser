@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import skdeTheme from "../themes/SkdeTheme";
+import skdeTheme from "@/app/themes/SkdeTheme";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
