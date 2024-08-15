@@ -10,6 +10,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Hvis ugyldig språk i URL, legger vi til /no/
-    "/((?!_next|no/|en/).*)",
+    "/((?!_next|no/|en/|img/|favicon.ico).*)",
   ],
 };
