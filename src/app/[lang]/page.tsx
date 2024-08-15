@@ -2,7 +2,6 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 import Header from "@/app/components/Header";
-import { PropsWithChildren } from "react";
 
 export type HomeProps = {
   params: {
@@ -10,10 +9,7 @@ export type HomeProps = {
   };
 };
 
-export default function Home({
-  children,
-  params,
-}: PropsWithChildren<HomeProps>) {
+export function Home({ params }: HomeProps) {
   return (
     <>
       <Header
@@ -34,3 +30,5 @@ export default function Home({
     </>
   );
 }
+
+export default Home;
