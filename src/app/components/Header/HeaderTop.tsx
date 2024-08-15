@@ -6,7 +6,7 @@ export const HeaderTop = () => {
     <Grid container spacing={2} sx={{ bgcolor: "background.paper" }}>
       <Grid xs={12}>
         <Image
-          src="/skde-blue.png"
+          src="/img/skde-blue.png"
           alt="SKDE-logo"
           width={100}
           height={40}

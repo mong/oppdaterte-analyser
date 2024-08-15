@@ -20,7 +20,7 @@ export default function Footer() {
             screens.
         */}
         <Image
-          src="/logo-skde-neg.svg"
+          src="/img/logo-skde-neg.svg"
           alt="SKDE-logo"
           width={129}
           height={52}
