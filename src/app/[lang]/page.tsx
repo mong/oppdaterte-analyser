@@ -2,14 +2,18 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 import Header from "@/app/components/Header";
+import { PropsWithChildren } from "react";
+
+export type HomeProps = {
+  params: {
+    lang: "en" | "no";
+  };
+};
 
 export default function Home({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: { lang: "en" | "no" };
-}) {
+}: PropsWithChildren<HomeProps>) {
   return (
     <>
       <Header
