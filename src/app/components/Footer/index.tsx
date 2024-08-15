@@ -26,7 +26,7 @@ export default function Footer() {
           height={52}
           priority
         />
-        <Typography variant="body1"></Typography>
+        <Typography variant="body1">&nbsp;</Typography>
       </Grid>
     </Grid>
   );

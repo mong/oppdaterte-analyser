@@ -2,7 +2,12 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
-export const HeaderMiddle = () => {
+type HeaderMiddleProps = {
+  title: string;
+  subtitle: string;
+};
+
+export const HeaderMiddle = ({ title, subtitle }: HeaderMiddleProps) => {
   return (
     <Grid
       container
@@ -11,9 +16,9 @@ export const HeaderMiddle = () => {
       sx={{ bgcolor: "primary.light" }}
     >
       <Grid xs={12}>
-        <Typography variant="h1">Sidetittel</Typography>
+        <Typography variant="h1">{title}</Typography>
         <br />
-        <Typography variant="h6">Undertittel</Typography>
+        <Typography variant="h6">{subtitle}</Typography>
       </Grid>
     </Grid>
   );
