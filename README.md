@@ -12,6 +12,10 @@ Remember to add an environment variable to a file `.env.local`, located locally 
 
 (This file is not commited and pushed to GitHub.)
 
+## Language redirects
+
+To support internationalization (i8n), the pages are automatically redirected from the root `/` to `/no/`. This is done in middleware.tsx. To add exceptions to this rule, see the regex pattern in the middleware code.
+
 ## Running locally
 
 First, run the development server:
