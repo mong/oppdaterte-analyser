@@ -13,7 +13,9 @@ export const CompendiumHeader = async ({
 }: CompendiumHeaderProps) => {
   const compendium = await getCompendium(slug, lang);
 
-  return <Header title={compendium.title} subtitle={compendium.subtitle} />;
+  return (
+    <Header title={compendium.title} subtitle={compendium.subtitle}></Header>
+  );
 };
 
 export default CompendiumHeader;

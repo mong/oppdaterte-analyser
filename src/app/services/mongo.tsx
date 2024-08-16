@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import compendiums from "@/app/models/compendiumModel";
+import CompendiumModel from "@/app/models/CompendiumModel";
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -13,5 +13,8 @@ export const dbConnect = async (): Promise<any> => {
 
 export const getCompendium = async (compendiumSlug: string, lang: string) => {
   await dbConnect();
-  return await compendiums.findOne({ slug: compendiumSlug, lang: lang }).exec();
+  return await CompendiumModel.findOne({
+    slug: compendiumSlug,
+    lang: lang,
+  }).exec();
 };
