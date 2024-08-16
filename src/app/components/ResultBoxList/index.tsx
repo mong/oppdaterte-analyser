@@ -17,11 +17,9 @@ export default async function ResultBoxList({
 
   return (
     <Suspense fallback={<Paper>Laster...</Paper>}>
-      <Paper>
-        {compendium.boxes.map((boxId: mongoose.Types.ObjectId) => {
-          return <ResultBox key={boxId.toHexString()} boxId={boxId} />;
-        })}
-      </Paper>
+      {compendium.boxes.map((boxId: mongoose.Types.ObjectId) => {
+        return <ResultBox key={boxId.toHexString()} boxId={boxId} />;
+      })}
     </Suspense>
   );
 }

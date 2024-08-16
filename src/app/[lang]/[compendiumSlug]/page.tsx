@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import { Stack, Paper } from "@mui/material";
 import Header from "@/app/components/Header";
 import CompendiumHeader from "@/app/components/CompendiumHeader";
+import ResultBoxList from "@/app/components/ResultBoxList";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -31,15 +32,25 @@ export default function Compendium({
 
   return (
     <>
-      <Suspense fallback={<Header title="_" subtitle="_" />}>
+      <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
         <CompendiumHeader slug={compendiumSlug} lang={lang} />
       </Suspense>
       <main>
         <Grid container spacing={2}>
           <Grid xs={12}>
-            <Typography variant="body1">
-              Kompendium: {params.compendiumSlug}
-            </Typography>
+            <Suspense
+              fallback={
+                <Stack direction="row" spacing={2}>
+                  <Paper>Opprettet: __.__.____, __:__:__</Paper>
+                  <Paper>Oppdatert: __.__.____, __:__:__</Paper>
+                </Stack>
+              }
+            ></Suspense>
+          </Grid>
+          <Grid xs={12}>
+            <Suspense>
+              <ResultBoxList slug={compendiumSlug} lang={lang} />
+            </Suspense>
           </Grid>
         </Grid>
       </main>

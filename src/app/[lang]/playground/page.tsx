@@ -1,10 +1,9 @@
 import { Suspense } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
+import { Stack, Paper } from "@mui/material";
 import ResultBoxList from "@/app/components/ResultBoxList";
 import Header from "@/app/components/Header";
 import CompendiumHeader from "@/app/components/CompendiumHeader";
-import CompendiumDates from "@/app/components/CompendiumDates";
-import { Typography, Stack, Paper } from "@mui/material";
 
 export default async function Playground() {
   const compendiumSlug = "barn";
@@ -25,9 +24,7 @@ export default async function Playground() {
                   <Paper>Oppdatert: __.__.____, __:__:__</Paper>
                 </Stack>
               }
-            >
-              <CompendiumDates slug={compendiumSlug} lang={lang} />
-            </Suspense>
+            ></Suspense>
           </Grid>
           <Grid xs={12}>
             <Suspense>

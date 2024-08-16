@@ -3,6 +3,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import skdeTheme from "@/app/themes/SkdeTheme";
+import PageWrapper from "@/app/components/PageWrapper";
+import Footer from "@/app/components/Footer";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
@@ -27,7 +29,10 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
             <CssBaseline />
-            {children}
+            <PageWrapper>
+              {children}
+              <Footer />
+            </PageWrapper>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

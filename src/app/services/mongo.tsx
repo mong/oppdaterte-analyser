@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import CompendiumModel from "@/app/models/CompendiumModel";
+import ResultBoxModel from "../models/ResultBoxModel";
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -17,4 +18,9 @@ export const getCompendium = async (compendiumSlug: string, lang: string) => {
     slug: compendiumSlug,
     lang: lang,
   }).exec();
+};
+
+export const getResultBoxById = async (id: mongoose.Types.ObjectId) => {
+  await dbConnect();
+  return await ResultBoxModel.findById(id).exec();
 };

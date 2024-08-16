@@ -17,7 +17,6 @@ export const HeaderMiddle = ({ title, subtitle }: HeaderMiddleProps) => {
     >
       <Grid xs={12}>
         <Typography variant="h1">{title}</Typography>
-        <br />
         <Typography variant="h6">{subtitle}</Typography>
       </Grid>
     </Grid>
