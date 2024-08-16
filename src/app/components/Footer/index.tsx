@@ -15,9 +15,8 @@ export default function Footer() {
         xs={12}
         sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}
       >
-        {/* TODO: Log should switch to larger size small screens.
-            See how the skde.no footer logo has a larger size for small
-            screens.
+        {/* TODO: Make logo responsive, so that it is larger on small screens.
+            See how the skde.no footer logo has a larger size for small screens.
         */}
         <Image
           src="/img/logo-skde-neg.svg"
