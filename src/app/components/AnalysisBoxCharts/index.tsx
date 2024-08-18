@@ -1,25 +1,54 @@
 "use client";
-import { ResponsiveChartContainer } from "@mui/x-charts/ResponsiveChartContainer";
-import { BarPlot } from "@mui/x-charts/BarChart";
-import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
-import Paper from "@mui/material/Paper";
+import * as React from "react";
+import { LineChart, lineElementClasses } from "@mui/x-charts/LineChart";
+
+const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
+const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
+const amtData = [2400, 2210, 0, 2000, 2181, 2500, 2100];
+const xLabels = [
+  "Page A",
+  "Page B",
+  "Page C",
+  "Page D",
+  "Page E",
+  "Page F",
+  "Page G",
+];
 
 export default function AnalysisBoxCharts() {
   return (
-    <Paper sx={{ width: "100%", height: 300 }} elevation={3}>
-      <ResponsiveChartContainer
-        series={[{ type: "bar", data: [35, 44, 24, 34, 40] }]}
-        xAxis={[
-          {
-            data: ["A", "B", "C", "D", "E"],
-            scaleType: "band",
-            id: "x-axis-id",
-          },
-        ]}
-      >
-        <BarPlot margin={{ top: 10, bottom: 10, left: 40, right: 40 }} />
-        <ChartsXAxis label="X axis" position="bottom" axisId="x-axis-id" />
-      </ResponsiveChartContainer>
-    </Paper>
+    <LineChart
+      width={500}
+      height={300}
+      series={[
+        {
+          data: uData,
+          label: "uv",
+          area: true,
+          stack: "total",
+          showMark: false,
+        },
+        {
+          data: pData,
+          label: "pv",
+          area: true,
+          stack: "total",
+          showMark: false,
+        },
+        {
+          data: amtData,
+          label: "amt",
+          area: true,
+          stack: "total",
+          showMark: false,
+        },
+      ]}
+      xAxis={[{ scaleType: "point", data: xLabels }]}
+      sx={{
+        [`& .${lineElementClasses.root}`]: {
+          display: "none",
+        },
+      }}
+    />
   );
 }

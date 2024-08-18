@@ -25,10 +25,10 @@ export const generateMetadata = async ({
 export default function Compendium({
   params,
 }: {
-  params: { compendiumSlug: string };
+  params: { lang: string; compendiumSlug: string };
 }) {
   const compendiumSlug = params.compendiumSlug;
-  const lang = "no";
+  const lang = params.lang;
 
   return (
     <>

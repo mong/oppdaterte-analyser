@@ -10,5 +10,5 @@ const analysisBoxSchema = new Schema(
   { collection: "analysisBoxes", timestamps: true },
 );
 
-export default mongoose.models.ResultBox ||
+export default mongoose.models.AnalysisBox ||
   mongoose.model("AnalysisBox", analysisBoxSchema);

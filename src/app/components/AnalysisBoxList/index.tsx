@@ -23,6 +23,7 @@ export default async function AnalysisBoxList({
             <AnalysisBox
               key={analysisBoxId.toHexString()}
               boxId={analysisBoxId}
+              lang={lang}
             />
           );
         },
