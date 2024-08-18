@@ -1,4 +1,4 @@
-import { getResultBoxById } from "@/app/services/mongo";
+import { getAnalysisBoxById as getAnalysisBoxById } from "@/app/services/mongo";
 import {
   Accordion,
   AccordionDetails,
@@ -9,24 +9,24 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import mongoose from "mongoose";
-import ResultBoxBarchart from "@/app/components/ResultBoxBarchart";
+import ResultBoxBarchart from "@/app/components/AnalysisBoxCharts";
 
-type ResultBoxProps = {
+type AnalysisBoxProps = {
   boxId: mongoose.Types.ObjectId;
 };
 
-export default async function ResultBox({ boxId }: ResultBoxProps) {
-  const box = await getResultBoxById(boxId);
+export default async function AnalysisBox({ boxId }: AnalysisBoxProps) {
+  const analysisBox = await getAnalysisBoxById(boxId);
   return (
     <Paper>
       <Grid container>
         <Grid sm={12}>
-          <Typography variant="h6">{box.title}</Typography>
+          <Typography variant="h6">{analysisBox.title}</Typography>
           <Typography variant="caption">
-            Opprettet: {box.createdAt.toLocaleString("no")}, Oppdatert:{" "}
-            {box.createdAt.toLocaleString("no")}
+            Opprettet: {analysisBox.createdAt.toLocaleString("no")}, Oppdatert:{" "}
+            {analysisBox.createdAt.toLocaleString("no")}
           </Typography>
-          <Typography variant="body1">{box.description}</Typography>
+          <Typography variant="body1">{analysisBox.description}</Typography>
         </Grid>
         <Grid sm={12}>
           <ResultBoxBarchart />
@@ -35,8 +35,8 @@ export default async function ResultBox({ boxId }: ResultBoxProps) {
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel-${box.title}-content`}
-              id={`panel-${box.title}-header`}
+              aria-controls={`panel-${analysisBox.title}-content`}
+              id={`panel-${analysisBox.title}-header`}
             >
               Mer info
             </AccordionSummary>

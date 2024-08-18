@@ -3,7 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Stack, Paper } from "@mui/material";
 import Header from "@/app/components/Header";
 import CompendiumHeader from "@/app/components/CompendiumHeader";
-import ResultBoxList from "@/app/components/ResultBoxList";
+import AnalysisBoxList from "@/app/components/AnalysisBoxList";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -49,7 +49,7 @@ export default function Compendium({
           </Grid>
           <Grid xs={12}>
             <Suspense>
-              <ResultBoxList slug={compendiumSlug} lang={lang} />
+              <AnalysisBoxList slug={compendiumSlug} lang={lang} />
             </Suspense>
           </Grid>
         </Grid>

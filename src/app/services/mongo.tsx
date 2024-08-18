@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import CompendiumModel from "@/app/models/CompendiumModel";
-import ResultBoxModel from "../models/ResultBoxModel";
+import AnalysisBoxModel from "../models/AnalysisBoxModel";
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -12,7 +12,10 @@ export const dbConnect = async (): Promise<any> => {
   }
 };
 
-export const getCompendium = async (compendiumSlug: string, lang: string) => {
+export const getCompendiumBySlugAndLang = async (
+  compendiumSlug: string,
+  lang: string,
+) => {
   await dbConnect();
   return await CompendiumModel.findOne({
     slug: compendiumSlug,
@@ -20,7 +23,7 @@ export const getCompendium = async (compendiumSlug: string, lang: string) => {
   }).exec();
 };
 
-export const getResultBoxById = async (id: mongoose.Types.ObjectId) => {
+export const getAnalysisBoxById = async (id: mongoose.Types.ObjectId) => {
   await dbConnect();
-  return await ResultBoxModel.findById(id).exec();
+  return await AnalysisBoxModel.findById(id).exec();
 };

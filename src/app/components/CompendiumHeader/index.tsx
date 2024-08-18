@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "@/app/components/Header";
-import { getCompendium } from "@/app/services/mongo";
+import { getCompendiumBySlugAndLang } from "@/app/services/mongo";
 
 type CompendiumHeaderProps = {
   slug: string;
@@ -11,7 +11,7 @@ export const CompendiumHeader = async ({
   slug,
   lang,
 }: CompendiumHeaderProps) => {
-  const compendium = await getCompendium(slug, lang);
+  const compendium = await getCompendiumBySlugAndLang(slug, lang);
 
   return (
     <Header title={compendium.title} subtitle={compendium.subtitle}></Header>

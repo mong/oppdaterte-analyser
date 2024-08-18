@@ -7,7 +7,7 @@ const compendiumSchema = new Schema(
     title: { type: String, required: true },
     subtitle: { type: String, required: true },
     description: { type: String, required: true },
-    boxes: { type: [Types.ObjectId], required: true },
+    analysisBoxIds: { type: [Types.ObjectId], required: true },
   },
   { collection: "compendiums", timestamps: true },
 );
