@@ -1,55 +1,44 @@
 "use client";
 import * as React from "react";
-import { LineChart, lineElementClasses } from "@mui/x-charts/LineChart";
-import Box from "@mui/material/Box";
-
-const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
-const amtData = [2400, 2210, 0, 2000, 2181, 2500, 2100];
-const xLabels = [
-  "Page A",
-  "Page B",
-  "Page C",
-  "Page D",
-  "Page E",
-  "Page F",
-  "Page G",
-];
+import { ResponsiveChartContainer, BarPlot } from "@mui/x-charts";
+import { Box } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 export default function AnalysisBoxCharts() {
+  const theme = useTheme();
+
   return (
-    <Box sx={{ height: "50vh", width: "80vw" }}>
-      <LineChart
-        series={[
+    <Box
+      sx={{
+        padding: theme.spacing(2),
+        width: "100%",
+        height: "50vh",
+        maxWidth: "1000px",
+        [theme.breakpoints.down("sm")]: {
+          height: "40vh",
+        },
+      }}
+      display="flex"
+      justifyContent="center"
+    >
+      {/* @ts-ignore */}
+      <ResponsiveChartContainer
+        xAxis={[
           {
-            data: uData,
-            label: "uv",
-            area: true,
-            stack: "total",
-            showMark: false,
-          },
-          {
-            data: pData,
-            label: "pv",
-            area: true,
-            stack: "total",
-            showMark: false,
-          },
-          {
-            data: amtData,
-            label: "amt",
-            area: true,
-            stack: "total",
-            showMark: false,
+            id: "barCategories",
+            data: ["bar A", "bar B", "bar C"],
+            scaleType: "band",
           },
         ]}
-        xAxis={[{ scaleType: "point", data: xLabels }]}
-        sx={{
-          [`& .${lineElementClasses.root}`]: {
-            display: "none",
+        series={[
+          {
+            type: "bar",
+            data: [2, 5, 3],
           },
-        }}
-      />
+        ]}
+      >
+        <BarPlot />
+      </ResponsiveChartContainer>
     </Box>
   );
 }
