@@ -23,8 +23,8 @@ export const PageWrapper = ({
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(6),
         [theme.breakpoints.down("sm")]: {
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(2),
+          paddingLeft: theme.spacing(4),
+          paddingRight: theme.spacing(4),
         },
         [theme.breakpoints.up("sm")]: {
           paddingLeft: theme.spacing(4),
