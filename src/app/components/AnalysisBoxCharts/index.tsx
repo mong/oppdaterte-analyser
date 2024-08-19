@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { LineChart, lineElementClasses } from "@mui/x-charts/LineChart";
+import Box from "@mui/material/Box";
 
 const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
 const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
@@ -17,38 +18,38 @@ const xLabels = [
 
 export default function AnalysisBoxCharts() {
   return (
-    <LineChart
-      width={500}
-      height={300}
-      series={[
-        {
-          data: uData,
-          label: "uv",
-          area: true,
-          stack: "total",
-          showMark: false,
-        },
-        {
-          data: pData,
-          label: "pv",
-          area: true,
-          stack: "total",
-          showMark: false,
-        },
-        {
-          data: amtData,
-          label: "amt",
-          area: true,
-          stack: "total",
-          showMark: false,
-        },
-      ]}
-      xAxis={[{ scaleType: "point", data: xLabels }]}
-      sx={{
-        [`& .${lineElementClasses.root}`]: {
-          display: "none",
-        },
-      }}
-    />
+    <Box sx={{ height: "50vh", width: "80vw" }}>
+      <LineChart
+        series={[
+          {
+            data: uData,
+            label: "uv",
+            area: true,
+            stack: "total",
+            showMark: false,
+          },
+          {
+            data: pData,
+            label: "pv",
+            area: true,
+            stack: "total",
+            showMark: false,
+          },
+          {
+            data: amtData,
+            label: "amt",
+            area: true,
+            stack: "total",
+            showMark: false,
+          },
+        ]}
+        xAxis={[{ scaleType: "point", data: xLabels }]}
+        sx={{
+          [`& .${lineElementClasses.root}`]: {
+            display: "none",
+          },
+        }}
+      />
+    </Box>
   );
 }

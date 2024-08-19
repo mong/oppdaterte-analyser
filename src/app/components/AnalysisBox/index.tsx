@@ -3,10 +3,10 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Paper,
-  Typography,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import mongoose from "mongoose";
 import AnalysisBoxCharts from "@/app/components/AnalysisBoxCharts";
@@ -19,32 +19,27 @@ type AnalysisBoxProps = {
 export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   const analysisBox = await getAnalysisBoxById(boxId);
   return (
-    <Paper>
-      <Grid container>
-        <Grid sm={12}>
-          <Typography variant="h6">{analysisBox.title}</Typography>
-          <Typography variant="caption">
-            Opprettet: {analysisBox.createdAt.toLocaleString(lang)}, Oppdatert:
-            {analysisBox.createdAt.toLocaleString(lang)}
-          </Typography>
-          <Typography variant="body1">{analysisBox.description}</Typography>
-        </Grid>
-        <Grid sm={12}>
-          <AnalysisBoxCharts />
-        </Grid>
-        <Grid sm={12}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel-${analysisBox.title}-content`}
-              id={`panel-${analysisBox.title}-header`}
-            >
-              Mer info
-            </AccordionSummary>
-            <AccordionDetails></AccordionDetails>
-          </Accordion>
-        </Grid>
-      </Grid>
-    </Paper>
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls={`panel-${analysisBox.title}-content`}
+        id={`panel-${analysisBox.title}-header`}
+      >
+        <List dense={true}>
+          <ListItem>
+            <ListItemText
+              primary={analysisBox.title}
+              secondary={`Oppdatert: ${analysisBox.createdAt.toLocaleString(lang)}`}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={analysisBox.description} />
+          </ListItem>
+        </List>
+      </AccordionSummary>
+      <AccordionDetails>
+        <AnalysisBoxCharts />
+      </AccordionDetails>
+    </Accordion>
   );
 }
