@@ -49,7 +49,7 @@ export default function CompendiumPage({
           </Grid>
           <Grid xs={12}>
             <Suspense>
-              <AnalysisBoxList slug={compendiumSlug} lang={lang} />
+              <AnalysisBoxList compendiumSlug={compendiumSlug} lang={lang} />
             </Suspense>
           </Grid>
         </Grid>

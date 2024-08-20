@@ -12,7 +12,7 @@ export default async function Playground() {
   return (
     <>
       <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
-        <CompendiumHeader slug={compendiumSlug} lang={lang} />
+        <CompendiumHeader compendiumSlug={compendiumSlug} lang={lang} />
       </Suspense>
       <main>
         <Grid container spacing={2}>
@@ -28,7 +28,7 @@ export default async function Playground() {
           </Grid>
           <Grid xs={12}>
             <Suspense>
-              <AnalysisBoxList slug={compendiumSlug} lang={lang} />
+              <AnalysisBoxList compendiumSlug={compendiumSlug} lang={lang} />
             </Suspense>
           </Grid>
         </Grid>

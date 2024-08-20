@@ -5,12 +5,12 @@ import { getCompendiumBySlug } from "@/app/services/mongo";
 import AnalysisBox from "@/app/components/AnalysisBox";
 
 type AnalysisBoxListProps = {
-  slug: string;
+  compendiumSlug: string;
   lang: string;
 };
 
 export default async function AnalysisBoxList({
-  slug,
+  compendiumSlug: slug,
   lang,
 }: AnalysisBoxListProps) {
   const compendium = await getCompendiumBySlug(slug);
