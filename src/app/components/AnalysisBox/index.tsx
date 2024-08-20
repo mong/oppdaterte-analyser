@@ -1,4 +1,4 @@
-import { getAnalysisBoxById as getAnalysisBoxById } from "@/app/services/mongo";
+import { getAnalysisById } from "@/app/services/mongo";
 import {
   Accordion,
   AccordionDetails,
@@ -17,28 +17,29 @@ type AnalysisBoxProps = {
 };
 
 export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
-  const analysisBox = await getAnalysisBoxById(boxId);
+  const analysis = await getAnalysisById(boxId);
+
   return (
     <Accordion>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-controls={`panel-${analysisBox.title}-content`}
-        id={`panel-${analysisBox.title}-header`}
+        aria-controls={`panel-${analysis.name}-content`}
+        id={`panel-${analysis.name}-header`}
       >
         <List dense={true}>
           <ListItem>
             <ListItemText
-              primary={analysisBox.title}
-              secondary={`Oppdatert: ${analysisBox.createdAt.toLocaleString(lang)}`}
+              primary={analysis.title.get(lang)}
+              secondary={`Publisert: ${analysis.createdAt.toLocaleString(lang)}`}
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary={analysisBox.description} />
+            <ListItemText primary={analysis.description.get(lang)} />
           </ListItem>
         </List>
       </AccordionSummary>
       <AccordionDetails>
-        <AnalysisBoxCharts />
+        <AnalysisBoxCharts analysis={analysis} lang={lang} />
       </AccordionDetails>
     </Accordion>
   );

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import mongoose from "mongoose";
 import { Skeleton } from "@mui/material";
-import { getCompendiumBySlugAndLang } from "@/app/services/mongo";
+import { getCompendiumBySlug } from "@/app/services/mongo";
 import AnalysisBox from "@/app/components/AnalysisBox";
 
 type AnalysisBoxListProps = {
@@ -13,21 +13,19 @@ export default async function AnalysisBoxList({
   slug,
   lang,
 }: AnalysisBoxListProps) {
-  const compendium = await getCompendiumBySlugAndLang(slug, lang);
+  const compendium = await getCompendiumBySlug(slug);
 
   return (
     <Suspense fallback={<Skeleton />}>
-      {compendium.analysisBoxIds.map(
-        (analysisBoxId: mongoose.Types.ObjectId) => {
-          return (
-            <AnalysisBox
-              key={analysisBoxId.toHexString()}
-              boxId={analysisBoxId}
-              lang={lang}
-            />
-          );
-        },
-      )}
+      {compendium.analysisIds.map((analysisBoxId: mongoose.Types.ObjectId) => {
+        return (
+          <AnalysisBox
+            key={analysisBoxId.toHexString()}
+            boxId={analysisBoxId}
+            lang={lang}
+          />
+        );
+      })}
     </Suspense>
   );
 }

@@ -3,8 +3,18 @@ import * as React from "react";
 import { ResponsiveChartContainer, BarPlot } from "@mui/x-charts";
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material";
+import { IAnalysis } from "@/app/models/AnalysisModel";
+import { ICompendium } from "@/app/models/CompendiumModel";
 
-export default function AnalysisBoxCharts() {
+interface AnalysisBoxChartsProps {
+  analysis: IAnalysis;
+  lang: string;
+}
+
+export default function AnalysisBoxCharts({
+  analysis,
+  lang,
+}: AnalysisBoxChartsProps) {
   const theme = useTheme();
 
   return (
@@ -18,8 +28,6 @@ export default function AnalysisBoxCharts() {
           height: "40vh",
         },
       }}
-      display="flex"
-      justifyContent="center"
     >
       {/* @ts-ignore */}
       <ResponsiveChartContainer

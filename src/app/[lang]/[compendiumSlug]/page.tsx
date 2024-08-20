@@ -22,7 +22,7 @@ export const generateMetadata = async ({
   };
 };
 
-export default function Compendium({
+export default function CompendiumPage({
   params,
 }: {
   params: { lang: string; compendiumSlug: string };
@@ -33,7 +33,7 @@ export default function Compendium({
   return (
     <>
       <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
-        <CompendiumHeader slug={compendiumSlug} lang={lang} />
+        <CompendiumHeader compendiumSlug={compendiumSlug} lang={lang} />
       </Suspense>
       <main>
         <Grid container spacing={2}>
