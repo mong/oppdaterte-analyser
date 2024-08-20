@@ -3,11 +3,10 @@ import * as React from "react";
 import { ResponsiveChartContainer, BarPlot } from "@mui/x-charts";
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material";
-import { IAnalysis } from "@/app/models/AnalysisModel";
-import { ICompendium } from "@/app/models/CompendiumModel";
+import { Analysis } from "@/app/models/AnalysisModel";
 
 interface AnalysisBoxChartsProps {
-  analysis: IAnalysis;
+  analysis: Analysis;
   lang: string;
 }
 

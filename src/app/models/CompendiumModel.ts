@@ -1,32 +1,33 @@
 import mongoose, { Schema, Types } from "mongoose";
+import { LocalizedString } from "./Types";
 
-export interface ICompendium {
+export interface Compendium {
   _id: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   slug: string;
-  title: { [key: string]: string };
-  subtitle: { [key: string]: string };
-  description: { [key: string]: string };
+  title: LocalizedString;
+  subtitle: LocalizedString;
+  description: LocalizedString;
   publishedAt: Date;
   isPublished: boolean;
   analysisIds: [Types.ObjectId];
 }
 
-const compendiumSchema = new Schema<ICompendium>(
+const compendiumSchema = new Schema<Compendium>(
   {
-    slug: { type: String },
+    slug: String,
     title: {
-      type: Map,
-      of: String,
+      en: String,
+      no: String,
     },
     subtitle: {
-      type: Map,
-      of: String,
+      en: String,
+      no: String,
     },
     description: {
-      type: Map,
-      of: String,
+      en: String,
+      no: String,
     },
     publishedAt: { type: Date },
     isPublished: { type: Boolean },
@@ -36,4 +37,4 @@ const compendiumSchema = new Schema<ICompendium>(
 );
 
 export default mongoose.models.Compendium ||
-  mongoose.model<ICompendium>("Compendium", compendiumSchema);
+  mongoose.model<Compendium>("Compendium", compendiumSchema);

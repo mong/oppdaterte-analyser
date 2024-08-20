@@ -10,7 +10,8 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import mongoose from "mongoose";
 import AnalysisBoxCharts from "@/app/components/AnalysisBoxCharts";
-import { IAnalysis } from "@/app/models/AnalysisModel";
+import { Analysis } from "@/app/models/AnalysisModel";
+import { toPlainObject } from "@/app/lib/mappings";
 
 type AnalysisBoxProps = {
   boxId: mongoose.Types.ObjectId;
@@ -19,6 +20,7 @@ type AnalysisBoxProps = {
 
 export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   const analysis = await getAnalysisById(boxId);
+  const analysisPojo = toPlainObject<Analysis>(analysis);
 
   return (
     <Accordion sx={{ margin: 2 }}>
@@ -30,20 +32,17 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
         <List dense={true}>
           <ListItem>
             <ListItemText
-              primary={analysis.title.get(lang)}
+              primary={analysis.title[lang]}
               secondary={`Publisert: ${analysis.createdAt.toLocaleString(lang)}`}
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary={analysis.description.get(lang)} />
+            <ListItemText primary={analysis.description[lang]} />
           </ListItem>
         </List>
       </AccordionSummary>
       <AccordionDetails>
-        <AnalysisBoxCharts
-          analysis={Object.fromEntries<IAnalysis>(analysis)}
-          lang={lang}
-        />
+        <AnalysisBoxCharts analysis={analysisPojo} lang={lang} />
       </AccordionDetails>
     </Accordion>
   );

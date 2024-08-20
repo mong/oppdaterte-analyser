@@ -1,53 +1,52 @@
 import mongoose, { Schema, Types } from "mongoose";
+import { LocalizedString, NamedVectorsList } from "./Types";
 
-export interface IAnalysis {
+export interface Analysis {
   _id: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   name: string;
-  title: { [key: string]: string };
-  description: { [key: string]: string };
+  title: LocalizedString;
+  description: LocalizedString;
   publishedAt: Date;
   isPublished: boolean;
   tags: [string];
   variables: [string];
-  data: {
-    [key: string]: {
-      [key: string]: {
-        [key: string]: number;
-      };
-    };
-  };
+  data: [NamedVectorsList];
 }
 
-const analysisSchema = new Schema<IAnalysis>(
+const analysisSchema = new Schema<Analysis>(
   {
     name: String,
     title: {
-      type: Map,
-      of: String,
+      en: String,
+      no: String,
     },
     description: {
-      type: Map,
-      of: String,
+      en: String,
+      no: String,
     },
-    publishedAt: { type: Date },
-    isPublished: { type: Boolean },
-    tags: { type: [String] },
-    variables: { type: [String] },
+    publishedAt: Date,
+    isPublished: Boolean,
+    tags: [String],
+    variables: [String],
     data: {
-      type: Map,
-      of: {
-        type: Map,
-        of: {
-          type: Map,
-          of: [Number],
+      name: String,
+      list: [
+        {
+          name: String,
+          vectors: [
+            {
+              name: String,
+              vector: [Number],
+            },
+          ],
         },
-      },
+      ],
     },
   },
   { collection: "analyses", timestamps: true },
 );
 
 export default mongoose.models.Analysis ||
-  mongoose.model<IAnalysis>("Analysis", analysisSchema);
+  mongoose.model<Analysis>("Analysis", analysisSchema);
