@@ -15,8 +15,8 @@ export const CompendiumHeader = async ({
 
   return (
     <Header
-      title={compendium.title[lang]}
-      subtitle={compendium.subtitle[lang]}
+      title={compendium.title.get(lang)}
+      subtitle={compendium.subtitle.get(lang)}
     ></Header>
   );
 };

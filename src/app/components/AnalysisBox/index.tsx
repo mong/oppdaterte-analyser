@@ -32,12 +32,12 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
         <List dense={true}>
           <ListItem>
             <ListItemText
-              primary={analysis.title[lang]}
+              primary={analysis.title.get(lang)}
               secondary={`Publisert: ${analysis.createdAt.toLocaleString(lang)}`}
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary={analysis.description[lang]} />
+            <ListItemText primary={analysis.description.get(lang)} />
           </ListItem>
         </List>
       </AccordionSummary>

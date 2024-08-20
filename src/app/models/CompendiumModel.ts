@@ -1,14 +1,13 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { LocalizedString } from "./Types";
 
 export interface Compendium {
   _id: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   slug: string;
-  title: LocalizedString;
-  subtitle: LocalizedString;
-  description: LocalizedString;
+  title: { [key: string]: string };
+  subtitle: { [key: string]: string };
+  description: { [key: string]: string };
   publishedAt: Date;
   isPublished: boolean;
   analysisIds: [Types.ObjectId];
@@ -16,18 +15,18 @@ export interface Compendium {
 
 const compendiumSchema = new Schema<Compendium>(
   {
-    slug: String,
+    slug: { type: String },
     title: {
-      en: String,
-      no: String,
+      type: Map,
+      of: String,
     },
     subtitle: {
-      en: String,
-      no: String,
+      type: Map,
+      of: String,
     },
     description: {
-      en: String,
-      no: String,
+      type: Map,
+      of: String,
     },
     publishedAt: { type: Date },
     isPublished: { type: Boolean },
