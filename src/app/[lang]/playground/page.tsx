@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Stack, Paper } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import AnalysisBoxList from "@/app/components/AnalysisBoxList";
 import Header from "@/app/components/Header";
 import CompendiumHeader from "@/app/components/CompendiumHeader";
@@ -19,15 +19,9 @@ export default async function Playground() {
           <Grid xs={12}>
             <Suspense
               fallback={
-                <Stack direction="row" spacing={2}>
-                  <Paper>Opprettet: __.__.____, __:__:__</Paper>
-                  <Paper>Oppdatert: __.__.____, __:__:__</Paper>
-                </Stack>
+                <Skeleton variant="rectangular" width={210} height={118} />
               }
-            ></Suspense>
-          </Grid>
-          <Grid xs={12}>
-            <Suspense>
+            >
               <AnalysisBoxList compendiumSlug={compendiumSlug} lang={lang} />
             </Suspense>
           </Grid>

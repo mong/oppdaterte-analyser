@@ -10,6 +10,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import mongoose from "mongoose";
 import AnalysisBoxCharts from "@/app/components/AnalysisBoxCharts";
+import { IAnalysis } from "@/app/models/AnalysisModel";
 
 type AnalysisBoxProps = {
   boxId: mongoose.Types.ObjectId;
@@ -20,7 +21,7 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   const analysis = await getAnalysisById(boxId);
 
   return (
-    <Accordion>
+    <Accordion sx={{ margin: 2 }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls={`panel-${analysis.name}-content`}
@@ -39,7 +40,10 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
         </List>
       </AccordionSummary>
       <AccordionDetails>
-        <AnalysisBoxCharts analysis={analysis} lang={lang} />
+        <AnalysisBoxCharts
+          analysis={Object.fromEntries<IAnalysis>(analysis)}
+          lang={lang}
+        />
       </AccordionDetails>
     </Accordion>
   );

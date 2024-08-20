@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "@/app/components/Header";
-import { ICompendium } from "@/app/models/CompendiumModel";
 import { getCompendiumBySlug } from "@/app/services/mongo";
 
 interface CompendiumHeaderProps {
@@ -12,12 +11,12 @@ export const CompendiumHeader = async ({
   compendiumSlug,
   lang,
 }: CompendiumHeaderProps) => {
-  const compendium: ICompendium = await getCompendiumBySlug(compendiumSlug);
+  const compendium = await getCompendiumBySlug(compendiumSlug);
 
   return (
     <Header
-      title={compendium.title[lang]}
-      subtitle={compendium.subtitle[lang]}
+      title={compendium.title.get(lang)}
+      subtitle={compendium.subtitle.get(lang)}
     ></Header>
   );
 };

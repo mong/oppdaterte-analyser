@@ -16,7 +16,9 @@ export default async function AnalysisBoxList({
   const compendium = await getCompendiumBySlug(slug);
 
   return (
-    <Suspense fallback={<Skeleton />}>
+    <Suspense
+      fallback={<Skeleton variant="rectangular" width={210} height={60} />}
+    >
       {compendium.analysisIds.map((analysisBoxId: mongoose.Types.ObjectId) => {
         return (
           <AnalysisBox
