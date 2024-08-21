@@ -6,7 +6,14 @@ import {
   ChartsXAxis,
   LinePlot,
 } from "@mui/x-charts";
-import { Box, MenuItem, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
 
 interface AnalysisBoxChartsProps {
@@ -25,32 +32,57 @@ export default function AnalysisBoxCharts({
   const numVars = analysis.variables.length;
 
   const seriesArray = Array(numVars);
-  console.log(analysis.variables);
   analysis.variables.map((variable, index) => {
-    console.log(index);
     years.map((year) => {
       if (!seriesArray[index]) seriesArray[index] = { type, data: [] };
-
       seriesArray[index].data.push(hospital[year][index]);
     });
   });
 
-  console.log(seriesArray);
+  const handleChange = (event: SelectChangeEvent) => {
+    setType(event.target.value as string);
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <TextField
-        select
-        value={type}
-        onChange={(event) => setType(event.target.value as "line" | "bar")}
-        label="Figurtype"
-        sx={{ minWidth: 150 }}
+      <Box
+        component="form"
+        sx={{
+          "& > :not(style)": { m: 1 },
+        }}
+        noValidate
+        autoComplete="off"
       >
-        <MenuItem value="line">line</MenuItem>
-        <MenuItem value="bar">bar</MenuItem>
-      </TextField>
+        <FormControl fullWidth={true}>
+          <InputLabel id={`chart-select-label-${analysis._id}`}>
+            Figurtype
+          </InputLabel>
+          <Select
+            id={`chart-select-${analysis._id}`}
+            labelId={`chart-select-label-${analysis._id}`}
+            label="Figurtype"
+            value={type}
+            onChange={handleChange}
+          >
+            <MenuItem
+              value={"line"}
+              key={`chart-select-line-${analysis._id}`}
+              id={`chart-select-line-${analysis._id}`}
+            >
+              Linje
+            </MenuItem>
+            <MenuItem
+              value={"bar"}
+              key={`chart-select-bar-${analysis._id}`}
+              id={`chart-select-bar-${analysis._id}`}
+            >
+              Søyle
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      <div>
+      <Box>
         <ResponsiveChartContainer
           series={seriesArray}
           xAxis={[
@@ -66,7 +98,7 @@ export default function AnalysisBoxCharts({
           <LinePlot />
           <ChartsXAxis label="X axis" position="bottom" axisId="x-axis-id" />
         </ResponsiveChartContainer>
-      </div>
+      </Box>
     </Box>
   );
 }
