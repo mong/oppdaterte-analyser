@@ -20,16 +20,19 @@ export default function AnalysisBoxCharts({
 }: AnalysisBoxChartsProps) {
   const [type, setType] = React.useState<"line" | "bar">("line");
 
-  const hospital: any = analysis.data.sykehus["2"];
+  const hospital: any = analysis.data.sykehus["15"];
   const years = Object.keys(hospital);
-  const series1: number[] = [];
-  const series2: number[] = [];
 
-  years.forEach((year) => {
-    const yearVals: number[] = hospital[year];
-    series1.push(Number(yearVals[0]));
-    series2.push(Number(yearVals[1]));
-  });
+  // Not production code, because is only supports two series
+  const [series1, series2] = years.reduce<[number[], number[]]>(
+    ([s1, s2], year) => {
+      const [val1, val2] = hospital[year];
+      s1.push(val1);
+      s2.push(val2);
+      return [s1, s2];
+    },
+    [[], []],
+  );
 
   return (
     <Box sx={{ width: "100%" }}>

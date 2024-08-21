@@ -15,7 +15,7 @@ export interface Analysis {
   data: {
     [key: string]: {
       [key: string]: {
-        [key: string]: number;
+        [key: string]: number[];
       };
     };
   };
