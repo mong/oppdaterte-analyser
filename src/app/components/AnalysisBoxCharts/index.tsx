@@ -22,17 +22,20 @@ export default function AnalysisBoxCharts({
 
   const hospital: any = analysis.data.sykehus["15"];
   const years = Object.keys(hospital);
+  const numVars = analysis.variables.length;
 
-  // Not production code, because is only supports two series
-  const [series1, series2] = years.reduce<[number[], number[]]>(
-    ([s1, s2], year) => {
-      const [val1, val2] = hospital[year];
-      s1.push(val1);
-      s2.push(val2);
-      return [s1, s2];
-    },
-    [[], []],
-  );
+  const seriesArray = Array(numVars);
+  console.log(analysis.variables);
+  analysis.variables.map((variable, index) => {
+    console.log(index);
+    years.map((year) => {
+      if (!seriesArray[index]) seriesArray[index] = { type, data: [] };
+
+      seriesArray[index].data.push(hospital[year][index]);
+    });
+  });
+
+  console.log(seriesArray);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -49,16 +52,7 @@ export default function AnalysisBoxCharts({
 
       <div>
         <ResponsiveChartContainer
-          series={[
-            {
-              type,
-              data: series1,
-            },
-            {
-              type,
-              data: series2,
-            },
-          ]}
+          series={seriesArray}
           xAxis={[
             {
               data: years,
