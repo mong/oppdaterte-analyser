@@ -16,7 +16,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
-import { toSeriesArray } from "@/app/lib/analysisDataUtils";
+import { ChartTypeString, toSeriesArray } from "@/app/lib/analysisDataUtils";
 
 interface AnalysisBoxChartsProps {
   analysis: Analysis;
@@ -27,13 +27,13 @@ export default function AnalysisBoxCharts({
   analysis,
   lang,
 }: AnalysisBoxChartsProps) {
-  const [type, setType] = React.useState<string>("line");
+  const [type, setType] = React.useState<ChartTypeString>("line");
 
   const hospital: any = analysis.data.sykehus["15"];
   const seriesArray = toSeriesArray(hospital, analysis.variables, type);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
+    setType(event.target.value as ChartTypeString);
   };
 
   return (
