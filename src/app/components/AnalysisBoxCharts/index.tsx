@@ -5,6 +5,7 @@ import {
   BarPlot,
   ChartsXAxis,
   LinePlot,
+  AllSeriesType,
 } from "@mui/x-charts";
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
+import { toSeriesArray } from "@/app/lib/analysisDataUtils";
 
 interface AnalysisBoxChartsProps {
   analysis: Analysis;
@@ -25,19 +27,10 @@ export default function AnalysisBoxCharts({
   analysis,
   lang,
 }: AnalysisBoxChartsProps) {
-  const [type, setType] = React.useState<"line" | "bar">("line");
+  const [type, setType] = React.useState<string>("line");
 
   const hospital: any = analysis.data.sykehus["15"];
-  const years = Object.keys(hospital);
-  const numVars = analysis.variables.length;
-
-  const seriesArray = Array(numVars);
-  analysis.variables.map((variable, index) => {
-    years.map((year) => {
-      if (!seriesArray[index]) seriesArray[index] = { type, data: [] };
-      seriesArray[index].data.push(hospital[year][index]);
-    });
-  });
+  const seriesArray = toSeriesArray(hospital, analysis.variables, type);
 
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
@@ -84,10 +77,10 @@ export default function AnalysisBoxCharts({
 
       <Box>
         <ResponsiveChartContainer
-          series={seriesArray}
+          series={seriesArray.series}
           xAxis={[
             {
-              data: years,
+              data: seriesArray.keys,
               scaleType: "band",
               id: "x-axis-id",
             },
