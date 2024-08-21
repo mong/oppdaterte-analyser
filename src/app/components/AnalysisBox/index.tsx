@@ -45,7 +45,7 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
             .get(lang)
             .map((highlight: string, index: number) => {
               return (
-                <ListItem key={`${analysis.name}-index`}>
+                <ListItem key={`${analysis.name}-${index}`}>
                   <ListItemIcon>
                     <StarRateIcon />
                   </ListItemIcon>
