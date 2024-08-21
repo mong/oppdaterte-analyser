@@ -7,6 +7,7 @@ export interface Analysis {
   name: string;
   title: { [key: string]: string };
   description: { [key: string]: string };
+  highlights: { [key: string]: [string] };
   publishedAt: Date;
   isPublished: boolean;
   tags: [string];
@@ -30,6 +31,10 @@ const analysisSchema = new Schema<Analysis>(
     description: {
       type: Map,
       of: String,
+    },
+    highlights: {
+      type: Map,
+      of: [String],
     },
     publishedAt: { type: Date },
     isPublished: { type: Boolean },

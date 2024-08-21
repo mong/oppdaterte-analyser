@@ -7,7 +7,6 @@ import {
   LinePlot,
 } from "@mui/x-charts";
 import { Box, MenuItem, TextField } from "@mui/material";
-import { useTheme } from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
 
 interface AnalysisBoxChartsProps {
@@ -19,9 +18,18 @@ export default function AnalysisBoxCharts({
   analysis,
   lang,
 }: AnalysisBoxChartsProps) {
-  const theme = useTheme();
-
   const [type, setType] = React.useState<"line" | "bar">("line");
+
+  const hospital: any = analysis.data.sykehus["2"];
+  const years = Object.keys(hospital);
+  const series1: number[] = [];
+  const series2: number[] = [];
+
+  years.forEach((year) => {
+    const yearVals: number[] = hospital[year];
+    series1.push(Number(yearVals[0]));
+    series2.push(Number(yearVals[1]));
+  });
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -41,16 +49,16 @@ export default function AnalysisBoxCharts({
           series={[
             {
               type,
-              data: [1, 2, 3, 2, 1],
+              data: series1,
             },
             {
               type,
-              data: [4, 3, 1, 3, 4],
+              data: series2,
             },
           ]}
           xAxis={[
             {
-              data: ["A", "B", "C", "D", "E"],
+              data: years,
               scaleType: "band",
               id: "x-axis-id",
             },
