@@ -27,7 +27,7 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   return (
     <Accordion sx={{ mb: 4 }} elevation={3} square={false}>
       <AccordionSummary
-        expandIcon={<AddCircleOutlineIcon />}
+        expandIcon={<AddCircleOutlineIcon fontSize="large" />}
         aria-controls={`panel-${analysis.name}-content`}
         id={`panel-${analysis.name}-header`}
       >
@@ -52,11 +52,11 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
               return (
                 <ListItem key={`${analysis.name}-${index}`}>
                   <ListItemIcon>
-                    <LightbulbCircleIcon />
+                    <LightbulbCircleIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText
                     primary={highlight}
-                    primaryTypographyProps={{ variant: "body1" }}
+                    primaryTypographyProps={{ variant: "body2" }}
                   />
                 </ListItem>
               );
