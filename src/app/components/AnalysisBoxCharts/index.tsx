@@ -15,6 +15,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  useTheme,
 } from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
 import {
@@ -105,6 +106,8 @@ export default function AnalysisBoxCharts({
 }: AnalysisBoxChartsProps) {
   const [type, setType] = React.useState<ChartTypeString>("bar");
 
+  const theme = useTheme();
+
   const group: AnalysisDataGroupPlain = analysis.data.sykehus["15"];
   const modifiedGroup =
     type === "line" ? toLineChartSeries(group) : toBarChartSeries(group);
@@ -162,7 +165,18 @@ export default function AnalysisBoxCharts({
           </Select>
         </FormControl>
       </Box>
-      <Box width={"70vw"} height={"40vh"}>
+      <Box
+        sx={{
+          [theme.breakpoints.down("xl")]: {
+            width: "80vw",
+            height: "60vw",
+          },
+          [theme.breakpoints.up("xl")]: {
+            width: "64vw",
+            height: "16vw",
+          },
+        }}
+      >
         <ResponsiveChartContainer
           series={seriesArray.series}
           {...getChartSettings(type, seriesArray.keys)}
