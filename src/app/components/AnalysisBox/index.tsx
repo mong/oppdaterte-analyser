@@ -27,7 +27,7 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   return (
     <Accordion sx={{ mb: 4 }} elevation={3} square={false}>
       <AccordionSummary
-        expandIcon={<AddCircleOutlineIcon fontSize="large" />}
+        expandIcon={<AddCircleOutlineIcon fontSize="large" color="secondary" />}
         aria-controls={`panel-${analysis.name}-content`}
         id={`panel-${analysis.name}-header`}
       >
