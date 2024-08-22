@@ -25,7 +25,7 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   const analysisPojo = toPlainObject<Analysis>(analysis);
 
   return (
-    <Accordion sx={{ marginBottom: 4 }} elevation={3} square={false}>
+    <Accordion sx={{ mb: 4 }} elevation={3} square={false}>
       <AccordionSummary
         expandIcon={<AddCircleOutlineIcon />}
         aria-controls={`panel-${analysis.name}-content`}
