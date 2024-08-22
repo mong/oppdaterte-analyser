@@ -7,9 +7,10 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import StarRateIcon from "@mui/icons-material/StarRate";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import LightbulbCircleIcon from "@mui/icons-material/LightbulbCircle";
 import { getAnalysisById } from "@/app/services/mongo";
 import AnalysisBoxCharts from "@/app/components/AnalysisBoxCharts";
 import { Analysis } from "@/app/models/AnalysisModel";
@@ -25,9 +26,9 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
   const analysisPojo = toPlainObject<Analysis>(analysis);
 
   return (
-    <Accordion sx={{ margin: 2 }}>
+    <Accordion sx={{ margin: 4 }} elevation={3} square={false}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<AddCircleOutlineIcon />}
         aria-controls={`panel-${analysis.name}-content`}
         id={`panel-${analysis.name}-header`}
       >
@@ -36,10 +37,15 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
             <ListItemText
               primary={analysis.title.get(lang)}
               secondary={`Publisert: ${analysis.createdAt.toLocaleString(lang)}`}
+              primaryTypographyProps={{ variant: "h4" }}
+              secondaryTypographyProps={{ variant: "caption" }}
             />
           </ListItem>
           <ListItem>
-            <ListItemText primary={analysis.description.get(lang)} />
+            <ListItemText
+              primary={analysis.description.get(lang)}
+              primaryTypographyProps={{ variant: "body1" }}
+            />
           </ListItem>
           {analysis.highlights
             .get(lang)
@@ -47,9 +53,12 @@ export default async function AnalysisBox({ boxId, lang }: AnalysisBoxProps) {
               return (
                 <ListItem key={`${analysis.name}-${index}`}>
                   <ListItemIcon>
-                    <StarRateIcon />
+                    <LightbulbCircleIcon />
                   </ListItemIcon>
-                  <ListItemText primary={highlight} />
+                  <ListItemText
+                    primary={highlight}
+                    primaryTypographyProps={{ variant: "body1" }}
+                  />
                 </ListItem>
               );
             })}
