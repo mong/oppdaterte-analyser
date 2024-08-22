@@ -25,10 +25,20 @@ export interface AnalysisDataGroup {
   [key: string]: ChartSeriesValueType[];
 }
 
+export interface AnalysisDataGroupPlain {
+  [key: string]: number[];
+}
+
 export interface ChartSeriesArray {
   keys: string[];
   series: ChartSeriesType[];
 }
+
+const getSeriesKeys = (
+  group: AnalysisDataGroup | AnalysisDataGroupPlain,
+): string[] => {
+  return Object.keys(group);
+};
 
 export const toSeriesArray = (
   group: AnalysisDataGroup,
@@ -36,7 +46,7 @@ export const toSeriesArray = (
   type: ChartTypeString,
 ): ChartSeriesArray => {
   const numVars = variables.length;
-  const seriesKeys = Object.keys(group);
+  const seriesKeys = getSeriesKeys(group);
   const seriesArray: ChartSeriesArray = {
     keys: seriesKeys,
     series: Array<ChartSeriesType>(numVars),
@@ -51,4 +61,21 @@ export const toSeriesArray = (
   });
 
   return seriesArray;
+};
+
+export const sumVariables = (
+  group: AnalysisDataGroupPlain,
+): AnalysisDataGroupPlain => {
+  const seriesKeys = getSeriesKeys(group);
+
+  const result: AnalysisDataGroupPlain = {};
+
+  seriesKeys.map((key) => {
+    const sum = group[key].reduce(
+      (accumulator, current) => accumulator + current,
+    );
+    result[key] = [sum];
+  });
+
+  return result;
 };

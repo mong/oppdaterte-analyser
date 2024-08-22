@@ -3,9 +3,10 @@ import * as React from "react";
 import {
   ResponsiveChartContainer,
   BarPlot,
-  ChartsXAxis,
   LinePlot,
-  AllSeriesType,
+  ChartsXAxis,
+  ChartsYAxis,
+  LineChart,
 } from "@mui/x-charts";
 import {
   Box,
@@ -16,28 +17,115 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { Analysis } from "@/app/models/AnalysisModel";
-import { ChartTypeString, toSeriesArray } from "@/app/lib/analysisDataUtils";
+import {
+  AnalysisDataGroup,
+  AnalysisDataGroupPlain,
+  ChartSeriesArray,
+  ChartTypeString,
+  sumVariables,
+  toSeriesArray,
+} from "@/app/lib/chartDataUtils";
 
 interface AnalysisBoxChartsProps {
   analysis: Analysis;
   lang: string;
 }
 
+const toLineChartSeries = (
+  group: AnalysisDataGroupPlain,
+): AnalysisDataGroupPlain => {
+  return sumVariables(group);
+};
+
+const toBarChartSeries = (
+  group: AnalysisDataGroupPlain,
+): AnalysisDataGroupPlain => {
+  return group;
+};
+
+const addLineChartProps = (seriesArray: ChartSeriesArray) => {
+  seriesArray.series.map((series) => {
+    Object.assign(series, {
+      type: "line",
+      layout: "vertical",
+      curve: "linear",
+    });
+  });
+};
+
+const addBarChartProps = (seriesArray: ChartSeriesArray) => {
+  seriesArray.series.map((series) => {
+    Object.assign(series, {
+      type: "bar",
+      stack: "total",
+      layout: "horizontal",
+    });
+  });
+};
+
+const getChartSettings = (type: string, data: any) => {
+  const chartSettings: any = {};
+
+  if (type === "line") {
+    chartSettings.xAxis = [
+      {
+        data: data,
+        id: "line-x-axis-id",
+        scaleType: "point",
+      },
+    ];
+    chartSettings.yAxis = [
+      {
+        id: "line-y-axis-id",
+        scaleType: "linear",
+      },
+    ];
+  } else if (type === "bar") {
+    chartSettings.xAxis = [
+      {
+        id: "bar-x-axis-id",
+        scaleType: "linear",
+      },
+    ];
+    chartSettings.yAxis = [
+      {
+        data: data,
+        id: "bar-y-axis-id",
+        scaleType: "band",
+      },
+    ];
+  }
+
+  return chartSettings;
+};
+
 export default function AnalysisBoxCharts({
   analysis,
   lang,
 }: AnalysisBoxChartsProps) {
-  const [type, setType] = React.useState<ChartTypeString>("line");
+  const [type, setType] = React.useState<ChartTypeString>("bar");
 
-  const hospital: any = analysis.data.sykehus["15"];
-  const seriesArray = toSeriesArray(hospital, analysis.variables, type);
+  const group: AnalysisDataGroupPlain = analysis.data.sykehus["15"];
+  const modifiedGroup =
+    type === "line" ? toLineChartSeries(group) : toBarChartSeries(group);
+  const seriesArray = toSeriesArray(
+    modifiedGroup as AnalysisDataGroup,
+    analysis.variables,
+    type,
+  );
+
+  if (type === "line") {
+    addLineChartProps(seriesArray);
+  } else if (type === "bar") {
+    addBarChartProps(seriesArray);
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as ChartTypeString);
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <>
       <Box
         component="form"
         sx={{
@@ -58,40 +146,59 @@ export default function AnalysisBoxCharts({
             onChange={handleChange}
           >
             <MenuItem
-              value={"line"}
-              key={`chart-select-line-${analysis._id}`}
-              id={`chart-select-line-${analysis._id}`}
-            >
-              Linje
-            </MenuItem>
-            <MenuItem
               value={"bar"}
               key={`chart-select-bar-${analysis._id}`}
               id={`chart-select-bar-${analysis._id}`}
             >
               Søyle
             </MenuItem>
+            <MenuItem
+              value={"line"}
+              key={`chart-select-line-${analysis._id}`}
+              id={`chart-select-line-${analysis._id}`}
+            >
+              Linje
+            </MenuItem>
           </Select>
         </FormControl>
       </Box>
-
-      <Box>
+      <Box width={"70vw"} height={"40vh"}>
         <ResponsiveChartContainer
           series={seriesArray.series}
-          xAxis={[
-            {
-              data: seriesArray.keys,
-              scaleType: "band",
-              id: "x-axis-id",
-            },
-          ]}
-          height={200}
+          {...getChartSettings(type, seriesArray.keys)}
         >
-          <BarPlot />
-          <LinePlot />
-          <ChartsXAxis label="X axis" position="bottom" axisId="x-axis-id" />
+          <BarPlot skipAnimation={true} />
+          <LinePlot skipAnimation={true} />
+          {type === "line" ? (
+            <>
+              <ChartsXAxis
+                label="År"
+                position="bottom"
+                axisId="line-x-axis-id"
+              />
+              <ChartsYAxis
+                label="Rate"
+                position="left"
+                axisId="line-y-axis-id"
+              />
+            </>
+          ) : (
+            <>
+              <ChartsXAxis
+                label="Rate"
+                position="bottom"
+                axisId="bar-x-axis-id"
+              />
+              <ChartsYAxis
+                label="År"
+                position="left"
+                axisId="bar-y-axis-id"
+                disableTicks={true}
+              />
+            </>
+          )}
         </ResponsiveChartContainer>
       </Box>
-    </Box>
+    </>
   );
 }
