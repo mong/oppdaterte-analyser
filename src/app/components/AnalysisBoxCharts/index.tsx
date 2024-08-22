@@ -7,6 +7,7 @@ import {
   ChartsXAxis,
   ChartsYAxis,
   LineChart,
+  axisClasses,
 } from "@mui/x-charts";
 import {
   Box,
@@ -105,10 +106,12 @@ export default function AnalysisBoxCharts({
   lang,
 }: AnalysisBoxChartsProps) {
   const [type, setType] = React.useState<ChartTypeString>("bar");
+  const [orgLevel, setOrgLevel] = React.useState<string>("rhf");
 
   const theme = useTheme();
 
-  const group: AnalysisDataGroupPlain = analysis.data.sykehus["15"];
+  const group: AnalysisDataGroupPlain =
+    orgLevel === "hf" ? analysis.data.sykehus["15"] : analysis.data.region["1"];
   const modifiedGroup =
     type === "line" ? toLineChartSeries(group) : toBarChartSeries(group);
   const seriesArray = toSeriesArray(
@@ -123,8 +126,12 @@ export default function AnalysisBoxCharts({
     addBarChartProps(seriesArray);
   }
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChartTypeChange = (event: SelectChangeEvent) => {
     setType(event.target.value as ChartTypeString);
+  };
+
+  const handleOrgLevelChange = (event: SelectChangeEvent) => {
+    setOrgLevel(event.target.value as string);
   };
 
   return (
@@ -132,12 +139,39 @@ export default function AnalysisBoxCharts({
       <Box
         component="form"
         sx={{
-          "& > :not(style)": { m: 1 },
+          "& > :not(style)": { m: 1, width: "20ch" },
         }}
         noValidate
         autoComplete="off"
       >
-        <FormControl fullWidth={true}>
+        <FormControl>
+          <InputLabel id={`unit-level-select-label-${analysis._id}`}>
+            Foretaksnivå
+          </InputLabel>
+          <Select
+            id={`unit-level-select-${analysis._id}`}
+            labelId={`unit-level-select-label-${analysis._id}`}
+            label="Foretaksnivå"
+            value={orgLevel}
+            onChange={handleOrgLevelChange}
+          >
+            <MenuItem
+              value={"rhf"}
+              key={`unit-level-select-rhf-${analysis._id}`}
+              id={`unit-level-select-rhf-${analysis._id}`}
+            >
+              Regionalt helseforetak
+            </MenuItem>
+            <MenuItem
+              value={"hf"}
+              key={`unit-level-select-hf-${analysis._id}`}
+              id={`unit-level-select-hf-${analysis._id}`}
+            >
+              Helseforetak
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
           <InputLabel id={`chart-select-label-${analysis._id}`}>
             Figurtype
           </InputLabel>
@@ -146,7 +180,7 @@ export default function AnalysisBoxCharts({
             labelId={`chart-select-label-${analysis._id}`}
             label="Figurtype"
             value={type}
-            onChange={handleChange}
+            onChange={handleChartTypeChange}
           >
             <MenuItem
               value={"bar"}
@@ -204,7 +238,6 @@ export default function AnalysisBoxCharts({
                 axisId="bar-x-axis-id"
               />
               <ChartsYAxis
-                label="År"
                 position="left"
                 axisId="bar-y-axis-id"
                 disableTicks={true}
