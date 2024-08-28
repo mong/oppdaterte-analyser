@@ -5,16 +5,14 @@ import { getCompendiumBySlug } from "@/app/services/mongo";
 import AnalysisBox from "@/app/components/AnalysisBox";
 
 type AnalysisBoxListProps = {
-  compendiumSlug: string;
+  compendium: any;
   lang: string;
 };
 
 export default async function AnalysisBoxList({
-  compendiumSlug: slug,
+  compendium,
   lang,
 }: AnalysisBoxListProps) {
-  const compendium = await getCompendiumBySlug(slug);
-
   return (
     <Suspense
       fallback={<Skeleton variant="rectangular" width={210} height={60} />}

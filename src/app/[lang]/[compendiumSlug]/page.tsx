@@ -5,6 +5,8 @@ import Header from "@/app/components/Header";
 import CompendiumHeader from "@/app/components/CompendiumHeader";
 import AnalysisBoxList from "@/app/components/AnalysisBoxList";
 
+import { getCompendiumBySlug, getAnalyseByName } from "@/app/services/mongo";
+
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
 // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
@@ -22,13 +24,18 @@ export const generateMetadata = async ({
   };
 };
 
-export default function CompendiumPage({
+export default async function CompendiumPage({
   params,
 }: {
   params: { lang: string; compendiumSlug: string };
 }) {
   const compendiumSlug = params.compendiumSlug;
   const lang = params.lang;
+
+  const compendium = await getCompendiumBySlug(compendiumSlug);
+
+  const analyse = await getAnalyseByName("astma_barn");
+  console.log(analyse);
 
   return (
     <>
@@ -43,7 +50,7 @@ export default function CompendiumPage({
                 <Skeleton variant="rectangular" width={210} height={118} />
               }
             >
-              <AnalysisBoxList compendiumSlug={compendiumSlug} lang={lang} />
+              <AnalysisBoxList compendium={compendium} lang={lang} />
             </Suspense>
           </Grid>
         </Grid>

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import CompendiumModel from "@/app/models/CompendiumModel";
 import AnalysisModel from "@/app/models/AnalysisModel";
+import AnalyseModel from "@/app/models/AnalyseModel";
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -20,4 +21,9 @@ export const getCompendiumBySlug = async (compendiumSlug: string) => {
 export const getAnalysisById = async (id: mongoose.Types.ObjectId) => {
   await dbConnect();
   return await AnalysisModel.findById(id).exec();
+};
+
+export const getAnalyseByName = async (name: string) => {
+  await dbConnect();
+  return await AnalyseModel.findOne({ name: name }).exec();
 };
