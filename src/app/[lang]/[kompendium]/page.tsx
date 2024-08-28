@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Skeleton } from "@mui/material";
 import Header from "@/app/components/Header";
-import CompendiumHeader from "@/app/components/CompendiumHeader";
 import AnalysisBoxList from "@/app/components/AnalysisBoxList";
 
 import { getCompendiumBySlug, getAnalyseByName } from "@/app/services/mongo";
@@ -15,24 +14,21 @@ import { getCompendiumBySlug, getAnalyseByName } from "@/app/services/mongo";
 export const generateMetadata = async ({
   params,
 }: {
-  params: { compendiumSlug: string };
+  params: { kompendium: string };
 }) => {
   return {
-    title: `${params.compendiumSlug}`,
-    description: `Oppdaterte analyser for ${params.compendiumSlug}`,
-    keywords: `${params.compendiumSlug}`,
+    title: `${params.kompendium}`,
+    description: `Oppdaterte analyser for ${params.kompendium}`,
+    keywords: `${params.kompendium}`,
   };
 };
 
-export default async function CompendiumPage({
+export default async function KompendiumPage({
   params,
 }: {
-  params: { lang: string; compendiumSlug: string };
+  params: { lang: string; kompendium: string };
 }) {
-  const compendiumSlug = params.compendiumSlug;
-  const lang = params.lang;
-
-  const compendium = await getCompendiumBySlug(compendiumSlug);
+  const kompendium = await getCompendiumBySlug(params.kompendium);
 
   const analyse = await getAnalyseByName("astma_barn");
   console.log(analyse);
@@ -40,17 +36,20 @@ export default async function CompendiumPage({
   return (
     <>
       <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
-        <CompendiumHeader compendiumSlug={compendiumSlug} lang={lang} />
+        <Header
+          title={kompendium.title.get(params.lang)}
+          subtitle={kompendium.subtitle.get(params.lang)}
+        ></Header>
       </Suspense>
       <main>
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Suspense
               fallback={
-                <Skeleton variant="rectangular" width={210} height={118} />
+                <Skeleton variant="rectangular" width={210} height={318} />
               }
             >
-              <AnalysisBoxList compendium={compendium} lang={lang} />
+              <AnalysisBoxList kompendium={kompendium} lang={params.lang} />
             </Suspense>
           </Grid>
         </Grid>

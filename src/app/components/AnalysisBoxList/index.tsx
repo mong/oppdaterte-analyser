@@ -5,19 +5,19 @@ import { getCompendiumBySlug } from "@/app/services/mongo";
 import AnalysisBox from "@/app/components/AnalysisBox";
 
 type AnalysisBoxListProps = {
-  compendium: any;
+  kompendium: any;
   lang: string;
 };
 
 export default async function AnalysisBoxList({
-  compendium,
+  kompendium,
   lang,
 }: AnalysisBoxListProps) {
   return (
     <Suspense
       fallback={<Skeleton variant="rectangular" width={210} height={60} />}
     >
-      {compendium.analysisIds.map((analysisBoxId: mongoose.Types.ObjectId) => {
+      {kompendium.analysisIds.map((analysisBoxId: mongoose.Types.ObjectId) => {
         return (
           <AnalysisBox
             key={analysisBoxId.toHexString()}
