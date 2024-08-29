@@ -2,7 +2,7 @@ import mongoose, { Schema, Types } from "mongoose";
 
 interface View {
   view: string;
-  labels?: { [key: string]: string };
+  labels?: [{ [key: string]: string }];
 }
 
 export interface Analyse {

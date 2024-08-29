@@ -2,9 +2,16 @@ import { Suspense } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Skeleton } from "@mui/material";
 import Header from "@/app/components/Header";
-import AnalysisBoxList from "@/app/components/AnalysisBoxList";
+import AnalyseList from "@/app/components/AnalyseList";
 
-import { getCompendiumBySlug, getAnalyseByName } from "@/app/services/mongo";
+import { Analyse } from "@/app/models/AnalyseModel";
+import { toPlainObject } from "@/app/lib/mappings";
+
+import {
+  getCompendiumBySlug,
+  getAnalyseByName,
+  getAnalyserByTag,
+} from "@/app/services/mongo";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -30,8 +37,9 @@ export default async function KompendiumPage({
 }) {
   const kompendium = await getCompendiumBySlug(params.kompendium);
 
-  const analyse = await getAnalyseByName("astma_barn");
-  console.log(analyse);
+  const analyser: Analyse[] = toPlainObject(
+    await getAnalyserByTag(params.kompendium),
+  );
 
   return (
     <>
@@ -49,7 +57,7 @@ export default async function KompendiumPage({
                 <Skeleton variant="rectangular" width={210} height={318} />
               }
             >
-              <AnalysisBoxList kompendium={kompendium} lang={params.lang} />
+              <AnalyseList analyser={analyser} lang={params.lang} />
             </Suspense>
           </Grid>
         </Grid>
