@@ -12,6 +12,7 @@ export default function Footer() {
         <Typography variant="body1"></Typography>
       </Grid>
       <Grid
+        className="centered"
         xs={12}
         sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}
       >
@@ -25,7 +26,6 @@ export default function Footer() {
           height={52}
           priority
         />
-        <Typography variant="body1">&nbsp;</Typography>
       </Grid>
     </Grid>
   );

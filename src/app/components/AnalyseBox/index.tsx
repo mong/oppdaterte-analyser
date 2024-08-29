@@ -93,26 +93,6 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Grid container>
-          <Grid xs={12}>
-            <FormControl fullWidth>
-              <InputLabel id="select-visning-label">Visning</InputLabel>
-              <Select
-                labelId="select-visning-label"
-                id="select-visning"
-                value={visning}
-                label="Visning"
-                onChange={(e) =>
-                  setVisning(e.target.value as "barchart" | "tidstrend")
-                }
-              >
-                <MenuItem value={"barchart"}>Enkeltår</MenuItem>
-                <MenuItem value={"tidstrend"}>Tidstrend</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-
         <Grid container spacing={2}>
           <Grid
             xs={12}

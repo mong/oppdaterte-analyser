@@ -4,7 +4,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 export const HeaderTop = () => {
   return (
     <Grid container spacing={2} sx={{ bgcolor: "background.paper" }}>
-      <Grid xs={12}>
+      <Grid xs={12} className="centered">
         <Image
           src="/img/skde-blue.png"
           alt="SKDE-logo"

@@ -15,7 +15,7 @@ export const HeaderMiddle = ({ title, subtitle }: HeaderMiddleProps) => {
       rowSpacing={6}
       sx={{ bgcolor: "primary.light" }}
     >
-      <Grid xs={12}>
+      <Grid xs={12} className="centered">
         <Typography variant="h1">{title}</Typography>
         <Typography variant="h6">{subtitle}</Typography>
       </Grid>

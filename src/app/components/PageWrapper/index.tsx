@@ -13,13 +13,7 @@ export const PageWrapper = ({
 
   const styles = {
     pageWrapper: {
-      "& .MuiPaper-root": {
-        padding: theme.spacing(2),
-      },
-      "& .MuiGrid2-root": {
-        margin: 0,
-      },
-      "& .MuiGrid2-container > .MuiGrid2-root": {
+      "& .centered": {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(6),
         [theme.breakpoints.down("sm")]: {
