@@ -1,4 +1,4 @@
-export const names = {
+export const names: any = {
   sykehus: {
     "1": "Finnmark",
     "2": "UNN",

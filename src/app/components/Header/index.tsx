@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 
 type HeaderProps = {
   title: string;
-  subtitle: string;
+  introduction: string;
 };
 
 export const Header = ({ title, introduction }: HeaderProps) => {

@@ -41,16 +41,12 @@ export default async function KompendiumPage({
     await getAnalyserByTag(params.kompendium),
   );
 
-  console.log("TAG::", tag);
-
   return (
     <>
-      <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
-        <Header
-          title={tag.fullname[params.lang]}
-          introduction={tag.introduction[params.lang]}
-        ></Header>
-      </Suspense>
+      <Header
+        title={tag.fullname[params.lang]}
+        introduction={tag.introduction[params.lang]}
+      ></Header>
       <main>
         <Grid container spacing={2}>
           <Grid xs={12}>
