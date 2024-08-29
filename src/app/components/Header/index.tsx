@@ -8,12 +8,12 @@ type HeaderProps = {
   subtitle: string;
 };
 
-export const Header = ({ title, subtitle }: HeaderProps) => {
+export const Header = ({ title, introduction }: HeaderProps) => {
   return (
     <Grid container spacing={2}>
       <Grid xs={12}>
         <HeaderTop />
-        <HeaderMiddle title={title} subtitle={subtitle} />
+        <HeaderMiddle title={title} introduction={introduction} />
       </Grid>
     </Grid>
   );

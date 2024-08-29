@@ -4,10 +4,10 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 type HeaderMiddleProps = {
   title: string;
-  subtitle: string;
+  introduction: string;
 };
 
-export const HeaderMiddle = ({ title, subtitle }: HeaderMiddleProps) => {
+export const HeaderMiddle = ({ title, introduction }: HeaderMiddleProps) => {
   return (
     <Grid
       container
@@ -17,7 +17,7 @@ export const HeaderMiddle = ({ title, subtitle }: HeaderMiddleProps) => {
     >
       <Grid xs={12} className="centered">
         <Typography variant="h1">{title}</Typography>
-        <Typography variant="h6">{subtitle}</Typography>
+        <Typography variant="h6">{introduction}</Typography>
       </Grid>
     </Grid>
   );

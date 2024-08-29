@@ -5,12 +5,13 @@ import Header from "@/app/components/Header";
 import AnalyseList from "@/app/components/AnalyseList";
 
 import { Analyse } from "@/app/models/AnalyseModel";
+import { Tag } from "@/app/models/TagModel";
 import { toPlainObject } from "@/app/lib/mappings";
 
 import {
-  getCompendiumBySlug,
   getAnalyseByName,
   getAnalyserByTag,
+  getTag,
 } from "@/app/services/mongo";
 
 // The function can also fetch data for the compendium and get its
@@ -35,18 +36,19 @@ export default async function KompendiumPage({
 }: {
   params: { lang: string; kompendium: string };
 }) {
-  const kompendium = await getCompendiumBySlug(params.kompendium);
-
+  const tag: Tag = toPlainObject(await getTag(params.kompendium));
   const analyser: Analyse[] = toPlainObject(
     await getAnalyserByTag(params.kompendium),
   );
+
+  console.log("TAG::", tag);
 
   return (
     <>
       <Suspense fallback={<Header title="&nbsp;" subtitle="&nbsp;" />}>
         <Header
-          title={kompendium.title.get(params.lang)}
-          subtitle={kompendium.subtitle.get(params.lang)}
+          title={tag.fullname[params.lang]}
+          introduction={tag.introduction[params.lang]}
         ></Header>
       </Suspense>
       <main>

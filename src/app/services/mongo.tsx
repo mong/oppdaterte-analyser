@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
-import CompendiumModel from "@/app/models/CompendiumModel";
-import AnalysisModel from "@/app/models/AnalysisModel";
 import AnalyseModel from "@/app/models/AnalyseModel";
-//import TagModel from "@/app/models/TagModel";
+import TagModel from "@/app/models/TagModel";
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -10,18 +8,6 @@ export const dbConnect = async (): Promise<any> => {
   } catch (err) {
     console.error(err);
   }
-};
-
-export const getCompendiumBySlug = async (compendiumSlug: string) => {
-  await dbConnect();
-  return await CompendiumModel.findOne({
-    slug: compendiumSlug,
-  }).exec();
-};
-
-export const getAnalysisById = async (id: mongoose.Types.ObjectId) => {
-  await dbConnect();
-  return await AnalysisModel.findById(id).exec();
 };
 
 export const getAnalyseByName = async (name: string) => {
@@ -32,4 +18,9 @@ export const getAnalyseByName = async (name: string) => {
 export const getAnalyserByTag = async (tag: string) => {
   await dbConnect();
   return await AnalyseModel.find({ tags: tag }).exec();
+};
+
+export const getTag = async (tag: string) => {
+  await dbConnect();
+  return await TagModel.findOne({ name: tag }).exec();
 };
