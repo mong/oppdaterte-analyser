@@ -14,7 +14,7 @@ export default async function MainPage({ params }: MainPageProps) {
     <>
       <Header
         title="Oppdaterte resultater"
-        subtitle="Dette er hovedsiden for oppdaterte Helseatlas-resultater"
+        introduction="Dette er hovedsiden for oppdaterte Helseatlas-resultater"
       />
       <main>
         <Grid container spacing={2}>
