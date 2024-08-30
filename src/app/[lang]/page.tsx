@@ -19,8 +19,8 @@ export default async function MainPage({ params }: MainPageProps) {
       <main>
         <Box className="centered padding">
           <Typography>
-            Benytt "slug" i URL for å se spesifikt kompendium, f. eks.{" "}
-            <Link href={`/${params.lang}/barn`}>/{params.lang}/barn</Link>.
+            Benytt &ldquo;slug&rdquo; i URL for å se spesifikt kompendium, f.
+            eks. <Link href={`/${params.lang}/barn`}>/{params.lang}/barn</Link>.
           </Typography>
         </Box>
       </main>
