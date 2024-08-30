@@ -70,8 +70,10 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
         aria-controls={`${analyse.name}-content`}
         id={`${analyse.name}-header`}
         sx={{
+          transition: "background-color .2s ease-in",
+          background: `linear-gradient(rgba(0, 0, 0, 0), white)`,
           ":hover": {
-            background: `linear-gradient(${theme.palette.surface2.main}, rgba(0, 0, 0, 0))`,
+            backgroundColor: theme.palette.surface2.light,
           },
         }}
         onClick={() => setExpanded(!expanded)}

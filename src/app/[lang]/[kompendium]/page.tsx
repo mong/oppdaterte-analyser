@@ -42,17 +42,11 @@ export default async function KompendiumPage({
         introduction={tag.introduction[params.lang]}
       ></Header>
       <main>
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Suspense
-              fallback={
-                <Skeleton variant="rectangular" width={210} height={318} />
-              }
-            >
-              <AnalyseList analyser={analyser} tags={tags} lang={params.lang} />
-            </Suspense>
-          </Grid>
-        </Grid>
+        <Suspense
+          fallback={<Skeleton variant="rectangular" width={210} height={318} />}
+        >
+          <AnalyseList analyser={analyser} tags={tags} lang={params.lang} />
+        </Suspense>
       </main>
     </>
   );
