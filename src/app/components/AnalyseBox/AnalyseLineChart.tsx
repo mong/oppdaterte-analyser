@@ -33,14 +33,14 @@ export const AnalyseLineChart = ({
   const dataset = React.useMemo(() => {
     const dataset = [];
     for (const year of [...years].reverse()) {
-      const datapoint = {
+      const datapoint: { year: number; sum: number; [k: string]: number } = {
         year: year,
         sum: 0,
       };
       for (const area of Object.keys(analyse.data[level])) {
         if (datapoint[area] === undefined) datapoint[area] = 0;
-        for (let i = 0; i < analyse.variables.length; i++) {
-          datapoint[area] += analyse.data[level][area][year][i];
+        for (let i = 0; i < Math.max(view.labels?.length || 0, 1); i++) {
+          datapoint[area] += analyse.data[level][area][year][0][i];
         }
       }
       dataset.push(datapoint);
