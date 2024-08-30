@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 
 import { Box, Skeleton } from "@mui/material";
-import AnalyseBox from "@/app/components/AnalyseBox";
-import { Analyse } from "@/app/models/AnalyseModel";
-import { Tag } from "@/app/models/TagModel";
+import AnalyseBox from "@/components/AnalyseBox";
+import { Analyse } from "@/models/AnalyseModel";
+import { Tag } from "@/models/TagModel";
 
 type AnalyseListProps = {
   analyser: Analyse[];

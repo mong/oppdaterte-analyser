@@ -18,10 +18,10 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { Analyse } from "@/app/models/AnalyseModel";
+import { Analyse } from "@/models/AnalyseModel";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
-import { Tag } from "@/app/models/TagModel";
+import { Tag } from "@/models/TagModel";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;

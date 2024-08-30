@@ -1,4 +1,4 @@
-import { Analyse } from "@/app/models/AnalyseModel";
+import { Analyse } from "@/models/AnalyseModel";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { names } from "./nameMapping";
 import React from "react";

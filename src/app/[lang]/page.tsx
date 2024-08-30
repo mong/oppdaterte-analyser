@@ -1,6 +1,6 @@
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import Header from "@/app/components/Header";
+import Header from "@/components/Header";
 import { Box } from "@mui/material";
 
 export type MainPageProps = {

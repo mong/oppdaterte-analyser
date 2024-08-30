@@ -1,6 +1,6 @@
-import { Analyse } from "@/app/models/AnalyseModel";
+import { Analyse } from "@/models/AnalyseModel";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { names } from "@/app/components/AnalyseBox/nameMapping";
+import { names } from "@/components/AnalyseBox/nameMapping";
 
 type AnalyseBarChartProps = {
   analyse: Analyse;
