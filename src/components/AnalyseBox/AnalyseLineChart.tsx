@@ -1,6 +1,6 @@
 import { Analyse } from "@/models/AnalyseModel";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { names } from "./nameMapping";
+import { regions_dict } from "./nameMapping";
 import React from "react";
 
 type AnalyseLineChartProps = {
@@ -8,6 +8,7 @@ type AnalyseLineChartProps = {
   years: number[];
   level: "region" | "sykehus";
   view: Analyse["views"][number];
+  lang: "en" | "no";
 };
 
 export const useWindowWidth = () => {
@@ -27,6 +28,7 @@ export const AnalyseLineChart = ({
   years,
   level,
   view,
+  lang,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
@@ -70,7 +72,7 @@ export const AnalyseLineChart = ({
         id: area,
         curve: "linear",
         showMark: false,
-        label: names[level][area],
+        label: regions_dict[lang][level][area],
       }))}
       onLineClick={(a, b) => console.log("Info: ", a, b)}
       tooltip={{ trigger: "axis" }}

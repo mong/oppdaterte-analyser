@@ -1,12 +1,13 @@
 import { Analyse } from "@/models/AnalyseModel";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { names } from "@/components/AnalyseBox/nameMapping";
+import { regions_dict } from "@/components/AnalyseBox/nameMapping";
 
 type AnalyseBarChartProps = {
   analyse: Analyse;
   year: number;
   level: "region" | "sykehus";
   view: Analyse["views"][number];
+  lang: "en" | "no";
 };
 
 export const AnalyseBarChart = ({
@@ -14,6 +15,7 @@ export const AnalyseBarChart = ({
   year,
   level,
   view,
+  lang,
 }: AnalyseBarChartProps) => {
   console.log(analyse, year, level, view);
 
@@ -47,7 +49,7 @@ export const AnalyseBarChart = ({
           scaleType: "band",
           dataKey: "area",
           tickPlacement: "middle",
-          valueFormatter: (area) => `${names[level][area]}`,
+          valueFormatter: (area) => `${regions_dict[lang][level][area]}`,
         },
       ]}
       series={labels.map((label, i) => ({

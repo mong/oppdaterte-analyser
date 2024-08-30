@@ -129,8 +129,8 @@ export default function AnalyseBox({
                   setLevel(e.target.value as "sykehus" | "region")
                 }
               >
-                <MenuItem value={"sykehus"}>{dict.hospital}</MenuItem>
-                <MenuItem value={"region"}>{dict.health_region}</MenuItem>
+                <MenuItem value={"sykehus"}>{dict.sykehus}</MenuItem>
+                <MenuItem value={"region"}>{dict.region}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -196,6 +196,7 @@ export default function AnalyseBox({
               year={year}
               level={level}
               view={view}
+              lang={lang}
             />
           ) : (
             <AnalyseLineChart
@@ -203,6 +204,7 @@ export default function AnalyseBox({
               years={years}
               level={level}
               view={view}
+              lang={lang}
             />
           )}
         </Paper>

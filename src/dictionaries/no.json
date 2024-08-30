@@ -6,7 +6,7 @@
     "single_year": "Enkeltår",
     "time_series": "Tidstrend",
     "all_years_shown": "All år vises",
-    "hospital": "Sykehus",
-    "health_region": "Region"
+    "sykehus": "Sykehus",
+    "region": "Region"
   }
 }

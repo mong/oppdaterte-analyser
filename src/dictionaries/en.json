@@ -6,7 +6,7 @@
     "single_year": "Single year",
     "time_series": "Time series",
     "all_years_shown": "All years are shown",
-    "hospital": "Hospital",
-    "health_region": "Region"
+    "sykehus": "Hospital",
+    "region": "Region"
   }
 }

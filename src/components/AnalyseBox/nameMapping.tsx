@@ -1,4 +1,4 @@
-export const names: any = {
+const untranslated: any = {
   sykehus: {
     "1": "Finnmark",
     "2": "UNN",
@@ -29,5 +29,22 @@ export const names: any = {
     "3": "Helse Vest",
     "4": "Helse Sør-Øst",
     "8888": "Norge",
+  },
+};
+
+export const regions_dict = {
+  no: {
+    sykehus: untranslated.sykehus,
+    region: untranslated.region,
+  },
+  en: {
+    sykehus: {
+      ...untranslated.sykehus,
+      "8888": "Norway",
+    },
+    region: {
+      ...untranslated.region,
+      "8888": "Norway",
+    },
   },
 };
