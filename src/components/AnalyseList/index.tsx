@@ -4,11 +4,12 @@ import { Box, Skeleton } from "@mui/material";
 import AnalyseBox from "@/components/AnalyseBox";
 import { Analyse } from "@/models/AnalyseModel";
 import { Tag } from "@/models/TagModel";
+import { getDictionary } from "@/lib/dictionaries";
 
 type AnalyseListProps = {
   analyser: Analyse[];
   tags: { [k: string]: Tag };
-  lang: string;
+  lang: "en" | "no";
 };
 
 export default async function AnalyseList({
@@ -16,6 +17,8 @@ export default async function AnalyseList({
   tags,
   lang,
 }: AnalyseListProps) {
+  const dict = await getDictionary(lang);
+
   return (
     <Box className="centered" sx={{ padding: "40px 0" }}>
       <Suspense
@@ -28,6 +31,7 @@ export default async function AnalyseList({
               analyse={analyse}
               tags={tags}
               lang={lang}
+              dict={dict.analysebox}
             />
           );
         })}

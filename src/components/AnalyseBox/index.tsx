@@ -26,10 +26,16 @@ import { Tag } from "@/models/TagModel";
 export type AnalyseBoxProps = {
   analyse: Analyse;
   tags: { [k: string]: Tag };
-  lang: string;
+  lang: "en" | "no";
+  dict: { [k: string]: string };
 };
 
-export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
+export default function AnalyseBox({
+  analyse,
+  tags,
+  lang,
+  dict,
+}: AnalyseBoxProps) {
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
 
@@ -111,18 +117,20 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-level-label">Geografisk område</InputLabel>
+              <InputLabel id="select-level-label">
+                {dict.area_select}
+              </InputLabel>
               <Select
                 labelId="select-level-label"
                 id="select-level"
                 value={level}
-                label="Geografisk område"
+                label={dict.area_select}
                 onChange={(e) =>
                   setLevel(e.target.value as "sykehus" | "region")
                 }
               >
-                <MenuItem value={"region"}>Region</MenuItem>
-                <MenuItem value={"sykehus"}>Sykehus</MenuItem>
+                <MenuItem value={"sykehus"}>{dict.hospital}</MenuItem>
+                <MenuItem value={"region"}>{dict.health_region}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -135,18 +143,20 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-visning-label">Visning</InputLabel>
+              <InputLabel id="select-visning-label">
+                {dict.view_select}
+              </InputLabel>
               <Select
                 labelId="select-visning-label"
                 id="select-visning"
                 value={visning}
-                label="Visning"
+                label={dict.view_select}
                 onChange={(e) =>
                   setVisning(e.target.value as "barchart" | "tidstrend")
                 }
               >
-                <MenuItem value={"barchart"}>Enkeltår</MenuItem>
-                <MenuItem value={"tidstrend"}>Tidstrend</MenuItem>
+                <MenuItem value={"barchart"}>{dict.single_year}</MenuItem>
+                <MenuItem value={"tidstrend"}>{dict.time_series}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -158,12 +168,12 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
             alignItems="center"
           >
             <FormControl fullWidth disabled={visning === "tidstrend"}>
-              <InputLabel id="select-year-label">Velg år</InputLabel>
+              <InputLabel id="select-year-label">{dict.year_select}</InputLabel>
               <Select
                 labelId="select-year-label"
                 id="select-year"
                 value={visning === "tidstrend" ? "-" : year.toString()}
-                label="Velg år"
+                label={dict.year_select}
                 onChange={(e) => setYear(Number(e.target.value))}
               >
                 {years.map((y) => (
@@ -172,7 +182,7 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
                   </MenuItem>
                 ))}
                 {visning === "tidstrend" && (
-                  <MenuItem value={"-"}>Alle år vises</MenuItem>
+                  <MenuItem value={"-"}>{dict.all_years_shown}</MenuItem>
                 )}
               </Select>
             </FormControl>

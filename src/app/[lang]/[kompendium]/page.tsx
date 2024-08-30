@@ -25,7 +25,7 @@ export const generateMetadata = async ({
 export default async function KompendiumPage({
   params,
 }: {
-  params: { lang: string; kompendium: string };
+  params: { lang: "en" | "no"; kompendium: string };
 }) {
   const tag = await getTag(params.kompendium);
   const analyser = await getAnalyserByTag(params.kompendium);
