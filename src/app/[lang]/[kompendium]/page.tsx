@@ -4,15 +4,7 @@ import { Skeleton } from "@mui/material";
 import Header from "@/app/components/Header";
 import AnalyseList from "@/app/components/AnalyseList";
 
-import { Analyse } from "@/app/models/AnalyseModel";
-import { Tag } from "@/app/models/TagModel";
-import { toPlainObject } from "@/app/lib/mappings";
-
-import {
-  getAnalyseByName,
-  getAnalyserByTag,
-  getTag,
-} from "@/app/services/mongo";
+import { getAnalyserByTag, getTag, getTags } from "@/app/services/mongo";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -36,9 +28,11 @@ export default async function KompendiumPage({
 }: {
   params: { lang: string; kompendium: string };
 }) {
-  const tag: Tag = toPlainObject(await getTag(params.kompendium));
-  const analyser: Analyse[] = toPlainObject(
-    await getAnalyserByTag(params.kompendium),
+  const tag = await getTag(params.kompendium);
+  const analyser = await getAnalyserByTag(params.kompendium);
+
+  const tags = await getTags(
+    Array.from(new Set(analyser.flatMap((analyse) => analyse.tags))),
   );
 
   return (
@@ -48,17 +42,11 @@ export default async function KompendiumPage({
         introduction={tag.introduction[params.lang]}
       ></Header>
       <main>
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Suspense
-              fallback={
-                <Skeleton variant="rectangular" width={210} height={318} />
-              }
-            >
-              <AnalyseList analyser={analyser} lang={params.lang} />
-            </Suspense>
-          </Grid>
-        </Grid>
+        <Suspense
+          fallback={<Skeleton variant="rectangular" width={210} height={318} />}
+        >
+          <AnalyseList analyser={analyser} tags={tags} lang={params.lang} />
+        </Suspense>
       </main>
     </>
   );

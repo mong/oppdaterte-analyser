@@ -3,14 +3,17 @@ import { Suspense } from "react";
 import { Box, Skeleton } from "@mui/material";
 import AnalyseBox from "@/app/components/AnalyseBox";
 import { Analyse } from "@/app/models/AnalyseModel";
+import { Tag } from "@/app/models/TagModel";
 
 type AnalyseListProps = {
   analyser: Analyse[];
+  tags: { [k: string]: Tag };
   lang: string;
 };
 
 export default async function AnalyseList({
   analyser,
+  tags,
   lang,
 }: AnalyseListProps) {
   return (
@@ -20,7 +23,12 @@ export default async function AnalyseList({
       >
         {analyser.map((analyse) => {
           return (
-            <AnalyseBox key={analyse.name} analyse={analyse} lang={lang} />
+            <AnalyseBox
+              key={analyse.name}
+              analyse={analyse}
+              tags={tags}
+              lang={lang}
+            />
           );
         })}
       </Suspense>

@@ -24,6 +24,7 @@ declare module "@mui/material/styles" {
   interface Palette {
     surface2: {
       main: string;
+      light: string;
     };
   }
 }
@@ -158,7 +159,6 @@ const colorTokens = {
   text: {
     primary: "#000",
     secondary: "#003087",
-    disabled: "#f5f5f5",
   },
 
   info: {
