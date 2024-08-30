@@ -21,6 +21,11 @@ declare module "@mui/material/styles" {
     xxl: true;
     xxxl: true;
   }
+  interface Palette {
+    surface2: {
+      main: string;
+    };
+  }
 }
 
 const fonts = {

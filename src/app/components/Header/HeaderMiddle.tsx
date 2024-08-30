@@ -1,6 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
+import { Box } from "@mui/material";
 
 type HeaderMiddleProps = {
   title: string;
@@ -9,17 +10,12 @@ type HeaderMiddleProps = {
 
 export const HeaderMiddle = ({ title, introduction }: HeaderMiddleProps) => {
   return (
-    <Grid
-      container
-      spacing={2}
-      rowSpacing={6}
-      sx={{ bgcolor: "primary.light" }}
-    >
-      <Grid xs={12} className="centered">
+    <Box sx={{ bgcolor: "primary.light" }} className="padding">
+      <Box className="centered padding">
         <Typography variant="h1">{title}</Typography>
         <Typography variant="h6">{introduction}</Typography>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

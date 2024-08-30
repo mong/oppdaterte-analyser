@@ -14,7 +14,7 @@ export default async function AnalyseList({
   lang,
 }: AnalyseListProps) {
   return (
-    <Box className="centered">
+    <Box className="centered" sx={{ padding: "40px 0" }}>
       <Suspense
         fallback={<Skeleton variant="rectangular" width={610} height={600} />}
       >

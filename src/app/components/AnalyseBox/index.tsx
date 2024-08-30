@@ -14,6 +14,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
+  useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
@@ -25,6 +26,7 @@ export type AnalyseBoxProps = {
   analyse: Analyse;
   lang: string;
 };
+import { palette } from "@mui/system";
 
 export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
   const years = Object.keys(analyse.data.region["1"]).map(Number);
@@ -37,6 +39,8 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
   );
   const [view, setView] = React.useState(analyse.views[0]);
   const [expanded, setExpanded] = React.useState(false);
+
+  const theme = useTheme();
 
   const tags = (
     <Box className={classNames["tag-container"]}>
@@ -57,14 +61,16 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
       className={classNames["analyse-box"]}
       square={true}
       expanded={expanded}
-      sx={{ overflow: "clip" }}
+      sx={{
+        overflow: "clip",
+      }}
     >
       <AccordionSummary
         aria-controls={`${analyse.name}-content`}
         id={`${analyse.name}-header`}
         sx={{
           ":hover": {
-            background: `linear-gradient(green, rgba(0, 0, 0, 0))`,
+            background: `linear-gradient(${theme.palette.surface2.main}, rgba(0, 0, 0, 0))`,
           },
         }}
         onClick={() => setExpanded(!expanded)}

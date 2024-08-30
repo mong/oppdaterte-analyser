@@ -22,11 +22,9 @@ export const AnalyseBarChart = ({
   };
 
   const labels = defaultLabels[view.view] || view.labels;
-  console.log(labels);
 
   const dataset = [];
   for (let area of Object.keys(analyse.data[level])) {
-    console.log("Area::", area);
     let datapoint: { area: string; sum: number; [k: number]: number } = {
       area: area,
       sum: 0,

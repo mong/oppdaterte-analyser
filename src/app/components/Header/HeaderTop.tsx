@@ -1,19 +1,19 @@
 import Image from "next/image";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Box } from "@mui/material";
 
 export const HeaderTop = () => {
   return (
-    <Grid container spacing={2} sx={{ bgcolor: "background.paper" }}>
-      <Grid xs={12} className="centered">
+    <Box sx={{ bgcolor: "background.paper" }}>
+      <Box className="centered padding">
         <Image
           src="/img/skde-blue.png"
           alt="SKDE-logo"
-          width={100}
-          height={40}
+          height={52}
+          width={130}
           priority
         />
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

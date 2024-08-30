@@ -4,18 +4,16 @@ import { PropsWithChildren } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-type PageWrapperProps = {};
-
-export const PageWrapper = ({
-  children,
-}: PropsWithChildren<PageWrapperProps>) => {
+export const PageWrapper = ({ children }: PropsWithChildren) => {
   const theme = useTheme();
 
   const styles = {
     pageWrapper: {
-      "& .centered": {
+      "& .padding": {
         paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(6),
+        paddingBottom: theme.spacing(4),
+      },
+      "& .centered": {
         [theme.breakpoints.down("sm")]: {
           paddingLeft: theme.spacing(4),
           paddingRight: theme.spacing(4),
