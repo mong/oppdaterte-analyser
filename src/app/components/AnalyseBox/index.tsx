@@ -21,14 +21,15 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Analyse } from "@/app/models/AnalyseModel";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
+import { Tag } from "@/app/models/TagModel";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
+  tags: { [k: string]: Tag };
   lang: string;
 };
-import { palette } from "@mui/system";
 
-export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
+export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
 
@@ -42,11 +43,11 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
 
   const theme = useTheme();
 
-  const tags = (
+  const tagList = (
     <Box className={classNames["tag-container"]}>
       {analyse.tags.map((tag) => (
         <Chip
-          label={"Hello"}
+          label={tags[tag].fullname[lang]}
           color="primary"
           key={tag}
           sx={{ marginRight: "1em" }}
@@ -76,13 +77,13 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
         onClick={() => setExpanded(!expanded)}
       >
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="h3">{analyse.name}</Typography>
+          <Typography variant="h3">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
             Oppdatert: {new Date(analyse.published).toUTCString()}
           </Typography>
           <ul>
             <li>
-              <Typography>{analyse.description.no}</Typography>
+              <Typography>{analyse.description[lang]}</Typography>
             </li>
             <li>
               <Typography>Dette er en konklusjon, dataene viser at.</Typography>
@@ -95,7 +96,7 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
             </li>
           </ul>
 
-          {!expanded && tags}
+          {!expanded && tagList}
         </Box>
       </AccordionSummary>
       <AccordionDetails>
@@ -219,7 +220,7 @@ export default function AnalyseBox({ analyse, lang }: AnalyseBoxProps) {
           convallis. Donec a ullamcorper nisi. Cras libero tellus, sodales id
           tellus sit amet, cursus imperdiet nibh.{" "}
         </Typography>
-        {tags}
+        {tagList}
       </AccordionDetails>
     </Accordion>
   );

@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
-import AnalyseModel from "@/app/models/AnalyseModel";
-import TagModel from "@/app/models/TagModel";
+import AnalyseModel, { Analyse } from "@/app/models/AnalyseModel";
+import TagModel, { Tag } from "@/app/models/TagModel";
+
+export function toPlainObject<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 export const dbConnect = async (): Promise<any> => {
   try {
@@ -10,17 +14,22 @@ export const dbConnect = async (): Promise<any> => {
   }
 };
 
-export const getAnalyseByName = async (name: string) => {
+export const getAnalyserByTag = async (tag: string): Promise<Analyse[]> => {
   await dbConnect();
-  return await AnalyseModel.findOne({ name: name }).exec();
+  return toPlainObject(await AnalyseModel.find({ tags: tag }).exec());
 };
 
-export const getAnalyserByTag = async (tag: string) => {
+export const getTag = async (tag: string): Promise<Tag> => {
   await dbConnect();
-  return await AnalyseModel.find({ tags: tag }).exec();
+  return toPlainObject(await TagModel.findOne({ name: tag }).exec());
 };
 
-export const getTag = async (tag: string) => {
+export const getTags = async (
+  tags: string[],
+): Promise<{ [k: string]: Tag }> => {
   await dbConnect();
-  return await TagModel.findOne({ name: tag }).exec();
+  const tagData = toPlainObject(
+    await TagModel.find({ name: { $in: tags } }).exec(),
+  );
+  return Object.fromEntries(tagData.map((tag) => [tag.name, tag]));
 };
