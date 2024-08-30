@@ -17,6 +17,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import { useTranslations } from "next-intl";
 
 import { Analyse } from "@/app/models/AnalyseModel";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -30,6 +31,7 @@ export type AnalyseBoxProps = {
 };
 
 export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
+  const t = useTranslations("AnalyseBox");
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
 
@@ -81,20 +83,17 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h3">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            Oppdatert: {new Date(analyse.published).toUTCString()}
+            {t("updated")}: {new Date(analyse.published).toLocaleString(lang)}
           </Typography>
           <ul>
             <li>
               <Typography>{analyse.description[lang]}</Typography>
             </li>
             <li>
-              <Typography>Dette er en konklusjon, dataene viser at.</Typography>
+              <Typography>{t("conclusion")}</Typography>
             </li>
             <li>
-              <Typography>
-                En normativ oppfordring til å gjøre mer eller mindre av et eller
-                annet?
-              </Typography>
+              <Typography>{t("recommendation")}</Typography>
             </li>
           </ul>
 
@@ -111,18 +110,20 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-level-label">Geografisk område</InputLabel>
+              <InputLabel id="select-level-label">
+                {t("geographicArea")}
+              </InputLabel>
               <Select
                 labelId="select-level-label"
                 id="select-level"
                 value={level}
-                label="Geografisk område"
+                label={t("geographicArea")}
                 onChange={(e) =>
                   setLevel(e.target.value as "sykehus" | "region")
                 }
               >
-                <MenuItem value={"region"}>Region</MenuItem>
-                <MenuItem value={"sykehus"}>Sykehus</MenuItem>
+                <MenuItem value={"region"}>{t("region")}</MenuItem>
+                <MenuItem value={"sykehus"}>{t("hospital")}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -197,31 +198,9 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
           )}
         </Paper>
         <br />
-        <Typography>
-          {" "}
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet
-          ultricies enim. Nulla suscipit sit amet velit vitae pulvinar. In
-          feugiat sodales lacus. Mauris porttitor accumsan eros, nec porttitor
-          tellus. Quisque non justo fermentum, efficitur erat sit amet, gravida
-          ligula. Suspendisse consequat dictum condimentum. Vestibulum ante
-          ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-          curae; Praesent quis eleifend nisi. Proin at interdum ligula, et
-          venenatis libero. Ut semper condimentum urna, vel tincidunt orci
-          aliquam vitae.{" "}
-        </Typography>
+        <Typography>{t("loremIpsum1")}</Typography>
         <br />
-        <Typography>
-          {" "}
-          Integer ornare odio odio, vitae efficitur purus dignissim eget. Aenean
-          elementum neque sed ultrices hendrerit. In quam justo, bibendum sed
-          metus non, vestibulum vestibulum odio. Maecenas ultricies bibendum
-          vehicula. Pellentesque vitae orci vehicula dolor pulvinar sodales.
-          Nunc rhoncus ultricies mi eu faucibus. Duis elit neque, sodales quis
-          imperdiet eget, lacinia ut turpis. Praesent iaculis ante mi, id
-          pellentesque dolor mollis at. Morbi placerat tristique odio ac
-          convallis. Donec a ullamcorper nisi. Cras libero tellus, sodales id
-          tellus sit amet, cursus imperdiet nibh.{" "}
-        </Typography>
+        <Typography>{t("loremIpsum2")}</Typography>
         {tagList}
       </AccordionDetails>
     </Accordion>

@@ -1,0 +1,17 @@
+{
+  "AnalyseBox": {
+    "updated": "Oppdatert",
+    "conclusion": "Dette er en konklusjon, dataene viser at.",
+    "recommendation": "En normativ oppfordring til å gjøre mer eller mindre av noe?",
+    "geographicArea": "Geografisk område",
+    "region": "Region",
+    "hospital": "Sykehus",
+    "view": "Visning",
+    "singleYear": "Enkelt år",
+    "timeTrend": "Tidstrend",
+    "selectYear": "Velg år",
+    "allYearsShown": "Alle år vist",
+    "loremIpsum1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+    "loremIpsum2": "Integer ornare odio odio, vitae efficitur purus dignissim eget..."
+  }
+}
