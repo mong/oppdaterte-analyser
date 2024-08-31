@@ -1,4 +1,9 @@
 {
+  "MainPage": {
+    "title": "Oppdaterte analyser",
+    "introduction": "Dette er hovedsiden for oppdaterte Helseatlas-analyser",
+    "useSlug": "Benytt en 'slug' i URL-en for å vise et spesifikt kompendium, f. eks."
+  },
   "AnalyseBox": {
     "updated": "Oppdatert",
     "conclusion": "Dette er en konklusjon, dataene viser at.",
@@ -7,11 +12,9 @@
     "region": "Region",
     "hospital": "Sykehus",
     "view": "Visning",
-    "singleYear": "Enkelt år",
+    "singleYear": "Enkeltår",
     "timeTrend": "Tidstrend",
     "selectYear": "Velg år",
-    "allYearsShown": "Alle år vist",
-    "loremIpsum1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    "loremIpsum2": "Integer ornare odio odio, vitae efficitur purus dignissim eget..."
+    "allYearsShown": "Alle år vises"
   }
 }

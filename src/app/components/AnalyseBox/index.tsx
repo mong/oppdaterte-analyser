@@ -136,18 +136,18 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-visning-label">Visning</InputLabel>
+              <InputLabel id="select-visning-label">{t("view")}</InputLabel>
               <Select
                 labelId="select-visning-label"
                 id="select-visning"
                 value={visning}
-                label="Visning"
+                label={t("view")}
                 onChange={(e) =>
                   setVisning(e.target.value as "barchart" | "tidstrend")
                 }
               >
-                <MenuItem value={"barchart"}>Enkeltår</MenuItem>
-                <MenuItem value={"tidstrend"}>Tidstrend</MenuItem>
+                <MenuItem value={"barchart"}>{t("singleYear")}</MenuItem>
+                <MenuItem value={"tidstrend"}>{t("timeTrend")}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -173,7 +173,7 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
                   </MenuItem>
                 ))}
                 {visning === "tidstrend" && (
-                  <MenuItem value={"-"}>Alle år vises</MenuItem>
+                  <MenuItem value={"-"}>{t("allYearsShown")}</MenuItem>
                 )}
               </Select>
             </FormControl>
@@ -198,9 +198,13 @@ export default function AnalyseBox({ analyse, tags, lang }: AnalyseBoxProps) {
           )}
         </Paper>
         <br />
-        <Typography>{t("loremIpsum1")}</Typography>
+        <Typography>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+        </Typography>
         <br />
-        <Typography>{t("loremIpsum2")}</Typography>
+        <Typography>
+          Integer ornare odio odio, vitae efficitur purus dignissim eget...
+        </Typography>
         {tagList}
       </AccordionDetails>
     </Accordion>

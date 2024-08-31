@@ -9,23 +9,19 @@ const intlMiddleware = createIntlMiddleware({
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Handle language routing first
-  const response = intlMiddleware(request);
+  if (/^\/(?:no|en)\//.test(pathname)) {
+    // Path is prefixed with a locale, so init the
+    // internationalization middleware.
+    return intlMiddleware(request);
+  }
 
-  // If intlMiddleware didn't handle the request, apply your custom logic
-  if (response) return response;
-
-  // Your existing logic
+  // The path is missing the locale prefix, so redirect
+  // to the path with the default language.
   const url = request.nextUrl.clone();
   url.pathname = `/no${pathname}`;
   return NextResponse.redirect(url);
 }
 
 export const config = {
-  matcher: [
-    // Intl routes
-    "/((?!api|_next|.*\\..*).*)",
-    // Your existing matcher
-    "/((?!_next|no/|en/|img/|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };

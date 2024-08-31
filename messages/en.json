@@ -1,4 +1,9 @@
 {
+  "MainPage": {
+    "title": "Updated Analyses",
+    "introduction": "This is the main page for updated Health Atlas analyses",
+    "useSlug": "Use a 'slug' in the URL to view a specific compendium, e.g."
+  },
   "AnalyseBox": {
     "updated": "Updated",
     "conclusion": "This is a conclusion, the data shows that.",
@@ -10,8 +15,6 @@
     "singleYear": "Single Year",
     "timeTrend": "Time Trend",
     "selectYear": "Select Year",
-    "allYearsShown": "All years shown",
-    "loremIpsum1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-    "loremIpsum2": "Integer ornare odio odio, vitae efficitur purus dignissim eget..."
+    "allYearsShown": "All years showing"
   }
 }
