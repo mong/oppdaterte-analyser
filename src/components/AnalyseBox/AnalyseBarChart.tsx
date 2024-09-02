@@ -1,4 +1,4 @@
-import { Analyse, Lang } from "@/types";
+import { Analyse, Lang, Text } from "@/types";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { regions_dict } from "@/components/AnalyseBox/nameMapping";
 
@@ -17,13 +17,11 @@ export const AnalyseBarChart = ({
   view,
   lang,
 }: AnalyseBarChartProps) => {
-  console.log(analyse, year, level, view);
-
-  const defaultLabels: { [k: string]: [{ [k: string]: string }] } = {
+  const defaultLabels: { [k: string]: Text[] } = {
     total: [{ no: "Total", en: "Total" }],
   };
 
-  const labels = defaultLabels[view.view] || view.labels;
+  const labels = defaultLabels[view.name] || view.variables;
 
   const dataset = [];
   for (let area of Object.keys(analyse.data[level])) {
@@ -32,7 +30,7 @@ export const AnalyseBarChart = ({
       sum: 0,
     };
 
-    for (let i = 0; i < Math.max(view.labels?.length || 0, 1); i++) {
+    for (let i = 0; i < Math.max(view.variables?.length || 0, 1); i++) {
       datapoint[i] = analyse.data[level][area][year][0][i];
       datapoint.sum += datapoint[i];
     }
@@ -54,8 +52,8 @@ export const AnalyseBarChart = ({
       ]}
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
-        label: `${i}`,
         stack: "stack_group",
+        ...(labels.length > 1 && { label: `${label[lang]}` }),
       }))}
       layout="horizontal"
       borderRadius={5}

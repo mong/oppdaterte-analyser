@@ -18,9 +18,51 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { Analyse, Tag, Lang } from "@/types";
+import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
+
+export const getViewMetadata = (views: View[]) => {
+  const defaultData: { [k: string]: View } = {
+    total: {
+      name: "total",
+      title: { no: "Enkeltår", en: "Single year" },
+      variables: [{ no: "Total", en: "Total" }],
+    },
+    off_priv: {
+      name: "off_priv",
+      title: {
+        no: "Enkeltår, offentlig/privat",
+        en: "Single year, public/private",
+      },
+      variables: [
+        { no: "Offentlig", en: "Public" },
+        { no: "Privat", en: "Private" },
+      ],
+    },
+  };
+
+  console.log(views);
+
+  if (views[0].name !== "total") {
+    throw new Error(
+      "Incorrect view order in datafile; the first view should be a total",
+    );
+  }
+
+  const mergedData = views.map(
+    (view) =>
+      ({
+        ...view,
+        ...defaultData[view.name],
+      }) as View,
+  );
+
+  return {
+    viewOrder: mergedData.map((view) => view.name),
+    viewLookup: Object.fromEntries(mergedData.map((view) => [view.name, view])),
+  };
+};
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
@@ -38,11 +80,11 @@ export default function AnalyseBox({
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
 
+  const { viewOrder, viewLookup } = getViewMetadata(analyse.views);
+
   const [year, setYear] = React.useState(Math.max(...years));
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
-  const [visning, setVisning] = React.useState<"barchart" | "tidstrend">(
-    "barchart",
-  );
+  const [visning, setVisning] = React.useState("barchart");
   const [view, setView] = React.useState(analyse.views[0]);
   const [expanded, setExpanded] = React.useState(false);
 
@@ -150,9 +192,7 @@ export default function AnalyseBox({
                 id="select-visning"
                 value={visning}
                 label={dict.view_select}
-                onChange={(e) =>
-                  setVisning(e.target.value as "barchart" | "tidstrend")
-                }
+                onChange={(e) => setVisning(e.target.value)}
               >
                 <MenuItem value={"barchart"}>{dict.single_year}</MenuItem>
                 <MenuItem value={"tidstrend"}>{dict.time_series}</MenuItem>
@@ -202,7 +242,6 @@ export default function AnalyseBox({
               analyse={analyse}
               years={years}
               level={level}
-              view={view}
               lang={lang}
             />
           )}

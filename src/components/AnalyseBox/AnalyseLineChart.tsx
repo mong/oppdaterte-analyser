@@ -7,7 +7,6 @@ type AnalyseLineChartProps = {
   analyse: Analyse;
   years: number[];
   level: "region" | "sykehus";
-  view: Analyse["views"][number];
   lang: Lang;
 };
 
@@ -27,27 +26,22 @@ export const AnalyseLineChart = ({
   analyse,
   years,
   level,
-  view,
   lang,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
   const dataset = React.useMemo(() => {
-    const dataset = [];
-    for (const year of [...years].reverse()) {
-      const datapoint: { year: number; sum: number; [k: string]: number } = {
+    return [...years].reverse().map((year) => {
+      return {
         year: year,
-        sum: 0,
+        ...Object.fromEntries(
+          Object.keys(analyse.data[level]).map((area) => [
+            area,
+            analyse.data[level][area][year][0][0],
+          ]),
+        ),
       };
-      for (const area of Object.keys(analyse.data[level])) {
-        if (datapoint[area] === undefined) datapoint[area] = 0;
-        for (let i = 0; i < Math.max(view.labels?.length || 0, 1); i++) {
-          datapoint[area] += analyse.data[level][area][year][0][i];
-        }
-      }
-      dataset.push(datapoint);
-    }
-    return dataset;
+    });
   }, [analyse, years, level]);
 
   const smallFactor = Math.min(windowWidth / 1000, 1);

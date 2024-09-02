@@ -6,14 +6,15 @@ export interface Text {
   en: string;
 }
 
-interface View {
-  view: string;
-  labels?: Text[];
+export interface View {
+  name: string;
+  title: Text;
+  variables: Text[];
 }
 
 export interface Analyse {
   _id: Types.ObjectId;
-  tags: [string];
+  tags: string[];
   name: string;
   published: number;
   title: Text;
