@@ -1,4 +1,4 @@
-import { Analyse } from "@/models/AnalyseModel";
+import { Analyse, Lang } from "@/types";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { regions_dict } from "@/components/AnalyseBox/nameMapping";
 
@@ -7,7 +7,7 @@ type AnalyseBarChartProps = {
   year: number;
   level: "region" | "sykehus";
   view: Analyse["views"][number];
-  lang: "en" | "no";
+  lang: Lang;
 };
 
 export const AnalyseBarChart = ({

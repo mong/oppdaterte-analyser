@@ -2,10 +2,11 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Header from "@/components/Header";
 import { Box } from "@mui/material";
+import { Lang } from "@/types";
 
 export type MainPageProps = {
   params: {
-    lang: "en" | "no";
+    lang: Lang;
   };
 };
 

@@ -2,14 +2,13 @@ import { Suspense } from "react";
 
 import { Box, Skeleton } from "@mui/material";
 import AnalyseBox from "@/components/AnalyseBox";
-import { Analyse } from "@/models/AnalyseModel";
-import { Tag } from "@/models/TagModel";
+import { Analyse, Tag, Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
 
 type AnalyseListProps = {
   analyser: Analyse[];
   tags: { [k: string]: Tag };
-  lang: "en" | "no";
+  lang: Lang;
 };
 
 export default async function AnalyseList({

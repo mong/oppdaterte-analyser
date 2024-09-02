@@ -1,4 +1,4 @@
-import { Analyse } from "@/models/AnalyseModel";
+import { Analyse, Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { regions_dict } from "./nameMapping";
 import React from "react";
@@ -8,7 +8,7 @@ type AnalyseLineChartProps = {
   years: number[];
   level: "region" | "sykehus";
   view: Analyse["views"][number];
-  lang: "en" | "no";
+  lang: Lang;
 };
 
 export const useWindowWidth = () => {

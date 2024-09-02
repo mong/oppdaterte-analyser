@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
+import { Lang } from "@/types";
 
 import { getAnalyserByTag, getTag, getTags } from "@/services/mongo";
 
@@ -25,7 +26,7 @@ export const generateMetadata = async ({
 export default async function KompendiumPage({
   params,
 }: {
-  params: { lang: "en" | "no"; kompendium: string };
+  params: { lang: Lang; kompendium: string };
 }) {
   const tag = await getTag(params.kompendium);
   const analyser = await getAnalyserByTag(params.kompendium);

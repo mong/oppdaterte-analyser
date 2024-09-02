@@ -1,26 +1,5 @@
-import mongoose, { Schema, Types } from "mongoose";
-
-interface View {
-  view: string;
-  labels?: [{ [key: string]: string }];
-}
-
-export interface Analyse {
-  _id: Types.ObjectId;
-  tags: [string];
-  name: string;
-  published: number;
-  title: { [key: string]: string };
-  description: { [key: string]: string };
-  views: View[];
-  data: {
-    [key: string]: {
-      [key: string]: {
-        [key: string]: number[][];
-      };
-    };
-  };
-}
+import mongoose, { Schema } from "mongoose";
+import { Analyse } from "@/types";
 
 const analyseSchema = new Schema<Analyse>(
   {

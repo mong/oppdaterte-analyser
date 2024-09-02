@@ -18,15 +18,14 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { Analyse } from "@/models/AnalyseModel";
+import { Analyse, Tag, Lang } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
-import { Tag } from "@/models/TagModel";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
   tags: { [k: string]: Tag };
-  lang: "en" | "no";
+  lang: Lang;
   dict: { [k: string]: string };
 };
 

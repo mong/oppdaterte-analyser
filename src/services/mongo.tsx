@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
-import AnalyseModel, { Analyse } from "@/models/AnalyseModel";
-import TagModel, { Tag } from "@/models/TagModel";
+import AnalyseModel from "@/models/AnalyseModel";
+import { Analyse } from "@/types";
+import TagModel from "@/models/TagModel";
+import { Tag } from "@/types";
 
 export function toPlainObject<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));

@@ -5,6 +5,7 @@ import { CssBaseline } from "@mui/material";
 import skdeTheme from "@/themes/SkdeTheme";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { Lang } from "@/types";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
@@ -21,7 +22,7 @@ export default function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: "en" | "no" };
+  params: { lang: Lang };
 }>) {
   return (
     <html lang={params.lang}>

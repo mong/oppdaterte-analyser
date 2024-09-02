@@ -1,10 +1,5 @@
-import mongoose, { Schema, Types } from "mongoose";
-
-export interface Tag {
-  _id: Types.ObjectId;
-  fullname: { [key: string]: string };
-  introduction: { [key: string]: string };
-}
+import mongoose, { Schema } from "mongoose";
+import { Tag } from "@/types";
 
 const tagSchema = new Schema<Tag>(
   {
