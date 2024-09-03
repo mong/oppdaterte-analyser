@@ -6,7 +6,7 @@ type AnalyseBarChartProps = {
   analyse: Analyse;
   year: number;
   level: "region" | "sykehus";
-  view: Analyse["views"][number];
+  view: number;
   lang: Lang;
 };
 
@@ -21,7 +21,9 @@ export const AnalyseBarChart = ({
     total: [{ no: "Total", en: "Total" }],
   };
 
-  const labels = defaultLabels[view.name] || view.variables;
+  const viewData = analyse.views[view];
+
+  const labels = defaultLabels[viewData.name] || viewData.variables;
 
   const dataset = [];
   for (let area of Object.keys(analyse.data[level])) {
@@ -30,8 +32,8 @@ export const AnalyseBarChart = ({
       sum: 0,
     };
 
-    for (let i = 0; i < Math.max(view.variables?.length || 0, 1); i++) {
-      datapoint[i] = analyse.data[level][area][year][0][i];
+    for (let i = 0; i < Math.max(viewData.variables?.length || 0, 1); i++) {
+      datapoint[i] = analyse.data[level][area][year][view][i];
       datapoint.sum += datapoint[i];
     }
     dataset.push(datapoint);

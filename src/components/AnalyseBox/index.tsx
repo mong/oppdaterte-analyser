@@ -84,8 +84,8 @@ export default function AnalyseBox({
 
   const [year, setYear] = React.useState(Math.max(...years));
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
-  const [visning, setVisning] = React.useState("barchart");
-  const [view, setView] = React.useState(analyse.views[0]);
+  const [view, setView] = React.useState<"tidstrend" | number>(0);
+
   const [expanded, setExpanded] = React.useState(false);
 
   const theme = useTheme();
@@ -184,17 +184,25 @@ export default function AnalyseBox({
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-visning-label">
-                {dict.view_select}
-              </InputLabel>
+              <InputLabel id="select-view-label">{dict.view_select}</InputLabel>
               <Select
-                labelId="select-visning-label"
-                id="select-visning"
-                value={visning}
+                labelId="select-view-label"
+                id="select-view"
+                value={view}
                 label={dict.view_select}
-                onChange={(e) => setVisning(e.target.value)}
+                onChange={(e) =>
+                  setView(
+                    e.target.value === "tidstrend"
+                      ? "tidstrend"
+                      : Number(e.target.value),
+                  )
+                }
               >
-                <MenuItem value={"barchart"}>{dict.single_year}</MenuItem>
+                {viewOrder.map((view, i) => (
+                  <MenuItem key={i} value={i}>
+                    {viewLookup[view].title[lang]}
+                  </MenuItem>
+                ))}
                 <MenuItem value={"tidstrend"}>{dict.time_series}</MenuItem>
               </Select>
             </FormControl>
@@ -206,12 +214,12 @@ export default function AnalyseBox({
             justifyContent="center"
             alignItems="center"
           >
-            <FormControl fullWidth disabled={visning === "tidstrend"}>
+            <FormControl fullWidth disabled={view === "tidstrend"}>
               <InputLabel id="select-year-label">{dict.year_select}</InputLabel>
               <Select
                 labelId="select-year-label"
                 id="select-year"
-                value={visning === "tidstrend" ? "-" : year.toString()}
+                value={view === "tidstrend" ? "-" : year.toString()}
                 label={dict.year_select}
                 onChange={(e) => setYear(Number(e.target.value))}
               >
@@ -220,7 +228,7 @@ export default function AnalyseBox({
                     {y}
                   </MenuItem>
                 ))}
-                {visning === "tidstrend" && (
+                {view === "tidstrend" && (
                   <MenuItem value={"-"}>{dict.all_years_shown}</MenuItem>
                 )}
               </Select>
@@ -229,19 +237,19 @@ export default function AnalyseBox({
         </Grid>
 
         <Paper elevation={0} className={classNames["chart-container"]}>
-          {visning === "barchart" ? (
+          {view === "tidstrend" ? (
+            <AnalyseLineChart
+              analyse={analyse}
+              years={years}
+              level={level}
+              lang={lang}
+            />
+          ) : (
             <AnalyseBarChart
               analyse={analyse}
               year={year}
               level={level}
               view={view}
-              lang={lang}
-            />
-          ) : (
-            <AnalyseLineChart
-              analyse={analyse}
-              years={years}
-              level={level}
               lang={lang}
             />
           )}
