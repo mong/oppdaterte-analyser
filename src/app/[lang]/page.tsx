@@ -4,6 +4,11 @@ import Header from "@/components/Header";
 import { Box } from "@mui/material";
 import { Lang } from "@/types";
 
+export const dynamicParams = false;
+export async function generateStaticParams() {
+  return [{ lang: "no" }, { lang: "en" }];
+}
+
 export type MainPageProps = {
   params: {
     lang: Lang;

@@ -31,6 +31,7 @@ export interface Analyse {
 
 export interface Tag {
   _id: Types.ObjectId;
+  name: string;
   fullname: Text;
   introduction: Text;
 }

@@ -4,7 +4,12 @@ import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
 
-import { getAnalyserByTag, getTag, getTags } from "@/services/mongo";
+import {
+  getAnalyserByTag,
+  getTag,
+  getTags,
+  getKompendier,
+} from "@/services/mongo";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -22,6 +27,18 @@ export const generateMetadata = async ({
     keywords: `${params.kompendium}`,
   };
 };
+
+export const dynamicParams = false;
+export async function generateStaticParams() {
+  const kompendier = await getKompendier();
+
+  return ["no", "en"].flatMap((lang) =>
+    kompendier.map((kompendium) => ({
+      lang: lang,
+      kompendium: kompendium.name,
+    })),
+  );
+}
 
 export default async function KompendiumPage({
   params,

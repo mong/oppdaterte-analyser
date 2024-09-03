@@ -26,6 +26,13 @@ export const getTag = async (tag: string): Promise<Tag> => {
   return toPlainObject(await TagModel.findOne({ name: tag }).exec());
 };
 
+export const getKompendier = async (): Promise<Tag[]> => {
+  await dbConnect();
+  return toPlainObject(
+    await TagModel.find({ introduction: { $exists: true } }).exec(),
+  );
+};
+
 export const getTags = async (
   tags: string[],
 ): Promise<{ [k: string]: Tag }> => {
