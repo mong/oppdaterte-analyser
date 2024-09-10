@@ -28,6 +28,11 @@ export const generateMetadata = async ({
   };
 };
 
+/*
+
+  The code below works to generate static pages locally, but is disabled because
+  the build on github fails (it cannot connect to the MongoDB server)
+
 export const dynamicParams = false;
 export async function generateStaticParams() {
   const kompendier = await getKompendier();
@@ -39,6 +44,7 @@ export async function generateStaticParams() {
     })),
   );
 }
+*/
 
 export default async function KompendiumPage({
   params,
