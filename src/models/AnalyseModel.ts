@@ -12,6 +12,10 @@ const analyseSchema = new Schema<Analyse>(
       type: Map,
       of: String,
     },
+    discussion: {
+      type: Map,
+      of: String,
+    },
     published: { type: Number },
     tags: { type: [String] },
     views: [
