@@ -20,7 +20,7 @@ export default async function MainPage({ params }: MainPageProps) {
     <>
       <Header
         title="Oppdaterte resultater"
-        introduction="Dette er hovedsiden for oppdaterte Helseatlas-resultater"
+        introduction="Dette er hovedsiden for oppdaterte Helseatlas-analyser."
       />
       <main>
         <Box className="centered padding">
