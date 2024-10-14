@@ -1,7 +1,14 @@
-import Image from "next/image";
-import { Box } from "@mui/material";
+"use client";
 
-export const HeaderTop = () => {
+import Image from "next/image";
+import { Box, Link } from "@mui/material";
+import { Lang } from "@/types";
+
+import { usePathname } from "next/navigation";
+
+export const HeaderTop = (params: { lang: Lang }) => {
+  const pathname = usePathname();
+
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
       <Box className="centered padding">
@@ -12,6 +19,27 @@ export const HeaderTop = () => {
           width={130}
           priority
         />
+        <Box sx={{ display: "inline", float: "right" }}>
+          <Link
+            sx={{
+              borderRight: "1px solid #034584",
+              paddingRight: 1,
+              fontWeight: params.lang === "no" ? "bold" : "normal",
+            }}
+            href={pathname === "/" ? "/" : `/no/${pathname.slice(4, Infinity)}`}
+          >
+            NO
+          </Link>
+          <Link
+            sx={{
+              paddingLeft: 1,
+              fontWeight: params.lang === "en" ? "bold" : "normal",
+            }}
+            href={`/en/${pathname.slice(4, Infinity)}`}
+          >
+            ENG
+          </Link>
+        </Box>
       </Box>
     </Box>
   );

@@ -1,16 +1,18 @@
 import React from "react";
 import HeaderTop from "./HeaderTop";
 import HeaderMiddle from "./HeaderMiddle";
+import { Lang } from "@/types";
 
 type HeaderProps = {
+  lang: Lang;
   title: string;
   introduction: string;
 };
 
-export const Header = ({ title, introduction }: HeaderProps) => {
+export const Header = ({ lang, title, introduction }: HeaderProps) => {
   return (
     <>
-      <HeaderTop />
+      <HeaderTop lang={lang} />
       <HeaderMiddle title={title} introduction={introduction} />
     </>
   );

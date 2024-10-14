@@ -61,6 +61,7 @@ export default async function KompendiumPage({
   return (
     <>
       <Header
+        lang={params.lang}
         title={tag.fullname[params.lang]}
         introduction={tag.introduction[params.lang]}
       ></Header>

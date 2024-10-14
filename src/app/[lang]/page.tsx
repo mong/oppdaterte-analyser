@@ -19,6 +19,7 @@ export default async function MainPage({ params }: MainPageProps) {
   return (
     <>
       <Header
+        lang={params.lang}
         title="Oppdaterte resultater"
         introduction="Dette er hovedsiden for oppdaterte Helseatlas-analyser."
       />
