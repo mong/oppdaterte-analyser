@@ -1,12 +1,13 @@
 import { Analyse, Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { regions_dict } from "./nameMapping";
+import { regions_dict, Selection } from "@/lib/nameMapping";
 import React from "react";
 
 type AnalyseLineChartProps = {
   analyse: Analyse;
   years: number[];
   level: "region" | "sykehus";
+  selection: Selection;
   lang: Lang;
 };
 
@@ -26,6 +27,7 @@ export const AnalyseLineChart = ({
   analyse,
   years,
   level,
+  selection,
   lang,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
@@ -45,12 +47,13 @@ export const AnalyseLineChart = ({
   }, [analyse, years, level]);
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
+  const selectionIDs = ["8888", ...selection[level].map(String)];
 
   return (
     <LineChart
       margin={{
-        left: 70,
-        top: level === "region" ? 80 : 145 + 60 * (1 - smallFactor),
+        left: 50,
+        top: 60 + 5 * selectionIDs.length,
       }}
       dataset={dataset}
       xAxis={[
@@ -61,7 +64,7 @@ export const AnalyseLineChart = ({
           tickPlacement: "middle",
         },
       ]}
-      series={Object.keys(analyse.data[level]).map((area) => ({
+      series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
         curve: "linear",
@@ -75,7 +78,7 @@ export const AnalyseLineChart = ({
           direction: "row",
           position: { vertical: "top", horizontal: "middle" },
           padding: {
-            top: 20,
+            top: 10,
             left: 10,
             bottom: 20,
             right: 20,

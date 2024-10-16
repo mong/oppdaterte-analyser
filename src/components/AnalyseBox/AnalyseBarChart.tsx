@@ -1,6 +1,6 @@
 import { Analyse, Lang, Text } from "@/types";
-import { BarChart } from "@mui/x-charts/BarChart";
-import { regions_dict } from "@/components/AnalyseBox/nameMapping";
+import { BarChart, BarElementPath } from "@mui/x-charts/BarChart";
+import { regions_dict, Selection } from "@/lib/nameMapping";
 
 type AnalyseBarChartProps = {
   analyse: Analyse;
@@ -8,6 +8,8 @@ type AnalyseBarChartProps = {
   level: "region" | "sykehus";
   view: number;
   lang: Lang;
+  selection: Selection;
+  onClick: (n: number) => any;
 };
 
 export const AnalyseBarChart = ({
@@ -16,6 +18,8 @@ export const AnalyseBarChart = ({
   level,
   view,
   lang,
+  selection,
+  onClick,
 }: AnalyseBarChartProps) => {
   const defaultLabels: { [k: string]: Text[] } = {
     total: [{ no: "Total", en: "Total" }],
@@ -39,6 +43,9 @@ export const AnalyseBarChart = ({
     dataset.push(datapoint);
   }
   dataset.sort((a, b) => b.sum - a.sum);
+  const dataIndexToArea = Object.fromEntries(
+    dataset.map((bar, i) => [i, bar.area]),
+  );
 
   return (
     <BarChart
@@ -52,11 +59,32 @@ export const AnalyseBarChart = ({
           valueFormatter: (area) => `${regions_dict[lang][level][area]}`,
         },
       ]}
+      slots={{
+        bar: ({ ownerState, ...otherProps }) => (
+          <BarElementPath
+            {...otherProps}
+            ownerState={{
+              ...ownerState,
+              color:
+                dataIndexToArea[ownerState.dataIndex] === "8888"
+                  ? `rgba(0, 48, 135, ${0.85 * 0.65 ** Number(ownerState.id)})` // ownerState.id = series ID
+                  : selection[level].includes(
+                        Number(dataIndexToArea[ownerState.dataIndex]),
+                      )
+                    ? `rgba(16, 100, 205, ${0.85 * 0.65 ** Number(ownerState.id)})`
+                    : `rgba(46, 150, 255, ${0.85 * 0.65 ** Number(ownerState.id)})`,
+            }}
+          />
+        ),
+      }}
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
+        id: `${i}`,
         stack: "stack_group",
+        color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         ...(labels.length > 1 && { label: `${label[lang]}` }),
       }))}
+      onAxisClick={(event, params) => onClick(Number(params?.axisValue))}
       layout="horizontal"
       borderRadius={5}
     />

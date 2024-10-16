@@ -22,6 +22,8 @@ import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
 
+import { regions_dict, hospitalStructure, Selection } from "@/lib/nameMapping";
+
 export const getViewMetadata = (views: View[]) => {
   const defaultData: { [k: string]: View } = {
     total: {
@@ -41,8 +43,6 @@ export const getViewMetadata = (views: View[]) => {
       ],
     },
   };
-
-  console.log(views);
 
   if (views[0].name !== "total") {
     throw new Error(
@@ -85,6 +85,10 @@ export default function AnalyseBox({
   const [year, setYear] = React.useState(Math.max(...years));
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
   const [view, setView] = React.useState<"tidstrend" | number>(0);
+
+  const [selection, setSelection] = React.useState(
+    new Selection({ region: [], sykehus: [1, 2, 3] }),
+  );
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -242,6 +246,7 @@ export default function AnalyseBox({
               analyse={analyse}
               years={years}
               level={level}
+              selection={selection}
               lang={lang}
             />
           ) : (
@@ -251,6 +256,15 @@ export default function AnalyseBox({
               level={level}
               view={view}
               lang={lang}
+              selection={selection}
+              onClick={(area) => {
+                if (area !== 8888)
+                  setSelection(
+                    level === "region"
+                      ? selection.toggleRegion(area)
+                      : selection.toggleSykehus(area),
+                  );
+              }}
             />
           )}
         </Paper>
