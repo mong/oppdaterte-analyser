@@ -1,4 +1,8 @@
-const untranslated: any = {
+type SykehusNavn = {
+  sykehus: { [k: number]: string };
+  region: { [k: number]: string };
+};
+const untranslated: SykehusNavn = {
   sykehus: {
     1: "Finnmark",
     2: "UNN",
@@ -82,7 +86,7 @@ export class Selection {
   }
 }
 
-export const regions_dict = {
+export const regions_dict: { no: SykehusNavn; en: SykehusNavn } = {
   no: {
     sykehus: untranslated.sykehus,
     region: untranslated.region,

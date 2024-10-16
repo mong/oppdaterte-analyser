@@ -87,7 +87,7 @@ export default function AnalyseBox({
   const [view, setView] = React.useState<"tidstrend" | number>(0);
 
   const [selection, setSelection] = React.useState(
-    new Selection({ region: [], sykehus: [1, 2, 3] }),
+    new Selection({ region: [], sykehus: [] }),
   );
 
   const [expanded, setExpanded] = React.useState(false);

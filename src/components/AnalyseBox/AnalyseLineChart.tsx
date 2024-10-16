@@ -69,7 +69,7 @@ export const AnalyseLineChart = ({
         id: area,
         curve: "linear",
         showMark: false,
-        label: regions_dict[lang][level][area],
+        label: regions_dict[lang][level][Number(area)],
       }))}
       onLineClick={(a, b) => console.log("Info: ", a, b)}
       tooltip={{ trigger: "axis" }}
