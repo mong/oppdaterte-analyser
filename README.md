@@ -2,7 +2,7 @@
 
 This is the repository for the web app showing updated health atlas analyses.
 
-The development version of the web app is continuously deployed from the main branch to Microsoft Azure, and the site can be found at http://utv-oppdaterte-analyser.azurewebsites.net.
+The development version of the web app is continuously deployed from the main branch to Microsoft Azure, and the site can be found at http://web-oppdaterte-analyser.azurewebsites.net.
 
 ## MongoDB
 
