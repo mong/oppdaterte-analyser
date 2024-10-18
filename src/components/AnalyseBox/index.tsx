@@ -16,7 +16,7 @@ import {
   Chip,
   useTheme,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid2";
 
 import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -115,6 +115,7 @@ export default function AnalyseBox({
       expanded={expanded}
       sx={{
         overflow: "clip",
+        borderRadius: { xs: 0, md: "24px" },
       }}
     >
       <AccordionSummary
@@ -152,11 +153,10 @@ export default function AnalyseBox({
           {!expanded && tagList}
         </Box>
       </AccordionSummary>
-      <AccordionDetails>
-        <Grid container spacing={2}>
+      <AccordionDetails sx={{ padding: 0 }}>
+        <Grid container spacing={2} sx={{ padding: 2 }}>
           <Grid
-            xs={12}
-            sm={4}
+            size={{ xs: 12, sm: 4 }}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -181,8 +181,7 @@ export default function AnalyseBox({
           </Grid>
 
           <Grid
-            xs={12}
-            sm={4}
+            size={{ xs: 12, sm: 4 }}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -212,8 +211,7 @@ export default function AnalyseBox({
             </FormControl>
           </Grid>
           <Grid
-            xs={12}
-            sm={4}
+            size={{ xs: 12, sm: 4 }}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -268,9 +266,10 @@ export default function AnalyseBox({
             />
           )}
         </Paper>
-        <br />
-        <Typography>{analyse.discussion[lang]}</Typography>
-        {tagList}
+        <Box sx={{ padding: 2 }}>
+          <Typography>{analyse.discussion[lang]}</Typography>
+          {tagList}
+        </Box>
       </AccordionDetails>
     </Accordion>
   );

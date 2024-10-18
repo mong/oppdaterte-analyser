@@ -31,6 +31,12 @@ export const PageWrapper = ({ children }: PropsWithChildren) => {
           paddingRight: theme.spacing(16),
         },
       },
+      "& .analyse-boxes": {
+        [theme.breakpoints.down("md")]: {
+          paddingLeft: theme.spacing(0),
+          paddingRight: theme.spacing(0),
+        },
+      },
       backgroundColor: theme.palette.background.paper,
     },
   };

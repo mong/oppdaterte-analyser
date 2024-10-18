@@ -19,7 +19,7 @@ export default async function AnalyseList({
   const dict = await getDictionary(lang);
 
   return (
-    <Box className="centered" sx={{ padding: "40px 0" }}>
+    <Box className="centered analyse-boxes" sx={{ padding: "40px 0" }}>
       <Suspense
         fallback={<Skeleton variant="rectangular" width={610} height={600} />}
       >
