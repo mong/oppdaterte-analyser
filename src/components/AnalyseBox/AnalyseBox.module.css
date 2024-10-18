@@ -1,5 +1,5 @@
 .analyse-box {
-  border: 1px solid rgb(0, 48, 135);
+  outline: 1px solid rgb(0, 48, 135);
   border-radius: 24px;
   margin-bottom: 40px;
   max-width: 1000px;
