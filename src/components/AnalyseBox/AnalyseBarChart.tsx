@@ -88,7 +88,7 @@ export const AnalyseBarChart = ({
               ...ownerState,
               color:
                 dataIndexToArea[ownerState.dataIndex] === 8888
-                  ? `rgba(80, 80, 100, ${0.85 * 0.65 ** Number(ownerState.id)})` // ownerState.id = series ID
+                  ? `rgba(120, 120, 140, ${0.85 * 0.65 ** Number(ownerState.id)})` // ownerState.id = series ID
                   : selection[level].includes(
                         dataIndexToArea[ownerState.dataIndex],
                       )
