@@ -23,6 +23,7 @@ import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
 
 import { regions_dict, hospitalStructure, Selection } from "@/lib/nameMapping";
+import AreaPicker from "@/components/AreaPicker";
 
 export const getViewMetadata = (views: View[]) => {
   const defaultData: { [k: string]: View } = {
@@ -267,6 +268,16 @@ export default function AnalyseBox({
           )}
         </Paper>
         <Box sx={{ padding: 2 }}>
+          <AreaPicker
+            selection={selection}
+            lang={lang}
+            onRegionChange={(region) =>
+              setSelection(selection.toggleRegion(region))
+            }
+            onSykehusChange={(sykehus) =>
+              setSelection(selection.toggleSykehus(sykehus))
+            }
+          />
           <Typography>{analyse.discussion[lang]}</Typography>
           {tagList}
         </Box>
