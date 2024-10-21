@@ -33,6 +33,12 @@ export default function AreaPicker({
         expandIcon={<ExpandMoreIcon />}
         aria-controls="area-picker"
         id="area-picker"
+        sx={{
+          backgroundColor: `rgba(46, 150, 255, ${0.85 * 0.65 ** 4})`,
+          "&:hover": {
+            backgroundColor: `rgba(46, 150, 255, ${0.85 * 0.65 ** 3})`,
+          },
+        }}
       >
         <Typography>{dict.choose_area}</Typography>
       </AccordionSummary>
