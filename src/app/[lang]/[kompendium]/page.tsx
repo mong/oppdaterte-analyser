@@ -3,6 +3,7 @@ import { Skeleton } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
+import { notFound } from "next/navigation";
 
 import {
   getAnalyserByTag,
@@ -52,8 +53,11 @@ export default async function KompendiumPage({
   params: { lang: Lang; kompendium: string };
 }) {
   const tag = await getTag(params.kompendium);
-  const analyser = await getAnalyserByTag(params.kompendium);
+  if (!tag?.introduction || !["en", "no"].includes(params.lang)) {
+    notFound();
+  }
 
+  const analyser = await getAnalyserByTag(params.kompendium);
   const tags = await getTags(
     Array.from(new Set(analyser.flatMap((analyse) => analyse.tags))),
   );
