@@ -10,5 +10,8 @@
     "region": "Region",
     "choose_area": "Velg opptaksområder",
     "empty_area_selection": "Ingen opptaksområder valgt"
+  },
+  "kompendium": {
+    "updated_analyses": "Oppdaterte analyser"
   }
 }

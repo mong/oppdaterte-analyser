@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
+import { getDictionary } from "@/lib/dictionaries";
 
 import {
   getAnalyserByTag,
@@ -20,11 +21,14 @@ import {
 export const generateMetadata = async ({
   params,
 }: {
-  params: { kompendium: string };
+  params: { lang: Lang; kompendium: string };
 }) => {
+  const tag = await getTag(params.kompendium);
+  const dict = await getDictionary(params.lang);
+
   return {
-    title: `${params.kompendium}`,
-    description: `Oppdaterte analyser for ${params.kompendium}`,
+    title: `${tag.fullname[params.lang]}`,
+    description: `${dict.kompendium.updated_analyses}: ${tag.fullname[params.lang]}`,
     keywords: `${params.kompendium}`,
   };
 };

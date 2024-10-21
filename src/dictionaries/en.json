@@ -10,5 +10,8 @@
     "region": "Region",
     "choose_area": "Choose referral areas",
     "empty_area_selection": "No referral areas chosen"
+  },
+  "kompendium": {
+    "updated_analyses": "Updated analyses"
   }
 }
