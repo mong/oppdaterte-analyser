@@ -23,6 +23,7 @@ import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
 
 import { regions_dict, hospitalStructure, Selection } from "@/lib/nameMapping";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AreaPicker from "@/components/AreaPicker";
 
 export const getViewMetadata = (views: View[]) => {
@@ -122,6 +123,7 @@ export default function AnalyseBox({
       <AccordionSummary
         aria-controls={`${analyse.name}-content`}
         id={`${analyse.name}-header`}
+        expandIcon={<ArrowDownwardIcon />}
         sx={{
           transition: "background-color .2s ease-in",
           background: `linear-gradient(rgba(0, 0, 0, 0), white)`,
@@ -270,6 +272,7 @@ export default function AnalyseBox({
         </Paper>
         <Box sx={{ padding: 2 }}>
           <AreaPicker
+            dict={dict}
             selection={selection}
             lang={lang}
             onRegionChange={(region) =>

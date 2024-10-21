@@ -8,6 +8,7 @@
     "all_years_shown": "All years are shown",
     "sykehus": "Hospital",
     "region": "Region",
-    "choose_area": "Choose referral area"
+    "choose_area": "Choose referral areas",
+    "empty_area_selection": "No referral areas chosen"
   }
 }

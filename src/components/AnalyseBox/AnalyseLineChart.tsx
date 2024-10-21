@@ -77,7 +77,7 @@ export const AnalyseLineChart = ({
       onLineClick={(a, b) => console.log("Info: ", a, b)}
       tooltip={{ trigger: "axis" }}
       slotProps={{
-        loadingOverlay: { message: dict.choose_area },
+        loadingOverlay: { message: dict.empty_area_selection },
         legend: {
           direction: "row",
           position: { vertical: "top", horizontal: "middle" },
