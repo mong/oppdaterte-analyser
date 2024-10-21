@@ -157,7 +157,7 @@ export default function AnalyseBox({
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
-        <Grid container spacing={2} sx={{ padding: 2 }}>
+        <Grid container spacing={2} sx={{ padding: 2, paddingBottom: 1 }}>
           <Grid
             size={{ xs: 12, sm: 4 }}
             display="flex"
@@ -270,7 +270,7 @@ export default function AnalyseBox({
             />
           )}
         </Paper>
-        <Box sx={{ padding: 2 }}>
+        <Box sx={{ padding: 2, paddingTop: 0 }}>
           <AreaPicker
             dict={dict}
             selection={selection}
