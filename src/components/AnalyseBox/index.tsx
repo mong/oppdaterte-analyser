@@ -243,6 +243,7 @@ export default function AnalyseBox({
           {view === "tidstrend" ? (
             <AnalyseLineChart
               analyse={analyse}
+              dict={dict}
               years={years}
               level={level}
               selection={selection}

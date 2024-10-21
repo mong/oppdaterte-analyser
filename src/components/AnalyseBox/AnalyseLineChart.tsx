@@ -9,6 +9,7 @@ type AnalyseLineChartProps = {
   level: "region" | "sykehus";
   selection: Selection;
   lang: Lang;
+  dict: { [k: string]: string };
 };
 
 export const useWindowWidth = () => {
@@ -29,6 +30,7 @@ export const AnalyseLineChart = ({
   level,
   selection,
   lang,
+  dict,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
@@ -51,6 +53,7 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
+      loading={selectionIDs.length === 1}
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
@@ -74,6 +77,7 @@ export const AnalyseLineChart = ({
       onLineClick={(a, b) => console.log("Info: ", a, b)}
       tooltip={{ trigger: "axis" }}
       slotProps={{
+        loadingOverlay: { message: dict.choose_area },
         legend: {
           direction: "row",
           position: { vertical: "top", horizontal: "middle" },
