@@ -142,15 +142,6 @@ export default function AnalyseBox({
             <li>
               <Typography>{analyse.description[lang]}</Typography>
             </li>
-            <li>
-              <Typography>Dette er en konklusjon, dataene viser at.</Typography>
-            </li>
-            <li>
-              <Typography>
-                En normativ oppfordring til å gjøre mer eller mindre av et eller
-                annet?
-              </Typography>
-            </li>
           </ul>
 
           {!expanded && tagList}
