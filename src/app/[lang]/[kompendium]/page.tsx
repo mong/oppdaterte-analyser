@@ -6,6 +6,9 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
+import { remark } from "remark";
+import html from "remark-html";
+
 import {
   getAnalyserByTag,
   getTag,
@@ -51,6 +54,11 @@ export async function generateStaticParams() {
 }
 */
 
+async function markdownToHtml(markdown: string): Promise<string> {
+  const text = await remark().use(html).process(markdown);
+  return text.toString();
+}
+
 export default async function KompendiumPage({
   params,
 }: {
@@ -66,6 +74,20 @@ export default async function KompendiumPage({
     Array.from(new Set(analyser.flatMap((analyse) => analyse.tags))),
   );
 
+  const mappings: [string, { [k: string]: string }][] = await Promise.all(
+    analyser.map(async (analyse) => {
+      const htmlSummary = await markdownToHtml(analyse.summary[params.lang]);
+      const htmlDiscussion = await markdownToHtml(
+        analyse.discussion[params.lang],
+      );
+      return [
+        analyse.name,
+        { summary: htmlSummary, discussion: htmlDiscussion },
+      ];
+    }),
+  );
+  const rawHtmlFromMarkdown = Object.fromEntries(mappings);
+
   return (
     <>
       <Header
@@ -77,7 +99,12 @@ export default async function KompendiumPage({
         <Suspense
           fallback={<Skeleton variant="rectangular" width={210} height={318} />}
         >
-          <AnalyseList analyser={analyser} tags={tags} lang={params.lang} />
+          <AnalyseList
+            analyser={analyser}
+            tags={tags}
+            lang={params.lang}
+            rawHtmlFromMarkdown={rawHtmlFromMarkdown}
+          />
         </Suspense>
       </main>
     </>

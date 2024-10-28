@@ -71,6 +71,7 @@ export type AnalyseBoxProps = {
   tags: { [k: string]: Tag };
   lang: Lang;
   dict: { [k: string]: string };
+  rawHtmlFromMarkdown: { [k: string]: string };
 };
 
 export default function AnalyseBox({
@@ -78,6 +79,7 @@ export default function AnalyseBox({
   tags,
   lang,
   dict,
+  rawHtmlFromMarkdown,
 }: AnalyseBoxProps) {
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
@@ -116,8 +118,8 @@ export default function AnalyseBox({
       square={true}
       expanded={expanded}
       sx={{
-        overflow: "clip",
         borderRadius: { xs: 0, md: "24px" },
+        boxShadow: { xs: "0px 3px 10px #AAA", md: "2px 3px 10px #AAA" },
       }}
     >
       <AccordionSummary
@@ -138,12 +140,9 @@ export default function AnalyseBox({
           <Typography variant="body2">
             Oppdatert: {new Date(analyse.published).toUTCString()}
           </Typography>
-          <ul>
-            <li>
-              <Typography>{analyse.description[lang]}</Typography>
-            </li>
-          </ul>
-
+          <div
+            dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
+          />
           {!expanded && tagList}
         </Box>
       </AccordionSummary>
@@ -273,7 +272,9 @@ export default function AnalyseBox({
               setSelection(selection.toggleSykehus(sykehus))
             }
           />
-          <Typography>{analyse.discussion[lang]}</Typography>
+          <div
+            dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.discussion }}
+          />
           {tagList}
         </Box>
       </AccordionDetails>

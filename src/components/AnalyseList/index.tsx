@@ -9,12 +9,14 @@ type AnalyseListProps = {
   analyser: Analyse[];
   tags: { [k: string]: Tag };
   lang: Lang;
+  rawHtmlFromMarkdown: { [k: string]: { [k: string]: string } };
 };
 
 export default async function AnalyseList({
   analyser,
   tags,
   lang,
+  rawHtmlFromMarkdown,
 }: AnalyseListProps) {
   const dict = await getDictionary(lang);
 
@@ -26,6 +28,7 @@ export default async function AnalyseList({
         {analyser.map((analyse) => {
           return (
             <AnalyseBox
+              rawHtmlFromMarkdown={rawHtmlFromMarkdown[analyse.name]}
               key={analyse.name}
               analyse={analyse}
               tags={tags}

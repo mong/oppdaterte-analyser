@@ -8,7 +8,7 @@ const analyseSchema = new Schema<Analyse>(
       type: Map,
       of: String,
     },
-    description: {
+    summary: {
       type: Map,
       of: String,
     },

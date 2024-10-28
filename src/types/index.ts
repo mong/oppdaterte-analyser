@@ -18,7 +18,7 @@ export interface Analyse {
   name: string;
   published: number;
   title: Text;
-  description: Text;
+  summary: Text;
   discussion: Text;
   views: View[];
   data: {

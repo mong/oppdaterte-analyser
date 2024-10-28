@@ -40,7 +40,7 @@ export default function AreaPicker({
           },
         }}
       >
-        <Typography>{dict.choose_area}</Typography>
+        <Typography>{dict.choose_area}:</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
