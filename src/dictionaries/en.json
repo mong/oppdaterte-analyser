@@ -13,5 +13,8 @@
   },
   "kompendium": {
     "updated_analyses": "Updated analyses"
+  },
+  "general": {
+    "under_development": "This website is under development. Changes to the site and bugs are likely. Feedback from users is highly valued, and can be sent to"
   }
 }

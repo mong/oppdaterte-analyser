@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { Box, Skeleton } from "@mui/material";
+import { Alert, Box, Skeleton } from "@mui/material";
 import AnalyseBox from "@/components/AnalyseBox";
 import { Analyse, Tag, Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
@@ -22,6 +22,16 @@ export default async function AnalyseList({
 
   return (
     <Box className="centered analyse-boxes" sx={{ padding: "40px 0" }}>
+      <Alert
+        severity="info"
+        sx={{ marginBottom: "20px", marginTop: "-20px", maxWidth: "1000px" }}
+      >
+        {dict.general.under_development}{" "}
+        <a href="mailto:mattias.ugelvik@helse-nord.no">
+          mattias.ugelvik@helse-nord.no
+        </a>
+        .
+      </Alert>
       <Suspense
         fallback={<Skeleton variant="rectangular" width={610} height={600} />}
       >

@@ -13,5 +13,8 @@
   },
   "kompendium": {
     "updated_analyses": "Oppdaterte analyser"
+  },
+  "general": {
+    "under_development": "Denne nettsiden er under utvikling. Endringer og feil med siden kan forventes. Tilbakemeldinger fra brukere av siden er høyt verdsatt, og kan sendes til"
   }
 }

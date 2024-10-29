@@ -155,18 +155,10 @@ const colorTokens = {
     main: "#1a1a1a",
     contrastText: "#fff",
   },
-
   text: {
     primary: "#000",
     secondary: "#003087",
   },
-
-  info: {
-    main: "#bfc7e4",
-    light: "#e6e9fa",
-    dark: "#003087",
-  },
-
   success: {
     main: "#add9b1",
     light: "#eaf6eb",
