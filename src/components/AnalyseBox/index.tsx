@@ -14,7 +14,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
-  useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
@@ -22,7 +21,7 @@ import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
 
-import { regions_dict, hospitalStructure, Selection } from "@/lib/nameMapping";
+import { Selection } from "@/lib/nameMapping";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AreaPicker from "@/components/AreaPicker";
 
@@ -96,8 +95,6 @@ export default function AnalyseBox({
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const theme = useTheme();
-
   const tagList = (
     <Box className={classNames["tag-container"]}>
       {analyse.tags.map((tag) => (
@@ -126,13 +123,13 @@ export default function AnalyseBox({
         aria-controls={`${analyse.name}-content`}
         id={`${analyse.name}-header`}
         expandIcon={<ArrowDownwardIcon />}
-        sx={{
+        sx={(theme) => ({
           transition: "background-color .2s ease-in",
           background: `linear-gradient(rgba(0, 0, 0, 0), white)`,
           ":hover": {
-            backgroundColor: theme.palette.surface2.light,
+            backgroundColor: theme.palette.primary.light,
           },
-        }}
+        })}
         onClick={() => setExpanded(!expanded)}
       >
         <Box sx={{ padding: "10px" }}>
