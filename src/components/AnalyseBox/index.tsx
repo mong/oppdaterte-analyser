@@ -22,6 +22,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid2";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { ClickAwayListener } from "@mui/base";
 
 import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -299,6 +300,7 @@ export default function AnalyseBox({
               >
                 {dict.utvalg}
               </Button>
+
               <Popper
                 transition
                 id="utvalgs-popper"
@@ -319,21 +321,29 @@ export default function AnalyseBox({
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={150}>
                     <Paper elevation={10} sx={{ padding: 2 }}>
-                      <Box display="flex" alignItems="center">
-                        <Box flexGrow={1}>
-                          <Typography variant="h4">{dict.utvalg}</Typography>
-                        </Box>
+                      <ClickAwayListener
+                        onClickAway={() => setUtvalgAnchor(null)}
+                      >
                         <Box>
-                          <IconButton onClick={() => setUtvalgAnchor(null)}>
-                            <CloseIcon />
-                          </IconButton>
+                          <Box display="flex" alignItems="center">
+                            <Box flexGrow={1}>
+                              <Typography variant="h4">
+                                {dict.utvalg}
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <IconButton onClick={() => setUtvalgAnchor(null)}>
+                                <CloseIcon />
+                              </IconButton>
+                            </Box>
+                          </Box>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: rawHtmlFromMarkdown.utvalg,
+                            }}
+                          />
                         </Box>
-                      </Box>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: rawHtmlFromMarkdown.utvalg,
-                        }}
-                      />
+                      </ClickAwayListener>
                     </Paper>
                   </Fade>
                 )}
