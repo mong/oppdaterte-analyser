@@ -30,5 +30,6 @@
 .tag-container {
   display: flex;
   flex-wrap: wrap;
+  row-gap: 10px;
   margin-top: 8px;
 }
