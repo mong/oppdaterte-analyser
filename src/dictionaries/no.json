@@ -9,7 +9,8 @@
     "sykehus": "Helseforetak",
     "region": "Region",
     "choose_area": "Velg opptaksområder",
-    "empty_area_selection": "Ingen opptaksområder valgt"
+    "empty_area_selection": "Ingen opptaksområder valgt",
+    "utvalg": "Utvalg"
   },
   "kompendium": {
     "updated_analyses": "Oppdaterte analyser"

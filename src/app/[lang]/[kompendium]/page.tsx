@@ -80,9 +80,10 @@ export default async function KompendiumPage({
       const htmlDiscussion = await markdownToHtml(
         analyse.discussion[params.lang],
       );
+      const utvalg = await markdownToHtml(analyse.utvalg[params.lang]);
       return [
         analyse.name,
-        { summary: htmlSummary, discussion: htmlDiscussion },
+        { summary: htmlSummary, discussion: htmlDiscussion, utvalg: utvalg },
       ];
     }),
   );

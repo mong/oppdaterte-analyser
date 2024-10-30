@@ -14,8 +14,14 @@ import {
   AccordionSummary,
   AccordionDetails,
   Chip,
+  Button,
+  Popper,
+  Fade,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid2";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { Analyse, Tag, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -94,6 +100,10 @@ export default function AnalyseBox({
   );
 
   const [expanded, setExpanded] = React.useState(false);
+
+  const [utvalgAnchor, setUtvalgAnchor] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   const tagList = (
     <Box className={classNames["tag-container"]}>
@@ -272,7 +282,64 @@ export default function AnalyseBox({
           <div
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.discussion }}
           />
-          {tagList}
+          <Grid
+            container
+            sx={{ justifyContent: "space-between", alignItems: "flex-end" }}
+          >
+            <Grid size="grow">{tagList}</Grid>
+            <Grid>
+              <Button
+                aria-describedby="utvalgs-popper"
+                startIcon={<InfoOutlinedIcon />}
+                variant={utvalgAnchor ? "contained" : "outlined"}
+                sx={{ borderRadius: "16px", textTransform: "none" }}
+                onClick={(event) =>
+                  setUtvalgAnchor(utvalgAnchor ? null : event.currentTarget)
+                }
+              >
+                {dict.utvalg}
+              </Button>
+              <Popper
+                transition
+                id="utvalgs-popper"
+                open={Boolean(utvalgAnchor)}
+                anchorEl={utvalgAnchor}
+                placement="top-end"
+                sx={{ margin: "10px" }}
+                style={{ width: "min(100vw, 800px)" }}
+                modifiers={[
+                  {
+                    name: "offset",
+                    options: {
+                      offset: [0, 10],
+                    },
+                  },
+                ]}
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={150}>
+                    <Paper elevation={10} sx={{ padding: 2 }}>
+                      <Box display="flex" alignItems="center">
+                        <Box flexGrow={1}>
+                          <Typography variant="h4">{dict.utvalg}</Typography>
+                        </Box>
+                        <Box>
+                          <IconButton onClick={() => setUtvalgAnchor(null)}>
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: rawHtmlFromMarkdown.utvalg,
+                        }}
+                      />
+                    </Paper>
+                  </Fade>
+                )}
+              </Popper>
+            </Grid>
+          </Grid>
         </Box>
       </AccordionDetails>
     </Accordion>

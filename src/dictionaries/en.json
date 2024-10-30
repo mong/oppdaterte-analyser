@@ -9,7 +9,8 @@
     "sykehus": "Hospital",
     "region": "Region",
     "choose_area": "Choose referral areas",
-    "empty_area_selection": "No referral areas chosen"
+    "empty_area_selection": "No referral areas chosen",
+    "utvalg": "Patient selection"
   },
   "kompendium": {
     "updated_analyses": "Updated analyses"
