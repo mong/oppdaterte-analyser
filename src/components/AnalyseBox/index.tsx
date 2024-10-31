@@ -320,11 +320,11 @@ export default function AnalyseBox({
               >
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={150}>
-                    <Paper elevation={10} sx={{ padding: 2 }}>
+                    <Paper elevation={10}>
                       <ClickAwayListener
                         onClickAway={() => setUtvalgAnchor(null)}
                       >
-                        <Box>
+                        <Box sx={{ padding: 2 }}>
                           <Box display="flex" alignItems="center">
                             <Box flexGrow={1}>
                               <Typography variant="h4">
