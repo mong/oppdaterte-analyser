@@ -9,6 +9,9 @@ export const PageWrapper = ({ children }: PropsWithChildren) => {
 
   const styles = {
     pageWrapper: {
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
       "& .padding": {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 
 export default function Footer() {
   return (
-    <Box>
+    <footer style={{ marginTop: "auto" }}>
       <Box
         sx={{ bgcolor: "footer1.main", color: "footer1.contrastText" }}
         className="padding"
@@ -23,6 +23,6 @@ export default function Footer() {
           priority
         />
       </Box>
-    </Box>
+    </footer>
   );
 }
