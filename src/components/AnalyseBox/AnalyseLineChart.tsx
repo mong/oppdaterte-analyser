@@ -71,7 +71,7 @@ export const AnalyseLineChart = ({
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
-  const dataset = React.useMemo(() => {
+  const dataset: { [k: number]: number; year: number }[] = React.useMemo(() => {
     return [...years].reverse().map((year) => {
       return {
         year: year,
@@ -84,6 +84,17 @@ export const AnalyseLineChart = ({
       };
     });
   }, [analyse, years, level]);
+  const maxValue = React.useMemo(
+    () =>
+      Math.max(
+        ...dataset.flatMap((yearly_data) =>
+          Object.keys(linechart_colors[level]).map(
+            (area) => yearly_data[Number(area)],
+          ),
+        ),
+      ),
+    [analyse, years, level],
+  );
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
   const selectionIDs = ["8888", ...selection[level].map(String)];
@@ -104,6 +115,7 @@ export const AnalyseLineChart = ({
           tickPlacement: "middle",
         },
       ]}
+      yAxis={[{ min: 0, max: maxValue }]}
       series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
