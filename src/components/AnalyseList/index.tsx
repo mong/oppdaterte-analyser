@@ -27,8 +27,8 @@ export default async function AnalyseList({
         sx={{ marginBottom: "20px", marginTop: "-20px", maxWidth: "1000px" }}
       >
         {dict.general.under_development}{" "}
-        <a href="mailto:mattias.ugelvik@helse-nord.no">
-          mattias.ugelvik@helse-nord.no
+        <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
+          helseatlas@skde.no
         </a>
         .
       </Alert>

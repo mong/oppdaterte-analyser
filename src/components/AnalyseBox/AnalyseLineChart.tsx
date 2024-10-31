@@ -112,7 +112,6 @@ export const AnalyseLineChart = ({
         label: regions_dict[lang][level][Number(area)],
         color: linechart_colors[level][Number(area)],
       }))}
-      onLineClick={(a, b) => console.log("Info: ", a, b)}
       tooltip={{ trigger: "axis" }}
       slotProps={{
         loadingOverlay: { message: dict.empty_area_selection },
@@ -133,8 +132,8 @@ export const AnalyseLineChart = ({
         },
       }}
       sx={{
-        "& .MuiLineElement-root:hover": {
-          strokeWidth: "5px",
+        "& .MuiLineElement-root": {
+          strokeWidth: "2.5px",
         },
       }}
     />
