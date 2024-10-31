@@ -1,14 +1,11 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-export const PageWrapper = ({ children }: PropsWithChildren) => {
-  const theme = useTheme();
-
-  const styles = {
-    pageWrapper: {
+export const PageWrapper = ({ children }: PropsWithChildren) => (
+  <Box
+    sx={(theme) => ({
       height: "100vh",
       display: "flex",
       flexDirection: "column",
@@ -41,10 +38,10 @@ export const PageWrapper = ({ children }: PropsWithChildren) => {
         },
       },
       backgroundColor: theme.palette.background.paper,
-    },
-  };
-
-  return <Box sx={styles.pageWrapper}>{children}</Box>;
-};
+    })}
+  >
+    {children}
+  </Box>
+);
 
 export default PageWrapper;
