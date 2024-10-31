@@ -135,6 +135,10 @@ export const AnalyseLineChart = ({
         "& .MuiLineElement-root": {
           strokeWidth: "2.5px",
         },
+        backgroundImage: "url('/img/logo-skde-graa.svg')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "max(60px, 10%)",
+        backgroundPosition: "bottom 65px right 5%",
       }}
     />
   );
