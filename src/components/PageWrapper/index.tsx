@@ -14,11 +14,7 @@ export const PageWrapper = ({ children }: PropsWithChildren) => (
         paddingBottom: theme.spacing(4),
       },
       "& .centered": {
-        [theme.breakpoints.down("sm")]: {
-          paddingLeft: theme.spacing(4),
-          paddingRight: theme.spacing(4),
-        },
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("xs")]: {
           paddingLeft: theme.spacing(4),
           paddingRight: theme.spacing(4),
         },
