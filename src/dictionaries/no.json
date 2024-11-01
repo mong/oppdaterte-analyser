@@ -12,14 +12,14 @@
     "empty_area_selection": "Ingen opptaksområder valgt",
     "utvalg": "Utvalg"
   },
-  "kompendium": {
-    "updated_analyses": "Oppdaterte analyser"
-  },
   "general": {
+    "updated_analyses": "Oppdaterte analyser",
     "under_development": "Denne nettsiden er under utvikling. Endringer og feil med siden kan forventes. Tilbakemeldinger fra brukere av siden er høyt verdsatt, og kan sendes til"
   },
   "frontpage": {
     "title": "Helseatlas oppdaterte analyser",
-    "description": "Visning av oppdaterte analyser fra Helseatlas"
+    "description": "Visning av oppdaterte analyser fra Helseatlas",
+    "introduction": "Dette er hovedsiden for oppdaterte Helseatlas-analyser.",
+    "list_text": "Dette er en liste over alle tilgjengelike kompendier (samlinger av relaterte analyser):"
   }
 }

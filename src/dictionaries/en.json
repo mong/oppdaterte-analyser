@@ -12,14 +12,14 @@
     "empty_area_selection": "No referral areas chosen",
     "utvalg": "Patient selection"
   },
-  "kompendium": {
-    "updated_analyses": "Updated analyses"
-  },
   "general": {
+    "updated_analyses": "Updated analyses",
     "under_development": "This website is under development. Changes to the site and bugs are likely. Feedback from users is highly valued, and can be sent to"
   },
   "frontpage": {
     "title": "Health Atlas updated analyses",
-    "description": "View updated analyses from SKDE's Health Atlas"
+    "description": "View updated analyses from SKDE's Health Atlas" ,
+    "introduction": "This is the main page for updated Health Atlas analyses.",
+    "list_text": "This is a list of all available compendiums (collections of related analyses):"
   }
 }
