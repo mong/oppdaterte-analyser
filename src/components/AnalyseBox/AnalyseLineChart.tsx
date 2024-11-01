@@ -93,7 +93,7 @@ export const AnalyseLineChart = ({
           ),
         ),
       ),
-    [analyse, years, level],
+    [analyse, years, level, dataset],
   );
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
