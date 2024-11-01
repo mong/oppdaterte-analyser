@@ -12,11 +12,7 @@ import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
 import { getKompendier } from "@/services/mongo";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-
-export const dynamicParams = false;
-export async function generateStaticParams() {
-  return [{ lang: "no" }, { lang: "en" }];
-}
+import { notFound } from "next/navigation";
 
 export const generateMetadata = async ({
   params,
@@ -24,7 +20,6 @@ export const generateMetadata = async ({
   params: { lang: Lang };
 }) => {
   const dict = await getDictionary(params.lang);
-
   return {
     title: dict.frontpage.title,
     description: dict.frontpage.description,
@@ -38,6 +33,10 @@ export type MainPageProps = {
 };
 
 export default async function MainPage({ params }: MainPageProps) {
+  if (!["en", "no"].includes(params.lang)) {
+    notFound();
+  }
+
   const dict = await getDictionary(params.lang);
   const kompendier = await getKompendier();
 
