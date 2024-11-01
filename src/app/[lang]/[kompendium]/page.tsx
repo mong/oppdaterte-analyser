@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Skeleton } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
@@ -9,12 +9,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import { remark } from "remark";
 import html from "remark-html";
 
-import {
-  getAnalyserByTag,
-  getTag,
-  getTags,
-  getKompendier,
-} from "@/services/mongo";
+import { getAnalyserByTag, getTag, getTags } from "@/services/mongo";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -98,7 +93,11 @@ export default async function KompendiumPage({
       ></Header>
       <main>
         <Suspense
-          fallback={<Skeleton variant="rectangular" width={210} height={318} />}
+          fallback={
+            <Box className="centered" sx={{ paddingTop: 5 }}>
+              <CircularProgress />
+            </Box>
+          }
         >
           <AnalyseList
             analyser={analyser}
