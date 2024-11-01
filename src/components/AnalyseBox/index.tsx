@@ -110,8 +110,8 @@ export default function AnalyseBox({
     <Box className={classNames["tag-container"]}>
       {analyse.tags.map((tag) => (
         <Chip
-          label={tags[tag].fullname[lang]}
-          color="primary"
+          label={tags[tag]?.fullname[lang] || tag}
+          color={tag in tags ? "primary" : "error"}
           key={tag}
           sx={{ marginRight: "1em" }}
         />
