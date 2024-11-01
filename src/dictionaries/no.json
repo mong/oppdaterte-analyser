@@ -17,5 +17,9 @@
   },
   "general": {
     "under_development": "Denne nettsiden er under utvikling. Endringer og feil med siden kan forventes. Tilbakemeldinger fra brukere av siden er høyt verdsatt, og kan sendes til"
+  },
+  "frontpage": {
+    "title": "Helseatlas oppdaterte analyser",
+    "description": "Visning av oppdaterte analyser fra Helseatlas"
   }
 }
