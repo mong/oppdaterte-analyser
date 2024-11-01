@@ -97,7 +97,7 @@ export const AnalyseLineChart = ({
   );
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
-  const selectionIDs = ["8888", ...selection[level].map(String)];
+  const selectionIDs = [...selection[level].map(String), "8888"];
 
   return (
     <LineChart
