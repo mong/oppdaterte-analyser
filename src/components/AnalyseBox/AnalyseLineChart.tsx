@@ -151,7 +151,7 @@ export const AnalyseLineChart = ({
         backgroundImage: "url('/img/logo-skde-graa.svg')",
         backgroundRepeat: "no-repeat",
         backgroundSize: "max(60px, 10%)",
-        backgroundPosition: "bottom 65px right 5%",
+        backgroundPosition: "bottom 40px right 5%",
       }}
     />
   );
