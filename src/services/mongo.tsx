@@ -16,6 +16,11 @@ export const dbConnect = async (): Promise<any> => {
   }
 };
 
+export const getAnalyse = async (analyse: string): Promise<Analyse> => {
+  await dbConnect();
+  return toPlainObject(await AnalyseModel.findOne({ name: analyse }).exec());
+};
+
 export const getAnalyserByTag = async (tag: string): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(await AnalyseModel.find({ tags: tag }).exec());

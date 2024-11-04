@@ -1,22 +1,18 @@
 import { Suspense } from "react";
 
-import { Alert, Box, Skeleton } from "@mui/material";
-import AnalyseBox from "@/components/AnalyseBox";
-import { Analyse, Tag, Lang } from "@/types";
+import { Alert, Box, CircularProgress } from "@mui/material";
+import { Analyse, Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
+import AnalyseBoxWrapper from "../AnalyseBoxWrapper";
 
 type AnalyseListProps = {
   analyser: Analyse[];
-  tags: { [k: string]: Tag };
   lang: Lang;
-  rawHtmlFromMarkdown: { [k: string]: { [k: string]: string } };
 };
 
 export default async function AnalyseList({
   analyser,
-  tags,
   lang,
-  rawHtmlFromMarkdown,
 }: AnalyseListProps) {
   const dict = await getDictionary(lang);
 
@@ -33,17 +29,18 @@ export default async function AnalyseList({
         .
       </Alert>
       <Suspense
-        fallback={<Skeleton variant="rectangular" width={610} height={600} />}
+        fallback={
+          <Box className="centered" sx={{ paddingTop: 5 }}>
+            <CircularProgress />
+          </Box>
+        }
       >
         {analyser.map((analyse) => {
           return (
-            <AnalyseBox
-              rawHtmlFromMarkdown={rawHtmlFromMarkdown[analyse.name]}
+            <AnalyseBoxWrapper
               key={analyse.name}
-              analyse={analyse}
-              tags={tags}
+              analyseName={analyse.name}
               lang={lang}
-              dict={dict.analysebox}
             />
           );
         })}
