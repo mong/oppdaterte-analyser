@@ -107,11 +107,12 @@ export const AnalyseBarChart = ({
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
         id: `${i}`,
+        valueFormatter: (v) => `${v?.toFixed(1)}`,
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         ...(labels.length > 1 && { label: `${label[lang]}` }),
       }))}
-      onAxisClick={(event, params) => onClick(Number(params?.axisValue))}
+      onAxisClick={(_, params) => onClick(Number(params?.axisValue))}
       layout="horizontal"
       borderRadius={5}
     />

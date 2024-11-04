@@ -120,12 +120,12 @@ export const AnalyseLineChart = ({
       series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
+        valueFormatter: (v) => `${v?.toFixed(1)}`,
         curve: "monotoneX",
         showMark: false,
         label: regions_dict[lang][level][Number(area)],
         color: linechart_colors[level][Number(area)],
       }))}
-      tooltip={{ trigger: "axis" }}
       slotProps={{
         loadingOverlay: { message: dict.empty_area_selection },
         legend: {
