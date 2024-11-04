@@ -28,7 +28,7 @@ export default function AreaPicker({
   dict,
 }: AreaPickerProps) {
   return (
-    <Accordion disableGutters sx={{ marginBottom: 2 }}>
+    <Accordion disableGutters>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="area-picker"
