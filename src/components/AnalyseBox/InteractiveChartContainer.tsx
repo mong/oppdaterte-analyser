@@ -194,7 +194,7 @@ export function InteractiveChartContainer({
           />
         )}
       </Paper>
-      <Box sx={{ padding: 2, paddingTop: 0 }}>
+      <Box sx={{ padding: 2, paddingTop: 0, paddingBottom: 0 }}>
         <AreaPicker
           dict={dict}
           selection={selection}
