@@ -5,7 +5,8 @@ import { Lang } from "@/types";
 
 import { getAnalyse } from "@/services/mongo";
 
-import AnalyseBoxWrapper from "@/components/AnalyseBoxWrapper";
+import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
+import { getDictionary } from "@/lib/dictionaries";
 
 export default async function AnalysePage({
   params,
@@ -13,6 +14,7 @@ export default async function AnalysePage({
   params: { lang: Lang; analyse: string };
 }) {
   const analyse = await getAnalyse(params.analyse);
+  const dict = await getDictionary(params.lang);
 
   return (
     <>
@@ -29,10 +31,14 @@ export default async function AnalysePage({
             </Box>
           }
         >
-          <Box className="centered" sx={{ paddingTop: "40px" }}>
-            <AnalyseBoxWrapper
-              analyseName={params.analyse}
+          <Box
+            className="centered analyse-boxes"
+            sx={{ paddingTop: "40px", maxWidth: 1200 }}
+          >
+            <InteractiveChartContainer
+              analyse={analyse}
               lang={params.lang}
+              dict={dict.analysebox}
             />
           </Box>
         </Suspense>
