@@ -9,6 +9,7 @@ import {
   InputLabel,
   Paper,
   Box,
+  Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
@@ -194,6 +195,9 @@ export function InteractiveChartContainer({
           />
         )}
       </Paper>
+      <Box sx={{ textAlign: "center", padding: 1 }}>
+        <Typography variant="body1">{analyse.description[lang]}</Typography>
+      </Box>
       <Box sx={{ padding: 2, paddingTop: 0, paddingBottom: 0 }}>
         <AreaPicker
           dict={dict}

@@ -21,6 +21,7 @@ export interface Analyse {
   summary: Text;
   discussion: Text;
   utvalg: Text;
+  description: Text;
   views: View[];
   data: {
     [key: string]: {

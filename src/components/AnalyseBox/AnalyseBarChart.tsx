@@ -56,7 +56,7 @@ export const AnalyseBarChart = ({
 
   return (
     <BarChart
-      margin={{ left: 120 }}
+      margin={{ left: 120, bottom: 25 }}
       dataset={dataset}
       yAxis={[
         {

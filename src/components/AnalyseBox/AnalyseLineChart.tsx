@@ -105,6 +105,7 @@ export const AnalyseLineChart = ({
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
+        bottom: 25,
       }}
       dataset={dataset}
       xAxis={[
