@@ -11,6 +11,7 @@ type AnalyseBarChartProps = {
   view: number;
   lang: Lang;
   selection: Selection;
+  maxValue: number;
   onClick: (n: number) => any;
 };
 
@@ -21,6 +22,7 @@ export const AnalyseBarChart = ({
   view,
   lang,
   selection,
+  maxValue,
   onClick,
 }: AnalyseBarChartProps) => {
   const defaultLabels: { [k: string]: Text[] } = {
@@ -45,20 +47,6 @@ export const AnalyseBarChart = ({
     dataset.push(datapoint);
   }
   dataset.sort((a, b) => b.sum - a.sum);
-
-  const maxValue = React.useMemo(
-    () =>
-      Math.max(
-        ...Object.keys(analyse.data[level]).map((area) =>
-          Math.max(
-            ...Object.keys(analyse.data[level][area]).map(
-              (year) => analyse.data[level][area][year][0][0],
-            ),
-          ),
-        ),
-      ),
-    [analyse, level],
-  );
 
   const dataIndexToArea = Object.fromEntries(
     dataset.map((bar, i) => [i, Number(bar.area)]),

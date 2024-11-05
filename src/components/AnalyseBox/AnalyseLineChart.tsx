@@ -47,6 +47,7 @@ type AnalyseLineChartProps = {
   selection: Selection;
   lang: Lang;
   dict: { [k: string]: string };
+  maxValue: number;
 };
 
 export const useWindowWidth = () => {
@@ -67,6 +68,7 @@ export const AnalyseLineChart = ({
   level,
   selection,
   lang,
+  maxValue,
   dict,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
@@ -84,17 +86,6 @@ export const AnalyseLineChart = ({
       };
     });
   }, [analyse, years, level]);
-  const maxValue = React.useMemo(
-    () =>
-      Math.max(
-        ...dataset.flatMap((yearly_data) =>
-          Object.keys(linechart_colors[level]).map(
-            (area) => yearly_data[Number(area)],
-          ),
-        ),
-      ),
-    [level, dataset],
-  );
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
   const selectionIDs = [...selection[level].map(String), "8888"];

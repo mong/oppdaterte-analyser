@@ -84,6 +84,20 @@ export function InteractiveChartContainer({
     new Selection({ region: [], sykehus: [] }),
   );
 
+  const maxValue = React.useMemo(
+    () =>
+      Math.max(
+        ...Object.keys(analyse.data[level]).map((area) =>
+          Math.max(
+            ...Object.keys(analyse.data[level][area]).map(
+              (year) => analyse.data[level][area][year][0][0],
+            ),
+          ),
+        ),
+      ),
+    [analyse, level],
+  );
+
   return (
     <Box>
       <Grid container spacing={2} sx={{ padding: 2, paddingBottom: 1 }}>
@@ -175,6 +189,7 @@ export function InteractiveChartContainer({
             level={level}
             selection={selection}
             lang={lang}
+            maxValue={maxValue}
           />
         ) : (
           <AnalyseBarChart
@@ -183,6 +198,7 @@ export function InteractiveChartContainer({
             level={level}
             view={view}
             lang={lang}
+            maxValue={maxValue}
             selection={selection}
             onClick={(area) => {
               if (area !== 8888)
