@@ -10,7 +10,8 @@
     "region": "Region",
     "choose_area": "Choose referral areas",
     "empty_area_selection": "No referral areas chosen",
-    "info": "Information"
+    "info": "Information",
+    "updated": "Updated"
   },
   "general": {
     "updated_analyses": "Updated analyses",

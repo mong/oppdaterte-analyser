@@ -87,7 +87,12 @@ export default function AnalyseBox({
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h3">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            Oppdatert: {new Date(analyse.published).toUTCString()}
+            {dict.updated}:{" "}
+            {new Date(analyse.published).toLocaleString(
+              { en: "en-GB", no: "nb-NO" }[lang],
+              { year: "numeric", month: "long", day: "numeric" },
+            )}
+            .
           </Typography>
           <div
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
