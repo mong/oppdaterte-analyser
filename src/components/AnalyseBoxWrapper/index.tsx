@@ -26,11 +26,11 @@ export default async function AnalyseBoxWrapper({
 
   const htmlSummary = await markdownToHtml(analyse.summary[lang]);
   const htmlDiscussion = await markdownToHtml(analyse.discussion[lang]);
-  const utvalg = await markdownToHtml(analyse.utvalg[lang]);
+  const info = await markdownToHtml(analyse.info[lang]);
   const rawHtmlFromMarkdown = {
     summary: htmlSummary,
     discussion: htmlDiscussion,
-    utvalg: utvalg,
+    info: info,
   };
 
   return (

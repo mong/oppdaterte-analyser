@@ -16,7 +16,7 @@ const analyseSchema = new Schema<Analyse>(
       type: Map,
       of: String,
     },
-    utvalg: {
+    info: {
       type: Map,
       of: String,
     },

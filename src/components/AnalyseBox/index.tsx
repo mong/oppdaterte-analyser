@@ -45,9 +45,7 @@ export default function AnalyseBox({
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const [utvalgAnchor, setUtvalgAnchor] = React.useState<null | HTMLElement>(
-    null,
-  );
+  const [infoAnchor, setInfoAnchor] = React.useState<null | HTMLElement>(null);
 
   const tagList = (
     <Box className={classNames["tag-container"]}>
@@ -110,22 +108,22 @@ export default function AnalyseBox({
             <Grid size="grow">{tagList}</Grid>
             <Grid>
               <Button
-                aria-describedby="utvalgs-popper"
+                aria-describedby="info-popper"
                 startIcon={<InfoOutlinedIcon />}
-                variant={utvalgAnchor ? "contained" : "outlined"}
+                variant={infoAnchor ? "contained" : "outlined"}
                 sx={{ borderRadius: "16px", textTransform: "none" }}
                 onClick={(event) =>
-                  setUtvalgAnchor(utvalgAnchor ? null : event.currentTarget)
+                  setInfoAnchor(infoAnchor ? null : event.currentTarget)
                 }
               >
-                {dict.utvalg}
+                {dict.info}
               </Button>
 
               <Popper
                 transition
-                id="utvalgs-popper"
-                open={Boolean(utvalgAnchor)}
-                anchorEl={utvalgAnchor}
+                id="info-popper"
+                open={Boolean(infoAnchor)}
+                anchorEl={infoAnchor}
                 placement="top-end"
                 sx={{
                   margin: "10px",
@@ -143,26 +141,27 @@ export default function AnalyseBox({
               >
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={150}>
-                    <Paper elevation={10}>
+                    <Paper
+                      elevation={10}
+                      sx={{ outline: "1px solid rgb(0, 48, 135)" }}
+                    >
                       <ClickAwayListener
-                        onClickAway={() => setUtvalgAnchor(null)}
+                        onClickAway={() => setInfoAnchor(null)}
                       >
-                        <Box sx={{ padding: 2 }}>
+                        <Box sx={{ padding: { xs: 2, md: 3 } }}>
                           <Box display="flex" alignItems="center">
                             <Box flexGrow={1}>
-                              <Typography variant="h4">
-                                {dict.utvalg}
-                              </Typography>
+                              <Typography variant="h4">{dict.info}</Typography>
                             </Box>
                             <Box>
-                              <IconButton onClick={() => setUtvalgAnchor(null)}>
+                              <IconButton onClick={() => setInfoAnchor(null)}>
                                 <CloseIcon />
                               </IconButton>
                             </Box>
                           </Box>
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: rawHtmlFromMarkdown.utvalg,
+                              __html: rawHtmlFromMarkdown.info,
                             }}
                           />
                         </Box>
