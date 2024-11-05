@@ -2,6 +2,7 @@ import { Analyse, Lang, Text } from "@/types";
 import { BarChart, BarElementPath } from "@mui/x-charts/BarChart";
 import { regions_dict, Selection } from "@/lib/nameMapping";
 import { ChartsText } from "@mui/x-charts/ChartsText";
+import React from "react";
 
 type AnalyseBarChartProps = {
   analyse: Analyse;
@@ -44,6 +45,21 @@ export const AnalyseBarChart = ({
     dataset.push(datapoint);
   }
   dataset.sort((a, b) => b.sum - a.sum);
+
+  const maxValue = React.useMemo(
+    () =>
+      Math.max(
+        ...Object.keys(analyse.data[level]).map((area) =>
+          Math.max(
+            ...Object.keys(analyse.data[level][area]).map(
+              (year) => analyse.data[level][area][year][0][0],
+            ),
+          ),
+        ),
+      ),
+    [analyse, level],
+  );
+
   const dataIndexToArea = Object.fromEntries(
     dataset.map((bar, i) => [i, Number(bar.area)]),
   );
@@ -58,6 +74,7 @@ export const AnalyseBarChart = ({
     <BarChart
       margin={{ left: 120, bottom: 25 }}
       dataset={dataset}
+      xAxis={[{ min: 0, max: maxValue }]}
       yAxis={[
         {
           scaleType: "band",
