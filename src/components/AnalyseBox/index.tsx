@@ -127,7 +127,10 @@ export default function AnalyseBox({
                 open={Boolean(utvalgAnchor)}
                 anchorEl={utvalgAnchor}
                 placement="top-end"
-                sx={{ margin: "10px" }}
+                sx={{
+                  margin: "10px",
+                  zIndex: 10 /* Ensuring the popper is above MUI InputLabel */,
+                }}
                 style={{ width: "min(100vw, 800px)" }}
                 modifiers={[
                   {
