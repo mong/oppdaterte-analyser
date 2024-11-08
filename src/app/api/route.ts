@@ -1,8 +1,10 @@
-import { getAnalyse } from "@/services/mongo";
+import { updateAnalyse } from "@/services/mongo";
+import { Analyse } from "@/types";
 
 export async function POST(request: Request) {
-  const res = await request.json();
+  const res: Analyse = await request.json();
 
-  const analyse = await getAnalyse(res.analyse);
+  updateAnalyse(res);
+
   return Response.json({ dataSubmitted: res });
 }

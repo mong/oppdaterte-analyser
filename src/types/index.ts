@@ -17,6 +17,9 @@ export interface Analyse {
   tags: string[];
   name: string;
   published: number;
+  first_published: number;
+  createdAt: Date;
+  updatedAt: Date;
   title: Text;
   summary: Text;
   discussion: Text;

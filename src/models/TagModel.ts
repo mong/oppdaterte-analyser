@@ -12,7 +12,7 @@ const tagSchema = new Schema<Tag>(
       of: String,
     },
   },
-  { collection: "tags", timestamps: true },
+  { collection: "tags", timestamps: false },
 );
 
 export default mongoose.models.Tag || mongoose.model<Tag>("Tag", tagSchema);

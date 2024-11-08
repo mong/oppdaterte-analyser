@@ -85,7 +85,7 @@ export default function AnalyseBox({
         onClick={() => setExpanded(!expanded)}
       >
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="h3">{analyse.title[lang]}</Typography>
+          <Typography variant="h4">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
             {dict.updated}:{" "}
             {new Date(analyse.published).toLocaleString(
