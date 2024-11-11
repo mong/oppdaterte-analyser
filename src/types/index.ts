@@ -16,6 +16,7 @@ export interface Analyse {
   _id: Types.ObjectId;
   tags: string[];
   name: string;
+  version: number;
   published: number;
   first_published: number;
   createdAt: Date;
@@ -40,4 +41,11 @@ export interface Tag {
   name: string;
   fullname: Text;
   introduction: Text;
+}
+
+export interface ApiUser {
+  _id: Types.ObjectId;
+  apiKey: string;
+  apiKeyHash: string;
+  userName: string;
 }

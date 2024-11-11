@@ -3,6 +3,7 @@ import { Analyse } from "@/types";
 
 const schemaType = {
   name: String,
+  version: Number,
   title: { type: Map, of: String },
   summary: { type: Map, of: String },
   discussion: { type: Map, of: String },
@@ -56,7 +57,7 @@ export const AnalyseBackupModel =
     new Schema<Analyse>(
       {
         ...schemaType,
-        createdAt: { type: Date, expires: 60 * 60, default: Date.now },
+        createdAt: { type: Date, expires: 60 * 60 * 24 * 7, default: Date.now },
       },
       { timestamps: true, versionKey: false },
     ),

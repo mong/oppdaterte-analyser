@@ -4,7 +4,5 @@ import { Analyse } from "@/types";
 export async function POST(request: Request) {
   const res: Analyse = await request.json();
 
-  updateAnalyse(res);
-
-  return Response.json({ dataSubmitted: res });
+  return updateAnalyse(res);
 }
