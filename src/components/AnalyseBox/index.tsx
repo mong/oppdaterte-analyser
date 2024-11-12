@@ -24,6 +24,7 @@ import { Analyse, Tag, Lang } from "@/types";
 
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { InteractiveChartContainer } from "./InteractiveChartContainer";
+import { formatDate } from "@/lib/helpers";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
@@ -87,12 +88,7 @@ export default function AnalyseBox({
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h4">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            {dict.updated}:{" "}
-            {new Date(analyse.published).toLocaleString(
-              { en: "en-GB", no: "nb-NO" }[lang],
-              { year: "numeric", month: "long", day: "numeric" },
-            )}
-            .
+            {dict.updated}: {formatDate(analyse.published, lang)}.
           </Typography>
           <div
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
