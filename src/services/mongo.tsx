@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 
 import crypto from "crypto";
 
-const TEST_DATABASE = false;
+const TEST_DATABASE = true;
 
 export function toPlainObject<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
@@ -60,12 +60,23 @@ export const getTags = async (
   return Object.fromEntries(tagData.map((tag) => [tag.name, tag]));
 };
 
+const safe_compare = (a: string, b: string) => {
+  try {
+    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+    // Avoiding timing attacks.
+  } catch {
+    return false; // a and b are of different lengths
+  }
+};
+
 const verifyApiKey = async () => {
-  const apiKeyHash = crypto
-    .createHash("md5")
-    .update(String(headers().get("Authorization")))
-    .digest("hex");
-  return await ApiUserModel.findOne({ apiKeyHash: apiKeyHash }).exec();
+  const apiKey = String(headers().get("Authorization"));
+  for (let user of await ApiUserModel.find({}).exec()) {
+    if (safe_compare(user.apiKey, apiKey)) {
+      return user;
+    }
+  }
+  return false;
 };
 
 export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
@@ -76,11 +87,9 @@ export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
     return Response.json({ reply: "Incorrect API-key." }, { status: 401 });
   }
 
-  const newerAnalyse = await AnalyseModel.findOne({
-    name: analyse.name,
-    published: { $gte: analyse.published },
-  }).exec();
-  if (newerAnalyse) {
+  const oldAnalyse = await AnalyseModel.findOne({ name: analyse.name }).exec();
+
+  if (oldAnalyse && oldAnalyse.published >= analyse.published) {
     return Response.json(
       {
         reply: `'${analyse.name}' is not newer than the version on the server. Request denied!`,
@@ -89,7 +98,6 @@ export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
     );
   }
 
-  const oldAnalyse = await AnalyseModel.findOne({ name: analyse.name }).exec();
   const version = oldAnalyse ? oldAnalyse.version + 1 : 1;
 
   await AnalyseModel.findOneAndUpdate(
