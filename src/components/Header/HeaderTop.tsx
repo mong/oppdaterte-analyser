@@ -5,13 +5,14 @@ import { Box, Link } from "@mui/material";
 import { Lang } from "@/types";
 
 import { usePathname } from "next/navigation";
+import CenteredContainer from "../CenteredContainer";
 
 export const HeaderTop = (params: { lang: Lang }) => {
   const pathname = usePathname();
 
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
-      <Box className="centered padding">
+      <CenteredContainer shrink={false}>
         <Image
           src="/img/skde-blue.png"
           alt="SKDE-logo"
@@ -40,7 +41,7 @@ export const HeaderTop = (params: { lang: Lang }) => {
             ENG
           </Link>
         </Box>
-      </Box>
+      </CenteredContainer>
     </Box>
   );
 };

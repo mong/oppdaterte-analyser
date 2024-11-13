@@ -1,7 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Header from "@/components/Header";
 import {
-  Box,
   List,
   ListItemButton,
   ListItemIcon,
@@ -13,6 +12,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import { getKompendier } from "@/services/mongo";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { notFound } from "next/navigation";
+import CenteredContainer from "@/components/CenteredContainer";
 
 export const generateMetadata = async ({
   params,
@@ -48,7 +48,7 @@ export default async function MainPage({ params }: MainPageProps) {
         introduction={dict.frontpage.introduction}
       />
       <main>
-        <Box className="centered padding">
+        <CenteredContainer>
           <Paper sx={{ padding: 2, maxWidth: "1000px" }}>
             <Typography>{dict.frontpage.list_text}</Typography>
             <List>
@@ -66,7 +66,7 @@ export default async function MainPage({ params }: MainPageProps) {
               ))}
             </List>
           </Paper>
-        </Box>
+        </CenteredContainer>
       </main>
     </>
   );

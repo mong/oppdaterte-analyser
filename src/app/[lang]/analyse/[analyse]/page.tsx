@@ -7,6 +7,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
 import { getAnalyse } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
+import CenteredContainer from "@/components/CenteredContainer";
 
 export default async function AnalysePage({
   params,
@@ -27,15 +28,12 @@ export default async function AnalysePage({
       <main>
         <Suspense
           fallback={
-            <Box className="centered analyse-boxes" sx={{ paddingTop: 5 }}>
+            <Box sx={{ paddingTop: 4 }}>
               <CircularProgress />
             </Box>
           }
         >
-          <Box
-            className="centered analyse-boxes"
-            sx={{ paddingTop: "0px", maxWidth: 1200 }}
-          >
+          <CenteredContainer analyseBox={true}>
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">Oppsummert</Typography>
               <div
@@ -61,7 +59,7 @@ export default async function AnalysePage({
                 dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
               />
             </Box>
-          </Box>
+          </CenteredContainer>
         </Suspense>
       </main>
     </>

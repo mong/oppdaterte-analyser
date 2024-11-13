@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import skdeTheme from "@/themes/SkdeTheme";
-import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { Lang } from "@/types";
 
@@ -30,10 +29,16 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
             <CssBaseline />
-            <PageWrapper>
+            <Box
+              sx={{
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               {children}
               <Footer />
-            </PageWrapper>
+            </Box>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

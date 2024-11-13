@@ -1,15 +1,13 @@
 import { Suspense } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { Alert, Box, CircularProgress } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
-import { remark } from "remark";
-import html from "remark-html";
-
-import { getAnalyserByTag, getTag, getTags } from "@/services/mongo";
+import { getAnalyserByTag, getTag } from "@/services/mongo";
+import CenteredContainer from "@/components/CenteredContainer";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -59,6 +57,7 @@ export default async function KompendiumPage({
     notFound();
   }
 
+  const dict = await getDictionary(params.lang);
   const analyser = await getAnalyserByTag(params.kompendium);
 
   return (
@@ -69,15 +68,26 @@ export default async function KompendiumPage({
         introduction={tag.introduction[params.lang]}
       ></Header>
       <main>
-        <Suspense
-          fallback={
-            <Box className="centered" sx={{ paddingTop: 5 }}>
-              <CircularProgress />
-            </Box>
-          }
-        >
-          <AnalyseList analyser={analyser} lang={params.lang} />
-        </Suspense>
+        <CenteredContainer>
+          <Alert severity="info" sx={{ marginBottom: -4 }}>
+            {dict.general.under_development}{" "}
+            <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
+              helseatlas@skde.no
+            </a>
+            .
+          </Alert>
+        </CenteredContainer>
+        <CenteredContainer analyseBox={true}>
+          <Suspense
+            fallback={
+              <Box sx={{ paddingTop: 4 }}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <AnalyseList analyser={analyser} lang={params.lang} />
+          </Suspense>
+        </CenteredContainer>
       </main>
     </>
   );
