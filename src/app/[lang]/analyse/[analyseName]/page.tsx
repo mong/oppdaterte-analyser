@@ -9,15 +9,15 @@ import { getAnalyse } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
 import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
+import UnderDevelopment from "@/components/UnderDevelopment";
 
-export default async function AnalysePage({
-  params,
-}: {
-  params: { lang: Lang; analyse: string };
+export default async function AnalysePage(props: {
+  params: { lang: Lang; analyseName: string };
 }) {
-  const analyse = await getAnalyse(params.analyse);
-  const dict = await getDictionary(params.lang);
-  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, params.lang);
+  const { lang, analyseName } = props.params;
+  const analyse = await getAnalyse(analyseName);
+  const dict = await getDictionary(lang);
+  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -29,20 +29,25 @@ export default async function AnalysePage({
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${params.lang}/analyse/${analyse.name}/`,
-      text: analyse.title[params.lang],
+      link: "https://www.skde.no/helseatlas/oppdaterte-analyser/",
+      text: dict.breadcrumbs.updated_analyses,
+    },
+    {
+      link: `/${lang}/analyse/${analyse.name}/`,
+      text: analyse.title[lang],
     },
   ];
 
   return (
     <>
       <Header
-        lang={params.lang}
+        lang={lang}
         breadcrumbs={breadcrumbs}
-        title={analyse.title[params.lang]}
-        introduction={`${dict.analysebox.updated}: ${formatDate(analyse.published, params.lang)}`}
+        title={analyse.title[lang]}
+        introduction={`${dict.analysebox.updated}: ${formatDate(analyse.published, lang)}`}
       ></Header>
       <main>
+        <UnderDevelopment lang={lang} />
         <Suspense
           fallback={
             <Box sx={{ paddingTop: 4 }}>
@@ -61,7 +66,7 @@ export default async function AnalysePage({
             </Box>
             <InteractiveChartContainer
               analyse={analyse}
-              lang={params.lang}
+              lang={lang}
               dict={dict.analysebox}
             />
             <Box sx={{ padding: 2 }}>

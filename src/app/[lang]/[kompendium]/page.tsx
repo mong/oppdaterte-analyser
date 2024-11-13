@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Alert, Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
@@ -9,57 +9,38 @@ import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
+import UnderDevelopment from "@/components/UnderDevelopment";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
 // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
 //
 // Also, the function should be moved to separate file, if possible?
-export const generateMetadata = async ({
-  params,
-}: {
+export const generateMetadata = async (props: {
   params: { lang: Lang; kompendium: string };
 }) => {
-  const tag = await getTag(params.kompendium);
-  const dict = await getDictionary(params.lang);
+  const { kompendium, lang } = props.params;
+  const tag = await getTag(kompendium);
+  const dict = await getDictionary(lang);
 
   return {
-    title: `${tag.fullname[params.lang]}`,
-    description: `${dict.general.updated_analyses}: ${tag.fullname[params.lang]}`,
-    keywords: `${params.kompendium}`,
+    title: `${tag.fullname[lang]}`,
+    description: `${dict.general.updated_analyses}: ${tag.fullname[lang]}`,
+    keywords: `${kompendium}`,
   };
 };
 
-/*
-
-  The code below works to generate static pages locally, but is disabled because
-  the build on github fails (it cannot connect to the MongoDB server)
-
-export const dynamicParams = false;
-export async function generateStaticParams() {
-  const kompendier = await getKompendier();
-
-  return ["no", "en"].flatMap((lang) =>
-    kompendier.map((kompendium) => ({
-      lang: lang,
-      kompendium: kompendium.name,
-    })),
-  );
-}
-*/
-
-export default async function KompendiumPage({
-  params,
-}: {
+export default async function KompendiumPage(props: {
   params: { lang: Lang; kompendium: string };
 }) {
-  const tag = await getTag(params.kompendium);
-  if (!tag?.introduction || !["en", "no"].includes(params.lang)) {
+  const { kompendium, lang } = props.params;
+  const tag = await getTag(kompendium);
+  if (!tag?.introduction || !["en", "no"].includes(lang)) {
     notFound();
   }
 
-  const dict = await getDictionary(params.lang);
-  const analyser = await getAnalyserByTag(params.kompendium);
+  const dict = await getDictionary(lang);
+  const analyser = await getAnalyserByTag(kompendium);
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -71,29 +52,25 @@ export default async function KompendiumPage({
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${params.lang}/${params.kompendium}/`,
-      text: tag.fullname[params.lang],
+      link: "https://www.skde.no/helseatlas/oppdaterte-analyser/",
+      text: dict.breadcrumbs.updated_analyses,
+    },
+    {
+      link: `/${lang}/${kompendium}/`,
+      text: tag.fullname[lang],
     },
   ];
 
   return (
     <>
       <Header
-        lang={params.lang}
+        lang={lang}
         breadcrumbs={breadcrumbs}
-        title={tag.fullname[params.lang]}
-        introduction={tag.introduction[params.lang]}
+        title={tag.fullname[lang]}
+        introduction={tag.introduction[lang]}
       ></Header>
       <main>
-        <CenteredContainer>
-          <Alert severity="info" sx={{ marginBottom: -4 }}>
-            {dict.general.under_development}{" "}
-            <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
-              helseatlas@skde.no
-            </a>
-            .
-          </Alert>
-        </CenteredContainer>
+        <UnderDevelopment lang={lang} />
         <CenteredContainer analyseBox={true}>
           <Suspense
             fallback={
@@ -102,7 +79,7 @@ export default async function KompendiumPage({
               </Box>
             }
           >
-            <AnalyseList analyser={analyser} lang={params.lang} />
+            <AnalyseList analyser={analyser} lang={lang} />
           </Suspense>
         </CenteredContainer>
       </main>

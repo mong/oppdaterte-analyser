@@ -14,6 +14,7 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { notFound } from "next/navigation";
 import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
+import UnderDevelopment from "@/components/UnderDevelopment";
 
 export const generateMetadata = async ({
   params,
@@ -34,11 +35,13 @@ export type MainPageProps = {
 };
 
 export default async function MainPage({ params }: MainPageProps) {
-  if (!["en", "no"].includes(params.lang)) {
+  const { lang } = params;
+
+  if (!["en", "no"].includes(lang)) {
     notFound();
   }
 
-  const dict = await getDictionary(params.lang);
+  const dict = await getDictionary(lang);
   const kompendier = await getKompendier();
 
   const breadcrumbs: BreadCrumbStop[] = [
@@ -51,7 +54,7 @@ export default async function MainPage({ params }: MainPageProps) {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${params.lang}/`,
+      link: `/${lang}/`,
       text: dict.breadcrumbs.updated_analyses,
     },
   ];
@@ -59,12 +62,13 @@ export default async function MainPage({ params }: MainPageProps) {
   return (
     <>
       <Header
-        lang={params.lang}
+        lang={lang}
         title={dict.general.updated_analyses}
         introduction={dict.frontpage.introduction}
         breadcrumbs={breadcrumbs}
       />
       <main>
+        <UnderDevelopment lang={lang} />
         <CenteredContainer>
           <Paper sx={{ padding: 2 }}>
             <Typography>{dict.frontpage.list_text}</Typography>
@@ -73,12 +77,12 @@ export default async function MainPage({ params }: MainPageProps) {
                 <ListItemButton
                   key={i}
                   LinkComponent={"a"}
-                  href={`/${params.lang}/${komp.name}`}
+                  href={`/${lang}/${komp.name}`}
                 >
                   <ListItemIcon>
                     <ArrowForwardRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={komp.fullname[params.lang]} />
+                  <ListItemText primary={komp.fullname[lang]} />
                 </ListItemButton>
               ))}
             </List>
