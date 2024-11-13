@@ -13,6 +13,7 @@ import { getKompendier } from "@/services/mongo";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { notFound } from "next/navigation";
 import CenteredContainer from "@/components/CenteredContainer";
+import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 
 export const generateMetadata = async ({
   params,
@@ -40,16 +41,32 @@ export default async function MainPage({ params }: MainPageProps) {
   const dict = await getDictionary(params.lang);
   const kompendier = await getKompendier();
 
+  const breadcrumbs: BreadCrumbStop[] = [
+    {
+      link: "https://www.skde.no",
+      text: dict.breadcrumbs.homepage,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: dict.breadcrumbs.health_atlas,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: dict.breadcrumbs.updated_analyses,
+    },
+  ];
+
   return (
     <>
       <Header
         lang={params.lang}
         title={dict.general.updated_analyses}
         introduction={dict.frontpage.introduction}
+        breadcrumbs={breadcrumbs}
       />
       <main>
         <CenteredContainer>
-          <Paper sx={{ padding: 2, maxWidth: "1000px" }}>
+          <Paper sx={{ padding: 2 }}>
             <Typography>{dict.frontpage.list_text}</Typography>
             <List>
               {kompendier.map((komp, i) => (

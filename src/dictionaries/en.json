@@ -22,5 +22,10 @@
     "description": "View updated analyses from SKDE's Health Atlas" ,
     "introduction": "This is the main page for updated Health Atlas analyses.",
     "list_text": "This is a list of all available compendiums (collections of related analyses):"
+  },
+  "breadcrumbs": {
+    "homepage": "Homepage",
+    "health_atlas": "Health Atlas",
+    "updated_analyses": "Updated analyses"
   }
 }

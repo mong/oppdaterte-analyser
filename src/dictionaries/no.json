@@ -22,5 +22,10 @@
     "description": "Visning av oppdaterte analyser fra Helseatlas",
     "introduction": "Dette er hovedsiden for oppdaterte Helseatlas-analyser.",
     "list_text": "Dette er en liste over alle tilgjengelige kompendier (samlinger av relaterte analyser):"
+  },
+  "breadcrumbs": {
+    "homepage": "Forside",
+    "health_atlas": "Helseatlas",
+    "updated_analyses": "Oppdaterte analyser"
   }
 }

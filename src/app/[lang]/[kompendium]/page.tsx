@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/dictionaries";
 
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import CenteredContainer from "@/components/CenteredContainer";
+import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 
 // The function can also fetch data for the compendium and get its
 // metadata from there. For more, see:
@@ -60,10 +61,26 @@ export default async function KompendiumPage({
   const dict = await getDictionary(params.lang);
   const analyser = await getAnalyserByTag(params.kompendium);
 
+  const breadcrumbs: BreadCrumbStop[] = [
+    {
+      link: "https://www.skde.no",
+      text: dict.breadcrumbs.homepage,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: dict.breadcrumbs.health_atlas,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: tag.fullname[params.lang],
+    },
+  ];
+
   return (
     <>
       <Header
         lang={params.lang}
+        breadcrumbs={breadcrumbs}
         title={tag.fullname[params.lang]}
         introduction={tag.introduction[params.lang]}
       ></Header>

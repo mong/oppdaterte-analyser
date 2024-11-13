@@ -3,8 +3,14 @@ import { Lang } from "@/types";
 
 import CenteredContainer from "../CenteredContainer";
 import LanguageSelector from "./LanguageSelector";
+import { BreadCrumbStop, SkdeBreadcrumbs } from "./SkdeBreadcrumbs";
 
-export const HeaderTop = (params: { lang: Lang }) => {
+type HeaderTopProps = {
+  breadcrumbs: BreadCrumbStop[];
+  lang: Lang;
+};
+
+export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
       <CenteredContainer shrink={false}>
@@ -15,12 +21,14 @@ export const HeaderTop = (params: { lang: Lang }) => {
               display="block"
               src="/img/logo-skde.svg"
               alt="SKDE logo"
+              fetchPriority="high"
               sx={{ height: { xs: 40, lg: 50 } }}
             />
           </Link>
 
-          <LanguageSelector lang={params.lang} />
+          <LanguageSelector lang={lang} />
         </Box>
+        <SkdeBreadcrumbs path={breadcrumbs} />
       </CenteredContainer>
     </Box>
   );

@@ -8,6 +8,7 @@ import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
 import { getAnalyse } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
 import CenteredContainer from "@/components/CenteredContainer";
+import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 
 export default async function AnalysePage({
   params,
@@ -18,10 +19,26 @@ export default async function AnalysePage({
   const dict = await getDictionary(params.lang);
   const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, params.lang);
 
+  const breadcrumbs: BreadCrumbStop[] = [
+    {
+      link: "https://www.skde.no",
+      text: dict.breadcrumbs.homepage,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: dict.breadcrumbs.health_atlas,
+    },
+    {
+      link: "https://www.skde.no/helseatlas/",
+      text: analyse.title[params.lang],
+    },
+  ];
+
   return (
     <>
       <Header
         lang={params.lang}
+        breadcrumbs={breadcrumbs}
         title={analyse.title[params.lang]}
         introduction={`${dict.analysebox.updated}: ${formatDate(analyse.published, params.lang)}`}
       ></Header>
