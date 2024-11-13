@@ -1,14 +1,14 @@
 "use client";
 
 import { Lang } from "@/types";
-import { Link } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import { usePathname } from "next/navigation";
 
 export const LanguageSelector = (params: { lang: Lang }) => {
   const pathname = usePathname();
 
   return (
-    <>
+    <Box>
       <Link
         sx={{
           borderRight: "1px solid #034584",
@@ -28,7 +28,7 @@ export const LanguageSelector = (params: { lang: Lang }) => {
       >
         ENG
       </Link>
-    </>
+    </Box>
   );
 };
 

@@ -8,16 +8,17 @@ export const HeaderTop = (params: { lang: Lang }) => {
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
       <CenteredContainer shrink={false}>
-        <Link href={"https://www.skde.no/"}>
-          <Box
-            component="img"
-            src="/img/logo-skde.svg"
-            alt="SKDE logo"
-            sx={{ height: { xs: 40, lg: 50 } }}
-          />
-        </Link>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Link href={"https://www.skde.no/"}>
+            <Box
+              component="img"
+              display="block"
+              src="/img/logo-skde.svg"
+              alt="SKDE logo"
+              sx={{ height: { xs: 40, lg: 50 } }}
+            />
+          </Link>
 
-        <Box sx={{ display: "inline", float: "right" }}>
           <LanguageSelector lang={params.lang} />
         </Box>
       </CenteredContainer>
