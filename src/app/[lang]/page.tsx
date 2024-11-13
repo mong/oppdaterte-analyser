@@ -51,7 +51,7 @@ export default async function MainPage({ params }: MainPageProps) {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: `/${params.lang}/`,
       text: dict.breadcrumbs.updated_analyses,
     },
   ];

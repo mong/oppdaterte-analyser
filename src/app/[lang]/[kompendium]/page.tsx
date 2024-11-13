@@ -71,7 +71,7 @@ export default async function KompendiumPage({
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: `/${params.lang}/${params.kompendium}/`,
       text: tag.fullname[params.lang],
     },
   ];

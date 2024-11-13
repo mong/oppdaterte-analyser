@@ -29,7 +29,7 @@ export default async function AnalysePage({
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: `/${params.lang}/analyse/${analyse.name}/`,
       text: analyse.title[params.lang],
     },
   ];
