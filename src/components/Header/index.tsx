@@ -4,6 +4,10 @@ import HeaderMiddle from "./HeaderMiddle";
 import { Lang } from "@/types";
 import { BreadCrumbStop } from "./SkdeBreadcrumbs";
 
+/*
+  Most of the code for footers and headers is copied from https://github.com/mong/mongts
+*/
+
 type HeaderProps = {
   lang: Lang;
   breadcrumbs: BreadCrumbStop[];
