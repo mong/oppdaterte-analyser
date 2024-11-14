@@ -55,7 +55,11 @@ export default function AnalyseBox({
           label={tags[tag]?.fullname[lang] || tag}
           color={tag in tags ? "primary" : "error"}
           key={tag}
-          sx={{ marginRight: "1em" }}
+          sx={{
+            marginRight: "1em",
+            printColorAdjust: "exact",
+            WebkitPrintColorAdjust: "exact",
+          }}
         />
       ))}
     </Box>
@@ -68,8 +72,14 @@ export default function AnalyseBox({
       square={true}
       expanded={expanded}
       sx={{
-        borderRadius: { xs: 0, md: "24px" },
+        borderRadius: { xs: 0, md: "16px" },
         boxShadow: { xs: "0px 3px 10px #AAA", md: "2px 3px 10px #AAA" },
+        "@media print": {
+          margin: 1,
+          marginBottom: 4,
+          borderRadius: "16px",
+          outline: "none",
+        },
       }}
     >
       <AccordionSummary
@@ -81,6 +91,9 @@ export default function AnalyseBox({
           background: `linear-gradient(rgba(0, 0, 0, 0), white)`,
           ":hover": {
             backgroundColor: theme.palette.primary.light,
+          },
+          "@media print": {
+            background: "none",
           },
         })}
         onClick={() => setExpanded(!expanded)}
