@@ -214,7 +214,7 @@ export function InteractiveChartContainer({
       <Box sx={{ textAlign: "center", padding: 1, paddingBottom: 2 }}>
         <Typography variant="body2">{analyse.description[lang]}</Typography>
       </Box>
-      <Box sx={{ padding: 2, paddingTop: 0, paddingBottom: 0 }}>
+      <Box sx={{ padding: 2, paddingY: 0 }}>
         <AreaPicker
           dict={dict}
           selection={selection}

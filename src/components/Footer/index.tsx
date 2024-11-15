@@ -20,7 +20,7 @@ export default function Footer() {
           color: "footer1.contrastText",
         }}
       >
-        <CenteredContainer shrink={false}>
+        <CenteredContainer>
           <Grid container size={{ xs: 12 }} sx={{ displayPrint: "none" }}>
             <Grid size={{ xs: 12, sm: 6 }} marginBottom={2} marginTop={2}>
               <Stack spacing={3}>
@@ -60,7 +60,7 @@ export default function Footer() {
         </CenteredContainer>
       </Box>
       <Box sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}>
-        <CenteredContainer shrink={false}>
+        <CenteredContainer>
           <Grid
             size={{ xs: 12 }}
             container

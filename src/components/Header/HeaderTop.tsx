@@ -13,7 +13,7 @@ type HeaderTopProps = {
 export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
-      <CenteredContainer shrink={false}>
+      <CenteredContainer>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Link href={"https://www.skde.no/"}>
             <Box
