@@ -30,12 +30,18 @@ export const AnalyseBarChart = ({
   };
 
   const viewData = analyse.views[view];
-
   const labels = defaultLabels[viewData.name] || viewData.variables;
 
-  const dataset = [];
+  type DataPoint = {
+    area: string;
+    sum: number;
+    n?: number;
+    [k: number]: number;
+  };
+
+  const dataset: DataPoint[] = [];
   for (let area of Object.keys(analyse.data[level])) {
-    let datapoint: { area: string; sum: number; [k: number]: number } = {
+    let datapoint: DataPoint = {
       area: area,
       sum: 0,
     };
@@ -44,6 +50,10 @@ export const AnalyseBarChart = ({
       datapoint[i] = analyse.data[level][area][year][view][i];
       datapoint.sum += datapoint[i];
     }
+    if (viewData.name === "total") {
+      datapoint.n = analyse.data[level][area][year][view][1];
+    }
+
     dataset.push(datapoint);
   }
   dataset.sort((a, b) => b.sum - a.sum);
@@ -112,7 +122,8 @@ export const AnalyseBarChart = ({
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
         id: `${i}`,
-        valueFormatter: (v) => `${v?.toFixed(1)}`,
+        valueFormatter: (v, { dataIndex }) =>
+          `${v?.toFixed(1)}${dataset[dataIndex].n ? ` (${dataset[dataIndex].n})` : ""}`,
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         ...(labels.length > 1 && { label: `${label[lang]}` }),
