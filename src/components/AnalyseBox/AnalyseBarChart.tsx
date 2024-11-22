@@ -123,7 +123,11 @@ export const AnalyseBarChart = ({
         dataKey: i.toString(),
         id: `${i}`,
         valueFormatter: (v, { dataIndex }) =>
-          `${v?.toFixed(1)}${dataset[dataIndex].n ? ` (${dataset[dataIndex].n})` : ""}`,
+          `${new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(v || 0)}${
+            dataset[dataIndex].n
+              ? ` (${new Intl.NumberFormat(lang, {}).format(dataset[dataIndex].n)})`
+              : ""
+          }`,
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         ...(labels.length > 1 && { label: `${label[lang]}` }),
