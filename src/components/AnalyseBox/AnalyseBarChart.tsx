@@ -61,6 +61,14 @@ export const AnalyseBarChart = ({
   const dataIndexToArea = Object.fromEntries(
     dataset.map((bar, i) => [i, Number(bar.area)]),
   );
+
+  const totalObservations = Object.fromEntries(
+    Object.keys(analyse.data[level]).map((area, i) => [
+      area,
+      analyse.data[level][area][year][0][1],
+    ]),
+  );
+
   const nameToArea = Object.fromEntries(
     dataset.map((bar) => [
       regions_dict[lang][level][Number(bar.area)],
@@ -78,7 +86,14 @@ export const AnalyseBarChart = ({
           scaleType: "band",
           dataKey: "area",
           tickPlacement: "middle",
-          valueFormatter: (area) => `${regions_dict[lang][level][area]}`,
+          valueFormatter: (area, { location }) => {
+            return (
+              regions_dict[lang][level][area] +
+              (location === "tooltip"
+                ? ` (n = ${new Intl.NumberFormat(lang, {}).format(totalObservations[area])})`
+                : "")
+            );
+          },
         },
       ]}
       sx={{
@@ -125,12 +140,10 @@ export const AnalyseBarChart = ({
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
         id: `${i}`,
-        valueFormatter: (v, { dataIndex }) =>
-          `${new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(v || 0)}${
-            dataset[dataIndex].n
-              ? ` (n = ${new Intl.NumberFormat(lang, {}).format(dataset[dataIndex].n)})`
-              : ""
-          }`,
+        valueFormatter: (v) =>
+          new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(
+            v || 0,
+          ),
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         label: label[lang],
