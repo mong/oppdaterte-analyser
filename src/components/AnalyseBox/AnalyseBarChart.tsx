@@ -80,7 +80,13 @@ export const AnalyseBarChart = ({
     <BarChart
       margin={{ left: 120, bottom: 25 }}
       dataset={dataset}
-      xAxis={[{ min: 0, max: maxValue }]}
+      xAxis={[
+        {
+          min: 0,
+          max: maxValue,
+          valueFormatter: (v) => new Intl.NumberFormat(lang).format(v),
+        },
+      ]}
       yAxis={[
         {
           scaleType: "band",
