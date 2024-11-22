@@ -78,7 +78,6 @@ export default function AnalyseBox({
           margin: 1,
           marginBottom: 4,
           borderRadius: "16px",
-          outline: "none",
         },
       }}
     >
