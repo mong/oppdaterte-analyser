@@ -26,7 +26,7 @@ export const AnalyseBarChart = ({
   onClick,
 }: AnalyseBarChartProps) => {
   const defaultLabels: { [k: string]: Text[] } = {
-    total: [{ no: "Total", en: "Total" }],
+    total: [{ no: "Rate", en: "Rate" }],
   };
 
   const viewData = analyse.views[view];
@@ -119,6 +119,9 @@ export const AnalyseBarChart = ({
           />
         ),
       }}
+      slotProps={{
+        legend: { hidden: labels.length < 2 },
+      }}
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
         id: `${i}`,
@@ -130,7 +133,7 @@ export const AnalyseBarChart = ({
           }`,
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
-        ...(labels.length > 1 && { label: `${label[lang]}` }),
+        label: label[lang],
       }))}
       onAxisClick={(_, params) => onClick(Number(params?.axisValue))}
       layout="horizontal"
