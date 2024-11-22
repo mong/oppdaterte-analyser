@@ -125,7 +125,7 @@ export const AnalyseBarChart = ({
         valueFormatter: (v, { dataIndex }) =>
           `${new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(v || 0)}${
             dataset[dataIndex].n
-              ? ` (${new Intl.NumberFormat(lang, {}).format(dataset[dataIndex].n)})`
+              ? ` (n = ${new Intl.NumberFormat(lang, {}).format(dataset[dataIndex].n)})`
               : ""
           }`,
         stack: "stack_group",
