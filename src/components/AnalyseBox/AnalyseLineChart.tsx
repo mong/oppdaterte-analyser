@@ -107,7 +107,7 @@ export const AnalyseLineChart = ({
           tickPlacement: "middle",
         },
       ]}
-      yAxis={[{ min: 0, max: maxValue }]}
+      yAxis={[{ min: 0, max: maxValue * 1.01 }]}
       series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
