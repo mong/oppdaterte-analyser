@@ -100,7 +100,7 @@ export default function AnalyseBox({
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h4">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            {dict.updated}: {formatDate(analyse.published, lang)}.
+            {dict.updated} {formatDate(analyse.published, lang)}.
           </Typography>
           <div
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
