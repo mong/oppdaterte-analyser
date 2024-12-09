@@ -63,12 +63,8 @@ export const AnalyseBarChart = ({
     dataset.map((bar, i) => [i, Number(bar.area)]),
   );
 
-  const totalObservations = Object.fromEntries(
-    Object.keys(analyse.data[level]).map((area, i) => [
-      area,
-      analyse.data[level][area][year][0][1],
-    ]),
-  );
+  const getTotalObservations = (area: string) =>
+    analyse.data[level][area][year][0][1];
 
   const nameToArea = Object.fromEntries(
     dataset.map((bar) => [
@@ -97,7 +93,7 @@ export const AnalyseBarChart = ({
             return (
               regions_dict[lang][level][area] +
               (location === "tooltip"
-                ? ` (n = ${formatNumber(totalObservations[area], lang)})`
+                ? ` (n = ${formatNumber(getTotalObservations(area), lang)})`
                 : "")
             );
           },

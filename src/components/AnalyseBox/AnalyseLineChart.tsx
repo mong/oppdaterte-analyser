@@ -2,6 +2,7 @@ import { Analyse, Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { regions_dict, Selection } from "@/lib/nameMapping";
 import React from "react";
+import { formatNumber } from "@/lib/helpers";
 
 const linechart_colors: {
   sykehus: { [k: number]: string };
@@ -46,7 +47,6 @@ type AnalyseLineChartProps = {
   level: "region" | "sykehus";
   selection: Selection;
   lang: Lang;
-  dict: { [k: string]: string };
   maxValue: number;
 };
 
@@ -69,7 +69,6 @@ export const AnalyseLineChart = ({
   selection,
   lang,
   maxValue,
-  dict,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
@@ -89,6 +88,9 @@ export const AnalyseLineChart = ({
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
   const selectionIDs = [...selection[level].map(String), "8888"];
+
+  const getTotalObservations = (area: string, year: number) =>
+    analyse.data[level][area][year][0][1];
 
   return (
     <LineChart
@@ -110,7 +112,14 @@ export const AnalyseLineChart = ({
       series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
-        valueFormatter: (v) => `${v?.toFixed(1)}`,
+        valueFormatter: (v, context) =>
+          `${formatNumber(v || 0, lang)} (n = ${formatNumber(
+            getTotalObservations(
+              area,
+              Number(years.at(-context.dataIndex - 1)),
+            ),
+            lang,
+          )})`,
         curve: "monotoneX",
         showMark: false,
         label: regions_dict[lang][level][Number(area)],

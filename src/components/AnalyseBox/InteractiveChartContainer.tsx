@@ -184,7 +184,6 @@ export function InteractiveChartContainer({
         {view === "tidstrend" ? (
           <AnalyseLineChart
             analyse={analyse}
-            dict={dict}
             years={years}
             level={level}
             selection={selection}
