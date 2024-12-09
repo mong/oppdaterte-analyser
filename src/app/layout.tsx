@@ -5,6 +5,7 @@ import { Box, CssBaseline } from "@mui/material";
 import skdeTheme from "@/themes/SkdeTheme";
 import Footer from "@/components/Footer";
 import { Lang } from "@/types";
+import MatomoTracker from "./MatomoTracker";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
@@ -25,6 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={params.lang}>
+      <MatomoTracker />
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
