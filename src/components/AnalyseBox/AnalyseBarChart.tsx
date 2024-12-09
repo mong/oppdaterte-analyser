@@ -3,6 +3,7 @@ import { BarChart, BarElementPath } from "@mui/x-charts/BarChart";
 import { regions_dict, Selection } from "@/lib/nameMapping";
 import { ChartsText } from "@mui/x-charts/ChartsText";
 import React from "react";
+import { formatNumber } from "@/lib/helpers";
 
 type AnalyseBarChartProps = {
   analyse: Analyse;
@@ -96,7 +97,7 @@ export const AnalyseBarChart = ({
             return (
               regions_dict[lang][level][area] +
               (location === "tooltip"
-                ? ` (n = ${new Intl.NumberFormat(lang, {}).format(totalObservations[area])})`
+                ? ` (n = ${formatNumber(totalObservations[area], lang)})`
                 : "")
             );
           },
@@ -146,10 +147,13 @@ export const AnalyseBarChart = ({
       series={labels.map((label, i) => ({
         dataKey: i.toString(),
         id: `${i}`,
-        valueFormatter: (v) =>
-          new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(
-            v || 0,
-          ),
+        valueFormatter: (v, context) => {
+          let percent = "";
+          if (view > 0 && v !== null) {
+            percent = ` (${formatNumber(v / dataset[context.dataIndex].sum, lang, { style: "percent" })})`;
+          }
+          return formatNumber(v || 0, lang, {}) + percent;
+        },
         stack: "stack_group",
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
         label: label[lang],
