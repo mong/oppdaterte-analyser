@@ -92,7 +92,6 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
-      loading={selectionIDs.length === 1}
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
@@ -118,7 +117,6 @@ export const AnalyseLineChart = ({
         color: linechart_colors[level][Number(area)],
       }))}
       slotProps={{
-        loadingOverlay: { message: dict.empty_area_selection },
         legend: {
           direction: "row",
           position: { vertical: "top", horizontal: "middle" },
