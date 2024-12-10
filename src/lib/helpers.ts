@@ -13,9 +13,11 @@ export function formatNumber(
   lang: Lang,
   options?: Intl.NumberFormatOptions,
 ) {
-  const digits = number < 0.5 ? 3 : number < 5 ? 2 : 1;
   return new Intl.NumberFormat(lang, {
-    maximumFractionDigits: options?.style === "percent" ? 1 : digits,
+    maximumFractionDigits:
+      options?.style === "percent"
+        ? Number(number < 0.1)
+        : 1 + Number(number < 5) + Number(number < 0.5),
     ...options,
   }).format(number);
 }
