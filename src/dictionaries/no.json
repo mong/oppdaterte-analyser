@@ -11,7 +11,8 @@
     "choose_area": "Velg opptaksområder",
     "empty_area_selection": "Ingen opptaksområder valgt",
     "info": "Informasjon",
-    "updated": "Oppdatert"
+    "updated": "Oppdatert",
+    "open_new_tab": "Åpne analyse i ny fane"
   },
   "general": {
     "updated_analyses": "Oppdaterte analyser",

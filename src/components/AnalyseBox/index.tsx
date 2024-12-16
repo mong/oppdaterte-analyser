@@ -14,6 +14,8 @@ import {
   Popper,
   Fade,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid2";
@@ -22,9 +24,10 @@ import { ClickAwayListener } from "@mui/base";
 
 import { Analyse, Tag, Lang } from "@/types";
 
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { InteractiveChartContainer } from "./InteractiveChartContainer";
 import { formatDate } from "@/lib/helpers";
+import Link from "next/link";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
@@ -65,6 +68,17 @@ export default function AnalyseBox({
     </Box>
   );
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
+
   return (
     <Accordion
       disableGutters
@@ -84,7 +98,6 @@ export default function AnalyseBox({
       <AccordionSummary
         aria-controls={`${analyse.name}-content`}
         id={`${analyse.name}-header`}
-        expandIcon={<ArrowDownwardIcon />}
         sx={(theme) => ({
           transition: "background-color .2s ease-in",
           background: `linear-gradient(rgba(0, 0, 0, 0), white)`,
@@ -93,6 +106,9 @@ export default function AnalyseBox({
           },
           "@media print": {
             background: "none",
+          },
+          "& > .MuiAccordionSummary-content": {
+            justifyContent: "space-between",
           },
         })}
         onClick={() => setExpanded(!expanded)}
@@ -106,6 +122,39 @@ export default function AnalyseBox({
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
           />
           {!expanded && tagList}
+        </Box>
+        <Box>
+          <IconButton
+            size="large"
+            aria-label="valg"
+            id="long-button"
+            aria-controls={open ? "analyse-meny" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MoreVertIcon sx={{ fontSize: "1.8rem" }} />
+          </IconButton>
+          <Menu
+            id="analyse-meny"
+            MenuListProps={{
+              "aria-labelledby": "long-button",
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem
+              onClick={handleClose}
+              component={Link}
+              href={`/${lang}/analyse/${analyse.name}`}
+              target="_blank"
+            >
+              {dict.open_new_tab}
+            </MenuItem>
+          </Menu>
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
