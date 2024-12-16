@@ -5,11 +5,28 @@ import { Lang } from "@/types";
 import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
 import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
-import { getAnalyse } from "@/services/mongo";
+import { getAnalyse, getTags } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
 import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
+
+export const generateMetadata = async (props: {
+  params: { lang: Lang; analyseName: string };
+}) => {
+  const { analyseName, lang } = props.params;
+  const analyse = await getAnalyse(analyseName);
+  const tags = await getTags(analyse.tags);
+  const dict = await getDictionary(lang);
+
+  return {
+    title: `${analyse.title[lang]} - ${dict.general.updated_analyses}`,
+    description: `${dict.general.updated_analyses}`,
+    keywords: `${Object.values(tags)
+      .map((tag) => tag.fullname[lang])
+      .join(", ")}`,
+  };
+};
 
 export default async function AnalysePage(props: {
   params: { lang: Lang; analyseName: string };

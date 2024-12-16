@@ -11,11 +11,6 @@ import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 
-// The function can also fetch data for the compendium and get its
-// metadata from there. For more, see:
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
-//
-// Also, the function should be moved to separate file, if possible?
 export const generateMetadata = async (props: {
   params: { lang: Lang; kompendium: string };
 }) => {
@@ -24,7 +19,7 @@ export const generateMetadata = async (props: {
   const dict = await getDictionary(lang);
 
   return {
-    title: `${tag.fullname[lang]}`,
+    title: `${tag.fullname[lang]} - ${dict.general.updated_analyses}`,
     description: `${dict.general.updated_analyses}: ${tag.fullname[lang]}`,
     keywords: `${kompendium}`,
   };
