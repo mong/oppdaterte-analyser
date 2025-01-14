@@ -28,12 +28,13 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { InteractiveChartContainer } from "./InteractiveChartContainer";
 import { formatDate } from "@/lib/helpers";
 import Link from "next/link";
+import downloadCsv from "@/lib/downloadCsv";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
   tags: { [k: string]: Tag };
   lang: Lang;
-  dict: { [k: string]: string };
+  dict: { [k: string]: { [k: string]: string } };
   rawHtmlFromMarkdown: { [k: string]: string };
 };
 
@@ -116,7 +117,7 @@ export default function AnalyseBox({
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h4">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            {dict.updated} {formatDate(analyse.published, lang)}.
+            {dict.analysebox.updated} {formatDate(analyse.published, lang)}.
           </Typography>
           <div
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
@@ -152,7 +153,16 @@ export default function AnalyseBox({
               href={`/${lang}/analyse/${analyse.name}`}
               target="_blank"
             >
-              {dict.open_new_tab}
+              {dict.analysebox.open_new_tab}
+            </MenuItem>
+            <MenuItem
+              onClick={(e) => {
+                downloadCsv(analyse, lang);
+                handleClose(e);
+              }}
+            >
+              {dict.analysebox.download_data}
+              {" (CSV)"}
             </MenuItem>
           </Menu>
         </Box>
@@ -178,7 +188,7 @@ export default function AnalyseBox({
                   setInfoAnchor(infoAnchor ? null : event.currentTarget)
                 }
               >
-                {dict.info}
+                {dict.analysebox.info}
               </Button>
 
               <Popper
@@ -213,7 +223,9 @@ export default function AnalyseBox({
                         <Box sx={{ padding: { xs: 2, md: 3 } }}>
                           <Box display="flex" alignItems="center">
                             <Box flexGrow={1}>
-                              <Typography variant="h4">{dict.info}</Typography>
+                              <Typography variant="h4">
+                                {dict.analysebox.info}
+                              </Typography>
                             </Box>
                             <Box>
                               <IconButton onClick={() => setInfoAnchor(null)}>

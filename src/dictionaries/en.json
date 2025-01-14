@@ -12,7 +12,8 @@
     "empty_area_selection": "No referral areas chosen",
     "info": "Information",
     "updated": "Updated",
-    "open_new_tab": "Open analysis in new tab"
+    "open_new_tab": "Open analysis in new tab",
+    "download_data": "Download data"
   },
   "general": {
     "updated_analyses": "Updated analyses",

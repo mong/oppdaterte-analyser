@@ -63,7 +63,7 @@ export const getViewMetadata = (views: View[]) => {
 export type InteractiveChartContainerProps = {
   analyse: Analyse;
   lang: Lang;
-  dict: { [k: string]: string };
+  dict: { [k: string]: { [k: string]: string } };
 };
 
 export function InteractiveChartContainer({
@@ -108,16 +108,18 @@ export function InteractiveChartContainer({
           alignItems="center"
         >
           <FormControl fullWidth>
-            <InputLabel id="select-level-label">{dict.area_select}</InputLabel>
+            <InputLabel id="select-level-label">
+              {dict.analysebox.area_select}
+            </InputLabel>
             <Select
               labelId="select-level-label"
               id="select-level"
               value={level}
-              label={dict.area_select}
+              label={dict.analysebox.area_select}
               onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
             >
-              <MenuItem value={"sykehus"}>{dict.sykehus}</MenuItem>
-              <MenuItem value={"region"}>{dict.region}</MenuItem>
+              <MenuItem value={"sykehus"}>{dict.analysebox.sykehus}</MenuItem>
+              <MenuItem value={"region"}>{dict.analysebox.region}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -129,12 +131,14 @@ export function InteractiveChartContainer({
           alignItems="center"
         >
           <FormControl fullWidth>
-            <InputLabel id="select-view-label">{dict.view_select}</InputLabel>
+            <InputLabel id="select-view-label">
+              {dict.analysebox.view_select}
+            </InputLabel>
             <Select
               labelId="select-view-label"
               id="select-view"
               value={view}
-              label={dict.view_select}
+              label={dict.analysebox.view_select}
               onChange={(e) =>
                 setView(
                   e.target.value === "tidstrend"
@@ -148,7 +152,9 @@ export function InteractiveChartContainer({
                   {viewLookup[view].title[lang]}
                 </MenuItem>
               ))}
-              <MenuItem value={"tidstrend"}>{dict.time_series}</MenuItem>
+              <MenuItem value={"tidstrend"}>
+                {dict.analysebox.time_series}
+              </MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -159,12 +165,14 @@ export function InteractiveChartContainer({
           alignItems="center"
         >
           <FormControl fullWidth disabled={view === "tidstrend"}>
-            <InputLabel id="select-year-label">{dict.year_select}</InputLabel>
+            <InputLabel id="select-year-label">
+              {dict.analysebox.year_select}
+            </InputLabel>
             <Select
               labelId="select-year-label"
               id="select-year"
               value={view === "tidstrend" ? "-" : year.toString()}
-              label={dict.year_select}
+              label={dict.analysebox.year_select}
               onChange={(e) => setYear(Number(e.target.value))}
             >
               {years.map((y) => (
@@ -173,7 +181,9 @@ export function InteractiveChartContainer({
                 </MenuItem>
               ))}
               {view === "tidstrend" && (
-                <MenuItem value={"-"}>{dict.all_years_shown}</MenuItem>
+                <MenuItem value={"-"}>
+                  {dict.analysebox.all_years_shown}
+                </MenuItem>
               )}
             </Select>
           </FormControl>

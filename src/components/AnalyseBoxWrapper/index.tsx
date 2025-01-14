@@ -22,7 +22,7 @@ export default async function AnalyseBoxWrapper({
       analyse={analyse}
       tags={tags}
       lang={lang}
-      dict={dict.analysebox}
+      dict={dict}
       rawHtmlFromMarkdown={await getAnalyseMarkdown(analyse, lang)}
     />
   );

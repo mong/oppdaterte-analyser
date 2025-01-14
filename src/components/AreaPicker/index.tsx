@@ -17,7 +17,7 @@ export type AreaPickerProps = {
   lang: Lang;
   onRegionChange: (region: number) => void;
   onSykehusChange: (sykehus: number) => void;
-  dict: { [k: string]: string };
+  dict: { [k: string]: { [k: string]: string } };
 };
 
 export default function AreaPicker({
@@ -40,7 +40,7 @@ export default function AreaPicker({
           },
         }}
       >
-        <Typography>{dict.choose_area}:</Typography>
+        <Typography>{dict.analysebox.choose_area}:</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
