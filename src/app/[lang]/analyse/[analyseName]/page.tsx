@@ -84,7 +84,7 @@ export default async function AnalysePage(props: {
             <InteractiveChartContainer
               analyse={analyse}
               lang={lang}
-              dict={dict.analysebox}
+              dict={dict}
             />
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">Diskusjon</Typography>
