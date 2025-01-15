@@ -13,7 +13,8 @@
     "info": "Informasjon",
     "updated": "Oppdatert",
     "open_new_tab": "Åpne analyse i ny fane",
-    "download_data": "Last ned data"
+    "download_data": "Last ned data",
+    "download_data_text": "Alle dataene brukt i figurene for denne analysen kan lastes ned i CSV-format."
   },
   "general": {
     "updated_analyses": "Oppdaterte analyser",

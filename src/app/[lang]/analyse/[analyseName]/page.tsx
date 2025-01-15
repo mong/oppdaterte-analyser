@@ -11,6 +11,7 @@ import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
+import DownloadDataButton from "@/components/DownloadDataButton";
 
 export const generateMetadata = async (props: {
   params: { lang: Lang; analyseName: string };
@@ -103,6 +104,9 @@ export default async function AnalysePage(props: {
               <div
                 dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
               />
+              <Typography variant="h3">Data</Typography>
+              <p>{dict.analysebox.download_data_text}</p>
+              <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
             </Box>
           </CenteredContainer>
         </Suspense>

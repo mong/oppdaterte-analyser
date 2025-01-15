@@ -13,7 +13,8 @@
     "info": "Information",
     "updated": "Updated",
     "open_new_tab": "Open analysis in new tab",
-    "download_data": "Download data"
+    "download_data": "Download data",
+    "download_data_text": "All of the data used in the charts for this analysis can be downloaded as a CSV file."
   },
   "general": {
     "updated_analyses": "Updated analyses",

@@ -9,7 +9,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Chip,
   Button,
   Popper,
   Fade,
