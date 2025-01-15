@@ -10,6 +10,7 @@ import { formatDate } from "@/lib/helpers";
 import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
+import TagList from "@/components/TagList";
 
 export const generateMetadata = async (props: {
   params: { lang: Lang; analyseName: string };
@@ -33,6 +34,7 @@ export default async function AnalysePage(props: {
 }) {
   const { lang, analyseName } = props.params;
   const analyse = await getAnalyse(analyseName);
+  const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
   const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);
 
@@ -62,7 +64,11 @@ export default async function AnalysePage(props: {
         breadcrumbs={breadcrumbs}
         title={analyse.title[lang]}
         introduction={`${dict.analysebox.updated} ${formatDate(analyse.published, lang)}`}
-      ></Header>
+      >
+        <Box sx={{ marginTop: 1 }}>
+          <TagList analyse={analyse} tags={tags} lang={lang} />
+        </Box>
+      </Header>
       <main>
         <UnderDevelopment lang={lang} />
         <Suspense

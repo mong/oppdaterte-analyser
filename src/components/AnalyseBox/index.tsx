@@ -29,6 +29,7 @@ import { InteractiveChartContainer } from "./InteractiveChartContainer";
 import { formatDate } from "@/lib/helpers";
 import Link from "next/link";
 import downloadCsv from "@/lib/downloadCsv";
+import TagList from "@/components/TagList";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
@@ -52,22 +53,7 @@ export default function AnalyseBox({
 
   const [infoAnchor, setInfoAnchor] = React.useState<null | HTMLElement>(null);
 
-  const tagList = (
-    <Box className={classNames["tag-container"]}>
-      {analyse.tags.map((tag) => (
-        <Chip
-          label={tags[tag]?.fullname[lang] || tag}
-          color={tag in tags ? "primary" : "error"}
-          key={tag}
-          sx={{
-            marginRight: "1em",
-            printColorAdjust: "exact",
-            WebkitPrintColorAdjust: "exact",
-          }}
-        />
-      ))}
-    </Box>
-  );
+  const tagList = <TagList analyse={analyse} tags={tags} lang={lang} />;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import HeaderTop from "./HeaderTop";
 import HeaderMiddle from "./HeaderMiddle";
 import { Lang } from "@/types";
@@ -15,19 +15,24 @@ type HeaderProps = {
   introduction: string;
 };
 
-export const Header = ({
+export function Header({
   lang,
   breadcrumbs,
   title,
   introduction,
-}: HeaderProps) => {
+  children,
+}: PropsWithChildren<HeaderProps>) {
   return (
     <>
       <HeaderTop lang={lang} breadcrumbs={breadcrumbs} />
-      <HeaderMiddle title={title} introduction={introduction} />
+      <HeaderMiddle
+        title={title}
+        introduction={introduction}
+        children={children}
+      />
     </>
   );
-};
+}
 
 export { HeaderTop } from "./HeaderTop";
 export { HeaderMiddle } from "./HeaderMiddle";
