@@ -25,11 +25,9 @@ export function Header({
   return (
     <>
       <HeaderTop lang={lang} breadcrumbs={breadcrumbs} />
-      <HeaderMiddle
-        title={title}
-        introduction={introduction}
-        children={children}
-      />
+      <HeaderMiddle title={title} introduction={introduction}>
+        {children}
+      </HeaderMiddle>
     </>
   );
 }
