@@ -12,6 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import InsightsIcon from "@mui/icons-material/InsightsOutlined";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 import { Analyse, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -149,11 +151,29 @@ export function InteractiveChartContainer({
             >
               {viewOrder.map((view, i) => (
                 <MenuItem key={i} value={i}>
-                  {viewLookup[view].title[lang]}
+                  <Grid container alignItems="center">
+                    <Grid display="flex">
+                      <BarChartIcon
+                        sx={{ marginRight: 1 }}
+                        fontSize={"small"}
+                        color="primary"
+                      />
+                    </Grid>
+                    <Grid>{viewLookup[view].title[lang]}</Grid>
+                  </Grid>
                 </MenuItem>
               ))}
               <MenuItem value={"tidstrend"}>
-                {dict.analysebox.time_series}
+                <Grid container alignItems="center">
+                  <Grid display="flex">
+                    <InsightsIcon
+                      sx={{ marginRight: 1 }}
+                      fontSize={"small"}
+                      color="primary"
+                    />
+                  </Grid>
+                  <Grid>{dict.analysebox.time_series}</Grid>
+                </Grid>
               </MenuItem>
             </Select>
           </FormControl>
