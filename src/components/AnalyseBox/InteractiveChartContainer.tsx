@@ -57,7 +57,6 @@ export function InteractiveChartContainer({
   const graphRef = React.useRef<null | HTMLDivElement>(null);
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -114,29 +113,6 @@ export function InteractiveChartContainer({
           alignItems="center"
         >
           <FormControl fullWidth>
-            <InputLabel id="select-level-label">
-              {dict.analysebox.area_select}
-            </InputLabel>
-            <Select
-              labelId="select-level-label"
-              id="select-level"
-              value={level}
-              label={dict.analysebox.area_select}
-              onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
-            >
-              <MenuItem value={"sykehus"}>{dict.analysebox.sykehus}</MenuItem>
-              <MenuItem value={"region"}>{dict.analysebox.region}</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid
-          size={{ xs: 12, sm: 4 }}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <FormControl fullWidth>
             <InputLabel id="select-view-label">
               {dict.analysebox.view_select}
             </InputLabel>
@@ -182,6 +158,7 @@ export function InteractiveChartContainer({
             </Select>
           </FormControl>
         </Grid>
+
         <Grid
           size={{ xs: 12, sm: 4 }}
           display="flex"
@@ -209,6 +186,29 @@ export function InteractiveChartContainer({
                   {dict.analysebox.all_years_shown}
                 </MenuItem>
               )}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid
+          size={{ xs: 12, sm: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <FormControl fullWidth>
+            <InputLabel id="select-level-label">
+              {dict.analysebox.area_select}
+            </InputLabel>
+            <Select
+              labelId="select-level-label"
+              id="select-level"
+              value={level}
+              label={dict.analysebox.area_select}
+              onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
+            >
+              <MenuItem value={"sykehus"}>{dict.analysebox.sykehus}</MenuItem>
+              <MenuItem value={"region"}>{dict.analysebox.region}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -255,12 +255,7 @@ export function InteractiveChartContainer({
                           "image/png": blob,
                         }),
                       ])
-                      .then(() => {
-                        setSnackbarMessage(
-                          dict.analysebox.copy_graph_snackbar_message,
-                        );
-                        setOpenSnackbar(true);
-                      }),
+                      .then(() => setOpenSnackbar(true)),
                 ),
               );
               handleClose(e);
@@ -279,10 +274,6 @@ export function InteractiveChartContainer({
               getCanvas().then((canvas) =>
                 canvas.toBlob((blob) => blob && saveAs(blob, filename)),
               );
-              setSnackbarMessage(
-                dict.analysebox.download_graph_snackbar_message,
-              );
-              setOpenSnackbar(true);
               handleClose(e);
             }}
           >
@@ -357,7 +348,7 @@ export function InteractiveChartContainer({
         autoHideDuration={4000}
         onClose={() => setOpenSnackbar(false)}
         TransitionComponent={Slide}
-        message={snackbarMessage}
+        message={dict.analysebox.copy_graph_snackbar_message}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         action={
           <IconButton

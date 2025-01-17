@@ -19,7 +19,6 @@
     "copy_graph_tooltip": "Copy graph",
     "copy_graph_snackbar_message": "Graph copied to clipboard",
     "download_graph": "Download graph (PNG)",
-    "download_graph_snackbar_message": "Graph downloaded as a PNG",
     "options": "Options"
   },
   "general": {

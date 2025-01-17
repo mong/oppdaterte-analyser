@@ -19,7 +19,6 @@
     "copy_graph_tooltip": "Kopier figur",
     "copy_graph_snackbar_message": "Figur kopiert til utklippstavlen",
     "download_graph": "Last ned figur (PNG)",
-    "download_graph_snackbar_message": "Figur er lastet ned",
     "options": "Valg"
   },
   "general": {
