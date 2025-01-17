@@ -99,12 +99,6 @@ export const AnalyseBarChart = ({
           },
         },
       ]}
-      sx={{
-        backgroundImage: "url('/img/logo-skde-graa.svg')",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "max(60px, 10%)",
-        backgroundPosition: "bottom 40px right 5%",
-      }}
       slots={{
         axisTickLabel: (props) => {
           const selected =

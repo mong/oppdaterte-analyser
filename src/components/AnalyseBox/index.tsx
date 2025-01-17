@@ -15,6 +15,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid2";
@@ -110,17 +111,19 @@ export default function AnalyseBox({
           {!expanded && tagList}
         </Box>
         <Box>
-          <IconButton
-            size="large"
-            aria-label="valg"
-            id="long-button"
-            aria-controls={open ? "analyse-meny" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MoreVertIcon sx={{ fontSize: "1.8rem" }} />
-          </IconButton>
+          <Tooltip title={dict.analysebox.options}>
+            <IconButton
+              size="large"
+              aria-label="valg"
+              id="long-button"
+              aria-controls={open ? "analyse-meny" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <MoreVertIcon sx={{ fontSize: "1.8rem" }} />
+            </IconButton>
+          </Tooltip>
           <Menu
             id="analyse-meny"
             MenuListProps={{
