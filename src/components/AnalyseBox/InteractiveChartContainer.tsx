@@ -165,6 +165,29 @@ export function InteractiveChartContainer({
           justifyContent="center"
           alignItems="center"
         >
+          <FormControl fullWidth>
+            <InputLabel id="select-level-label">
+              {dict.analysebox.area_select}
+            </InputLabel>
+            <Select
+              labelId="select-level-label"
+              id="select-level"
+              value={level}
+              label={dict.analysebox.area_select}
+              onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
+            >
+              <MenuItem value={"sykehus"}>{dict.analysebox.sykehus}</MenuItem>
+              <MenuItem value={"region"}>{dict.analysebox.region}</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid
+          size={{ xs: 12, sm: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <FormControl fullWidth disabled={view === "tidstrend"}>
             <InputLabel id="select-year-label">
               {dict.analysebox.year_select}
@@ -186,29 +209,6 @@ export function InteractiveChartContainer({
                   {dict.analysebox.all_years_shown}
                 </MenuItem>
               )}
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid
-          size={{ xs: 12, sm: 4 }}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <FormControl fullWidth>
-            <InputLabel id="select-level-label">
-              {dict.analysebox.area_select}
-            </InputLabel>
-            <Select
-              labelId="select-level-label"
-              id="select-level"
-              value={level}
-              label={dict.analysebox.area_select}
-              onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
-            >
-              <MenuItem value={"sykehus"}>{dict.analysebox.sykehus}</MenuItem>
-              <MenuItem value={"region"}>{dict.analysebox.region}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
