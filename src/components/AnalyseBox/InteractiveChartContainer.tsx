@@ -255,9 +255,7 @@ export function InteractiveChartContainer({
                         color="primary"
                       />
                     </Grid>
-                    <Grid>
-                      <Box sx={{ marginLeft: 0 }}>Total</Box>
-                    </Grid>
+                    <Grid>Total</Grid>
                   </Grid>
                 </MenuItem>
                 <MenuItem value={"0,1"}>
@@ -269,11 +267,7 @@ export function InteractiveChartContainer({
                         color="primary"
                       />
                     </Grid>
-                    <Grid>
-                      <Box sx={{ marginLeft: 0 }}>
-                        {dict.analysebox.number_variable}
-                      </Box>
-                    </Grid>
+                    <Grid>{dict.analysebox.number_variable}</Grid>
                   </Grid>
                 </MenuItem>
                 {analyse.views.map((view, i) =>
@@ -303,11 +297,7 @@ export function InteractiveChartContainer({
                                   color="primary"
                                 />
                               </Grid>
-                              <Grid>
-                                <Box sx={{ marginLeft: 0 }}>
-                                  {variable[lang]}
-                                </Box>
-                              </Grid>
+                              <Grid>{variable[lang]}</Grid>
                             </Grid>
                           </MenuItem>
                         )),
