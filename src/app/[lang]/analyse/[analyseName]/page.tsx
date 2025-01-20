@@ -94,7 +94,7 @@ export default async function AnalysePage(props: {
               dict={dict}
             />
             <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">Diskusjon</Typography>
+              <Typography variant="h3">{dict.analysebox.discussion}</Typography>
               <div
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.discussion,
@@ -104,9 +104,12 @@ export default async function AnalysePage(props: {
               <div
                 dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
               />
+
               <Typography variant="h3">Data</Typography>
               <p>{dict.analysebox.download_data_text}</p>
-              <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
+              <Box sx={{ displayPrint: "none" }}>
+                <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
+              </Box>
             </Box>
           </CenteredContainer>
         </Suspense>

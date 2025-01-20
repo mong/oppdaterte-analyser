@@ -153,11 +153,7 @@ export function InteractiveChartContainer({
                 <MenuItem key={i} value={i}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
-                      <BarChartIcon
-                        sx={{ marginRight: 1 }}
-                        fontSize={"medium"}
-                        color="primary"
-                      />
+                      <BarChartIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
                     <Grid>{view.title[lang]}</Grid>
                   </Grid>
@@ -166,11 +162,7 @@ export function InteractiveChartContainer({
               <MenuItem value={"tidstrend"}>
                 <Grid container alignItems="center">
                   <Grid display="flex">
-                    <InsightsIcon
-                      sx={{ marginRight: 1 }}
-                      fontSize={"medium"}
-                      color="primary"
-                    />
+                    <InsightsIcon sx={{ marginRight: 1 }} color="primary" />
                   </Grid>
                   <Grid>{dict.analysebox.time_series}</Grid>
                 </Grid>
@@ -201,7 +193,6 @@ export function InteractiveChartContainer({
                   <Grid display="flex">
                     <LocalHospitalIcon
                       sx={{ marginRight: 1 }}
-                      fontSize={"medium"}
                       color="primary"
                     />
                   </Grid>
@@ -211,11 +202,7 @@ export function InteractiveChartContainer({
               <MenuItem value={"region"}>
                 <Grid container alignItems="center" wrap="nowrap">
                   <Grid display="flex">
-                    <PublicIcon
-                      sx={{ marginRight: 1 }}
-                      fontSize={"medium"}
-                      color="primary"
-                    />
+                    <PublicIcon sx={{ marginRight: 1 }} color="primary" />
                   </Grid>
                   <Grid>{dict.analysebox.region}</Grid>
                 </Grid>
@@ -249,11 +236,7 @@ export function InteractiveChartContainer({
                 <MenuItem value={"0,0"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
-                      <JoinFullIcon
-                        sx={{ marginRight: 1 }}
-                        fontSize={"medium"}
-                        color="primary"
-                      />
+                      <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
                     <Grid>Total</Grid>
                   </Grid>
@@ -261,11 +244,7 @@ export function InteractiveChartContainer({
                 <MenuItem value={"0,1"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
-                      <NumbersIcon
-                        sx={{ marginRight: 1 }}
-                        fontSize={"medium"}
-                        color="primary"
-                      />
+                      <NumbersIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
                     <Grid>{dict.analysebox.number_variable}</Grid>
                   </Grid>
@@ -293,7 +272,6 @@ export function InteractiveChartContainer({
                               <Grid display="flex">
                                 <ZoomInIcon
                                   sx={{ marginRight: 1 }}
-                                  fontSize={"medium"}
                                   color="primary"
                                 />
                               </Grid>
@@ -347,6 +325,7 @@ export function InteractiveChartContainer({
               zIndex: 2,
               color: "rgba(0, 0, 0, 0.2)",
               "&:hover": { color: "rgba(0, 0, 0, 0.6)" },
+              displayPrint: "none",
             }}
             aria-controls={open ? "screenshot-meny" : undefined}
             aria-expanded={open ? "true" : undefined}
@@ -411,7 +390,8 @@ export function InteractiveChartContainer({
               backgroundRepeat: "no-repeat",
               backgroundSize: "min(max(60px, 10vw), 120px)",
               backgroundPositionX: "95%",
-              backgroundPositionY: "93%",
+              backgroundPositionY: "92%",
+              printColorAdjust: "exact",
             }}
           >
             {view === "tidstrend" ? (
@@ -453,7 +433,7 @@ export function InteractiveChartContainer({
         </Box>
       </Box>
 
-      <Box sx={{ padding: 2, paddingY: 0 }}>
+      <Box sx={{ padding: 2, paddingY: 0, displayPrint: "none" }}>
         <AreaPicker
           dict={dict}
           selection={selection}
