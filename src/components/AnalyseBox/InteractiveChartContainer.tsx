@@ -385,15 +385,30 @@ export function InteractiveChartContainer({
           <Paper
             elevation={0}
             className={classNames["chart-container"]}
-            sx={{
-              backgroundImage: "url('/img/logo-skde-graa.svg')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "min(max(60px, 10vw), 120px)",
-              backgroundPositionX: "95%",
-              backgroundPositionY: "92%",
-              printColorAdjust: "exact",
-            }}
+            sx={{ position: "sticky" }}
           >
+            <Box
+              sx={{
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+              }}
+            >
+              <Box
+                component="img"
+                alt="SKDE Logo."
+                src="/img/logo-skde-graa.svg"
+                className={classNames["logo"]}
+                sx={{
+                  width: "15vw",
+                  maxWidth: 125,
+                  position: "absolute",
+                  bottom: 40,
+                  right: 30,
+                  printColorAdjust: "exact",
+                }}
+              />
+            </Box>
             {view === "tidstrend" ? (
               <AnalyseLineChart
                 analyse={analyse}

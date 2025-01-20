@@ -13,3 +13,8 @@
   min-height: 370px;
   margin-top: 0px;
 }
+@media print {
+  img.logo {
+    bottom: 70px;
+  }
+}
