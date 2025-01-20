@@ -3,6 +3,7 @@
     "area_select": "Geographical area",
     "view_select": "View",
     "year_select": "Choose year",
+    "variable_select": "Variable",
     "single_year": "Single year",
     "time_series": "Time series",
     "all_years_shown": "All years are shown",
@@ -19,7 +20,9 @@
     "copy_graph_tooltip": "Copy graph",
     "copy_graph_snackbar_message": "Graph copied to clipboard",
     "download_graph": "Download graph (PNG)",
-    "options": "Options"
+    "options": "Options",
+    "summary": "Summary",
+    "number_variable": "Number"
   },
   "general": {
     "updated_analyses": "Updated analyses",

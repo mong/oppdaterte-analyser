@@ -81,7 +81,7 @@ export default async function AnalysePage(props: {
         >
           <CenteredContainer analyseBox={true}>
             <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">Oppsummert</Typography>
+              <Typography variant="h3">{dict.analysebox.summary}</Typography>
               <div
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.summary,

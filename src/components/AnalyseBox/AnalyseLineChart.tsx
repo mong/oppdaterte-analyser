@@ -3,6 +3,7 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import { regions_dict, Selection } from "@/lib/nameMapping";
 import React from "react";
 import { formatNumber } from "@/lib/helpers";
+import { SeriesValueFormatterContext } from "@mui/x-charts/internals";
 
 const linechart_colors: {
   sykehus: { [k: number]: string };
@@ -45,6 +46,7 @@ type AnalyseLineChartProps = {
   analyse: Analyse;
   years: number[];
   level: "region" | "sykehus";
+  variable: [number, number];
   selection: Selection;
   lang: Lang;
   maxValue: number;
@@ -66,6 +68,7 @@ export const AnalyseLineChart = ({
   analyse,
   years,
   level,
+  variable,
   selection,
   lang,
   maxValue,
@@ -79,7 +82,7 @@ export const AnalyseLineChart = ({
         ...Object.fromEntries(
           Object.keys(analyse.data[level]).map((area) => [
             area,
-            analyse.data[level][area][year][0][0],
+            analyse.data[level][area][year][variable[0]][variable[1]],
           ]),
         ),
       };
@@ -87,10 +90,29 @@ export const AnalyseLineChart = ({
   }, [analyse, years, level]);
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
-  const selectionIDs = [...selection[level].map(String), "8888"];
+  const selectionIDs = ["8888", ...selection[level].map(String)];
 
-  const getTotalObservations = (area: string, year: number) =>
-    analyse.data[level][area][year][0][1];
+  const getValueFormatter = (area: string) => {
+    return (value: number | null, context: SeriesValueFormatterContext) => {
+      const year = Number(years.at(-context.dataIndex - 1));
+
+      var parenthesis = "";
+
+      if (String(variable) === "0,0") {
+        var parenthesis = `(n = ${formatNumber(
+          analyse.data[level][area][year][0][1],
+          lang,
+        )})`;
+      } else if (String(variable) !== "0,1") {
+        let sum = analyse.data[level][area][year][variable[0]].reduce(
+          (acc, current) => acc + current,
+        );
+        var parenthesis = `(${formatNumber(analyse.data[level][area][year][variable[0]][variable[1]] / sum, lang, { style: "percent" })})`;
+      }
+
+      return `${formatNumber(value || 0, lang)} ${parenthesis}`;
+    };
+  };
 
   return (
     <LineChart
@@ -112,14 +134,7 @@ export const AnalyseLineChart = ({
       series={selectionIDs.map((area) => ({
         dataKey: area,
         id: area,
-        valueFormatter: (v, context) =>
-          `${formatNumber(v || 0, lang)} (n = ${formatNumber(
-            getTotalObservations(
-              area,
-              Number(years.at(-context.dataIndex - 1)),
-            ),
-            lang,
-          )})`,
+        valueFormatter: getValueFormatter(area),
         curve: "monotoneX",
         showMark: false,
         label: regions_dict[lang][level][Number(area)],

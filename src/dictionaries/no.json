@@ -3,6 +3,7 @@
     "area_select": "Geografisk område",
     "view_select": "Visning",
     "year_select": "Velg år",
+    "variable_select": "Variabel",
     "single_year": "Enkeltår",
     "time_series": "Tidstrend",
     "all_years_shown": "All år vises",
@@ -19,7 +20,9 @@
     "copy_graph_tooltip": "Kopier figur",
     "copy_graph_snackbar_message": "Figur kopiert til utklippstavlen",
     "download_graph": "Last ned figur (PNG)",
-    "options": "Valg"
+    "options": "Valg",
+    "summary": "Sammendrag",
+    "number_variable": "Antall"
   },
   "general": {
     "updated_analyses": "Oppdaterte analyser",
