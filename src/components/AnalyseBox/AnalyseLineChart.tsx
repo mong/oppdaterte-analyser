@@ -87,7 +87,7 @@ export const AnalyseLineChart = ({
         ),
       };
     });
-  }, [analyse, years, level]);
+  }, [analyse, years, level, variable]);
 
   const smallFactor = Math.min(windowWidth / 1000, 1);
   const selectionIDs = ["8888", ...selection[level].map(String)];
@@ -116,6 +116,7 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
+      skipAnimation={true}
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
