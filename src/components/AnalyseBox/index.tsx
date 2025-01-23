@@ -105,7 +105,8 @@ export default function AnalyseBox({
           <Typography variant="body2">
             {dict.analysebox.updated} {formatDate(analyse.published, lang)}.
           </Typography>
-          <div
+          <Box
+            sx={{ fontSize: 18, lineHeight: 1.5 }}
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
           />
           {!expanded && tagList}
@@ -113,6 +114,7 @@ export default function AnalyseBox({
         <Box>
           <Tooltip title={dict.analysebox.options}>
             <IconButton
+              component="div" /* Fixes hydration error because of "button inside button" */
               size="large"
               aria-label="valg"
               id="long-button"
