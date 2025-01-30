@@ -105,8 +105,9 @@ export default function AnalyseBox({
           <Typography variant="body2">
             {dict.analysebox.updated} {formatDate(analyse.published, lang)}.
           </Typography>
-          <Box
-            sx={{ fontSize: 18, lineHeight: 1.5 }}
+          <Typography
+            variant="body1"
+            component="div"
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
           />
           {!expanded && tagList}
@@ -160,7 +161,9 @@ export default function AnalyseBox({
       <AccordionDetails sx={{ padding: 0 }}>
         <InteractiveChartContainer analyse={analyse} dict={dict} lang={lang} />
         <Box sx={{ padding: 2, paddingTop: 0 }}>
-          <div
+          <Typography
+            variant="body1"
+            component="div"
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.discussion }}
           />
           <Grid
@@ -223,7 +226,9 @@ export default function AnalyseBox({
                               </IconButton>
                             </Box>
                           </Box>
-                          <div
+                          <Typography
+                            variant="body1"
+                            component="div"
                             dangerouslySetInnerHTML={{
                               __html: rawHtmlFromMarkdown.info,
                             }}

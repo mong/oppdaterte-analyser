@@ -82,7 +82,9 @@ export default async function AnalysePage(props: {
           <CenteredContainer analyseBox={true}>
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">{dict.analysebox.summary}</Typography>
-              <div
+              <Typography
+                variant="body1"
+                component="div"
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.summary,
                 }}
@@ -95,18 +97,25 @@ export default async function AnalysePage(props: {
             />
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">{dict.analysebox.discussion}</Typography>
-              <div
+              <Typography
+                variant="body1"
+                component="div"
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.discussion,
                 }}
               />
+
               <Typography variant="h3">{dict.analysebox.info}</Typography>
-              <div
+              <Typography
+                variant="body1"
+                component="div"
                 dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
               />
 
               <Typography variant="h3">Data</Typography>
-              <p>{dict.analysebox.download_data_text}</p>
+              <Typography variant="body1" component="div">
+                <p>{dict.analysebox.download_data_text}</p>
+              </Typography>
               <Box sx={{ displayPrint: "none" }}>
                 <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
               </Box>

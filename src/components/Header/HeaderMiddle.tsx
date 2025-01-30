@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import Typography from "@mui/material/Typography";
-import { Box, Container } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import CenteredContainer from "../CenteredContainer";
 
 type HeaderMiddleProps = {
