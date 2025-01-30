@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import Header from "@/components/Header";
 import {
   List,
@@ -12,7 +12,6 @@ import { getDictionary } from "@/lib/dictionaries";
 import { getKompendier } from "@/services/mongo";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { notFound } from "next/navigation";
-import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 
@@ -69,7 +68,7 @@ export default async function MainPage({ params }: MainPageProps) {
       />
       <main>
         <UnderDevelopment lang={lang} />
-        <CenteredContainer>
+        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
           <Paper sx={{ padding: 2 }}>
             <Typography>{dict.frontpage.list_text}</Typography>
             <List>
@@ -87,7 +86,7 @@ export default async function MainPage({ params }: MainPageProps) {
               ))}
             </List>
           </Paper>
-        </CenteredContainer>
+        </Container>
       </main>
     </>
   );

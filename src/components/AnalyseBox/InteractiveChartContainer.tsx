@@ -381,64 +381,68 @@ export function InteractiveChartContainer({
           </MenuItem>
         </Menu>
 
-        <Box ref={graphRef}>
-          <Paper
-            elevation={0}
-            className={classNames["chart-container"]}
-            sx={{ position: "sticky" }}
+        <Box
+          ref={graphRef}
+          sx={{
+            width: "100%",
+            height: "80vw",
+            maxHeight: "700px",
+            minHeight: "370px",
+            marginTop: 0,
+            position: "sticky",
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+            }}
           >
             <Box
+              component="img"
+              alt="SKDE Logo."
+              src="/img/logo-skde-graa.svg"
               sx={{
+                width: "15vw",
+                maxWidth: 125,
                 position: "absolute",
-                right: 0,
-                bottom: 0,
+                bottom: 40,
+                right: 30,
+                printColorAdjust: "exact",
+                "@media print": { bottom: 70 },
               }}
-            >
-              <Box
-                component="img"
-                alt="SKDE Logo."
-                src="/img/logo-skde-graa.svg"
-                className={classNames["logo"]}
-                sx={{
-                  width: "15vw",
-                  maxWidth: 125,
-                  position: "absolute",
-                  bottom: 40,
-                  right: 30,
-                  printColorAdjust: "exact",
-                }}
-              />
-            </Box>
-            {view === "tidstrend" ? (
-              <AnalyseLineChart
-                analyse={analyse}
-                years={years}
-                level={level}
-                variable={timelineVar}
-                selection={selection}
-                lang={lang}
-                maxValue={maxValues[String(timelineVar)]}
-              />
-            ) : (
-              <AnalyseBarChart
-                analyse={analyse}
-                year={year}
-                level={level}
-                view={view}
-                lang={lang}
-                maxValue={maxValues["0,0"]}
-                selection={selection}
-                onClick={(area) => {
-                  if (area !== 8888)
-                    setSelection(
-                      level === "region"
-                        ? selection.toggleRegion(area)
-                        : selection.toggleSykehus(area),
-                    );
-                }}
-              />
-            )}
-          </Paper>
+            />
+          </Box>
+          {view === "tidstrend" ? (
+            <AnalyseLineChart
+              analyse={analyse}
+              years={years}
+              level={level}
+              variable={timelineVar}
+              selection={selection}
+              lang={lang}
+              maxValue={maxValues[String(timelineVar)]}
+            />
+          ) : (
+            <AnalyseBarChart
+              analyse={analyse}
+              year={year}
+              level={level}
+              view={view}
+              lang={lang}
+              maxValue={maxValues["0,0"]}
+              selection={selection}
+              onClick={(area) => {
+                if (area !== 8888)
+                  setSelection(
+                    level === "region"
+                      ? selection.toggleRegion(area)
+                      : selection.toggleSykehus(area),
+                  );
+              }}
+            />
+          )}
         </Box>
 
         <Box sx={{ textAlign: "center", padding: 1, paddingBottom: 2 }}>

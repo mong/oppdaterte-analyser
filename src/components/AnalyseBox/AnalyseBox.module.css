@@ -6,15 +6,3 @@
 .analyse-box:last-child {
   margin-bottom: 0px;
 }
-.chart-container {
-  width: 100%;
-  height: 80vw;
-  max-height: 700px;
-  min-height: 370px;
-  margin-top: 0px;
-}
-@media print {
-  img.logo {
-    bottom: 70px;
-  }
-}

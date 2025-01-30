@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import CenteredContainer from "../CenteredContainer";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { ArrowForward, ArrowOutward } from "@mui/icons-material";
 import Link from "next/link";
@@ -20,7 +19,7 @@ export default function Footer() {
           color: "footer1.contrastText",
         }}
       >
-        <CenteredContainer>
+        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
           <Grid container size={{ xs: 12 }} sx={{ displayPrint: "none" }}>
             <Grid size={{ xs: 12, sm: 6 }} marginBottom={2} marginTop={2}>
               <Stack spacing={3}>
@@ -57,10 +56,10 @@ export default function Footer() {
               </Stack>
             </Grid>
           </Grid>
-        </CenteredContainer>
+        </Container>
       </Box>
       <Box sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}>
-        <CenteredContainer>
+        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
           <Grid
             size={{ xs: 12 }}
             container
@@ -137,7 +136,7 @@ export default function Footer() {
               </Grid>
             </Grid>
           </Grid>
-        </CenteredContainer>
+        </Container>
       </Box>
     </Box>
   );

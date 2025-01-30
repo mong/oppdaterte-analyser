@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
@@ -7,7 +7,6 @@ import { getDictionary } from "@/lib/dictionaries";
 import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
-import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
@@ -79,7 +78,11 @@ export default async function AnalysePage(props: {
             </Box>
           }
         >
-          <CenteredContainer analyseBox={true}>
+          <Container
+            maxWidth="xl"
+            disableGutters={false}
+            sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
+          >
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">{dict.analysebox.summary}</Typography>
               <Typography
@@ -120,7 +123,7 @@ export default async function AnalysePage(props: {
                 <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
               </Box>
             </Box>
-          </CenteredContainer>
+          </Container>
         </Suspense>
       </main>
     </>

@@ -1,5 +1,4 @@
-import { Alert } from "@mui/material";
-import CenteredContainer from "../CenteredContainer";
+import { Alert, Container } from "@mui/material";
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
 
@@ -7,7 +6,7 @@ export default async function UnderDevelopment(params: { lang: Lang }) {
   const dict = await getDictionary(params.lang);
 
   return (
-    <CenteredContainer>
+    <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
       <Alert severity="info" sx={{ marginBottom: -4 }}>
         {dict.general.under_development}{" "}
         <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
@@ -15,6 +14,6 @@ export default async function UnderDevelopment(params: { lang: Lang }) {
         </a>
         .
       </Alert>
-    </CenteredContainer>
+    </Container>
   );
 }

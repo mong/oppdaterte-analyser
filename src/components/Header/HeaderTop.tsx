@@ -1,7 +1,6 @@
-import { Box, Link } from "@mui/material";
+import { Box, Container, Link } from "@mui/material";
 import { Lang } from "@/types";
 
-import CenteredContainer from "../CenteredContainer";
 import LanguageSelector from "./LanguageSelector";
 import { BreadCrumbStop, SkdeBreadcrumbs } from "./SkdeBreadcrumbs";
 
@@ -13,7 +12,7 @@ type HeaderTopProps = {
 export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
   return (
     <Box sx={{ bgcolor: "background.paper" }}>
-      <CenteredContainer>
+      <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Link href={"https://www.skde.no/"}>
             <Box
@@ -25,11 +24,10 @@ export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
               sx={{ height: { xs: 40, lg: 50 } }}
             />
           </Link>
-
           <LanguageSelector lang={lang} />
         </Box>
         <SkdeBreadcrumbs path={breadcrumbs} />
-      </CenteredContainer>
+      </Container>
     </Box>
   );
 };

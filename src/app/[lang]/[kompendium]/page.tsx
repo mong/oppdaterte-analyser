@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Container } from "@mui/material";
 import Header from "@/components/Header";
 import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
 import { getAnalyserByTag, getTag } from "@/services/mongo";
-import CenteredContainer from "@/components/CenteredContainer";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 
@@ -66,7 +65,11 @@ export default async function KompendiumPage(props: {
       ></Header>
       <main>
         <UnderDevelopment lang={lang} />
-        <CenteredContainer analyseBox={true}>
+        <Container
+          maxWidth="xl"
+          disableGutters={false}
+          sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
+        >
           <Suspense
             fallback={
               <Box sx={{ paddingTop: 4 }}>
@@ -76,7 +79,7 @@ export default async function KompendiumPage(props: {
           >
             <AnalyseList analyser={analyser} lang={lang} />
           </Suspense>
-        </CenteredContainer>
+        </Container>
       </main>
     </>
   );

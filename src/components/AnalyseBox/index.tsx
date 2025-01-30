@@ -108,6 +108,7 @@ export default function AnalyseBox({
           <Typography
             variant="body1"
             component="div"
+            sx={{ "@media print": { fontSize: "1rem" } }}
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
           />
           {!expanded && tagList}
@@ -164,6 +165,7 @@ export default function AnalyseBox({
           <Typography
             variant="body1"
             component="div"
+            sx={{ "@media print": { fontSize: "1rem" } }}
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.discussion }}
           />
           <Grid
