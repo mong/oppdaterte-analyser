@@ -88,6 +88,7 @@ export default async function AnalysePage(props: {
               <Typography
                 variant="body1"
                 component="div"
+                sx={{ "@media print": { fontSize: "1rem" } }}
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.summary,
                 }}
@@ -103,6 +104,7 @@ export default async function AnalysePage(props: {
               <Typography
                 variant="body1"
                 component="div"
+                sx={{ "@media print": { fontSize: "1rem" } }}
                 dangerouslySetInnerHTML={{
                   __html: rawHtmlFromMarkdown.discussion,
                 }}
@@ -112,11 +114,16 @@ export default async function AnalysePage(props: {
               <Typography
                 variant="body1"
                 component="div"
+                sx={{ "@media print": { fontSize: "1rem" } }}
                 dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
               />
 
               <Typography variant="h3">Data</Typography>
-              <Typography variant="body1" component="div">
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ "@media print": { fontSize: "1rem" } }}
+              >
                 <p>{dict.analysebox.download_data_text}</p>
               </Typography>
               <Box sx={{ displayPrint: "none" }}>
