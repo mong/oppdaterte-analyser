@@ -4,11 +4,11 @@ import { Analyse } from "@/types";
 const schemaType = {
   name: String,
   version: Number,
-  title: { type: Map, of: String },
-  summary: { type: Map, of: String },
-  discussion: { type: Map, of: String },
-  info: { type: Map, of: String },
-  description: { type: Map, of: String },
+  title: { no: String, en: String },
+  summary: { no: String, en: String },
+  discussion: { no: String, en: String },
+  info: { no: String, en: String },
+  description: { no: String, en: String },
   published: { type: Number },
   first_published: { type: Number },
   createdAt: { type: Date },
@@ -17,16 +17,8 @@ const schemaType = {
   views: [
     {
       name: String,
-      title: {
-        type: Map,
-        of: String,
-      },
-      variables: [
-        {
-          type: Map,
-          of: String,
-        },
-      ],
+      title: { no: String, en: String },
+      variables: [{ no: String, en: String }],
       _id: false,
     },
   ],
