@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
@@ -42,7 +43,6 @@ export default async function AnalysePage(props: {
 
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
-  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -79,66 +79,81 @@ export default async function AnalysePage(props: {
         <UnderDevelopment lang={lang} />
         <Suspense
           fallback={
-            <Box sx={{ paddingTop: 4 }}>
+            <Grid container justifyContent="center" sx={{ padding: 10 }}>
               <CircularProgress />
-            </Box>
+            </Grid>
           }
         >
-          <Container
-            maxWidth="xl"
-            disableGutters={false}
-            sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
-          >
-            <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">{dict.analysebox.summary}</Typography>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-                dangerouslySetInnerHTML={{
-                  __html: rawHtmlFromMarkdown.summary,
-                }}
-              />
-            </Box>
-            <InteractiveChartContainer
-              analyse={analyse}
-              lang={lang}
-              dict={dict}
-            />
-            <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">{dict.analysebox.discussion}</Typography>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-                dangerouslySetInnerHTML={{
-                  __html: rawHtmlFromMarkdown.discussion,
-                }}
-              />
-
-              <Typography variant="h3">{dict.analysebox.info}</Typography>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-                dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
-              />
-
-              <Typography variant="h3">Data</Typography>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-              >
-                <p>{dict.analysebox.download_data_text}</p>
-              </Typography>
-              <Box sx={{ displayPrint: "none" }}>
-                <DownloadDataButton analyse={analyse} lang={lang} dict={dict} />
-              </Box>
-            </Box>
-          </Container>
+          <AnalysePageContent lang={lang} analyseName={analyseName} />
         </Suspense>
       </main>
     </>
+  );
+}
+
+async function AnalysePageContent(props: { lang: Lang; analyseName: string }) {
+  const analyse = await getAnalyse(props.analyseName);
+
+  if (!analyse || !["en", "no"].includes(props.lang)) {
+    notFound();
+  }
+
+  const dict = await getDictionary(props.lang);
+  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, props.lang);
+
+  return (
+    <Container
+      maxWidth="xl"
+      disableGutters={false}
+      sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
+    >
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h3">{dict.analysebox.summary}</Typography>
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{ "@media print": { fontSize: "1rem" } }}
+          dangerouslySetInnerHTML={{
+            __html: rawHtmlFromMarkdown.summary,
+          }}
+        />
+      </Box>
+      <InteractiveChartContainer
+        analyse={analyse}
+        lang={props.lang}
+        dict={dict}
+      />
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="h3">{dict.analysebox.discussion}</Typography>
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{ "@media print": { fontSize: "1rem" } }}
+          dangerouslySetInnerHTML={{
+            __html: rawHtmlFromMarkdown.discussion,
+          }}
+        />
+
+        <Typography variant="h3">{dict.analysebox.info}</Typography>
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{ "@media print": { fontSize: "1rem" } }}
+          dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
+        />
+
+        <Typography variant="h3">Data</Typography>
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{ "@media print": { fontSize: "1rem" } }}
+        >
+          <p>{dict.analysebox.download_data_text}</p>
+        </Typography>
+        <Box sx={{ displayPrint: "none" }}>
+          <DownloadDataButton analyse={analyse} lang={props.lang} dict={dict} />
+        </Box>
+      </Box>
+    </Container>
   );
 }

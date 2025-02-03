@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import { Box, CircularProgress, Container } from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import Header from "@/components/Header";
-import AnalyseList from "@/components/AnalyseList";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
@@ -9,6 +9,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
+import AnalyseBoxWrapper from "@/components/AnalyseBoxWrapper";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
@@ -72,12 +73,20 @@ export default async function KompendiumPage(props: {
         >
           <Suspense
             fallback={
-              <Box sx={{ paddingTop: 4 }}>
+              <Grid container justifyContent="center" sx={{ padding: 10 }}>
                 <CircularProgress />
-              </Box>
+              </Grid>
             }
           >
-            <AnalyseList analyser={analyser} lang={lang} />
+            {analyser.map((analyse) => {
+              return (
+                <AnalyseBoxWrapper
+                  key={analyse.name}
+                  analyseName={analyse.name}
+                  lang={lang}
+                />
+              );
+            })}
           </Suspense>
         </Container>
       </main>
