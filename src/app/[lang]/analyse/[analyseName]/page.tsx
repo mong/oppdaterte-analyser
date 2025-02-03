@@ -54,7 +54,7 @@ export default async function AnalysePage(props: {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas/oppdaterte-analyser/",
+      link: `/${lang}/`,
       text: dict.breadcrumbs.updated_analyses,
     },
     {

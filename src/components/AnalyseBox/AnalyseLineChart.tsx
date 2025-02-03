@@ -82,7 +82,7 @@ export const AnalyseLineChart = ({
         ...Object.fromEntries(
           Object.keys(analyse.data[level]).map((area) => [
             area,
-            analyse.data[level][area][year][variable[0]][variable[1]],
+            Number(analyse.data[level][area][year][variable[0]][variable[1]]),
           ]),
         ),
       };
@@ -116,7 +116,6 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
-      skipAnimation={false}
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
