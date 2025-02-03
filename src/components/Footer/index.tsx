@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid2";
 import { ArrowForward, ArrowOutward } from "@mui/icons-material";
 import Link from "next/link";
 import { Link as MUILink } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { JSX, PropsWithChildren } from "react";
 
 /*
   Most of the code for footers and headers is copied from https://github.com/mong/mongts

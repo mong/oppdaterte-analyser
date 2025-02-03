@@ -120,7 +120,7 @@ export function InteractiveChartContainer({
           )
           .concat([["0,1", calculateMaxValue(0, 1)]]),
       ),
-    [analyse, level],
+    [analyse, level, calculateMaxValue],
   );
 
   return (
