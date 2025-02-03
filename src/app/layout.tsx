@@ -7,11 +7,6 @@ import Footer from "@/components/Footer";
 import { Lang } from "@/types";
 import MatomoTracker from "./MatomoTracker";
 
-export const dynamicParams = false;
-export async function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "no" }];
-}
-
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
   description: "Visning av oppdaterte analyser fra Helseatlas",
