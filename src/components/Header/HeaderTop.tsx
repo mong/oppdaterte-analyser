@@ -6,7 +6,7 @@ import { BreadCrumbStop, SkdeBreadcrumbs } from "./SkdeBreadcrumbs";
 
 type HeaderTopProps = {
   breadcrumbs: BreadCrumbStop[];
-  lang: Lang;
+  lang?: Lang;
 };
 
 export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
@@ -24,7 +24,7 @@ export const HeaderTop = ({ lang, breadcrumbs }: HeaderTopProps) => {
               sx={{ height: { xs: 40, lg: 50 } }}
             />
           </Link>
-          <LanguageSelector lang={lang} />
+          {lang && <LanguageSelector lang={lang} />}
         </Box>
         <SkdeBreadcrumbs path={breadcrumbs} />
       </Container>

@@ -11,6 +11,7 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "@/components/DownloadDataButton";
+import { notFound } from "next/navigation";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; analyseName: string }>;
@@ -34,6 +35,11 @@ export default async function AnalysePage(props: {
 }) {
   const { lang, analyseName } = await props.params;
   const analyse = await getAnalyse(analyseName);
+
+  if (!analyse || !["en", "no"].includes(lang)) {
+    notFound();
+  }
+
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
   const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);

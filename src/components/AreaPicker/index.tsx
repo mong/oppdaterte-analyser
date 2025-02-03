@@ -36,7 +36,7 @@ export default function AreaPicker({
         sx={{
           backgroundColor: `rgba(46, 150, 255, ${0.85 * 0.65 ** 4})`,
           "&:hover": {
-            backgroundColor: `rgba(46, 150, 255, ${0.85 * 0.65 ** 3})`,
+            backgroundColor: `rgba(46, 150, 255, ${0.85 * 0.65 ** 4.6})`,
           },
         }}
       >
