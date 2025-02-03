@@ -437,7 +437,14 @@ export function InteractiveChartContainer({
           )}
         </Box>
 
-        <Box sx={{ textAlign: "center", padding: 1, paddingBottom: 2 }}>
+        <Box
+          sx={{
+            textAlign: "center",
+            padding: 1,
+            paddingBottom: 2,
+            "@media print": { padding: 0 },
+          }}
+        >
           {(view !== "tidstrend" || String(timelineVar) === "0,0") && (
             <Typography variant="body2">{analyse.description[lang]}</Typography>
           )}
