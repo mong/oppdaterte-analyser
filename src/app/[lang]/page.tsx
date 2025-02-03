@@ -15,11 +15,10 @@ import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: { lang: Lang };
+export const generateMetadata = async (props: {
+  params: Promise<{ lang: Lang }>;
 }) => {
+  const params = await props.params;
   const dict = await getDictionary(params.lang);
   return {
     title: dict.frontpage.title,
@@ -28,12 +27,13 @@ export const generateMetadata = async ({
 };
 
 export type MainPageProps = {
-  params: {
+  params: Promise<{
     lang: Lang;
-  };
+  }>;
 };
 
-export default async function MainPage({ params }: MainPageProps) {
+export default async function MainPage(props: MainPageProps) {
+  const params = await props.params;
   const { lang } = params;
 
   if (!["en", "no"].includes(lang)) {

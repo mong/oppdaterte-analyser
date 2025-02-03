@@ -11,9 +11,9 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 
 export const generateMetadata = async (props: {
-  params: { lang: Lang; kompendium: string };
+  params: Promise<{ lang: Lang; kompendium: string }>;
 }) => {
-  const { kompendium, lang } = props.params;
+  const { kompendium, lang } = await props.params;
   const tag = await getTag(kompendium);
   const dict = await getDictionary(lang);
 
@@ -25,9 +25,9 @@ export const generateMetadata = async (props: {
 };
 
 export default async function KompendiumPage(props: {
-  params: { lang: Lang; kompendium: string };
+  params: Promise<{ lang: Lang; kompendium: string }>;
 }) {
-  const { kompendium, lang } = props.params;
+  const { kompendium, lang } = await props.params;
   const tag = await getTag(kompendium);
   if (!tag?.introduction || !["en", "no"].includes(lang)) {
     notFound();

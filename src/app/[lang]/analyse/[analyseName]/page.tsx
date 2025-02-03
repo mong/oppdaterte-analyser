@@ -13,9 +13,9 @@ import TagList from "@/components/TagList";
 import DownloadDataButton from "@/components/DownloadDataButton";
 
 export const generateMetadata = async (props: {
-  params: { lang: Lang; analyseName: string };
+  params: Promise<{ lang: Lang; analyseName: string }>;
 }) => {
-  const { analyseName, lang } = props.params;
+  const { analyseName, lang } = await props.params;
   const analyse = await getAnalyse(analyseName);
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
@@ -30,9 +30,9 @@ export const generateMetadata = async (props: {
 };
 
 export default async function AnalysePage(props: {
-  params: { lang: Lang; analyseName: string };
+  params: Promise<{ lang: Lang; analyseName: string }>;
 }) {
-  const { lang, analyseName } = props.params;
+  const { lang, analyseName } = await props.params;
   const analyse = await getAnalyse(analyseName);
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);

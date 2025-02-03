@@ -70,7 +70,7 @@ const safe_compare = (a: string, b: string) => {
 };
 
 const verifyApiKey = async () => {
-  const apiKey = String(headers().get("Authorization"));
+  const apiKey = String((await headers()).get("Authorization"));
   for (let user of await ApiUserModel.find({}).exec()) {
     if (safe_compare(user.apiKey, apiKey)) {
       return user;
