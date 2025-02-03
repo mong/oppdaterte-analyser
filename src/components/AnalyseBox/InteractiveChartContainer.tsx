@@ -1,13 +1,11 @@
 "use client";
 
 import React from "react";
-import classNames from "./AnalyseBox.module.css";
 import {
   Select,
   FormControl,
   MenuItem,
   InputLabel,
-  Paper,
   Box,
   Typography,
   IconButton,
@@ -97,31 +95,25 @@ export function InteractiveChartContainer({
     new Selection({ region: [], sykehus: [] }),
   );
 
-  const calculateMaxValue = (view_index: number, var_index: number) =>
-    Math.max(
-      ...Object.keys(analyse.data[level]).map((area) =>
-        Math.max(
-          ...Object.keys(analyse.data[level][area]).map(
-            (year) => analyse.data[level][area][year][view_index][var_index],
+  const maxValues = React.useMemo(() => {
+    const calculateMaxValue = (view_index: number, var_index: number) =>
+      Math.max(
+        ...Object.keys(analyse.data[level]).map((area) =>
+          Math.max(
+            ...Object.keys(analyse.data[level][area]).map(
+              (year) => analyse.data[level][area][year][view_index][var_index],
+            ),
           ),
         ),
-      ),
+      );
+    return Object.fromEntries(
+      analyse.views
+        .flatMap((view, i) =>
+          view.variables.map((_, j) => [`${i},${j}`, calculateMaxValue(i, j)]),
+        )
+        .concat([["0,1", calculateMaxValue(0, 1)]]),
     );
-
-  const maxValues = React.useMemo(
-    () =>
-      Object.fromEntries(
-        analyse.views
-          .flatMap((view, i) =>
-            view.variables.map((_, j) => [
-              `${i},${j}`,
-              calculateMaxValue(i, j),
-            ]),
-          )
-          .concat([["0,1", calculateMaxValue(0, 1)]]),
-      ),
-    [analyse, level, calculateMaxValue],
-  );
+  }, [analyse, level]);
 
   return (
     <Box>

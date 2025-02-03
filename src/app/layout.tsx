@@ -17,13 +17,11 @@ export const metadata: Metadata = {
   description: "Visning av oppdaterte analyser fra Helseatlas",
 };
 
-export default async function RootLayout(
-  props: Readonly<{
-    children: React.ReactNode;
-    params: { lang: Lang };
-  }>,
-) {
-  const params = await props.params;
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: { lang: Lang };
+}) {
+  const params = props.params;
 
   const { children } = props;
 
