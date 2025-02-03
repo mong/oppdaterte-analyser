@@ -116,7 +116,7 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
-      skipAnimation={true}
+      skipAnimation={false}
       margin={{
         left: 50,
         top: 60 + 5 * selectionIDs.length,
