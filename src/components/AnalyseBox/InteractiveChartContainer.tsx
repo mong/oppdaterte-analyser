@@ -445,8 +445,19 @@ export function InteractiveChartContainer({
             "@media print": { padding: 0 },
           }}
         >
-          {(view !== "tidstrend" || String(timelineVar) === "0,0") && (
+          {view !== "tidstrend" || String(timelineVar) === "0,0" ? (
             <Typography variant="body2">{analyse.description[lang]}</Typography>
+          ) : view === "tidstrend" &&
+            !["0,0", "0,1"].includes(String(timelineVar)) ? (
+            <Typography variant="body2">
+              {analyse.description[lang]}
+              {": "}
+              <i>
+                {analyse.views[timelineVar[0]].variables[timelineVar[1]][lang]}
+              </i>
+            </Typography>
+          ) : (
+            <></>
           )}
         </Box>
       </Box>
