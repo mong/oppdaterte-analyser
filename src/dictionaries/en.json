@@ -33,7 +33,7 @@
     "title": "Health Atlas updated analyses",
     "description": "View updated analyses from SKDE's Health Atlas" ,
     "introduction": "This is the main page for updated Health Atlas analyses.",
-    "list_text": "This is a list of all available compendiums (collections of related analyses):"
+    "list_text": "This is a list of all available collections of analyses:"
   },
   "breadcrumbs": {
     "homepage": "Homepage",
