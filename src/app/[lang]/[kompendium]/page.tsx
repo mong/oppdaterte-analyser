@@ -30,7 +30,7 @@ export default async function KompendiumPage(props: {
 }) {
   const { kompendium, lang } = await props.params;
   const tag = await getTag(kompendium);
-  if (!tag?.introduction || !["en", "no"].includes(lang)) {
+  if (!tag || !["en", "no"].includes(lang)) {
     notFound();
   }
 
@@ -62,7 +62,7 @@ export default async function KompendiumPage(props: {
         lang={lang}
         breadcrumbs={breadcrumbs}
         title={tag.fullname[lang]}
-        introduction={tag.introduction[lang]}
+        introduction={tag.introduction?.[lang] || ""}
       ></Header>
       <main>
         <UnderDevelopment lang={lang} />

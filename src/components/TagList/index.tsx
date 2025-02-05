@@ -1,5 +1,8 @@
+"use client";
+
 import { Analyse, Lang, Tag } from "@/types";
 import { Box, Chip } from "@mui/material";
+import Link from "next/link";
 
 type TagListProps = {
   analyse: Analyse;
@@ -19,6 +22,11 @@ export default function TagList({ analyse, tags, lang }: TagListProps) {
     >
       {analyse.tags.map((tag) => (
         <Chip
+          clickable
+          component={Link}
+          href={`/${lang}/${tag}/`}
+          target="_blank"
+          onClick={(event) => event.stopPropagation()}
           label={tags[tag]?.fullname[lang] || tag}
           color={tag in tags ? "primary" : "error"}
           key={tag}
