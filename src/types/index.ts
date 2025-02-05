@@ -14,17 +14,18 @@ export interface View {
 
 export interface Analyse {
   _id: Types.ObjectId;
-  tags: string[];
   name: string;
   version: number;
-  published: number;
-  createdAt: Date;
-  updatedAt: Date;
+  published: boolean;
+  tags: string[];
   title: Text;
+  description: Text;
   summary: Text;
   discussion: Text;
   info: Text;
-  description: Text;
+  createdAt: Date;
+  updatedAt: Date;
+  generated: number;
   views: View[];
   data: {
     [key: string]: {

@@ -29,13 +29,15 @@ export const dbConnect = async (): Promise<any> => {
 export const getAnalyse = async (analyseName: string): Promise<Analyse> => {
   await dbConnect();
   return toPlainObject(
-    await AnalyseModel.findOne({ name: analyseName }).exec(),
+    await AnalyseModel.findOne({ name: analyseName, published: true }).exec(),
   );
 };
 
 export const getAnalyserByTag = async (tag: string): Promise<Analyse[]> => {
   await dbConnect();
-  return toPlainObject(await AnalyseModel.find({ tags: tag }).exec());
+  return toPlainObject(
+    await AnalyseModel.find({ tags: tag, published: true }).exec(),
+  );
 };
 
 export const getTag = async (tag: string): Promise<Tag> => {
@@ -89,7 +91,7 @@ export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
 
   const oldAnalyse = await AnalyseModel.findOne({ name: analyse.name }).exec();
 
-  if (oldAnalyse && oldAnalyse.published >= analyse.published) {
+  if (oldAnalyse && oldAnalyse.generated >= analyse.generated) {
     return Response.json(
       {
         reply: `'${analyse.name}' is not newer than the version on the server. Request denied!`,
@@ -105,6 +107,7 @@ export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
     {
       ...analyse,
       version: version,
+      published: true,
     },
     { upsert: true },
   ).exec();

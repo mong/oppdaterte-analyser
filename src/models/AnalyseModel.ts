@@ -4,15 +4,16 @@ import { Analyse } from "@/types";
 const schemaType = {
   name: String,
   version: Number,
+  published: Boolean,
+  tags: [String],
   title: { no: String, en: String },
+  description: { no: String, en: String },
   summary: { no: String, en: String },
   discussion: { no: String, en: String },
   info: { no: String, en: String },
-  description: { no: String, en: String },
-  published: { type: Number },
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  tags: { type: [String] },
+  createdAt: Date,
+  updatedAt: Date,
+  generated: Number,
   views: [
     {
       name: String,
