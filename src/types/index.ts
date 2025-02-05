@@ -18,7 +18,6 @@ export interface Analyse {
   name: string;
   version: number;
   published: number;
-  first_published: number;
   createdAt: Date;
   updatedAt: Date;
   title: Text;

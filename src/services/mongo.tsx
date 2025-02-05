@@ -104,10 +104,6 @@ export const updateAnalyse = async (analyse: Analyse): Promise<Response> => {
     { name: analyse.name },
     {
       ...analyse,
-      first_published:
-        oldAnalyse?.first_published ||
-        oldAnalyse?.published ||
-        analyse.published,
       version: version,
     },
     { upsert: true },

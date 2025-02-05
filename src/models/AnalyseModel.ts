@@ -10,7 +10,6 @@ const schemaType = {
   info: { no: String, en: String },
   description: { no: String, en: String },
   published: { type: Number },
-  first_published: { type: Number },
   createdAt: { type: Date },
   updatedAt: { type: Date },
   tags: { type: [String] },
