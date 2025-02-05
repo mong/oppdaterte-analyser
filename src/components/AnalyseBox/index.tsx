@@ -103,7 +103,7 @@ export default function AnalyseBox({
         <Box sx={{ padding: "10px" }}>
           <Typography variant="h4">{analyse.title[lang]}</Typography>
           <Typography variant="body2">
-            {dict.analysebox.updated} {formatDate(analyse.published, lang)}.
+            {dict.analysebox.updated} {formatDate(analyse.updatedAt, lang)}
           </Typography>
           <Typography
             variant="body1"

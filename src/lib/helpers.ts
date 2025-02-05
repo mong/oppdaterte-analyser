@@ -1,6 +1,6 @@
 import { Lang } from "@/types";
 
-export function formatDate(date: number, lang: Lang) {
+export function formatDate(date: Date, lang: Lang) {
   return new Date(date).toLocaleString({ en: "en-GB", no: "nb-NO" }[lang], {
     year: "numeric",
     month: "long",

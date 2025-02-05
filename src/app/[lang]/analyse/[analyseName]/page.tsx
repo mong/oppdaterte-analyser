@@ -69,7 +69,7 @@ export default async function AnalysePage(props: {
         lang={lang}
         breadcrumbs={breadcrumbs}
         title={analyse.title[lang]}
-        introduction={`${dict.analysebox.updated} ${formatDate(analyse.published, lang)}`}
+        introduction={`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}
       >
         <Box sx={{ marginTop: 1 }}>
           <TagList analyse={analyse} tags={tags} lang={lang} />
