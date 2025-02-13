@@ -27,7 +27,7 @@ export const generateMetadata = async (props: {
     description: `${dict.general.updated_analyses}`,
     keywords: `${Object.values(tags)
       .map((tag) => tag.fullname[lang])
-      .join(", ")}`,
+      .join(", ")}, ${dict.general.metadata_keywords}`,
   };
 };
 

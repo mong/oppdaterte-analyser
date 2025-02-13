@@ -21,7 +21,7 @@ export const generateMetadata = async (props: {
   return {
     title: `${tag.fullname[lang]} - ${dict.general.updated_analyses}`,
     description: `${dict.general.updated_analyses}: ${tag.fullname[lang]}`,
-    keywords: `${kompendium}`,
+    keywords: `${tag.fullname[lang]}, ${dict.general.metadata_keywords}`,
   };
 };
 

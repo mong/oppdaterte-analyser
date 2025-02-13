@@ -27,7 +27,8 @@
   },
   "general": {
     "updated_analyses": "Updated analyses",
-    "under_development": "This website is under development. Feedback can be sent to"
+    "under_development": "This website is under development. Feedback can be sent to",
+    "metadata_keywords": "geographical variation, SKDE, Health Atlas, Updated Health Atlas"
   },
   "frontpage": {
     "title": "Health Atlas updated analyses",

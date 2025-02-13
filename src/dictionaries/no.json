@@ -27,7 +27,8 @@
   },
   "general": {
     "updated_analyses": "Oppdaterte analyser",
-    "under_development": "Denne nettsiden er under utvikling. Tilbakemeldinger kan sendes til"
+    "under_development": "Denne nettsiden er under utvikling. Tilbakemeldinger kan sendes til",
+    "metadata_keywords": "geografisk variasjon, SKDE, helseatlas, oppdaterte helseatlas"
   },
   "frontpage": {
     "title": "Helseatlas oppdaterte analyser",

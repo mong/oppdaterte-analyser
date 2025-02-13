@@ -23,6 +23,7 @@ export async function generateMetadata(props: {
   return {
     title: dict.frontpage.title,
     description: dict.frontpage.description,
+    keywords: dict.general.metadata_keywords,
   };
 }
 

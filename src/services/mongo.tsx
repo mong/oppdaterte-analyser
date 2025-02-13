@@ -33,6 +33,11 @@ export const getAnalyse = async (analyseName: string): Promise<Analyse> => {
   );
 };
 
+export const getAllAnalyser = async (): Promise<Analyse[]> => {
+  await dbConnect();
+  return toPlainObject(await AnalyseModel.find({ published: true }).exec());
+};
+
 export const getAnalyserByTag = async (tag: string): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
