@@ -15,8 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    environment: build-push
-
     permissions:
       contents: read
       packages: write
