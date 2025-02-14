@@ -35,6 +35,8 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           file: ./Dockerfile
+          secrets: |
+            "mongo_uri=${{ secrets.MONGO_URI }}"
 
   deploy:
     runs-on: ubuntu-latest
