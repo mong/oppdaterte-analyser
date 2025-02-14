@@ -8,11 +8,13 @@ export default async function UnderDevelopment(params: { lang: Lang }) {
   return (
     <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
       <Alert severity="info" sx={{ marginBottom: -4 }}>
-        {dict.general.under_development}{" "}
-        <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
-          helseatlas@skde.no
-        </a>
-        .
+        <span data-nosnippet>
+          {dict.general.under_development}{" "}
+          <a href="mailto:helseatlas@skde.no?subject=Tilbakemelding på sidene for oppdaterte analyser">
+            helseatlas@skde.no
+          </a>
+          .
+        </span>
       </Alert>
     </Container>
   );
