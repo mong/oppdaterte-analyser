@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Header from "@/components/Header";
-import { Lang } from "@/types";
+import { Analyse, Lang } from "@/types";
 import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
 import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
@@ -14,11 +14,31 @@ import TagList from "@/components/TagList";
 import DownloadDataButton from "@/components/DownloadDataButton";
 import { notFound } from "next/navigation";
 
+const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {
+  const testPage = Boolean(
+    testSlug !== undefined &&
+      [1, 2].includes(testSlug.length) &&
+      testSlug[0] === "test" &&
+      (testSlug.length === 1 || testSlug[1].match(/^\d+$/)),
+  );
+
+  if (testSlug && !testPage) {
+    notFound();
+  }
+
+  const analyse = await getAnalyse(
+    analyseName,
+    !testPage ? "published" : Number(testSlug[1] || 0),
+  );
+
+  return { testPage, analyse };
+};
+
 export const generateMetadata = async (props: {
-  params: Promise<{ lang: Lang; analyseName: string }>;
+  params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
 }) => {
-  const { analyseName, lang } = await props.params;
-  const analyse = await getAnalyse(analyseName);
+  const { lang, analyseName, testSlug } = await props.params;
+  const { analyse } = await getCorrectAnalyse(analyseName, testSlug);
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
 
@@ -32,10 +52,10 @@ export const generateMetadata = async (props: {
 };
 
 export default async function AnalysePage(props: {
-  params: Promise<{ lang: Lang; analyseName: string }>;
+  params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
 }) {
-  const { lang, analyseName } = await props.params;
-  const analyse = await getAnalyse(analyseName);
+  const { lang, analyseName, testSlug } = await props.params;
+  const { analyse } = await getCorrectAnalyse(analyseName, testSlug);
 
   if (!analyse || !["en", "no"].includes(lang)) {
     notFound();
@@ -84,22 +104,22 @@ export default async function AnalysePage(props: {
             </Grid>
           }
         >
-          <AnalysePageContent lang={lang} analyseName={analyseName} />
+          <AnalysePageContent lang={lang} analyse={analyse} />
         </Suspense>
       </main>
     </>
   );
 }
 
-async function AnalysePageContent(props: { lang: Lang; analyseName: string }) {
-  const analyse = await getAnalyse(props.analyseName);
-
-  if (!analyse || !["en", "no"].includes(props.lang)) {
-    notFound();
-  }
-
+export async function AnalysePageContent(props: {
+  lang: Lang;
+  analyse: Analyse;
+}) {
   const dict = await getDictionary(props.lang);
-  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, props.lang);
+  const rawHtmlFromMarkdown = await getAnalyseMarkdown(
+    props.analyse,
+    props.lang,
+  );
 
   return (
     <Container
@@ -119,7 +139,7 @@ async function AnalysePageContent(props: { lang: Lang; analyseName: string }) {
         />
       </Box>
       <InteractiveChartContainer
-        analyse={analyse}
+        analyse={props.analyse}
         lang={props.lang}
         dict={dict}
       />
@@ -151,7 +171,11 @@ async function AnalysePageContent(props: { lang: Lang; analyseName: string }) {
           <p>{dict.analysebox.download_data_text}</p>
         </Typography>
         <Box sx={{ displayPrint: "none" }}>
-          <DownloadDataButton analyse={analyse} lang={props.lang} dict={dict} />
+          <DownloadDataButton
+            analyse={props.analyse}
+            lang={props.lang}
+            dict={dict}
+          />
         </Box>
       </Box>
     </Container>

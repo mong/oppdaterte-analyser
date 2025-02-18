@@ -34,24 +34,16 @@ const schemaType = {
   },
 };
 
+const analyseSchema = new Schema<Analyse>(schemaType, {
+  timestamps: true,
+  versionKey: false,
+});
+
+analyseSchema.index(
+  { name: 1, version: -1 },
+  { partialFilterExpression: { published: true, version: { $gt: 0 } } },
+);
+
 export const AnalyseModel =
   mongoose.models.Analyse ||
-  mongoose.model<Analyse>(
-    "Analyse",
-    new Schema<Analyse>(schemaType, { timestamps: true, versionKey: false }),
-    "analyser",
-  );
-
-export const AnalyseBackupModel =
-  mongoose.models.AnalyseBackup ||
-  mongoose.model<Analyse>(
-    "AnalyseBackup",
-    new Schema<Analyse>(
-      {
-        ...schemaType,
-        createdAt: { type: Date, expires: 60 * 60 * 24 * 7, default: Date.now },
-      },
-      { timestamps: true, versionKey: false },
-    ),
-    "analyser_backup",
-  );
+  mongoose.model<Analyse>("Analyse", analyseSchema, "analyser");

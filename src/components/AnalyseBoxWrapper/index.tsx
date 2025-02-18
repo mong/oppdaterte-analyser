@@ -1,22 +1,20 @@
-import { Lang } from "@/types";
+import { Analyse, Lang } from "@/types";
 import AnalyseBox from "../AnalyseBox";
 import { getDictionary } from "@/lib/dictionaries";
-import { getAnalyse, getTags } from "@/services/mongo";
+import { getTags } from "@/services/mongo";
 import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
 
 export type AnalyseBoxWrapperProps = {
-  analyseName: string;
+  analyse: Analyse;
   lang: Lang;
 };
 
 export default async function AnalyseBoxWrapper({
-  analyseName,
+  analyse,
   lang,
 }: AnalyseBoxWrapperProps) {
   const dict = await getDictionary(lang);
-  const analyse = await getAnalyse(analyseName);
   const tags = await getTags(analyse.tags);
-
   return (
     <AnalyseBox
       analyse={analyse}

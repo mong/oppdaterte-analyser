@@ -84,7 +84,7 @@ export default async function KompendiumPage(props: {
               return (
                 <AnalyseBoxWrapper
                   key={analyse.name}
-                  analyseName={analyse.name}
+                  analyse={analyse}
                   lang={lang}
                 />
               );
