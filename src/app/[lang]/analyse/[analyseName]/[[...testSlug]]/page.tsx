@@ -111,10 +111,7 @@ export default async function AnalysePage(props: {
   );
 }
 
-export async function AnalysePageContent(props: {
-  lang: Lang;
-  analyse: Analyse;
-}) {
+async function AnalysePageContent(props: { lang: Lang; analyse: Analyse }) {
   const dict = await getDictionary(props.lang);
   const rawHtmlFromMarkdown = await getAnalyseMarkdown(
     props.analyse,
