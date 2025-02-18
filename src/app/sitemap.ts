@@ -3,9 +3,7 @@ import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const kompendier = await getKompendier();
-  const analyser = (await getAllAnalyser()).filter(
-    (analyse) => analyse.name !== "skulder",
-  );
+  const analyser = await getAllAnalyser();
 
   return [
     {
