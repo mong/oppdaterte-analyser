@@ -39,6 +39,9 @@ export const generateMetadata = async (props: {
 }) => {
   const { lang, analyseName, testSlug } = await props.params;
   const { analyse } = await getCorrectAnalyse(analyseName, testSlug);
+
+  if (!analyse) notFound();
+
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
 
