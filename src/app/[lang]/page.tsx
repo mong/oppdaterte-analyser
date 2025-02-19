@@ -55,7 +55,7 @@ export default async function MainPage(props: MainPageProps) {
     },
     {
       link: `/${lang}/`,
-      text: dict.breadcrumbs.updated_analyses,
+      text: dict.breadcrumbs.updated_health_atlas,
     },
   ];
 
@@ -63,7 +63,7 @@ export default async function MainPage(props: MainPageProps) {
     <>
       <Header
         lang={lang}
-        title={dict.general.updated_analyses}
+        title={dict.general.updated_health_atlas}
         introduction={dict.frontpage.introduction}
         breadcrumbs={breadcrumbs}
       />

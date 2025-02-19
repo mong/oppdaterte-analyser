@@ -46,8 +46,8 @@ export const generateMetadata = async (props: {
   const dict = await getDictionary(lang);
 
   return {
-    title: `${analyse.title[lang]} - ${dict.general.updated_analyses}`,
-    description: `${dict.general.updated_analyses}`,
+    title: `${analyse.title[lang]} - ${dict.general.updated_health_atlas}`,
+    description: `${dict.general.updated_health_atlas}`,
     keywords: `${Object.values(tags)
       .map((tag) => tag.fullname[lang])
       .join(", ")}, ${dict.general.metadata_keywords}`,
@@ -78,7 +78,7 @@ export default async function AnalysePage(props: {
     },
     {
       link: `/${lang}/`,
-      text: dict.breadcrumbs.updated_analyses,
+      text: dict.breadcrumbs.updated_health_atlas,
     },
     {
       link: `/${lang}/analyse/${analyse.name}/`,

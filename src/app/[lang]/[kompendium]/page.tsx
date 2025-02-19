@@ -19,10 +19,10 @@ export const generateMetadata = async (props: {
   const dict = await getDictionary(lang);
 
   return {
-    title: `${tag.fullname[lang]} - ${dict.general.updated_analyses}`,
+    title: `${tag.fullname[lang]} - ${dict.general.updated_health_atlas}`,
     description: tag.introduction
       ? tag.introduction[lang]
-      : `${dict.general.updated_analyses}: ${tag.fullname[lang]}`,
+      : `${dict.general.updated_health_atlas}: ${tag.fullname[lang]}`,
     keywords: `${tag.fullname[lang]}, ${dict.general.metadata_keywords}`,
   };
 };
@@ -50,7 +50,7 @@ export default async function KompendiumPage(props: {
     },
     {
       link: `/${lang}/`,
-      text: dict.breadcrumbs.updated_analyses,
+      text: dict.breadcrumbs.updated_health_atlas,
     },
     {
       link: `/${lang}/${kompendium}/`,

@@ -26,19 +26,19 @@
     "number_variable": "Antall"
   },
   "general": {
-    "updated_analyses": "Oppdaterte analyser",
+    "updated_health_atlas": "Oppdaterte helseatlas",
     "under_development": "Denne nettsiden er under utvikling. Tilbakemeldinger kan sendes til",
     "metadata_keywords": "geografisk variasjon, SKDE, helseatlas, oppdaterte helseatlas"
   },
   "frontpage": {
-    "title": "Helseatlas oppdaterte analyser",
-    "description": "Visning av oppdaterte analyser fra Helseatlas",
-    "introduction": "Dette er hovedsiden for oppdaterte Helseatlas-analyser.",
+    "title": "Oppdaterte helseatlas",
+    "description": "Visning av oppdaterte analyser fra helseatlas",
+    "introduction": "Dette er hovedsiden for oppdaterte helseatlas-analyser.",
     "list_text": "Dette er en liste over alle samlinger av analyser:"
   },
   "breadcrumbs": {
     "homepage": "Forside",
     "health_atlas": "Helseatlas",
-    "updated_analyses": "Oppdaterte analyser"
+    "updated_health_atlas": "Oppdaterte helseatlas"
   }
 }
