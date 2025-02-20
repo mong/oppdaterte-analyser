@@ -64,9 +64,10 @@ export default async function MainPage(props: MainPageProps) {
       <Header
         lang={lang}
         title={dict.general.updated_health_atlas}
-        introduction={dict.frontpage.introduction}
         breadcrumbs={breadcrumbs}
-      />
+      >
+        <Typography variant="h6">{dict.frontpage.introduction}</Typography>
+      </Header>
       <main>
         <UnderDevelopment lang={lang} />
         <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>

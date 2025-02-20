@@ -12,22 +12,18 @@ type HeaderProps = {
   lang: Lang;
   breadcrumbs: BreadCrumbStop[];
   title: string;
-  introduction: string;
 };
 
 export function Header({
   lang,
   breadcrumbs,
   title,
-  introduction,
   children,
 }: PropsWithChildren<HeaderProps>) {
   return (
     <>
       <HeaderTop lang={lang} breadcrumbs={breadcrumbs} />
-      <HeaderMiddle title={title} introduction={introduction}>
-        {children}
-      </HeaderMiddle>
+      <HeaderMiddle title={title}>{children}</HeaderMiddle>
     </>
   );
 }

@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { Analyse, Lang } from "@/types";
 import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
-import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
+import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
@@ -88,12 +88,8 @@ export default async function AnalysePage(props: {
 
   return (
     <>
-      <Header
-        lang={lang}
-        breadcrumbs={breadcrumbs}
-        title={analyse.title[lang]}
-        introduction={`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}
-      >
+      <Header lang={lang} breadcrumbs={breadcrumbs} title={analyse.title[lang]}>
+        <Typography variant="h6">{`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}</Typography>
         <Box sx={{ marginTop: 1 }}>
           <TagList analyse={analyse} tags={tags} lang={lang} />
         </Box>

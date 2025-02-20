@@ -4,12 +4,10 @@ import { Box } from "@mui/material";
 
 type HeaderMiddleProps = {
   title: string;
-  introduction: string;
 };
 
 export function HeaderMiddle({
   title,
-  introduction,
   children,
 }: PropsWithChildren<HeaderMiddleProps>) {
   return (
@@ -26,7 +24,6 @@ export function HeaderMiddle({
         sx={{ padding: 4, "@media print": { paddingY: 0 } }}
       >
         <Typography variant="h1">{title}</Typography>
-        <Typography variant="h6">{introduction}</Typography>
         {children}
       </Container>
     </Box>

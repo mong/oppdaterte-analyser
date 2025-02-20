@@ -2,7 +2,7 @@ import { Analyse, Lang } from "@/types";
 import AnalyseBox from "../AnalyseBox";
 import { getDictionary } from "@/lib/dictionaries";
 import { getTags } from "@/services/mongo";
-import getAnalyseMarkdown from "@/lib/getAnalyseMarkdown";
+import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 
 export type AnalyseBoxWrapperProps = {
   analyse: Analyse;

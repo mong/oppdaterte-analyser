@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { CircularProgress, Container } from "@mui/material";
+import { CircularProgress, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Header from "@/components/Header";
 import { Lang } from "@/types";
@@ -10,6 +10,7 @@ import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import AnalyseBoxWrapper from "@/components/AnalyseBoxWrapper";
+import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
@@ -21,7 +22,7 @@ export const generateMetadata = async (props: {
   return {
     title: `${tag.fullname[lang]} - ${dict.general.updated_health_atlas}`,
     description: tag.introduction
-      ? tag.introduction[lang]
+      ? await stripMarkdown(tag.introduction[lang])
       : `${dict.general.updated_health_atlas}: ${tag.fullname[lang]}`,
     keywords: `${tag.fullname[lang]}, ${dict.general.metadata_keywords}`,
   };
@@ -60,12 +61,18 @@ export default async function KompendiumPage(props: {
 
   return (
     <>
-      <Header
-        lang={lang}
-        breadcrumbs={breadcrumbs}
-        title={tag.fullname[lang]}
-        introduction={tag.introduction?.[lang] || ""}
-      ></Header>
+      <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.fullname[lang]}>
+        <Typography
+          variant="h6"
+          sx={{
+            "& > p": { margin: 0 },
+            "& a": { color: "primary.main" },
+          }}
+          dangerouslySetInnerHTML={{
+            __html: await markdownToHtml(tag.introduction?.[lang] || ""),
+          }}
+        />
+      </Header>
       <main>
         <UnderDevelopment lang={lang} />
         <Container
