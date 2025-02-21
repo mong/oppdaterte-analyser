@@ -32,8 +32,8 @@
   },
   "frontpage": {
     "title": "Oppdaterte helseatlas",
-    "description": "Visning av oppdaterte analyser fra helseatlas",
-    "introduction": "Dette er hovedsiden for oppdaterte helseatlas-analyser.",
+    "introduction_1": "Helseatlas sammenlikner bruk av helsetjenester for befolkningen i ulike geografiske områder. Her finner du de nyeste tallene som beskriver bruk av utvalgte tjenester innen en rekke fagområder, samt en kort analyse av resultatene.",
+    "introduction_2": "Helseatlas i form av digitale rapporter som omhandler et utvalgt tema, fagområde eller en pasientgruppe finner du [her](https://apps.skde.no/helseatlas/).",
     "list_text": "Dette er en liste over alle samlinger av analyser:"
   },
   "breadcrumbs": {

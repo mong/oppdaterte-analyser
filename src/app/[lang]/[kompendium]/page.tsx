@@ -65,7 +65,7 @@ export default async function KompendiumPage(props: {
         <Typography
           variant="h6"
           sx={{
-            "& > p": { margin: 0 },
+            "& > p": { margin: 0, marginTop: 2 },
             "& a": { color: "primary.main" },
           }}
           dangerouslySetInnerHTML={{

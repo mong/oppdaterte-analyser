@@ -32,8 +32,8 @@
   },
   "frontpage": {
     "title": "Updated Health Atlas",
-    "description": "View updated analyses from SKDE's Health Atlas" ,
-    "introduction": "This is the main page for updated Health Atlas analyses.",
+    "introduction_1": "Health Atlas compares the use of healthcare services for the population in different geographical areas. Here you will find the latest figures describing the use of selected services within various fields, as well as a brief analysis of the result.",
+    "introduction_2": "Health Atlases in the form of digital reports addressing a selected topic, field, or patient group can be found [here](https://apps.skde.no/helseatlas/en/).",
     "list_text": "This is a list of all available collections of analyses:"
   },
   "breadcrumbs": {

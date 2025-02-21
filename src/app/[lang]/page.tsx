@@ -14,6 +14,7 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
+import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 
 export async function generateMetadata(props: {
   params: Promise<{ lang: Lang }>;
@@ -22,7 +23,7 @@ export async function generateMetadata(props: {
   const dict = await getDictionary(params.lang);
   return {
     title: dict.frontpage.title,
-    description: dict.frontpage.description,
+    description: await stripMarkdown(dict.frontpage.introduction_1),
     keywords: dict.general.metadata_keywords,
   };
 }
@@ -66,7 +67,27 @@ export default async function MainPage(props: MainPageProps) {
         title={dict.general.updated_health_atlas}
         breadcrumbs={breadcrumbs}
       >
-        <Typography variant="h6">{dict.frontpage.introduction}</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            "& > p": { margin: 0, marginY: 2 },
+            "& a": { color: "primary.main" },
+          }}
+          dangerouslySetInnerHTML={{
+            __html: await markdownToHtml(dict.frontpage.introduction_1),
+          }}
+        />
+        <Typography
+          variant="body1"
+          component="div"
+          sx={{
+            "& > p": { margin: 0 },
+            "& a": { color: "primary.main" },
+          }}
+          dangerouslySetInnerHTML={{
+            __html: await markdownToHtml(dict.frontpage.introduction_2),
+          }}
+        />
       </Header>
       <main>
         <UnderDevelopment lang={lang} />

@@ -89,7 +89,10 @@ export default async function AnalysePage(props: {
   return (
     <>
       <Header lang={lang} breadcrumbs={breadcrumbs} title={analyse.title[lang]}>
-        <Typography variant="h6">{`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}</Typography>
+        <Typography
+          variant="h6"
+          sx={{ marginY: 2 }}
+        >{`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}</Typography>
         <Box sx={{ marginTop: 1 }}>
           <TagList analyse={analyse} tags={tags} lang={lang} />
         </Box>
