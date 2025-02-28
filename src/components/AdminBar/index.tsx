@@ -6,6 +6,7 @@ import {
   Box,
   Container,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Toolbar,
@@ -16,7 +17,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import { colors } from "@mui/material";
 import React from "react";
-import Link from "next/link";
 
 type AdminBarProps = {
   email: string;
