@@ -6,6 +6,8 @@ import skdeTheme from "@/themes/SkdeTheme";
 import Footer from "@/components/Footer";
 import { Lang } from "@/types";
 import MatomoTracker from "./MatomoTracker";
+import { loginCredentials } from "@/lib/authorization";
+import AdminBar from "@/components/AdminBar";
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -18,7 +20,7 @@ export default async function RootLayout(props: {
 }) {
   const params = props.params;
 
-  const { children } = props;
+  const credentials = await loginCredentials();
 
   return (
     <html lang={params.lang}>
@@ -34,7 +36,8 @@ export default async function RootLayout(props: {
                 flexDirection: "column",
               }}
             >
-              {children}
+              {credentials && <AdminBar {...credentials} />}
+              {props.children}
               <Footer />
             </Box>
           </ThemeProvider>
