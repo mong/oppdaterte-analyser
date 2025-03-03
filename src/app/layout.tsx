@@ -29,6 +29,7 @@ export default async function RootLayout(props: {
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
             <CssBaseline />
+            {credentials && <AdminBar {...credentials} />}
             <Box
               sx={{
                 height: "100vh",
@@ -36,7 +37,6 @@ export default async function RootLayout(props: {
                 flexDirection: "column",
               }}
             >
-              {credentials && <AdminBar {...credentials} />}
               {props.children}
               <Footer />
             </Box>

@@ -25,7 +25,7 @@ type AdminBarProps = {
 
 const settings = [
   { tekst: "Forsiden", url: "/" },
-  { tekst: "Last opp analyse", url: "/last-opp/" },
+  { tekst: "Last opp analyse", url: "/admin/last-opp/" },
   { tekst: "Se HTTP-Headers", url: "/admin/headers/" },
   { tekst: "Logg ut", url: "/.auth/logout" },
 ];
