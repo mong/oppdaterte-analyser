@@ -1,18 +1,17 @@
 import { HeaderTop } from "@/components/Header";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
+import UploadField from "@/components/UploadField";
 import { loginCredentials } from "@/lib/authorization";
 import { getDictionary } from "@/lib/dictionaries";
-import { Container } from "@mui/material";
-import { headers } from "next/headers";
+import { Container, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
-export default async function HeadersPage() {
+export default async function UploadPage() {
   const credentials = await loginCredentials();
   if (!credentials) {
     redirect("/login");
   }
 
-  const headerList = await headers();
   const dict = await getDictionary("no");
 
   const breadcrumbs: BreadCrumbStop[] = [
@@ -29,8 +28,8 @@ export default async function HeadersPage() {
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/admin/headers`,
-      text: "HTTP Headers",
+      link: `/admin/upload`,
+      text: "Last opp analyse",
     },
   ];
 
@@ -38,14 +37,9 @@ export default async function HeadersPage() {
     <>
       <HeaderTop breadcrumbs={breadcrumbs} />
       <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
-        <h1>Request Headers</h1>
-        <ul>
-          {Array.from(headerList.entries()).map(([key, value]) => (
-            <li key={key}>
-              <strong>{key}</strong>: {value}
-            </li>
-          ))}
-        </ul>
+        <Typography variant="h3">Last opp analyse</Typography>
+        <br />
+        <UploadField />
       </Container>
     </>
   );

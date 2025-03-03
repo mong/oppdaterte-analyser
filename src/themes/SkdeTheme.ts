@@ -127,32 +127,27 @@ const colorTokens = {
     light: "#e3ebf2",
     dark: "#001b52",
   },
-
   secondary: {
     main: "#bfc7e4",
     light: "#e6e9f4",
     dark: "#000000",
   },
-
   background: {
     main: "#dedede",
     light: "#fff",
     paper: "#fff",
     dark: "#9b9b9b",
   },
-
   surface: {
     main: "#5e7680",
     light: "#e0e7eb",
     dark: "#173844",
   },
-
   surface2: {
     main: "#399568",
     light: "#e0ebe5",
     dark: "#00531e",
   },
-
   footer1: {
     main: "#333",
     contrastText: "#fff",
@@ -165,23 +160,6 @@ const colorTokens = {
   text: {
     primary: "#000",
     secondary: "#003087",
-  },
-  success: {
-    main: "#add9b1",
-    light: "#eaf6eb",
-    dark: "#002f87",
-  },
-
-  warning: {
-    main: "#fef17f",
-    light: "#fffac8",
-    dark: "#ffc745",
-  },
-
-  error: {
-    main: "#dd747a",
-    light: "#fdebef",
-    dark: "#cb333b",
   },
 };
 

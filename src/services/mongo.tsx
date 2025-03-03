@@ -99,15 +99,10 @@ export const getTags = async (
   return Object.fromEntries(tagData.map((tag) => [tag.name, tag]));
 };
 
-export const uploadAnalyse = async (analyse: Analyse): Promise<Response> => {
+export const uploadAnalyse = async (analyse: Analyse): Promise<void> => {
   await dbConnect();
 
-  const apiUser = await verifyApiKey();
-  if (!apiUser) {
-    return Response.json({ reply: "Incorrect API-key." }, { status: 401 });
-  }
-
-  await AnalyseModel.findOneAndUpdate(
+  await AnalyseModel.replaceOne(
     { name: analyse.name, version: 0 },
     {
       ...analyse,
@@ -115,11 +110,6 @@ export const uploadAnalyse = async (analyse: Analyse): Promise<Response> => {
       published: false,
     },
     { upsert: true },
-  );
-
-  return Response.json(
-    { reply: `'${analyse.name}' successfully uploaded as a test version.` },
-    { status: 201 },
   );
 };
 

@@ -1,5 +1,11 @@
 import { Suspense } from "react";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Container,
+  Typography,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Header from "@/components/Header";
 import { Analyse, Lang } from "@/types";
@@ -99,6 +105,13 @@ export default async function AnalysePage(props: {
       </Header>
       <main>
         <UnderDevelopment lang={lang} />
+        {analyse.version === 0 && (
+          <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+            <Alert severity="warning">
+              Dette er en test-side! Denne analysen er fortsatt ikke publisert.
+            </Alert>
+          </Container>
+        )}
         <Suspense
           fallback={
             <Grid container justifyContent="center" sx={{ padding: 10 }}>
