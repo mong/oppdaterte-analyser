@@ -13,8 +13,8 @@ export default async function HeadersPage() {
   }
 
   const headerList = await headers();
-  const dict = await getDictionary("no");
 
+  const dict = await getDictionary("no");
   const breadcrumbs: BreadCrumbStop[] = [
     {
       link: "https://www.skde.no",

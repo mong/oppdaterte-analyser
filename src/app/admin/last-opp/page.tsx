@@ -1,6 +1,6 @@
 import { HeaderTop } from "@/components/Header";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import UploadField from "@/components/UploadField";
+import UploadForm from "@/components/UploadForm";
 import { loginCredentials } from "@/lib/authorization";
 import { getDictionary } from "@/lib/dictionaries";
 import { Container, Typography } from "@mui/material";
@@ -13,7 +13,6 @@ export default async function UploadPage() {
   }
 
   const dict = await getDictionary("no");
-
   const breadcrumbs: BreadCrumbStop[] = [
     {
       link: "https://www.skde.no",
@@ -38,8 +37,14 @@ export default async function UploadPage() {
       <HeaderTop breadcrumbs={breadcrumbs} />
       <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
         <Typography variant="h3">Last opp analyse</Typography>
-        <br />
-        <UploadField />
+        <Typography variant="body1" sx={{ marginY: 2 }}>
+          Analysen er en .json fil som blir generert av makroen{" "}
+          <code>%publiser</code> på SAS-siden. Analysen vil ikke bli publisert,
+          men den vil bli tilgjengelig som en test-versjon (med versjonsnummer
+          0). Hvis det finnes en test-versjon fra før av vil den bli
+          overskrevet.
+        </Typography>
+        <UploadForm />
       </Container>
     </>
   );
