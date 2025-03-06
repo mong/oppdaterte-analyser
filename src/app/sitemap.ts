@@ -1,9 +1,9 @@
-import { getAllAnalyser, getKompendier } from "@/services/mongo";
+import { getAnalyser, getKompendier } from "@/services/mongo";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const kompendier = await getKompendier();
-  const analyser = await getAllAnalyser();
+  const analyser = await getAnalyser();
 
   return [
     {

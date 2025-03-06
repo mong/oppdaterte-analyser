@@ -3,6 +3,7 @@ import { Tag } from "@/types";
 
 const tagSchema = new Schema<Tag>(
   {
+    name: String,
     fullname: {
       type: Map,
       of: String,

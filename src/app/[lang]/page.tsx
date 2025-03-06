@@ -43,7 +43,7 @@ export default async function MainPage(props: MainPageProps) {
   }
 
   const dict = await getDictionary(lang);
-  const kompendier = await getKompendier();
+  const kompendier = await getKompendier(`fullname.${lang}`);
 
   const breadcrumbs: BreadCrumbStop[] = [
     {

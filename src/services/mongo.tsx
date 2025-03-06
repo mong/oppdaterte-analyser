@@ -59,21 +59,45 @@ export const getAnalyse = async (
   );
 };
 
-export const getAllAnalyser = async (): Promise<Analyse[]> => {
+export const getAnalyser = async (sort = "name"): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
-    await AnalyseModel.find({ published: true, version: { $gt: 0 } }).exec(),
+    await AnalyseModel.find({ published: true, version: { $gt: 0 } })
+      .sort(sort)
+      .exec(),
   );
 };
 
-export const getAnalyserByTag = async (tag: string): Promise<Analyse[]> => {
+export const getUnpublishedAnalyser = async (
+  sort = "name",
+): Promise<Analyse[]> => {
+  await dbConnect();
+  return toPlainObject(
+    await AnalyseModel.find({
+      published: false,
+      version: 0,
+      name: {
+        $nin: (await getAnalyser()).map((analyse) => analyse.name),
+      },
+    })
+      .sort(sort)
+      .exec(),
+  );
+};
+
+export const getAnalyserByTag = async (
+  tag: string,
+  sort = "name",
+): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
     await AnalyseModel.find({
       tags: tag,
       published: true,
       version: { $gt: 0 },
-    }).exec(),
+    })
+      .sort(sort)
+      .exec(),
   );
 };
 
@@ -82,10 +106,12 @@ export const getTag = async (tag: string): Promise<Tag> => {
   return toPlainObject(await TagModel.findOne({ name: tag }).exec());
 };
 
-export const getKompendier = async (): Promise<Tag[]> => {
+export const getKompendier = async (sort = "name"): Promise<Tag[]> => {
   await dbConnect();
   return toPlainObject(
-    await TagModel.find({ introduction: { $exists: true } }).exec(),
+    await TagModel.find({ introduction: { $exists: true } })
+      .sort(sort)
+      .exec(),
   );
 };
 
