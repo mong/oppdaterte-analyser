@@ -4,6 +4,7 @@ import { loginCredentials } from "@/lib/authorization";
 import { getDictionary } from "@/lib/dictionaries";
 import {
   Container,
+  IconButton,
   Link,
   Paper,
   Table,
@@ -18,6 +19,7 @@ import { redirect } from "next/navigation";
 import { getAnalyser, getUnpublishedAnalyser } from "@/services/mongo";
 import { formatDate } from "@/lib/helpers";
 import { Analyse } from "@/types";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
   return (
@@ -26,8 +28,10 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
         <TableHead>
           <TableRow>
             <TableCell>Analyse</TableCell>
-            <TableCell align="right">tags</TableCell>
-            <TableCell align="right">sist oppdatert</TableCell>
+            <TableCell align="right">ID</TableCell>
+            <TableCell align="right">Tags</TableCell>
+            <TableCell align="right">Oppdatert</TableCell>
+            <TableCell align="right">Endre</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,13 +41,24 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <Link href={`/admin/administrer/${analyse.name}`}>
+                <Link
+                  href={`/no/analyse/${analyse.name}/${analyse.version === 0 ? "test/" : ""}`}
+                >
                   {analyse.title["no"]}
                 </Link>
               </TableCell>
+              <TableCell align="right">{analyse.name}</TableCell>
               <TableCell align="right">{analyse.tags.join(", ")}</TableCell>
               <TableCell align="right">
                 {formatDate(analyse.updatedAt, "no")}
+              </TableCell>
+              <TableCell align="right">
+                <IconButton
+                  aria-label="endre analyse"
+                  href={`/admin/administrer/${analyse.name}/`}
+                >
+                  <SettingsIcon />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
@@ -70,11 +85,11 @@ export default async function AdministrerPage() {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/`,
+      link: "/",
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/admin/administrer`,
+      link: "/admin/administrer/",
       text: "Administrer analyser",
     },
   ];
@@ -89,17 +104,17 @@ export default async function AdministrerPage() {
         <Typography variant="h3">Administrer analyser</Typography>
         <Typography variant="body1" sx={{ marginY: 2 }}>
           Denne siden gir en oversikt over hva som ligger i databasen av
-          publiserte og upubliserte analyser. Det vil snart være mulig å klikke
-          på analyser for å administrere de – for eksempel hvis man vil
-          publisere testversjonen av en analyse.
+          publiserte og upubliserte analyser. Det vil snart være mulig å endre
+          på analyser – for eksempel hvis man vil publisere testversjonen av en
+          analyse.
         </Typography>
-        <Typography variant="h3">Publiserte analyser</Typography>
-        <br />
-        <AnalyseList analyser={publishedAnalyser} />
-        <br />
         <Typography variant="h3">Upubliserte analyser</Typography>
         <br />
         <AnalyseList analyser={unpublishedAnalyser} />
+        <br />
+        <Typography variant="h3">Publiserte analyser</Typography>
+        <br />
+        <AnalyseList analyser={publishedAnalyser} />
       </Container>
     </>
   );

@@ -25,11 +25,11 @@ export default async function HeadersPage() {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/`,
+      link: "/",
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/admin/headers`,
+      link: "/admin/headers/",
       text: "HTTP Headers",
     },
   ];

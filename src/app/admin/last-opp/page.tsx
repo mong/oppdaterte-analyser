@@ -23,11 +23,11 @@ export default async function UploadPage() {
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/`,
+      link: "/",
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/admin/upload`,
+      link: "/admin/upload/",
       text: "Last opp analyse",
     },
   ];

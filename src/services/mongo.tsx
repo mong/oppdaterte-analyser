@@ -59,6 +59,15 @@ export const getAnalyse = async (
   );
 };
 
+export const getAnalyseVersions = async (
+  analyseName: string,
+): Promise<Analyse[]> => {
+  await dbConnect();
+  return toPlainObject(
+    await AnalyseModel.find({ name: analyseName }).sort("version").exec(),
+  );
+};
+
 export const getAnalyser = async (sort = "name"): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
