@@ -50,7 +50,7 @@ export default function AnalyseDashboard({
     <>
       <Typography variant="h3">Endre på analysen {analyseName}</Typography>
       <Typography variant="body1" sx={{ marginY: 2 }}>
-        Her skal man kunne gjøre endringer.
+        På denne siden kan du endre på publiseringsstatusen til analysen.
       </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -113,6 +113,11 @@ export default function AnalyseDashboard({
         Velg hvilken versjon som skal være publisert
       </Typography>
       <br />
+      <Typography>
+        Her kan du velge hvilken versjon av analysen som skal vises på
+        nettsiden. Hvis du velger "ingen", så vil analysen bli avpublisert.
+      </Typography>
+      <br />
       <form action={publishedAction} id="publishedForm">
         <FormControl disabled={pendingPublished}>
           <InputLabel id="publisert-versjon-label">
@@ -151,7 +156,12 @@ export default function AnalyseDashboard({
       </form>
       <br />
       <Typography variant="h4">Publiser test-versjon</Typography>
-
+      <br />
+      <Typography>
+        Hvis du skal publisere en test-versjon som du har lastet opp, kan du
+        gjøre det her. Tidligere versjoner av analysen vil ikke bli slettet, de
+        vil bare bli sjult.
+      </Typography>
       <Button
         disabled={!analyser.find((analyse) => analyse.version === 0)}
         sx={{ marginTop: 2 }}
