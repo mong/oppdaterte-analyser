@@ -108,11 +108,11 @@ export default async function AdministrerPage() {
           eller avpublisere analyser, eller velge hvilken versjon av en analyse
           som skal være publisert.
         </Typography>
-        <Typography variant="h3">Upubliserte analyser</Typography>
+        <Typography variant="h4">Upubliserte analyser</Typography>
         <br />
         <AnalyseList analyser={unpublishedAnalyser} />
         <br />
-        <Typography variant="h3">Publiserte analyser</Typography>
+        <Typography variant="h4">Publiserte analyser</Typography>
         <br />
         <AnalyseList analyser={publishedAnalyser} />
       </Container>
