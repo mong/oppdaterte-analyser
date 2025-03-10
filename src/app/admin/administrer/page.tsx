@@ -42,7 +42,7 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
             >
               <TableCell component="th" scope="row">
                 <Link
-                  href={`/no/analyse/${analyse.name}/${analyse.version === 0 ? "test/" : ""}`}
+                  href={`/no/analyse/${analyse.name}/${analyse.published ? "" : `test/${analyse.version > 0 ? analyse.version : ""}`}`}
                 >
                   {analyse.title["no"]}
                 </Link>

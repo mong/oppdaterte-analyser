@@ -58,16 +58,26 @@ export const getUnpublishedAnalyser = async (
   sort = "name",
 ): Promise<Analyse[]> => {
   await dbConnect();
-  return toPlainObject(
-    await AnalyseModel.find({
-      published: false,
-      version: 0,
-      name: {
-        $nin: (await getAnalyser()).map((analyse) => analyse.name),
+
+  const unpublishedAnalyses = await AnalyseModel.aggregate([
+    {
+      $group: {
+        _id: "$name",
+        version: { $max: "$version" },
+        published: { $max: "$published" },
       },
-    })
-      .sort(sort)
-      .exec(),
+    },
+    { $match: { published: false } },
+  ]);
+
+  return await Promise.all(
+    unpublishedAnalyses.map((analyse) =>
+      AnalyseModel.findOne({
+        published: false,
+        version: analyse.version,
+        name: analyse._id,
+      }),
+    ),
   );
 };
 
