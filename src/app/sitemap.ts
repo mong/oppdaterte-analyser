@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: "https://analyser.skde.no",
       lastModified: analyser
-        .map((analyse) => analyse.updatedAt)
+        .map((analyse) => analyse.createdAt)
         .reduce((acc, val) => (acc > val ? acc : val)),
       alternates: {
         languages: {
@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `https://analyser.skde.no/no/${komp.name}/`,
         lastModified: analyser
           .filter((analyse) => analyse.tags.includes(komp.name))
-          .map((analyse) => analyse.updatedAt)
+          .map((analyse) => analyse.createdAt)
           .reduce((acc, val) => (acc > val ? acc : val)),
         alternates: {
           languages: {
@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .concat(
       analyser.map((analyse) => ({
         url: `https://analyser.skde.no/no/analyse/${analyse.name}/`,
-        lastModified: new Date(analyse.updatedAt),
+        lastModified: new Date(analyse.createdAt),
         alternates: {
           languages: {
             en: `https://analyser.skde.no/en/analyse/${analyse.name}/`,

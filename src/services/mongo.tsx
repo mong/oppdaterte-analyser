@@ -1,12 +1,8 @@
 import mongoose from "mongoose";
 import { AnalyseModel } from "@/models/AnalyseModel";
-import ApiUserModel from "@/models/ApiUserModel";
 import { Analyse } from "@/types";
 import TagModel from "@/models/TagModel";
 import { Tag } from "@/types";
-import { headers } from "next/headers";
-
-import crypto from "crypto";
 
 const TEST_DATABASE = false;
 
@@ -24,25 +20,6 @@ export const dbConnect = async (): Promise<any> => {
   } catch (err) {
     console.error(err);
   }
-};
-
-const safe_compare = (a: string, b: string) => {
-  try {
-    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
-    // Avoiding timing attacks.
-  } catch {
-    return false; // a and b are of different lengths
-  }
-};
-
-const verifyApiKey = async () => {
-  const apiKey = String((await headers()).get("Authorization"));
-  for (let user of await ApiUserModel.find({}).exec()) {
-    if (safe_compare(user.apiKey, apiKey)) {
-      return user;
-    }
-  }
-  return false;
 };
 
 export const getAnalyse = async (
@@ -145,78 +122,6 @@ export const uploadAnalyse = async (analyse: Analyse): Promise<void> => {
       published: false,
     },
     { upsert: true },
-  );
-};
-
-export const publishAnalyse = async (
-  analyseName: string,
-): Promise<Response> => {
-  await dbConnect();
-
-  const apiUser = await verifyApiKey();
-  if (!apiUser) {
-    return Response.json({ reply: "Incorrect API-key." }, { status: 401 });
-  }
-
-  const newAnalyse = await AnalyseModel.findOne({
-    name: analyseName,
-    version: 0,
-  })
-    .select("-_id")
-    .exec();
-
-  if (!newAnalyse) {
-    return Response.json(
-      {
-        reply: `'${analyseName}' not found. A test version must be uploaded before it is published. Request denied!`,
-      },
-      { status: 409 },
-    );
-  }
-
-  const oldAnalyse = await AnalyseModel.findOne({
-    name: analyseName,
-    published: true,
-    version: { $gt: 0 },
-  })
-    .sort("-version")
-    .exec();
-
-  if (oldAnalyse && oldAnalyse.generated > newAnalyse.generated) {
-    return Response.json(
-      {
-        reply: `The test version of '${newAnalyse.name}' is older than the published version. Request denied!`,
-      },
-      { status: 409 },
-    );
-  }
-
-  const maxVersion = await AnalyseModel.findOne({
-    name: analyseName,
-    version: { $gt: 0 },
-  })
-    .sort("-version")
-    .exec();
-  const version = maxVersion ? maxVersion.version + 1 : 1;
-
-  await AnalyseModel.create({
-    ...newAnalyse.toObject(),
-    version: version,
-    published: true,
-  });
-
-  await AnalyseModel.updateMany(
-    { name: analyseName, published: true, version: { $gt: 0, $ne: version } },
-    { published: false },
-  );
-
-  return Response.json(
-    {
-      reply: oldAnalyse
-        ? `'${analyseName}' successfully published. Current version: ${version}. Older versions are unpublished, but not deleted.`
-        : `'${analyseName}' was successfully published.`,
-    },
-    { status: 201 },
   );
 };
 

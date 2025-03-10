@@ -34,7 +34,10 @@
     "title": "Updated Health Atlas",
     "introduction_1": "Health Atlas compares the use of healthcare services for the population in different geographical areas. Here you will find the latest figures describing the use of selected services within various fields, as well as a brief analysis of the result.",
     "introduction_2": "Health Atlases in the form of digital reports addressing a selected topic, field, or patient group can be found [here](https://apps.skde.no/helseatlas/en/).",
-    "list_text": "This is a list of all available collections of analyses:"
+    "fagområder": "Medical specialties",
+    "fagområder_text": "Our analyses are organized by medical specialty. Below you will find pages with all Health Atlas analyses pertaining to specific medical specialties.",
+    "all_analyses": "All analyses",
+    "all_analyses_text": "Note that a single analysis can be included in multiple collection pages because it may be relevant to several medical specialties. Below you will find all our published analyses, listed in alphabetical order. As of today, we have published <n> analyses, which will be updated each year with new data."
   },
   "breadcrumbs": {
     "homepage": "Homepage",

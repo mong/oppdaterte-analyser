@@ -98,7 +98,7 @@ export default async function AnalysePage(props: {
         <Typography
           variant="h6"
           sx={{ marginY: 2 }}
-        >{`${dict.analysebox.updated} ${formatDate(analyse.updatedAt, lang)}`}</Typography>
+        >{`${dict.analysebox.updated} ${formatDate(analyse.createdAt, lang)}`}</Typography>
         <Box sx={{ marginTop: 1 }}>
           <TagList analyse={analyse} tags={tags} lang={lang} />
         </Box>

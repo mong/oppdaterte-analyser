@@ -5,12 +5,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Paper,
 } from "@mui/material";
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
-import { getKompendier } from "@/services/mongo";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import { getAnalyser, getKompendier } from "@/services/mongo";
 import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
@@ -44,6 +42,7 @@ export default async function MainPage(props: MainPageProps) {
 
   const dict = await getDictionary(lang);
   const kompendier = await getKompendier(`fullname.${lang}`);
+  const analyser = await getAnalyser(`title.${lang}`);
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -92,23 +91,44 @@ export default async function MainPage(props: MainPageProps) {
       <main>
         <UnderDevelopment lang={lang} />
         <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography>{dict.frontpage.list_text}</Typography>
-            <List>
-              {kompendier.map((komp, i) => (
-                <ListItemButton
-                  key={i}
-                  LinkComponent={"a"}
-                  href={`/${lang}/${komp.name}`}
-                >
-                  <ListItemIcon>
-                    <ArrowForwardRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={komp.fullname[lang]} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Paper>
+          <Typography variant="h3">{dict.frontpage.fagområder}</Typography>
+          <br />
+          <Typography>{dict.frontpage.fagområder_text}</Typography>
+          <List dense>
+            {kompendier.map((komp, i) => (
+              <ListItemButton
+                key={i}
+                LinkComponent={"a"}
+                href={`/${lang}/${komp.name}`}
+              >
+                <ListItemIcon>•</ListItemIcon>
+                <ListItemText
+                  primary={`${komp.fullname[lang]} (${analyser.filter((analyse) => analyse.tags.includes(komp.name)).length})`}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+          <br />
+          <Typography variant="h3">{dict.frontpage.all_analyses}</Typography>
+          <br />
+          <Typography>
+            {dict.frontpage.all_analyses_text.replace(
+              "<n>",
+              analyser.length.toString(),
+            )}
+          </Typography>
+          <List dense>
+            {analyser.map((analyse, i) => (
+              <ListItemButton
+                key={i}
+                LinkComponent={"a"}
+                href={`/${lang}/analyse/${analyse.name}`}
+              >
+                <ListItemIcon>•</ListItemIcon>
+                <ListItemText primary={analyse.title[lang]} />
+              </ListItemButton>
+            ))}
+          </List>
         </Container>
       </main>
     </>
