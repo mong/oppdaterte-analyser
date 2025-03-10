@@ -104,9 +104,9 @@ export default async function AdministrerPage() {
         <Typography variant="h3">Administrer analyser</Typography>
         <Typography variant="body1" sx={{ marginY: 2 }}>
           Denne siden gir en oversikt over hva som ligger i databasen av
-          publiserte og upubliserte analyser. Det vil snart være mulig å endre
-          på analyser – for eksempel hvis man vil publisere testversjonen av en
-          analyse.
+          publiserte og upubliserte analyser. Det er også mulig å endre
+          publiseringsstatus på analyser – for eksempel hvis man vil publisere
+          testversjonen av en analyse.
         </Typography>
         <Typography variant="h3">Upubliserte analyser</Typography>
         <br />

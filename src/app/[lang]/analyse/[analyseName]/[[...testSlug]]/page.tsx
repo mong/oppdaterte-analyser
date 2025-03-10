@@ -17,7 +17,7 @@ import { formatDate } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
-import DownloadDataButton from "@/components/DownloadDataButton";
+import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
 
 const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {

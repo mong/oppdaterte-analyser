@@ -219,3 +219,56 @@ export const publishAnalyse = async (
     { status: 201 },
   );
 };
+
+export const publishAnalyseVersion = async (
+  analyseName: string,
+  version: number,
+): Promise<void> => {
+  await dbConnect();
+
+  await AnalyseModel.updateMany(
+    { name: analyseName, published: true, version: { $gt: 0 } },
+    { published: false },
+  );
+
+  if (version > 0) {
+    await AnalyseModel.updateOne(
+      { name: analyseName, version: { $eq: version } },
+      { published: true },
+    );
+  }
+};
+
+export const publishTestAnalyse = async (
+  analyseName: string,
+): Promise<Boolean> => {
+  await dbConnect();
+
+  const oldAnalyse = await AnalyseModel.findOne({
+    name: analyseName,
+    version: 0,
+  }).exec();
+  if (!oldAnalyse) {
+    return false;
+  }
+
+  const maxVersion = await AnalyseModel.findOne({
+    name: analyseName,
+    version: { $gt: 0 },
+  })
+    .sort("-version")
+    .exec();
+  const version = maxVersion ? maxVersion.version + 1 : 1;
+
+  await AnalyseModel.updateMany(
+    { name: analyseName, published: true, version: { $gt: 0 } },
+    { published: false },
+  );
+
+  await AnalyseModel.updateOne(
+    { name: analyseName, version: 0 },
+    { published: true, version: version },
+  );
+
+  return true;
+};

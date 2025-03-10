@@ -1,6 +1,6 @@
 import { HeaderTop } from "@/components/Header";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import UploadForm from "@/components/Forms/UploadForm";
+import UploadForm from "./UploadForm";
 import { loginCredentials } from "@/lib/authorization";
 import { getDictionary } from "@/lib/dictionaries";
 import { Container, Typography } from "@mui/material";

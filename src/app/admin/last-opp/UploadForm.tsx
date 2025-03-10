@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadAnalyseAction } from "@/lib/uploadAnalyseAction";
+import { uploadAnalyseAction } from "@/lib/actions";
 import { Alert, Button, Link, styled } from "@mui/material";
 import React, { useActionState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
