@@ -115,7 +115,8 @@ export default function AnalyseDashboard({
       <br />
       <Typography>
         Her kan du velge hvilken versjon av analysen som skal vises på
-        nettsiden. Hvis du velger "ingen", så vil analysen bli avpublisert.
+        nettsiden. Hvis du velger &quot;ingen&quot;, så vil analysen bli
+        avpublisert.
       </Typography>
       <br />
       <form action={publishedAction} id="publishedForm">
