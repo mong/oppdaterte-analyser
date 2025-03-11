@@ -253,7 +253,9 @@ export function InteractiveChartContainer({
                   i === 0
                     ? []
                     : [
-                        <ListSubheader>{view.title[lang]}</ListSubheader>,
+                        <ListSubheader key={i}>
+                          {view.title[lang]}
+                        </ListSubheader>,
                       ].concat(
                         view.variables.map((variable, j) => (
                           <MenuItem value={`${i},${j}`} key={`${i}_${j}`}>
