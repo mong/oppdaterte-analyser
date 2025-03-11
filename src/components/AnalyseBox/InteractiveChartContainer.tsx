@@ -13,6 +13,9 @@ import {
   Menu,
   Snackbar,
   Slide,
+  Checkbox,
+  ListSubheader,
+  FormControlLabel,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import InsightsIcon from "@mui/icons-material/InsightsOutlined";
@@ -58,6 +61,8 @@ export function InteractiveChartContainer({
   const [timelineVar, setTimelineVar] = React.useState<[number, number]>([
     0, 0,
   ]);
+  const [showNorway, setShowNorway] = React.useState(false);
+
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
   const [view, setView] = React.useState<"tidstrend" | number>(0);
   const graphRef = React.useRef<null | HTMLDivElement>(null);
@@ -98,13 +103,16 @@ export function InteractiveChartContainer({
   const maxValues = React.useMemo(() => {
     const calculateMaxValue = (view_index: number, var_index: number) =>
       Math.max(
-        ...Object.keys(analyse.data[level]).map((area) =>
-          Math.max(
-            ...Object.keys(analyse.data[level][area]).map(
-              (year) => analyse.data[level][area][year][view_index][var_index],
+        ...Object.keys(analyse.data[level])
+          .filter((area) => showNorway || area !== "8888")
+          .map((area) =>
+            Math.max(
+              ...Object.keys(analyse.data[level][area]).map(
+                (year) =>
+                  analyse.data[level][area][year][view_index][var_index],
+              ),
             ),
           ),
-        ),
       );
     return Object.fromEntries(
       analyse.views
@@ -113,7 +121,7 @@ export function InteractiveChartContainer({
         )
         .concat([["0,1", calculateMaxValue(0, 1)]]),
     );
-  }, [analyse, level]);
+  }, [analyse, level, showNorway]);
 
   return (
     <Box>
@@ -245,18 +253,7 @@ export function InteractiveChartContainer({
                   i === 0
                     ? []
                     : [
-                        <MenuItem
-                          disabled
-                          value=""
-                          dense={true}
-                          key={i}
-                          sx={{
-                            boxShadow: `inset 0px 0px 30px rgba(46, 150, 255, ${0.85 * 0.65 ** 4})`,
-                            "&.Mui-disabled": { opacity: 1 },
-                          }}
-                        >
-                          {view.title[lang]}
-                        </MenuItem>,
+                        <ListSubheader>{view.title[lang]}</ListSubheader>,
                       ].concat(
                         view.variables.map((variable, j) => (
                           <MenuItem value={`${i},${j}`} key={`${i}_${j}`}>
@@ -412,6 +409,7 @@ export function InteractiveChartContainer({
               years={years}
               level={level}
               variable={timelineVar}
+              showNorway={showNorway}
               selection={selection}
               lang={lang}
               maxValue={maxValues[String(timelineVar)]}
@@ -447,8 +445,28 @@ export function InteractiveChartContainer({
         >
           {view !== "tidstrend" || String(timelineVar) === "0,0" ? (
             <Typography variant="body2">{analyse.description[lang]}</Typography>
-          ) : view === "tidstrend" &&
-            !["0,0", "0,1"].includes(String(timelineVar)) ? (
+          ) : view === "tidstrend" && String(timelineVar) === "0,1" ? (
+            <>
+              <Typography variant="body2" sx={{ display: "inline" }}>
+                {dict.analysebox.absolute_number}
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    sx={{ marginLeft: 2 }}
+                    checked={showNorway}
+                    onChange={() => setShowNorway(!showNorway)}
+                  />
+                }
+                label={
+                  <Typography variant="body2" sx={{ display: "inline" }}>
+                    {dict.analysebox.show_norway}
+                  </Typography>
+                }
+              />
+            </>
+          ) : (
             <Typography variant="body2">
               {analyse.description[lang]}
               {": "}
@@ -456,8 +474,6 @@ export function InteractiveChartContainer({
                 {analyse.views[timelineVar[0]].variables[timelineVar[1]][lang]}
               </i>
             </Typography>
-          ) : (
-            <></>
           )}
         </Box>
       </Box>

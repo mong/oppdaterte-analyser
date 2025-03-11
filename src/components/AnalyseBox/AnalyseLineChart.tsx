@@ -47,6 +47,7 @@ type AnalyseLineChartProps = {
   years: number[];
   level: "region" | "sykehus";
   variable: [number, number];
+  showNorway: boolean;
   selection: Selection;
   lang: Lang;
   maxValue: number;
@@ -69,6 +70,7 @@ export const AnalyseLineChart = ({
   years,
   level,
   variable,
+  showNorway,
   selection,
   lang,
   maxValue,
@@ -131,15 +133,20 @@ export const AnalyseLineChart = ({
         },
       ]}
       yAxis={[{ min: 0, max: maxValue * 1.01 }]}
-      series={selectionIDs.map((area) => ({
-        dataKey: area,
-        id: area,
-        valueFormatter: getValueFormatter(area),
-        curve: "monotoneX",
-        showMark: false,
-        label: regions_dict[lang][level][Number(area)],
-        color: linechart_colors[level][Number(area)],
-      }))}
+      series={selectionIDs
+        .filter(
+          (area) =>
+            area !== "8888" || variable.toString() !== "0,1" || showNorway,
+        )
+        .map((area) => ({
+          dataKey: area,
+          id: area,
+          valueFormatter: getValueFormatter(area),
+          curve: "monotoneX",
+          showMark: false,
+          label: regions_dict[lang][level][Number(area)],
+          color: linechart_colors[level][Number(area)],
+        }))}
       slotProps={{
         legend: {
           direction: "row",
@@ -155,6 +162,9 @@ export const AnalyseLineChart = ({
           labelStyle: {
             fontSize: 6 + Math.round(12 * smallFactor),
           },
+        },
+        noDataOverlay: {
+          message: { no: "Ingen områder valgt", en: "No areas chosen" }[lang],
         },
       }}
       sx={{
