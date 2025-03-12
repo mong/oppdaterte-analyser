@@ -10,7 +10,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: "https://analyser.skde.no",
       lastModified: analyser
         .map((analyse) => analyse.createdAt)
-        .reduce((acc, val) => (acc > val ? acc : val)),
+        .reduce(
+          (acc, val) => (acc > new Date(val) ? acc : new Date(val)),
+          new Date(0),
+        ),
       alternates: {
         languages: {
           en: "https://analyser.skde.no/en/",
@@ -24,7 +27,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: analyser
           .filter((analyse) => analyse.tags.includes(komp.name))
           .map((analyse) => analyse.createdAt)
-          .reduce((acc, val) => (acc > val ? acc : val)),
+          .reduce(
+            (acc, val) => (acc > new Date(val) ? acc : new Date(val)),
+            new Date(0),
+          ),
         alternates: {
           languages: {
             en: `https://analyser.skde.no/en/${komp.name}/`,

@@ -14,6 +14,11 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 
+export const dynamicParams = false;
+export async function generateStaticParams() {
+  return [{ lang: "no" }, { lang: "en" }];
+}
+
 export async function generateMetadata(props: {
   params: Promise<{ lang: Lang }>;
 }) {
