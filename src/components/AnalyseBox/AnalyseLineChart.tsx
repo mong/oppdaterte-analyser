@@ -169,7 +169,7 @@ export const AnalyseLineChart = ({
       }}
       sx={{
         "& .MuiLineElement-root": {
-          strokeWidth: "2.5px",
+          strokeWidth: "3px",
         },
       }}
     />
