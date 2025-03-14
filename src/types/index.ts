@@ -18,6 +18,7 @@ export interface Analyse {
   version: number;
   published: boolean;
   tags: string[];
+  age_range: [number, number];
   title: Text;
   description: Text;
   summary: Text;

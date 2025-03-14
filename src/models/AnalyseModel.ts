@@ -6,6 +6,7 @@ const schemaType = {
   version: Number,
   published: Boolean,
   tags: [String],
+  age_range: [Number],
   title: { no: String, en: String },
   description: { no: String, en: String },
   summary: { no: String, en: String },

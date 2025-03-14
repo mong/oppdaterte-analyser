@@ -37,6 +37,7 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
+import { getDescription } from "@/lib/helpers";
 
 export type InteractiveChartContainerProps = {
   analyse: Analyse;
@@ -446,11 +447,13 @@ export function InteractiveChartContainer({
           }}
         >
           {view !== "tidstrend" || String(timelineVar) === "0,0" ? (
-            <Typography variant="body2">{analyse.description[lang]}</Typography>
+            <Typography variant="body2">
+              {getDescription(analyse, lang, "rate")}
+            </Typography>
           ) : view === "tidstrend" && String(timelineVar) === "0,1" ? (
             <>
               <Typography variant="body2" sx={{ display: "inline" }}>
-                {dict.analysebox.absolute_number}
+                {getDescription(analyse, lang, "antall")}
               </Typography>
               <FormControlLabel
                 control={
@@ -470,7 +473,7 @@ export function InteractiveChartContainer({
             </>
           ) : (
             <Typography variant="body2">
-              {analyse.description[lang]}
+              {getDescription(analyse, lang, "rate")}
               {": "}
               <i>
                 {analyse.views[timelineVar[0]].variables[timelineVar[1]][lang]}
