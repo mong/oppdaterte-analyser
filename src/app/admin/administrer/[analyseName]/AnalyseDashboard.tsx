@@ -161,10 +161,13 @@ export default function AnalyseDashboard({
       <Typography>
         Hvis du skal publisere en test-versjon som du har lastet opp, kan du
         gjøre det her. Tidligere versjoner av analysen vil ikke bli slettet, de
-        vil bare bli sjult.
+        vil bare bli sjult.{" "}
+        <b style={{ color: "red" }}>
+          Publisering midlertidig blokkert grunnet endring av datastruktur
+        </b>
       </Typography>
       <Button
-        disabled={!analyser.find((analyse) => analyse.version === 0)}
+        disabled={true /*!analyser.find((analyse) => analyse.version === 0)*/}
         sx={{ marginTop: 2 }}
         variant="contained"
         onClick={async (event) => {
