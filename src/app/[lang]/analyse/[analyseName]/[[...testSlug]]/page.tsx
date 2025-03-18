@@ -13,7 +13,7 @@ import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveCh
 import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
-import { formatDate, getSubHeader } from "@/lib/helpers";
+import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
@@ -105,7 +105,7 @@ export default async function AnalysePage(props: {
       </Grid>
       <Grid>
         <Typography variant="body2">
-          {dict.analysebox.updated} {formatDate(analyse.createdAt, lang)}
+          {dict.analysebox.updated} {makeDateElem(analyse.createdAt, lang)}
         </Typography>
       </Grid>
     </Grid>

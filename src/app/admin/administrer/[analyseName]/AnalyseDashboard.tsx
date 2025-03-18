@@ -1,6 +1,6 @@
 "use client";
 
-import { formatDate } from "@/lib/helpers";
+import { makeDateElem } from "@/lib/helpers";
 import { Analyse } from "@/types";
 import {
   Button,
@@ -101,7 +101,7 @@ export default function AnalyseDashboard({
                 </TableCell>
                 <TableCell align="right">{analyse.tags.join(", ")}</TableCell>
                 <TableCell align="right">
-                  {formatDate(analyse.createdAt, "no")}
+                  {makeDateElem(analyse.createdAt, "no")}
                 </TableCell>
               </TableRow>
             ))}
@@ -161,13 +161,10 @@ export default function AnalyseDashboard({
       <Typography>
         Hvis du skal publisere en test-versjon som du har lastet opp, kan du
         gjøre det her. Tidligere versjoner av analysen vil ikke bli slettet, de
-        vil bare bli sjult.{" "}
-        <b style={{ color: "red" }}>
-          Publisering midlertidig blokkert grunnet endring av datastruktur
-        </b>
+        vil bare bli sjult.
       </Typography>
       <Button
-        disabled={true /*!analyser.find((analyse) => analyse.version === 0)*/}
+        disabled={!analyser.find((analyse) => analyse.version === 0)}
         sx={{ marginTop: 2 }}
         variant="contained"
         onClick={async (event) => {

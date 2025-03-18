@@ -8,6 +8,14 @@ export function formatDate(date: Date, lang: Lang) {
   });
 }
 
+export function makeDateElem(date: Date, lang: Lang) {
+  return (
+    <time dateTime={new Date(date).toISOString()}>
+      {formatDate(date, lang)}
+    </time>
+  );
+}
+
 export function formatNumber(
   number: number,
   lang: Lang,

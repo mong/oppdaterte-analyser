@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { redirect } from "next/navigation";
 import { getAnalyser, getUnpublishedAnalyser } from "@/services/mongo";
-import { formatDate } from "@/lib/helpers";
+import { makeDateElem } from "@/lib/helpers";
 import { Analyse } from "@/types";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -50,7 +50,7 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
               <TableCell align="right">{analyse.name}</TableCell>
               <TableCell align="right">{analyse.tags.join(", ")}</TableCell>
               <TableCell align="right">
-                {formatDate(analyse.createdAt, "no")}
+                {makeDateElem(analyse.createdAt, "no")}
               </TableCell>
               <TableCell align="right">
                 <IconButton

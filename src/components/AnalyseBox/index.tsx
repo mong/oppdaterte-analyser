@@ -19,7 +19,7 @@ import { Analyse, Tag, Lang } from "@/types";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { InteractiveChartContainer } from "./InteractiveChartContainer";
-import { formatDate, getSubHeader } from "@/lib/helpers";
+import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import Link from "next/link";
 import downloadCsv from "@/lib/downloadCsv";
 import TagList from "@/components/TagList";
@@ -74,7 +74,7 @@ export default function AnalyseBox({
       </Grid>
       <Grid>
         <Typography variant="body2">
-          {formatDate(analyse.createdAt, lang)}
+          {makeDateElem(analyse.createdAt, lang)}
         </Typography>
       </Grid>
     </Grid>
