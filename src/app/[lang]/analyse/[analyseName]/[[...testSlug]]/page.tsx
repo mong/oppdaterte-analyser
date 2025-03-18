@@ -13,7 +13,7 @@ import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveCh
 import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
-import { formatDate } from "@/lib/helpers";
+import { formatDate, getSubHeader } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
@@ -92,16 +92,32 @@ export default async function AnalysePage(props: {
     },
   ];
 
+  const bottomGrid = (
+    <Grid
+      container
+      sx={{ justifyContent: "space-between", alignItems: "flex-end" }}
+    >
+      <Grid size="grow">
+        <TagList
+          tags={analyse.tags.map((tagName) => tags[tagName] || tagName)}
+          lang={lang}
+        />
+      </Grid>
+      <Grid>
+        <Typography variant="body2">
+          {dict.analysebox.updated} {formatDate(analyse.createdAt, lang)}
+        </Typography>
+      </Grid>
+    </Grid>
+  );
+
   return (
     <>
       <Header lang={lang} breadcrumbs={breadcrumbs} title={analyse.title[lang]}>
-        <Typography
-          variant="h6"
-          sx={{ marginY: 2 }}
-        >{`${dict.analysebox.updated} ${formatDate(analyse.createdAt, lang)}`}</Typography>
-        <Box sx={{ marginTop: 1 }}>
-          <TagList analyse={analyse} tags={tags} lang={lang} />
-        </Box>
+        <Typography variant="h6" sx={{ marginY: 2 }}>
+          {getSubHeader(analyse, lang)}
+        </Typography>
+        {bottomGrid}
       </Header>
       <main>
         <UnderDevelopment lang={lang} />

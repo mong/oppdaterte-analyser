@@ -13,6 +13,7 @@ import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import UnderDevelopment from "@/components/UnderDevelopment";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
+import { getSubHeader } from "@/lib/helpers";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
@@ -130,7 +131,10 @@ export default async function MainPage(props: MainPageProps) {
                 href={`/${lang}/analyse/${analyse.name}`}
               >
                 <ListItemIcon>•</ListItemIcon>
-                <ListItemText primary={analyse.title[lang]} />
+                <ListItemText
+                  primary={analyse.title[lang]}
+                  secondary={getSubHeader(analyse, lang)}
+                />
               </ListItemButton>
             ))}
           </List>

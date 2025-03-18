@@ -4,32 +4,27 @@ import React from "react";
 import classNames from "./AnalyseBox.module.css";
 import {
   Typography,
-  Paper,
   Box,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Button,
-  Popper,
-  Fade,
   IconButton,
   Menu,
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import Grid from "@mui/material/Grid2";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { ClickAwayListener } from "@mui/base";
 
 import { Analyse, Tag, Lang } from "@/types";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { InteractiveChartContainer } from "./InteractiveChartContainer";
-import { formatDate } from "@/lib/helpers";
+import { formatDate, getSubHeader } from "@/lib/helpers";
 import Link from "next/link";
 import downloadCsv from "@/lib/downloadCsv";
 import TagList from "@/components/TagList";
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import { accordionSummaryClasses } from "@mui/material/AccordionSummary";
 
 export type AnalyseBoxProps = {
   analyse: Analyse;
@@ -51,10 +46,6 @@ export default function AnalyseBox({
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const [infoAnchor, setInfoAnchor] = React.useState<null | HTMLElement>(null);
-
-  const tagList = <TagList analyse={analyse} tags={tags} lang={lang} />;
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -65,6 +56,29 @@ export default function AnalyseBox({
     event.stopPropagation();
     setAnchorEl(null);
   };
+
+  const bottomGrid = (
+    <Grid
+      container
+      sx={{
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        margin: 1,
+      }}
+    >
+      <Grid size="grow">
+        <TagList
+          tags={analyse.tags.map((tagName) => tags[tagName] || tagName)}
+          lang={lang}
+        />
+      </Grid>
+      <Grid>
+        <Typography variant="body2">
+          {formatDate(analyse.createdAt, lang)}
+        </Typography>
+      </Grid>
+    </Grid>
+  );
 
   return (
     <Accordion
@@ -94,69 +108,73 @@ export default function AnalyseBox({
           "@media print": {
             background: "none",
           },
-          "& > .MuiAccordionSummary-content": {
-            justifyContent: "space-between",
-          },
         })}
         onClick={() => setExpanded(!expanded)}
       >
-        <Box sx={{ padding: "10px" }}>
-          <Typography variant="h4">{analyse.title[lang]}</Typography>
-          <Typography variant="body2">
-            {dict.analysebox.updated} {formatDate(analyse.createdAt, lang)}
-          </Typography>
-          <Typography
-            variant="body1"
-            component="div"
-            sx={{ "@media print": { fontSize: "1rem" } }}
-            dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
-          />
-          {!expanded && tagList}
-        </Box>
-        <Box>
-          <Tooltip title={dict.analysebox.options}>
-            <IconButton
-              component="div" /* Fixes hydration error because of "button inside button" */
-              size="large"
-              aria-label="valg"
-              id="long-button"
-              aria-controls={open ? "analyse-meny" : undefined}
-              aria-expanded={open ? "true" : undefined}
-              aria-haspopup="true"
-              onClick={handleClick}
-            >
-              <MoreVertIcon sx={{ fontSize: "1.8rem" }} />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            id="analyse-meny"
-            MenuListProps={{
-              "aria-labelledby": "long-button",
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-          >
-            <MenuItem
-              onClick={handleClose}
-              component={Link}
-              href={`/${lang}/analyse/${analyse.name}`}
-              target="_blank"
-            >
-              {dict.analysebox.open_new_tab}
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                downloadCsv(analyse, lang);
-                handleClose(e);
-              }}
-            >
-              {dict.analysebox.download_data}
-              {" (CSV)"}
-            </MenuItem>
-          </Menu>
+        <Box sx={{ width: "100%" }}>
+          <Grid container sx={{ justifyContent: "space-between" }}>
+            <Grid size="grow" sx={{ paddingTop: 1, paddingLeft: 1 }}>
+              <Typography variant="h4">{analyse.title[lang]}</Typography>
+            </Grid>
+            <Grid sx={{ marginBottom: -2 }}>
+              <Tooltip title={dict.analysebox.options}>
+                <IconButton
+                  component="div" /* Fixes hydration error because of "button inside button" */
+                  size="large"
+                  aria-label="valg"
+                  id="long-button"
+                  aria-controls={open ? "analyse-meny" : undefined}
+                  aria-expanded={open ? "true" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MoreVertIcon sx={{ fontSize: "1.8rem" }} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                id="analyse-meny"
+                MenuListProps={{
+                  "aria-labelledby": "long-button",
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  href={`/${lang}/analyse/${analyse.name}`}
+                  target="_blank"
+                >
+                  {dict.analysebox.open_new_tab}
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    downloadCsv(analyse, lang);
+                    handleClose(e);
+                  }}
+                >
+                  {dict.analysebox.download_data}
+                  {" (CSV)"}
+                </MenuItem>
+              </Menu>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ paddingX: 1, marginTop: 0.5 }}>
+            <Typography variant="body1" sx={{ color: "#444" }}>
+              {getSubHeader(analyse, lang)}
+            </Typography>
+            <Typography
+              variant="body1"
+              component="div"
+              sx={{ width: "100%", "@media print": { fontSize: "1rem" } }}
+              dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.summary }}
+            />
+          </Box>
+          {!expanded && bottomGrid}
         </Box>
       </AccordionSummary>
       <AccordionDetails sx={{ padding: 0 }}>
@@ -168,81 +186,41 @@ export default function AnalyseBox({
             sx={{ "@media print": { fontSize: "1rem" } }}
             dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.discussion }}
           />
-          <Grid
-            container
-            sx={{ justifyContent: "space-between", alignItems: "flex-end" }}
+          <Accordion
+            elevation={0}
+            disableGutters
+            sx={{ marginBottom: 1, "&:before": { display: "none" } }}
           >
-            <Grid size="grow">{tagList}</Grid>
-            <Grid>
-              <Button
-                aria-describedby="info-popper"
-                startIcon={<InfoOutlinedIcon />}
-                variant={infoAnchor ? "contained" : "outlined"}
-                sx={{ borderRadius: "16px", textTransform: "none" }}
-                onClick={(event) =>
-                  setInfoAnchor(infoAnchor ? null : event.currentTarget)
-                }
-              >
-                {dict.analysebox.info}
-              </Button>
-
-              <Popper
-                transition
-                id="info-popper"
-                open={Boolean(infoAnchor)}
-                anchorEl={infoAnchor}
-                placement="top-end"
-                sx={{
-                  margin: "10px",
-                  zIndex: 10 /* Ensuring the popper is above MUI InputLabel */,
-                }}
-                style={{ width: "min(100vw, 800px)" }}
-                modifiers={[
+            <AccordionSummary
+              expandIcon={
+                <ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />
+              }
+              aria-controls="panel1-content"
+              id="panel1-header"
+              sx={{
+                flexDirection: "row-reverse",
+                [`& .${accordionSummaryClasses.expandIconWrapper}.${accordionSummaryClasses.expanded}`]:
                   {
-                    name: "offset",
-                    options: {
-                      offset: [0, 10],
-                    },
+                    transform: "rotate(90deg)",
                   },
-                ]}
-              >
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={150}>
-                    <Paper
-                      elevation={10}
-                      sx={{ outline: "1px solid rgb(0, 48, 135)" }}
-                    >
-                      <ClickAwayListener
-                        onClickAway={() => setInfoAnchor(null)}
-                      >
-                        <Box sx={{ padding: { xs: 2, md: 3 } }}>
-                          <Box display="flex" alignItems="center">
-                            <Box flexGrow={1}>
-                              <Typography variant="h4">
-                                {dict.analysebox.info}
-                              </Typography>
-                            </Box>
-                            <Box>
-                              <IconButton onClick={() => setInfoAnchor(null)}>
-                                <CloseIcon />
-                              </IconButton>
-                            </Box>
-                          </Box>
-                          <Typography
-                            variant="body1"
-                            component="div"
-                            dangerouslySetInnerHTML={{
-                              __html: rawHtmlFromMarkdown.info,
-                            }}
-                          />
-                        </Box>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </Grid>
-          </Grid>
+              }}
+            >
+              <Typography sx={{ marginLeft: 1 }} component="span">
+                {dict.analysebox.info}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography
+                variant="body1"
+                component="div"
+                dangerouslySetInnerHTML={{
+                  __html: rawHtmlFromMarkdown.info,
+                }}
+              />
+            </AccordionDetails>
+          </Accordion>
+
+          {bottomGrid}
         </Box>
       </AccordionDetails>
     </Accordion>

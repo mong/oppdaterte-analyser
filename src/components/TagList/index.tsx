@@ -1,16 +1,14 @@
 "use client";
 
-import { Analyse, Lang, Tag } from "@/types";
-import { Box, Chip } from "@mui/material";
-import Link from "next/link";
+import { Lang, Tag } from "@/types";
+import { Box, Chip, Link } from "@mui/material";
 
 type TagListProps = {
-  analyse: Analyse;
-  tags: { [k: string]: Tag };
+  tags: (Tag | string)[];
   lang: Lang;
 };
 
-export default function TagList({ analyse, tags, lang }: TagListProps) {
+export default function TagList({ tags, lang }: TagListProps) {
   return (
     <Box
       sx={{
@@ -20,16 +18,16 @@ export default function TagList({ analyse, tags, lang }: TagListProps) {
         marginTop: "8px",
       }}
     >
-      {analyse.tags.map((tag) => (
+      {tags.map((tag, i) => (
         <Chip
           clickable
           component={Link}
-          href={`/${lang}/${tag}/`}
+          href={`/${lang}/${typeof tag === "string" ? tag : tag.name}/`}
           target="_blank"
           onClick={(event) => event.stopPropagation()}
-          label={tags[tag]?.fullname[lang] || tag}
-          color={tag in tags ? "primary" : "error"}
-          key={tag}
+          label={typeof tag === "string" ? tag : tag.fullname[lang]}
+          color={typeof tag === "string" ? "error" : "primary"}
+          key={i}
           sx={{
             marginRight: "1em",
             printColorAdjust: "exact",

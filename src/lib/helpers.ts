@@ -34,13 +34,30 @@ export function getAgeRange(analyse: Analyse, lang: Lang) {
   }
 }
 
+export function getDescriptionParts(description_string: string) {
+  const match = /(.*)(\spe?r 1[\s,]000\s)(.*)/.exec(description_string);
+
+  if (match === null) return false;
+
+  const [_, description, per_1000, category] = match;
+  return {
+    description,
+    per_1000,
+    category,
+    category_is_population: ["innbyggere", "inhabitants"].includes(category),
+  };
+}
+
 export function getDescription(
   analyse: Analyse,
   lang: Lang,
   type: "rate" | "antall",
 ) {
-  const [_, description, per_1000, category] =
-    /(.*)(\spe?r 1[\s,]000\s)(.*)/.exec(analyse.description[lang]) as string[];
+  const parts = getDescriptionParts(analyse.description[lang]);
+
+  if (!parts) return "Parse error. Noe er feil med beskrivelsen!";
+
+  const { description, per_1000, category, category_is_population } = parts;
 
   const age_range = getAgeRange(analyse, lang);
   const age = age_range ? `, ${age_range}` : "";
@@ -49,9 +66,28 @@ export function getDescription(
     case "rate":
       return description + per_1000 + category + age;
     case "antall":
-      const hide_category =
-        ["innbyggere", "inhabitants"].includes(category) ||
-        description.includes(` ${category} `);
-      return description + (hide_category ? "" : `, ${category}`) + age;
+      return (
+        description +
+        (category_is_population || description.includes(` ${category} `)
+          ? ""
+          : `, ${category}`) +
+        age
+      );
   }
+}
+
+export function getSubHeader(analyse: Analyse, lang: Lang) {
+  const parts = getDescriptionParts(analyse.description[lang]);
+
+  if (!parts) return "Parse error. Noe er feil med beskrivelsen!";
+  const { category, category_is_population } = parts;
+
+  const ageRangeText = getAgeRange(analyse, lang);
+  return [
+    !category_is_population &&
+      category[0].toUpperCase() + category.substring(1),
+    ageRangeText,
+  ]
+    .filter(Boolean)
+    .join(", ");
 }
