@@ -105,7 +105,7 @@ export default async function MainPage(props: MainPageProps) {
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/${komp.name}`}
+                href={`/${lang}/${komp.name}/`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
@@ -128,7 +128,7 @@ export default async function MainPage(props: MainPageProps) {
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/analyse/${analyse.name}`}
+                href={`/${lang}/analyse/${analyse.name}/`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
