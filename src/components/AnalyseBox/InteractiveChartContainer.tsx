@@ -27,7 +27,7 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PublicIcon from "@mui/icons-material/Public";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 
-import { Analyse, Lang } from "@/types";
+import { Analyse, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
 import { AnalyseLineChart } from "./AnalyseLineChart";
 
@@ -59,14 +59,18 @@ export function InteractiveChartContainer({
   years.sort((a, b) => b - a);
 
   const [year, setYear] = React.useState(Math.max(...years));
-  const [timelineVar, setTimelineVar] = React.useState<[number, number]>([
-    0, 0,
+  const [timelineVar, setTimelineVar] = React.useState<[string, number]>([
+    "total",
+    0,
   ]);
   const [showNorway, setShowNorway] = React.useState(false);
 
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
-  const [view, setView] = React.useState<"tidstrend" | number>(0);
+  const [view, setView] = React.useState("total");
   const graphRef = React.useRef<null | HTMLDivElement>(null);
+
+  const currentView = analyse.views.find((v) => v.name === view);
+  // ^ currentView is undefined if view is "tidstrend"
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
@@ -102,26 +106,26 @@ export function InteractiveChartContainer({
   );
 
   const maxValues = React.useMemo(() => {
-    const calculateMaxValue = (view_index: number, var_index: number) =>
+    const calculateMaxValue = (viewName: string, var_index: number) =>
       Math.max(
         ...Object.keys(analyse.data[level])
           .filter((area) => showNorway || area !== "8888")
           .map((area) =>
             Math.max(
               ...Object.keys(analyse.data[level][area]).map(
-                (year) =>
-                  analyse.data[level][area][year][view_index][var_index],
+                (year) => analyse.data[level][area][year][viewName][var_index],
               ),
             ),
           ),
       );
-    return Object.fromEntries(
-      analyse.views
-        .flatMap((view, i) =>
-          view.variables.map((_, j) => [`${i},${j}`, calculateMaxValue(i, j)]),
-        )
-        .concat([["0,1", calculateMaxValue(0, 1)]]),
+    const mapping = Object.fromEntries(
+      analyse.views.map((view, i) => [
+        view.name,
+        view.variables.map((_, j) => calculateMaxValue(view.name, j)),
+      ]),
     );
+    mapping["total"].push(calculateMaxValue("total", 1));
+    return mapping;
   }, [analyse, level, showNorway]);
 
   return (
@@ -142,16 +146,10 @@ export function InteractiveChartContainer({
               id="select-view"
               value={view}
               label={dict.analysebox.view_select}
-              onChange={(e) =>
-                setView(
-                  e.target.value === "tidstrend"
-                    ? "tidstrend"
-                    : Number(e.target.value),
-                )
-              }
+              onChange={(e) => setView(e.target.value)}
             >
               {analyse.views.map((view, i) => (
-                <MenuItem key={i} value={i}>
+                <MenuItem key={i} value={view.name}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
                       <BarChartIcon sx={{ marginRight: 1 }} color="primary" />
@@ -228,13 +226,12 @@ export function InteractiveChartContainer({
                 id="select-variable"
                 value={String(timelineVar)}
                 label={dict.analysebox.variable_select}
-                onChange={(e) =>
-                  setTimelineVar(
-                    e.target.value.split(",").map(Number) as [number, number],
-                  )
-                }
+                onChange={(e) => {
+                  const [viewName, variable] = e.target.value.split(",");
+                  setTimelineVar([viewName, Number(variable)]);
+                }}
               >
-                <MenuItem value={"0,0"}>
+                <MenuItem value={"total,0"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
                       <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
@@ -242,7 +239,7 @@ export function InteractiveChartContainer({
                     <Grid>Total</Grid>
                   </Grid>
                 </MenuItem>
-                <MenuItem value={"0,1"}>
+                <MenuItem value={"total,1"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
                       <NumbersIcon sx={{ marginRight: 1 }} color="primary" />
@@ -259,7 +256,10 @@ export function InteractiveChartContainer({
                         </ListSubheader>,
                       ].concat(
                         view.variables.map((variable, j) => (
-                          <MenuItem value={`${i},${j}`} key={`${i}_${j}`}>
+                          <MenuItem
+                            value={`${view.name},${j}`}
+                            key={`${view.name}_${j}`}
+                          >
                             <Grid container alignItems="center" wrap="nowrap">
                               <Grid display="flex">
                                 <ZoomInIcon
@@ -358,10 +358,9 @@ export function InteractiveChartContainer({
 
           <MenuItem
             onClick={(e) => {
-              const filename =
-                view === "tidstrend"
-                  ? `${analyse.name}_tidstrend.png`
-                  : `${analyse.name}_${analyse.views[view].title[lang].toLowerCase().replace(" ", "_")}_${year}.png`;
+              const filename = !currentView
+                ? `${analyse.name}_tidstrend.png`
+                : `${analyse.name}_${currentView.title[lang].toLowerCase().replace(" ", "_")}_${year}.png`;
 
               getCanvas().then((canvas) =>
                 canvas.toBlob((blob) => blob && saveAs(blob, filename)),
@@ -415,16 +414,16 @@ export function InteractiveChartContainer({
               showNorway={showNorway}
               selection={selection}
               lang={lang}
-              maxValue={maxValues[String(timelineVar)]}
+              maxValue={maxValues[timelineVar[0]][timelineVar[1]]}
             />
           ) : (
             <AnalyseBarChart
               analyse={analyse}
               year={year}
               level={level}
-              view={view}
+              view={currentView as View}
               lang={lang}
-              maxValue={maxValues["0,0"]}
+              maxValue={maxValues["total"][0]}
               selection={selection}
               onClick={(area) => {
                 if (area !== 8888)
@@ -446,11 +445,11 @@ export function InteractiveChartContainer({
             "@media print": { padding: 0 },
           }}
         >
-          {view !== "tidstrend" || String(timelineVar) === "0,0" ? (
+          {view !== "tidstrend" || String(timelineVar) === "total,0" ? (
             <Typography variant="body2">
               {getDescription(analyse, lang, "rate")}
             </Typography>
-          ) : view === "tidstrend" && String(timelineVar) === "0,1" ? (
+          ) : view === "tidstrend" && String(timelineVar) === "total,1" ? (
             <>
               <Typography variant="body2" sx={{ display: "inline" }}>
                 {getDescription(analyse, lang, "antall")}
@@ -476,7 +475,10 @@ export function InteractiveChartContainer({
               {getDescription(analyse, lang, "rate")}
               {": "}
               <i>
-                {analyse.views[timelineVar[0]].variables[timelineVar[1]][lang]}
+                {
+                  (analyse.views.find((v) => v.name === timelineVar[0]) as View)
+                    .variables[timelineVar[1]][lang]
+                }
               </i>
             </Typography>
           )}

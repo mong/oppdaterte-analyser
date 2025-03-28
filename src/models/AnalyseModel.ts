@@ -29,7 +29,10 @@ const schemaType = {
       type: Map,
       of: {
         type: Map,
-        of: [[Number]],
+        of: {
+          type: Map,
+          of: [Number],
+        },
       },
     },
   },
@@ -47,4 +50,4 @@ analyseSchema.index(
 
 export const AnalyseModel =
   mongoose.models.Analyse ||
-  mongoose.model<Analyse>("Analyse", analyseSchema, "analyser");
+  mongoose.model<Analyse>("Analyse", analyseSchema, "analyserCopy");

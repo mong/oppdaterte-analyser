@@ -46,7 +46,7 @@ type AnalyseLineChartProps = {
   analyse: Analyse;
   years: number[];
   level: "region" | "sykehus";
-  variable: [number, number];
+  variable: [string, number];
   showNorway: boolean;
   selection: Selection;
   lang: Lang;
@@ -136,7 +136,7 @@ export const AnalyseLineChart = ({
       series={selectionIDs
         .filter(
           (area) =>
-            area !== "8888" || variable.toString() !== "0,1" || showNorway,
+            area !== "8888" || variable.toString() !== "total,1" || showNorway,
         )
         .map((area) => ({
           dataKey: area,

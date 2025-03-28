@@ -31,7 +31,9 @@ export interface Analyse {
   data: {
     [key: string]: {
       [key: string]: {
-        [key: string]: number[][];
+        [key: string]: {
+          [key: string]: number[];
+        };
       };
     };
   };

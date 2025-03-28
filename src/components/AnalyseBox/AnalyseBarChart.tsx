@@ -1,4 +1,4 @@
-import { Analyse, Lang, Text } from "@/types";
+import { Analyse, Lang, Text, View } from "@/types";
 import { BarChart, BarElementPath } from "@mui/x-charts/BarChart";
 import { regions_dict, Selection } from "@/lib/nameMapping";
 import { ChartsText } from "@mui/x-charts/ChartsText";
@@ -9,7 +9,7 @@ type AnalyseBarChartProps = {
   analyse: Analyse;
   year: number;
   level: "region" | "sykehus";
-  view: number;
+  view: View;
   lang: Lang;
   selection: Selection;
   maxValue: number;
@@ -30,8 +30,7 @@ export const AnalyseBarChart = ({
     total: [{ no: "Rate", en: "Rate" }],
   };
 
-  const viewData = analyse.views[view];
-  const labels = defaultLabels[viewData.name] || viewData.variables;
+  const labels = defaultLabels[view.name] || view.variables;
 
   type DataPoint = {
     area: string;
@@ -47,12 +46,12 @@ export const AnalyseBarChart = ({
       sum: 0,
     };
 
-    for (let i = 0; i < Math.max(viewData.variables?.length || 0, 1); i++) {
-      datapoint[i] = analyse.data[level][area][year][view][i];
+    for (let i = 0; i < Math.max(view.variables?.length || 0, 1); i++) {
+      datapoint[i] = analyse.data[level][area][year][view.name][i];
       datapoint.sum += datapoint[i];
     }
-    if (viewData.name === "total") {
-      datapoint.n = analyse.data[level][area][year][view][1];
+    if (view.name === "total") {
+      datapoint.n = analyse.data[level][area][year][view.name][1];
     }
 
     dataset.push(datapoint);
@@ -64,7 +63,7 @@ export const AnalyseBarChart = ({
   );
 
   const getTotalObservations = (area: string) =>
-    analyse.data[level][area][year][0][1];
+    analyse.data[level][area][year]["total"][1];
 
   const nameToArea = Object.fromEntries(
     dataset.map((bar) => [
@@ -139,7 +138,7 @@ export const AnalyseBarChart = ({
         id: `${i}`,
         valueFormatter: (v, context) => {
           let percent = "";
-          if (view > 0 && v !== null) {
+          if (view.name !== "total" && v !== null) {
             percent = ` (${formatNumber(v / dataset[context.dataIndex].sum, lang, { style: "percent" })})`;
           }
           return formatNumber(v || 0, lang, {}) + percent;
