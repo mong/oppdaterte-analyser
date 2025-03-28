@@ -16,12 +16,12 @@ export default function downloadCsv(analyse: Analyse, lang: Lang): void {
           [{ no: "Opptaksområde", en: "Catchment area" }[lang]]:
             regions_dict[lang][nivå as "sykehus" | "region"][Number(area)],
           [{ no: "År", en: "Year" }[lang]]: year,
-          n: analyse.data[nivå][area][year][0][1],
+          n: analyse.data[nivå][area][year]["total"][1],
           ...Object.fromEntries(
-            analyse.views.flatMap((view, view_index) =>
+            analyse.views.flatMap((view) =>
               view.variables.map((variable, variable_index) => [
                 variable[lang],
-                analyse.data[nivå][area][year][view_index][variable_index],
+                analyse.data[nivå][area][year][view.name][variable_index],
               ]),
             ),
           ),
