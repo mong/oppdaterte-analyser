@@ -50,4 +50,4 @@ analyseSchema.index(
 
 export const AnalyseModel =
   mongoose.models.Analyse ||
-  mongoose.model<Analyse>("Analyse", analyseSchema, "analyserCopy");
+  mongoose.model<Analyse>("Analyse", analyseSchema, "analyser");
