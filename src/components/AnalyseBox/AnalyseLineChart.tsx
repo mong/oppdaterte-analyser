@@ -100,12 +100,12 @@ export const AnalyseLineChart = ({
 
       var parenthesis = "";
 
-      if (String(variable) === "0,0") {
+      if (String(variable) === "total,0") {
         var parenthesis = `(n = ${formatNumber(
-          analyse.data[level][area][year][0][1],
+          analyse.data[level][area][year]["total"][1],
           lang,
         )})`;
-      } else if (String(variable) !== "0,1") {
+      } else if (String(variable) !== "total,1") {
         let sum = analyse.data[level][area][year][variable[0]].reduce(
           (acc, current) => acc + current,
         );
