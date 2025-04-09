@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { CircularProgress, Container, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";

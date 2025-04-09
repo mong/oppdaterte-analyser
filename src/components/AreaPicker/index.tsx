@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { hospitalStructure, regions_dict, Selection } from "@/lib/nameMapping";
 import { Lang } from "@/types";
 import {

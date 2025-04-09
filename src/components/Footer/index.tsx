@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import { ArrowForward, ArrowOutward } from "@mui/icons-material";
 import Link from "next/link";
 import { Link as MUILink } from "@mui/material";

@@ -13,7 +13,7 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import { Analyse, Tag, Lang } from "@/types";
 

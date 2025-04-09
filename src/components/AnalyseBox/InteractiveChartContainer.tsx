@@ -17,7 +17,7 @@ import {
   ListSubheader,
   FormControlLabel,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import InsightsIcon from "@mui/icons-material/InsightsOutlined";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import CloseIcon from "@mui/icons-material/Close";
