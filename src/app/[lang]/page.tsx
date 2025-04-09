@@ -11,7 +11,6 @@ import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyser, getKompendier } from "@/services/mongo";
 import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import UnderDevelopment from "@/components/UnderDevelopment";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
 
@@ -95,7 +94,6 @@ export default async function MainPage(props: MainPageProps) {
         />
       </Header>
       <main>
-        <UnderDevelopment lang={lang} />
         <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
           <Typography variant="h3">{dict.frontpage.fagområder}</Typography>
           <br />

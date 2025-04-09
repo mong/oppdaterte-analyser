@@ -8,7 +8,6 @@ import { getDictionary } from "@/lib/dictionaries";
 
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import UnderDevelopment from "@/components/UnderDevelopment";
 import AnalyseBoxWrapper from "@/components/AnalyseBoxWrapper";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 
@@ -74,7 +73,6 @@ export default async function KompendiumPage(props: {
         />
       </Header>
       <main>
-        <UnderDevelopment lang={lang} />
         <Container
           maxWidth="xl"
           disableGutters={false}

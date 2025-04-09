@@ -15,7 +15,6 @@ import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import UnderDevelopment from "@/components/UnderDevelopment";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
@@ -120,7 +119,6 @@ export default async function AnalysePage(props: {
         {bottomGrid}
       </Header>
       <main>
-        <UnderDevelopment lang={lang} />
         {analyse.version === 0 && (
           <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
             <Alert severity="warning">
