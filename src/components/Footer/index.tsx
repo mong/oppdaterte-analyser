@@ -2,8 +2,7 @@ import Image from "next/image";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { ArrowForward, ArrowOutward } from "@mui/icons-material";
-import Link from "next/link";
-import { Link as MUILink } from "@mui/material";
+import { Link } from "@mui/material";
 import { JSX, PropsWithChildren } from "react";
 
 /*
@@ -25,12 +24,12 @@ export default function Footer() {
               <Stack spacing={3}>
                 <h4>OM NETTSTEDET</h4>
                 <ArrowLink
-                  href={"https://www.skde.no/om-skde/personvern/"}
+                  href={"https://www.skde.no/personvern/"}
                   text="Personvern"
                   textVariant="body2"
                 />
                 <ArrowLink
-                  href={"https://www.skde.no/om-skde/informasjonskapsler/"}
+                  href={"https://www.skde.no/informasjonskapsler/"}
                   text="Informasjonskapsler"
                   textVariant="body2"
                 />
@@ -49,7 +48,7 @@ export default function Footer() {
               <Stack spacing={3}>
                 <h4>KONTAKT</h4>
                 <ArrowLink
-                  href={"https://www.skde.no/om-skde/kontaktinformasjon/"}
+                  href={"https://www.skde.no/alt-om-oss/kontakt-skde/"}
                   text="Kontakt SKDE"
                   textVariant="body2"
                 />
@@ -146,10 +145,8 @@ const StyledLink = ({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) => (
-  <Link href={href} passHref legacyBehavior>
-    <MUILink sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
-      {children}
-    </MUILink>
+  <Link href={href} sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
+    {children}
   </Link>
 );
 
@@ -197,15 +194,15 @@ export const ArrowLink = (props: ArrowLinkProps) => {
       </Stack>
     </Button>
   ) : (
-    <Link href={href} target={target} passHref legacyBehavior>
-      <MUILink
-        sx={{ textDecoration: "none", color: "inherit", fontStyle: "normal" }}
-      >
-        <Stack alignItems="center" direction="row" gap={1}>
-          <Typography variant={textVariant}>{text}</Typography>
-          {arrow}
-        </Stack>
-      </MUILink>
+    <Link
+      href={href}
+      target={target}
+      sx={{ textDecoration: "none", color: "inherit", fontStyle: "normal" }}
+    >
+      <Stack alignItems="center" direction="row" gap={1}>
+        <Typography variant={textVariant}>{text}</Typography>
+        {arrow}
+      </Stack>
     </Link>
   );
 };
