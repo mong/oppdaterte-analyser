@@ -146,11 +146,9 @@ const StyledLink = ({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) => (
-  <Link href={href} passHref legacyBehavior>
-    <MUILink sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
-      {children}
-    </MUILink>
-  </Link>
+  <MUILink href={href} sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
+    {children}
+  </MUILink>
 );
 
 type ArrowLinkProps = {
@@ -197,15 +195,15 @@ export const ArrowLink = (props: ArrowLinkProps) => {
       </Stack>
     </Button>
   ) : (
-    <Link href={href} target={target} passHref legacyBehavior>
-      <MUILink
-        sx={{ textDecoration: "none", color: "inherit", fontStyle: "normal" }}
-      >
-        <Stack alignItems="center" direction="row" gap={1}>
-          <Typography variant={textVariant}>{text}</Typography>
-          {arrow}
-        </Stack>
-      </MUILink>
-    </Link>
+    <MUILink
+      href={href}
+      target={target}
+      sx={{ textDecoration: "none", color: "inherit", fontStyle: "normal" }}
+    >
+      <Stack alignItems="center" direction="row" gap={1}>
+        <Typography variant={textVariant}>{text}</Typography>
+        {arrow}
+      </Stack>
+    </MUILink>
   );
 };
