@@ -2,8 +2,7 @@ import Image from "next/image";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { ArrowForward, ArrowOutward } from "@mui/icons-material";
-import Link from "next/link";
-import { Link as MUILink } from "@mui/material";
+import { Link } from "@mui/material";
 import { JSX, PropsWithChildren } from "react";
 
 /*
@@ -146,9 +145,9 @@ const StyledLink = ({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) => (
-  <MUILink href={href} sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
+  <Link href={href} sx={{ textDecoration: "underline", color: "#c4dbf3" }}>
     {children}
-  </MUILink>
+  </Link>
 );
 
 type ArrowLinkProps = {
@@ -195,7 +194,7 @@ export const ArrowLink = (props: ArrowLinkProps) => {
       </Stack>
     </Button>
   ) : (
-    <MUILink
+    <Link
       href={href}
       target={target}
       sx={{ textDecoration: "none", color: "inherit", fontStyle: "normal" }}
@@ -204,6 +203,6 @@ export const ArrowLink = (props: ArrowLinkProps) => {
         <Typography variant={textVariant}>{text}</Typography>
         {arrow}
       </Stack>
-    </MUILink>
+    </Link>
   );
 };
