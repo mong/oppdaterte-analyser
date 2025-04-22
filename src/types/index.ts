@@ -37,6 +37,15 @@ export interface Analyse {
       };
     };
   };
+  demografi: {
+    [key: string]: {
+      [key: string]: {
+        [key: string]: {
+          [key: string]: number[];
+        };
+      };
+    };
+  };
 }
 
 export interface Tag {

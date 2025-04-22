@@ -4,7 +4,7 @@ import { Analyse } from "@/types";
 import TagModel from "@/models/TagModel";
 import { Tag } from "@/types";
 
-const TEST_DATABASE = false;
+const TEST_DATABASE = true;
 
 export function toPlainObject<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));

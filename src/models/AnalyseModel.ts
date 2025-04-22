@@ -36,6 +36,19 @@ const schemaType = {
       },
     },
   },
+  demografi: {
+    type: Map,
+    of: {
+      type: Map,
+      of: {
+        type: Map,
+        of: {
+          type: Map,
+          of: [Number],
+        },
+      },
+    },
+  },
 };
 
 const analyseSchema = new Schema<Analyse>(schemaType, {
