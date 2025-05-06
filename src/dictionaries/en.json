@@ -10,6 +10,8 @@
     "demography": "Demography",
     "demography_n_people": "Number of people",
     "demography_proportion": "Proportion of age group",
+    "demography_proportion_gender": "Proportion of gender and age group",
+    "demography_split_gender": "Split on gender",
     "sykehus": "Hospital",
     "region": "Region",
     "choose_area": "Choose referral areas",

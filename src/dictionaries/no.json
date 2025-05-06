@@ -10,6 +10,8 @@
     "demography": "Demografi",
     "demography_n_people": "Antall personer",
     "demography_proportion": "Andel av aldersgruppe",
+    "demography_proportion_gender": "Andel av kjønns- og aldersgruppe",
+    "demography_split_gender": "Del på kjønn",
     "sykehus": "Helseforetak",
     "region": "Region",
     "choose_area": "Velg opptaksområder",

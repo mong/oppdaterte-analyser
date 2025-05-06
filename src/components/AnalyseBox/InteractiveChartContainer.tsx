@@ -508,7 +508,6 @@ export function InteractiveChartContainer({
             />
           )}
         </Box>
-
         <Box
           sx={{
             textAlign: "center",
@@ -523,7 +522,7 @@ export function InteractiveChartContainer({
                 {!demographyAndel
                   ? dict.analysebox.demography_n_people
                   : showGenders
-                    ? "Andel av kjønns- og aldersgruppe"
+                    ? dict.analysebox.demography_proportion_gender
                     : dict.analysebox.demography_proportion}
               </Typography>
             </>
@@ -604,7 +603,7 @@ export function InteractiveChartContainer({
                     onChange={() => setShowGenders(!showGenders)}
                   />
                 }
-                label="Del på kjønn"
+                label={dict.analysebox.demography_split_gender}
               />
             </Box>
             <Box
