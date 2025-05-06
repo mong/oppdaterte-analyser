@@ -69,8 +69,6 @@ export default async function AnalysePage(props: {
     notFound();
   }
 
-  console.log("analyse.demografi", analyse.demografi);
-
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
 

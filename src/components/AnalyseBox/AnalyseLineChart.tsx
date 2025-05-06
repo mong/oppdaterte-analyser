@@ -124,14 +124,7 @@ export const AnalyseLineChart = ({
         bottom: 25,
       }}
       dataset={dataset}
-      xAxis={[
-        {
-          scaleType: "point",
-          dataKey: "year",
-          valueFormatter: (y) => y.toString(),
-          tickPlacement: "middle",
-        },
-      ]}
+      xAxis={[{ scaleType: "point", dataKey: "year" }]}
       yAxis={[{ min: 0, max: maxValue * 1.01 }]}
       series={selectionIDs
         .filter(
@@ -149,8 +142,6 @@ export const AnalyseLineChart = ({
         }))}
       slotProps={{
         legend: {
-          direction: "row",
-          position: { vertical: "top", horizontal: "middle" },
           padding: {
             top: 10,
             left: 10,

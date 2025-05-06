@@ -24,7 +24,7 @@ export function formatNumber(
   return new Intl.NumberFormat(lang, {
     maximumFractionDigits:
       options?.style === "percent"
-        ? Number(number < 0.1)
+        ? Number(number < 0.1) + Number(number < 0.05) + Number(number < 0.0015)
         : 1 + Number(number < 5) + Number(number < 0.5),
     ...options,
   }).format(number);

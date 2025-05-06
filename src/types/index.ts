@@ -19,6 +19,7 @@ export interface Analyse {
   published: boolean;
   tags: string[];
   age_range: [number, number];
+  kjonn: "begge" | "menn" | "kvinner";
   title: Text;
   description: Text;
   summary: Text;

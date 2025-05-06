@@ -13,9 +13,12 @@ import {
   Menu,
   Snackbar,
   Slide,
-  Checkbox,
   ListSubheader,
   FormControlLabel,
+  Switch,
+  ToggleButtonGroup,
+  ToggleButton,
+  Slider,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import InsightsIcon from "@mui/icons-material/InsightsOutlined";
@@ -26,6 +29,9 @@ import JoinFullIcon from "@mui/icons-material/JoinFull";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PublicIcon from "@mui/icons-material/Public";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import GroupsIcon from "@mui/icons-material/Groups";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 
 import { Analyse, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -38,6 +44,7 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { getDescription } from "@/lib/helpers";
+import AnalyseDemography from "./AnalyseDemography";
 
 export type InteractiveChartContainerProps = {
   analyse: Analyse;
@@ -58,12 +65,21 @@ export function InteractiveChartContainer({
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
 
-  const [year, setYear] = React.useState(Math.max(...years));
-  const [timelineVar, setTimelineVar] = React.useState<[string, number]>([
+  const lastYear = Math.max(...years);
+  const [year, setYear] = React.useState<number | "all_years">(lastYear);
+  const [variable, setVariable] = React.useState<[string, number]>([
     "total",
     0,
   ]);
   const [showNorway, setShowNorway] = React.useState(false);
+  const [showGenders, setShowGenders] = React.useState(true);
+  const [demographyAndel, setDemographyAndel] = React.useState(false);
+
+  const [animating, setAnimating] = React.useState(false);
+  const animatingRef = React.useRef(false);
+  React.useEffect(() => {
+    animatingRef.current = animating;
+  }, [animating]);
 
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
   const [view, setView] = React.useState("total");
@@ -112,7 +128,7 @@ export function InteractiveChartContainer({
           .filter((area) => showNorway || area !== "8888")
           .map((area) =>
             Math.max(
-              ...Object.keys(analyse.data[level][area]).map(
+              ...years.map(
                 (year) => analyse.data[level][area][year][viewName][var_index],
               ),
             ),
@@ -127,6 +143,14 @@ export function InteractiveChartContainer({
     mapping["total"].push(calculateMaxValue("total", 1));
     return mapping;
   }, [analyse, level, showNorway]);
+
+  const demographyAvailable = !analyse.demografi
+    ? {}
+    : Object.fromEntries(
+        Object.keys(analyse.demografi[lastYear][analyse.age_range[0]])
+          .filter((v) => v !== "population")
+          .map((v) => [v, true]),
+      );
 
   return (
     <Box>
@@ -146,7 +170,17 @@ export function InteractiveChartContainer({
               id="select-view"
               value={view}
               label={dict.analysebox.view_select}
-              onChange={(e) => setView(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value === "demografi") {
+                  setYear("all_years");
+                  if (
+                    String(variable) === "total,1" ||
+                    !demographyAvailable[variable[0]]
+                  )
+                    setVariable(["total", 0]);
+                } else if (year === "all_years") setYear(lastYear);
+                setView(e.target.value);
+              }}
             >
               {analyse.views.map((view, i) => (
                 <MenuItem key={i} value={view.name}>
@@ -166,51 +200,21 @@ export function InteractiveChartContainer({
                   <Grid>{dict.analysebox.time_series}</Grid>
                 </Grid>
               </MenuItem>
+              {analyse.demografi && (
+                <MenuItem value={"demografi"}>
+                  <Grid container alignItems="center">
+                    <Grid display="flex">
+                      <GroupsIcon sx={{ marginRight: 1 }} color="primary" />
+                    </Grid>
+                    <Grid>{dict.analysebox.demography}</Grid>
+                  </Grid>
+                </MenuItem>
+              )}
             </Select>
           </FormControl>
         </Grid>
 
-        <Grid
-          size={{ xs: 12, sm: 4 }}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <FormControl fullWidth>
-            <InputLabel id="select-level-label">
-              {dict.analysebox.area_select}
-            </InputLabel>
-            <Select
-              labelId="select-level-label"
-              id="select-level"
-              value={level}
-              label={dict.analysebox.area_select}
-              onChange={(e) => setLevel(e.target.value as "sykehus" | "region")}
-            >
-              <MenuItem value={"sykehus"}>
-                <Grid container alignItems="center" wrap="nowrap">
-                  <Grid display="flex">
-                    <LocalHospitalIcon
-                      sx={{ marginRight: 1 }}
-                      color="primary"
-                    />
-                  </Grid>
-                  <Grid>{dict.analysebox.sykehus}</Grid>
-                </Grid>
-              </MenuItem>
-              <MenuItem value={"region"}>
-                <Grid container alignItems="center" wrap="nowrap">
-                  <Grid display="flex">
-                    <PublicIcon sx={{ marginRight: 1 }} color="primary" />
-                  </Grid>
-                  <Grid>{dict.analysebox.region}</Grid>
-                </Grid>
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        {view === "tidstrend" ? (
+        {view !== "demografi" && (
           <Grid
             size={{ xs: 12, sm: 4 }}
             display="flex"
@@ -218,65 +222,43 @@ export function InteractiveChartContainer({
             alignItems="center"
           >
             <FormControl fullWidth>
-              <InputLabel id="select-variable-label">
-                {dict.analysebox.variable_select}
+              <InputLabel id="select-level-label">
+                {dict.analysebox.area_select}
               </InputLabel>
               <Select
-                labelId="select-variable-label"
-                id="select-variable"
-                value={String(timelineVar)}
-                label={dict.analysebox.variable_select}
-                onChange={(e) => {
-                  const [viewName, variable] = e.target.value.split(",");
-                  setTimelineVar([viewName, Number(variable)]);
-                }}
+                labelId="select-level-label"
+                id="select-level"
+                value={level}
+                label={dict.analysebox.area_select}
+                onChange={(e) =>
+                  setLevel(e.target.value as "sykehus" | "region")
+                }
               >
-                <MenuItem value={"total,0"}>
+                <MenuItem value={"sykehus"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
-                      <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
+                      <LocalHospitalIcon
+                        sx={{ marginRight: 1 }}
+                        color="primary"
+                      />
                     </Grid>
-                    <Grid>Total</Grid>
+                    <Grid>{dict.analysebox.sykehus}</Grid>
                   </Grid>
                 </MenuItem>
-                <MenuItem value={"total,1"}>
+                <MenuItem value={"region"}>
                   <Grid container alignItems="center" wrap="nowrap">
                     <Grid display="flex">
-                      <NumbersIcon sx={{ marginRight: 1 }} color="primary" />
+                      <PublicIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
-                    <Grid>{dict.analysebox.number_variable}</Grid>
+                    <Grid>{dict.analysebox.region}</Grid>
                   </Grid>
                 </MenuItem>
-                {analyse.views.map((view, i) =>
-                  i === 0
-                    ? []
-                    : [
-                        <ListSubheader key={i}>
-                          {view.title[lang]}
-                        </ListSubheader>,
-                      ].concat(
-                        view.variables.map((variable, j) => (
-                          <MenuItem
-                            value={`${view.name},${j}`}
-                            key={`${view.name}_${j}`}
-                          >
-                            <Grid container alignItems="center" wrap="nowrap">
-                              <Grid display="flex">
-                                <ZoomInIcon
-                                  sx={{ marginRight: 1 }}
-                                  color="primary"
-                                />
-                              </Grid>
-                              <Grid>{variable[lang]}</Grid>
-                            </Grid>
-                          </MenuItem>
-                        )),
-                      ),
-                )}
               </Select>
             </FormControl>
           </Grid>
-        ) : (
+        )}
+
+        {view !== "tidstrend" && (
           <Grid
             size={{ xs: 12, sm: 4 }}
             display="flex"
@@ -292,13 +274,93 @@ export function InteractiveChartContainer({
                 id="select-year"
                 value={year.toString()}
                 label={dict.analysebox.year_select}
-                onChange={(e) => setYear(Number(e.target.value))}
+                onChange={(e) =>
+                  setYear(
+                    e.target.value === "all_years"
+                      ? "all_years"
+                      : Number(e.target.value),
+                  )
+                }
               >
+                {view === "demografi" && (
+                  <MenuItem value={"all_years"}>
+                    {dict.analysebox.all_years}
+                  </MenuItem>
+                )}
                 {years.map((y) => (
                   <MenuItem key={y.toString()} value={y}>
                     {y}
                   </MenuItem>
                 ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
+
+        {["tidstrend", "demografi"].includes(view) && (
+          <Grid
+            size={{ xs: 12, sm: 4 }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <FormControl fullWidth>
+              <InputLabel id="select-variable-label">
+                {dict.analysebox.variable_select}
+              </InputLabel>
+              <Select
+                labelId="select-variable-label"
+                id="select-variable"
+                value={String(variable)}
+                label={dict.analysebox.variable_select}
+                onChange={(e) => {
+                  const [viewName, variable] = e.target.value.split(",");
+                  setVariable([viewName, Number(variable)]);
+                }}
+              >
+                <MenuItem value={"total,0"}>
+                  <Grid container alignItems="center" wrap="nowrap">
+                    <Grid display="flex">
+                      <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
+                    </Grid>
+                    <Grid>Total</Grid>
+                  </Grid>
+                </MenuItem>
+                {view === "tidstrend" && (
+                  <MenuItem value={"total,1"}>
+                    <Grid container alignItems="center" wrap="nowrap">
+                      <Grid display="flex">
+                        <NumbersIcon sx={{ marginRight: 1 }} color="primary" />
+                      </Grid>
+                      <Grid>{dict.analysebox.number_variable}</Grid>
+                    </Grid>
+                  </MenuItem>
+                )}
+                {analyse.views.map((v, i) => {
+                  return v.name === "total" ||
+                    (view === "demografi" && !demographyAvailable[v.name])
+                    ? []
+                    : [
+                        <ListSubheader key={i}>{v.title[lang]}</ListSubheader>,
+                      ].concat(
+                        v.variables.map((variable, j) => (
+                          <MenuItem
+                            value={`${v.name},${j}`}
+                            key={`${v.name}_${j}`}
+                          >
+                            <Grid container alignItems="center" wrap="nowrap">
+                              <Grid display="flex">
+                                <ZoomInIcon
+                                  sx={{ marginRight: 1 }}
+                                  color="primary"
+                                />
+                              </Grid>
+                              <Grid>{variable[lang]}</Grid>
+                            </Grid>
+                          </MenuItem>
+                        )),
+                      );
+                })}
               </Select>
             </FormControl>
           </Grid>
@@ -410,16 +472,26 @@ export function InteractiveChartContainer({
               analyse={analyse}
               years={years}
               level={level}
-              variable={timelineVar}
+              variable={variable}
               showNorway={showNorway}
               selection={selection}
               lang={lang}
-              maxValue={maxValues[timelineVar[0]][timelineVar[1]]}
+              maxValue={maxValues[variable[0]][variable[1]]}
+            />
+          ) : view === "demografi" ? (
+            <AnalyseDemography
+              analyse={analyse}
+              showGenders={showGenders}
+              variable={variable}
+              andel={demographyAndel}
+              lang={lang}
+              year={year}
+              years={years}
             />
           ) : (
             <AnalyseBarChart
               analyse={analyse}
-              year={year}
+              year={year as number}
               level={level}
               view={currentView as View}
               lang={lang}
@@ -441,34 +513,52 @@ export function InteractiveChartContainer({
           sx={{
             textAlign: "center",
             padding: 1,
-            paddingBottom: 2,
+            paddingBottom: 0,
             "@media print": { padding: 0 },
           }}
         >
-          {view !== "tidstrend" || String(timelineVar) === "total,0" ? (
+          {view === "demografi" ? (
+            <>
+              <Typography variant="body2">
+                {!demographyAndel
+                  ? dict.analysebox.demography_n_people
+                  : showGenders
+                    ? "Andel av kjønns- og aldersgruppe"
+                    : dict.analysebox.demography_proportion}
+              </Typography>
+            </>
+          ) : view !== "tidstrend" || String(variable) === "total,0" ? (
             <Typography variant="body2">
               {getDescription(analyse, lang, "rate")}
             </Typography>
-          ) : view === "tidstrend" && String(timelineVar) === "total,1" ? (
+          ) : view === "tidstrend" && String(variable) === "total,1" ? (
             <>
-              <Typography variant="body2" sx={{ display: "inline" }}>
+              <Typography variant="body2">
                 {getDescription(analyse, lang, "antall")}
               </Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    sx={{ marginLeft: 2 }}
-                    checked={showNorway}
-                    onChange={() => setShowNorway(!showNorway)}
-                  />
-                }
-                label={
-                  <Typography variant="body2" sx={{ display: "inline" }}>
-                    {dict.analysebox.show_norway}
-                  </Typography>
-                }
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "end",
+                  paddingX: 2,
+                  paddingY: 1,
+                  alignItems: "center",
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={showNorway}
+                      onChange={() => setShowNorway(!showNorway)}
+                    />
+                  }
+                  label={
+                    <Typography variant="body2" sx={{ display: "inline" }}>
+                      {dict.analysebox.show_norway}
+                    </Typography>
+                  }
+                />
+              </Box>
             </>
           ) : (
             <Typography variant="body2">
@@ -476,16 +566,133 @@ export function InteractiveChartContainer({
               {": "}
               <i>
                 {
-                  (analyse.views.find((v) => v.name === timelineVar[0]) as View)
-                    .variables[timelineVar[1]][lang]
+                  (analyse.views.find((v) => v.name === variable[0]) as View)
+                    .variables[variable[1]][lang]
                 }
               </i>
             </Typography>
           )}
         </Box>
+        {view === "demografi" && (
+          <>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                paddingX: 2,
+                paddingY: 1,
+                alignItems: "center",
+              }}
+            >
+              <ToggleButtonGroup
+                color="primary"
+                value={demographyAndel ? "andel" : "antall"}
+                exclusive
+                size="small"
+                onChange={() => setDemographyAndel(!demographyAndel)}
+                aria-label="Platform"
+              >
+                <ToggleButton value={"antall"}>Antall</ToggleButton>
+                <ToggleButton value={"andel"}>Andel</ToggleButton>
+              </ToggleButtonGroup>
+
+              <FormControlLabel
+                disabled={analyse.kjonn !== "begge"}
+                control={
+                  <Switch
+                    checked={showGenders}
+                    onChange={() => setShowGenders(!showGenders)}
+                  />
+                }
+                label="Del på kjønn"
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                paddingLeft: 1,
+                paddingRight: 5,
+                paddingBottom: 1,
+              }}
+            >
+              <Box>
+                {animating ? (
+                  <IconButton onClick={() => setAnimating(false)}>
+                    <PauseIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={() => {
+                      setAnimating(true);
+                      var currentYear = ["all_years", lastYear].includes(year)
+                        ? Math.min(...years) - 1
+                        : (year as number);
+                      (function loop() {
+                        setTimeout(() => {
+                          if (currentYear < lastYear && animatingRef.current) {
+                            currentYear++;
+                            setYear(currentYear);
+
+                            loop();
+                          } else {
+                            setAnimating(false);
+                          }
+                        }, 600);
+                      })();
+                    }}
+                  >
+                    <PlayArrowIcon />
+                  </IconButton>
+                )}
+              </Box>
+              <Box sx={{ flexGrow: 1, marginLeft: 2 }}>
+                <Slider
+                  value={year === "all_years" ? lastYear + 1 : year}
+                  step={1}
+                  min={Math.min(...years)}
+                  max={lastYear + 1}
+                  onChange={(_, value) => {
+                    if (value === lastYear + 1) setYear("all_years");
+                    else setYear(value as number);
+                  }}
+                  valueLabelFormat={(value) =>
+                    value === lastYear + 1
+                      ? dict.analysebox.all_years
+                      : value.toString()
+                  }
+                  valueLabelDisplay="auto"
+                  marks={years
+                    .map((year) => ({
+                      value: year,
+                      label: year.toString(),
+                    }))
+                    .concat({
+                      value: lastYear + 1,
+                      label: dict.analysebox.all_years,
+                    })}
+                  sx={{
+                    "@media (max-width: 600px)": {
+                      "& .MuiSlider-markLabel": {
+                        fontSize: "0.75rem",
+                      },
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
 
-      <Box sx={{ padding: 2, paddingY: 0, displayPrint: "none" }}>
+      <Box
+        sx={{
+          padding: 2,
+          paddingBottom: 0,
+          paddingTop: 2,
+          displayPrint: "none",
+        }}
+      >
         <AreaPicker
           dict={dict}
           selection={selection}
