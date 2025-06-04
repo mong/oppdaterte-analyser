@@ -525,11 +525,17 @@ export function InteractiveChartContainer({
           {view === "demografi" ? (
             <>
               <Typography variant="body2">
-                {!demographyAndel
-                  ? dict.analysebox.demography_n_people
-                  : showGenders
-                    ? dict.analysebox.demography_proportion_gender
-                    : dict.analysebox.demography_proportion}
+                {demographyAndel
+                  ? dict.analysebox[
+                      showGenders
+                        ? "demography_proportion_gender"
+                        : "demography_proportion"
+                    ]
+                  : dict.analysebox[
+                      showGenders
+                        ? "demography_n_people_gender"
+                        : "demography_n_people"
+                    ]}
               </Typography>
             </>
           ) : view !== "tidstrend" || String(variable) === "total,0" ? (

@@ -154,6 +154,13 @@ const AnalyseDemography = ({
         {
           scaleType: "point",
           dataKey: "alder",
+          tickInterval: (value) =>
+            value % Math.floor(Math.max(1, aldre.length / 20)) === 0,
+          valueFormatter: (value, context) =>
+            value +
+            (context.location === "tooltip"
+              ? { no: " år", en: " years" }[lang]
+              : ""),
         },
       ]}
       yAxis={[
@@ -192,11 +199,10 @@ const AnalyseDemography = ({
         ...series,
         showMark: false,
         color: ["#00509E", "#95BDE6"][i],
-        valueFormatter: (value: number | null) => {
-          return andel
+        valueFormatter: (value: number | null) =>
+          andel
             ? formatNumber((value || 0) / 100, lang, { style: "percent" })
-            : formatNumber(value || 0, lang);
-        },
+            : formatNumber(value || 0, lang),
       }))}
       margin={{
         left: 50,
