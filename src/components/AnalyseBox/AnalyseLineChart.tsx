@@ -124,7 +124,13 @@ export const AnalyseLineChart = ({
         bottom: 25,
       }}
       dataset={dataset}
-      xAxis={[{ scaleType: "point", dataKey: "year" }]}
+      xAxis={[
+        {
+          scaleType: "point",
+          dataKey: "year",
+          valueFormatter: (value) => `${value}`,
+        },
+      ]}
       yAxis={[{ min: 0, max: maxValue * 1.01 }]}
       series={selectionIDs
         .filter(
