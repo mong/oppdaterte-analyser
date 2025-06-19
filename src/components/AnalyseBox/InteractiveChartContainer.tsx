@@ -21,6 +21,8 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Slider,
+  Button,
+  Zoom,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import InsightsIcon from "@mui/icons-material/InsightsOutlined";
@@ -34,6 +36,8 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 import { Analyse, Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -80,6 +84,8 @@ export function InteractiveChartContainer({
   const [showNorway, setShowNorway] = React.useState(false);
   const [showGenders, setShowGenders] = React.useState(true);
   const [demographyAndel, setDemographyAndel] = React.useState(false);
+
+  const [yearSelector, setYearSelector] = React.useState(false);
 
   const [animating, setAnimating] = React.useState(false);
   const animatingRef = React.useRef(false);
@@ -162,8 +168,9 @@ export function InteractiveChartContainer({
     <Box>
       <Grid container spacing={2} sx={{ padding: 2, paddingBottom: 1 }}>
         <Grid
-          size={{ xs: 12, sm: 4 }}
+          size={{ xs: 12, md: 4 }}
           display="flex"
+          sx={{ height: "3.75rem" }}
           justifyContent="center"
           alignItems="center"
         >
@@ -222,8 +229,9 @@ export function InteractiveChartContainer({
 
         {view !== "demografi" && (
           <Grid
-            size={{ xs: 12, sm: 4 }}
+            size={{ xs: 12, md: 4 }}
             display="flex"
+            sx={{ height: "3.75rem" }}
             justifyContent="center"
             alignItems="center"
           >
@@ -264,49 +272,11 @@ export function InteractiveChartContainer({
           </Grid>
         )}
 
-        {view !== "tidstrend" && (
-          <Grid
-            size={{ xs: 12, sm: 4 }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <FormControl fullWidth>
-              <InputLabel id="select-year-label">
-                {dict.analysebox.year_select}
-              </InputLabel>
-              <Select
-                labelId="select-year-label"
-                id="select-year"
-                value={year.toString()}
-                label={dict.analysebox.year_select}
-                onChange={(e) =>
-                  setYear(
-                    e.target.value === "all_years"
-                      ? "all_years"
-                      : Number(e.target.value),
-                  )
-                }
-              >
-                {view === "demografi" && (
-                  <MenuItem value={"all_years"}>
-                    {dict.analysebox.all_years}
-                  </MenuItem>
-                )}
-                {years.map((y) => (
-                  <MenuItem key={y.toString()} value={y}>
-                    {y}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        )}
-
         {["tidstrend", "demografi"].includes(view) && (
           <Grid
-            size={{ xs: 12, sm: 4 }}
+            size={{ xs: 12, md: 4 }}
             display="flex"
+            sx={{ height: "3.75rem" }}
             justifyContent="center"
             alignItems="center"
           >
@@ -329,7 +299,7 @@ export function InteractiveChartContainer({
                     <Grid display="flex">
                       <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
-                    <Grid>Total</Grid>
+                    <Grid>{dict.analysebox.totalrate}</Grid>
                   </Grid>
                 </MenuItem>
                 {view === "tidstrend" && (
@@ -371,7 +341,182 @@ export function InteractiveChartContainer({
             </FormControl>
           </Grid>
         )}
+
+        {view !== "tidstrend" && (
+          <Grid
+            size={{ xs: 12, md: 4 }}
+            display="flex"
+            sx={{ height: "3.75rem" }}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <>
+              <FormControl
+                fullWidth
+                sx={{ height: "100%", display: { xs: "none", md: "flex" } }}
+              >
+                <InputLabel
+                  id="select-year-label"
+                  shrink
+                  sx={{
+                    background: "white",
+                    paddingX: 1,
+                    borderRadius: 4,
+                    boxShadow: yearSelector
+                      ? "inset 0px -4px 2px rgb(194, 194, 194)"
+                      : "none",
+                  }}
+                >
+                  {dict.analysebox.year_select}
+                </InputLabel>
+                <Button
+                  sx={{
+                    ...(yearSelector ? {} : { color: "black" }),
+                    height: "100%",
+                    paddingX: 1.5,
+                    fontSize: "1.1667rem",
+                    fontWeight: 400,
+                    textTransform: "none",
+                    justifyContent: "space-between",
+                  }}
+                  color="primary"
+                  size="large"
+                  disableRipple
+                  variant={yearSelector ? "contained" : "outlined"}
+                  endIcon={
+                    yearSelector ? (
+                      <ArrowDropUpIcon />
+                    ) : (
+                      <ArrowDropDownIcon
+                        sx={{ color: "rgba(0, 0, 0, 0.54)" }}
+                      />
+                    )
+                  }
+                  onClick={() => setYearSelector(!yearSelector)}
+                >
+                  {year === "all_years" ? dict.analysebox.all_years : year}
+                </Button>
+              </FormControl>
+
+              <FormControl
+                fullWidth
+                sx={{ display: { xs: "flex", md: "none" } }}
+              >
+                <InputLabel id="select-year-label">
+                  {dict.analysebox.year_select}
+                </InputLabel>
+                <Select
+                  labelId="select-year-label"
+                  id="select-year"
+                  value={year.toString()}
+                  label={dict.analysebox.year_select}
+                  onChange={(e) =>
+                    setYear(
+                      e.target.value === "all_years"
+                        ? "all_years"
+                        : Number(e.target.value),
+                    )
+                  }
+                >
+                  {view === "demografi" && (
+                    <MenuItem value={"all_years"}>
+                      {dict.analysebox.all_years}
+                    </MenuItem>
+                  )}
+                  {years.map((y) => (
+                    <MenuItem key={y.toString()} value={y}>
+                      {y}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </>
+          </Grid>
+        )}
       </Grid>
+
+      {yearSelector && view !== "tidstrend" && (
+        <Zoom in={yearSelector && view !== "tidstrend"}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              justifyContent: "space-between",
+              marginTop: 2,
+              paddingLeft: 1,
+              paddingRight: 5,
+              paddingBottom: 1,
+            }}
+          >
+            <Box>
+              {animating ? (
+                <IconButton onClick={() => setAnimating(false)}>
+                  <PauseIcon />
+                </IconButton>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    setAnimating(true);
+                    var currentYear = ["all_years", lastYear].includes(year)
+                      ? Math.min(...years) - 1
+                      : (year as number);
+                    (function loop() {
+                      setTimeout(
+                        () => {
+                          if (currentYear < lastYear && animatingRef.current) {
+                            currentYear++;
+                            setYear(currentYear);
+
+                            loop();
+                          } else {
+                            setAnimating(false);
+                          }
+                        },
+                        600 + 400 * Number(view !== "demografi"),
+                      );
+                    })();
+                  }}
+                >
+                  <PlayArrowIcon />
+                </IconButton>
+              )}
+            </Box>
+            <Box sx={{ flexGrow: 1, marginLeft: 2 }}>
+              <Slider
+                value={year === "all_years" ? lastYear + 1 : year}
+                step={1}
+                min={Math.min(...years)}
+                max={lastYear + Number(view === "demografi")}
+                onChange={(_, value) => {
+                  if (value === lastYear + 1) setYear("all_years");
+                  else setYear(value as number);
+                }}
+                valueLabelFormat={(value) =>
+                  value === lastYear + 1
+                    ? dict.analysebox.all_years
+                    : value.toString()
+                }
+                valueLabelDisplay="auto"
+                marks={years
+                  .map((year) => ({
+                    value: year,
+                    label: year.toString(),
+                  }))
+                  .concat({
+                    value: lastYear + 1,
+                    label: dict.analysebox.all_years,
+                  })}
+                sx={{
+                  "@media (max-width: 600px)": {
+                    "& .MuiSlider-markLabel": {
+                      fontSize: "0.75rem",
+                    },
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+        </Zoom>
+      )}
 
       <Box sx={{ position: "sticky" }}>
         <Tooltip title={dict.analysebox.copy_graph_tooltip}>
@@ -618,80 +763,6 @@ export function InteractiveChartContainer({
                 label={dict.analysebox.demography_split_gender}
               />
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingLeft: 1,
-                paddingRight: 5,
-                paddingBottom: 1,
-              }}
-            >
-              <Box>
-                {animating ? (
-                  <IconButton onClick={() => setAnimating(false)}>
-                    <PauseIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    onClick={() => {
-                      setAnimating(true);
-                      var currentYear = ["all_years", lastYear].includes(year)
-                        ? Math.min(...years) - 1
-                        : (year as number);
-                      (function loop() {
-                        setTimeout(() => {
-                          if (currentYear < lastYear && animatingRef.current) {
-                            currentYear++;
-                            setYear(currentYear);
-
-                            loop();
-                          } else {
-                            setAnimating(false);
-                          }
-                        }, 600);
-                      })();
-                    }}
-                  >
-                    <PlayArrowIcon />
-                  </IconButton>
-                )}
-              </Box>
-              <Box sx={{ flexGrow: 1, marginLeft: 2 }}>
-                <Slider
-                  value={year === "all_years" ? lastYear + 1 : year}
-                  step={1}
-                  min={Math.min(...years)}
-                  max={lastYear + 1}
-                  onChange={(_, value) => {
-                    if (value === lastYear + 1) setYear("all_years");
-                    else setYear(value as number);
-                  }}
-                  valueLabelFormat={(value) =>
-                    value === lastYear + 1
-                      ? dict.analysebox.all_years
-                      : value.toString()
-                  }
-                  valueLabelDisplay="auto"
-                  marks={years
-                    .map((year) => ({
-                      value: year,
-                      label: year.toString(),
-                    }))
-                    .concat({
-                      value: lastYear + 1,
-                      label: dict.analysebox.all_years,
-                    })}
-                  sx={{
-                    "@media (max-width: 600px)": {
-                      "& .MuiSlider-markLabel": {
-                        fontSize: "0.75rem",
-                      },
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
           </>
         )}
       </Box>
@@ -721,7 +792,7 @@ export function InteractiveChartContainer({
         open={openSnackbar}
         autoHideDuration={4000}
         onClose={() => setOpenSnackbar(false)}
-        TransitionComponent={Slide}
+        slots={{ transition: Slide }}
         message={dict.analysebox.copy_graph_snackbar_message}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         action={

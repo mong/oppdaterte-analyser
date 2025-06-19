@@ -31,7 +31,8 @@
     "options": "Options",
     "summary": "Summary",
     "discussion": "Discussion",
-    "number_variable": "Number"
+    "number_variable": "Number",
+    "totalrate": "Total rate"
   },
   "general": {
     "updated_health_atlas": "Updated Health Atlas",
