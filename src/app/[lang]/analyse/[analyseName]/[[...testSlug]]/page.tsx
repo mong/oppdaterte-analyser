@@ -18,6 +18,7 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
+import { Compare } from "@/components/Compare";
 
 const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {
   const testPage = Boolean(
@@ -63,11 +64,13 @@ export default async function AnalysePage(props: {
   params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
 }) {
   const { lang, analyseName, testSlug } = await props.params;
-  const { analyse } = await getCorrectAnalyse(analyseName, testSlug);
+  const { testPage, analyse } = await getCorrectAnalyse(analyseName, testSlug);
 
   if (!analyse || !["en", "no"].includes(lang)) {
     notFound();
   }
+
+  const oldAnalyse = testPage && (await getAnalyse(analyseName, "published"));
 
   const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
@@ -119,22 +122,31 @@ export default async function AnalysePage(props: {
         {bottomGrid}
       </Header>
       <main>
-        {analyse.version === 0 && (
-          <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+        <Container
+          maxWidth="xl"
+          disableGutters={false}
+          sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
+        >
+          {analyse.version === 0 && (
             <Alert severity="warning">
               Dette er en test-side! Denne analysen er fortsatt ikke publisert.
             </Alert>
-          </Container>
-        )}
-        <Suspense
-          fallback={
-            <Grid container justifyContent="center" sx={{ padding: 10 }}>
-              <CircularProgress />
-            </Grid>
-          }
-        >
-          <AnalysePageContent lang={lang} analyse={analyse} />
-        </Suspense>
+          )}
+          <Suspense
+            fallback={
+              <Grid container justifyContent="center" sx={{ padding: 10 }}>
+                <CircularProgress />
+              </Grid>
+            }
+          >
+            {oldAnalyse && (
+              <Box sx={{ marginTop: 4 }}>
+                <Compare newAnalyse={analyse} oldAnalyse={oldAnalyse} />
+              </Box>
+            )}
+            <AnalysePageContent lang={lang} analyse={analyse} />
+          </Suspense>
+        </Container>
       </main>
     </>
   );
@@ -148,11 +160,7 @@ async function AnalysePageContent(props: { lang: Lang; analyse: Analyse }) {
   );
 
   return (
-    <Container
-      maxWidth="xl"
-      disableGutters={false}
-      sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
-    >
+    <>
       <Box sx={{ padding: 2 }}>
         <Typography variant="h3">{dict.analysebox.summary}</Typography>
         <Typography
@@ -204,6 +212,6 @@ async function AnalysePageContent(props: { lang: Lang; analyse: Analyse }) {
           />
         </Box>
       </Box>
-    </Container>
+    </>
   );
 }
