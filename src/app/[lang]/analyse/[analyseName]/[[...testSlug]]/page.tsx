@@ -4,6 +4,7 @@ import {
   Box,
   CircularProgress,
   Container,
+  Paper,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -139,10 +140,22 @@ export default async function AnalysePage(props: {
               </Grid>
             }
           >
-            {oldAnalyse && (
-              <Box sx={{ marginTop: 4 }}>
-                <Compare newAnalyse={analyse} oldAnalyse={oldAnalyse} />
-              </Box>
+            {testPage && (
+              <Paper
+                elevation={0}
+                sx={{
+                  marginTop: 2,
+                  padding: 2,
+                  paddingY: 4,
+                  boxShadow: "inset 0 0 25px #003087",
+                  background: "#F9F9F9",
+                }}
+              >
+                <Compare
+                  newAnalyse={analyse}
+                  oldAnalyse={await getAnalyse(analyseName, "published")}
+                />
+              </Paper>
             )}
             <AnalysePageContent lang={lang} analyse={analyse} />
           </Suspense>
