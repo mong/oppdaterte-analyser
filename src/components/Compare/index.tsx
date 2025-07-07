@@ -175,8 +175,8 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
                 Elem: () => (
                   <Box key={`${year}-${level}-${view.name}`}>
                     <Typography variant="h5" sx={{ marginTop: 1 }}>
-                      Mulig avvik i {year}, på {level}-nivå, i visningen "
-                      {view.name}"
+                      Mulig avvik i {year}, på {level}-nivå, i visningen{" "}
+                      {`"${view.name}"`}
                     </Typography>
                     <DiffChart data={viewData}></DiffChart>
                   </Box>
@@ -437,7 +437,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
                   Den nye analysen ble generert i SAS før den gamle analysen.
                   Den gamle versjonen ble generert{" "}
                   {formatDate(new Date(oldAnalyse.generated), "no")}, mens den
-                  "nye" versjonen ble generert{" "}
+                  nye versjonen ble generert{" "}
                   {formatDate(new Date(newAnalyse.generated), "no")}.
                 </span>
               ),
