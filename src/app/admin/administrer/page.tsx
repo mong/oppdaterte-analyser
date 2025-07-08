@@ -16,10 +16,15 @@ import {
   Typography,
 } from "@mui/material";
 import { redirect } from "next/navigation";
-import { getAnalyser, getUnpublishedAnalyser } from "@/services/mongo";
+import {
+  getAnalyse,
+  getAnalyser,
+  getUnpublishedAnalyser,
+} from "@/services/mongo";
 import { makeDateElem } from "@/lib/helpers";
 import { Analyse } from "@/types";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ScienceIcon from "@mui/icons-material/Science";
 
 const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
   return (
@@ -31,11 +36,12 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
             <TableCell align="right">ID</TableCell>
             <TableCell align="right">Tags</TableCell>
             <TableCell align="right">Oppdatert</TableCell>
+            <TableCell align="right">Test</TableCell>
             <TableCell align="right">Endre</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {analyser.map((analyse) => (
+          {analyser.map(async (analyse) => (
             <TableRow
               key={analyse.name}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -51,6 +57,11 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
               <TableCell align="right">{analyse.tags.join(", ")}</TableCell>
               <TableCell align="right">
                 {makeDateElem(analyse.createdAt, "no")}
+              </TableCell>
+              <TableCell align="right">
+                {(await getAnalyse(analyse.name, 0)) && (
+                  <ScienceIcon sx={{ color: "darkgreen" }} />
+                )}
               </TableCell>
               <TableCell align="right">
                 <IconButton

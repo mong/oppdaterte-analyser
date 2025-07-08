@@ -32,7 +32,8 @@
     "summary": "Sammendrag",
     "discussion": "Diskusjon",
     "number_variable": "Antall",
-    "totalrate": "Totalrate"
+    "totalrate": "Totalrate",
+    "alle": "Alle"
   },
   "general": {
     "updated_health_atlas": "Oppdaterte helseatlas",

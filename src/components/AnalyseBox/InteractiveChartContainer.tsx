@@ -1,7 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-
 import React from "react";
 import {
   Select,
@@ -68,9 +66,6 @@ export function InteractiveChartContainer({
       "Incorrect view order in datafile; the first view should be a total",
     );
   }
-
-  const searchParams = useSearchParams();
-  const demografiEnabled = searchParams.get("demografi") && analyse.demografi;
 
   const years = Object.keys(analyse.data.region["1"]).map(Number);
   years.sort((a, b) => b - a);
@@ -213,7 +208,7 @@ export function InteractiveChartContainer({
                   <Grid>{dict.analysebox.time_series}</Grid>
                 </Grid>
               </MenuItem>
-              {demografiEnabled && (
+              {analyse.demografi && (
                 <MenuItem value={"demografi"}>
                   <Grid container alignItems="center">
                     <Grid display="flex">
@@ -299,7 +294,13 @@ export function InteractiveChartContainer({
                     <Grid display="flex">
                       <JoinFullIcon sx={{ marginRight: 1 }} color="primary" />
                     </Grid>
-                    <Grid>{dict.analysebox.totalrate}</Grid>
+                    <Grid>
+                      {
+                        dict.analysebox[
+                          view === "tidstrend" ? "totalrate" : "alle"
+                        ]
+                      }
+                    </Grid>
                   </Grid>
                 </MenuItem>
                 {view === "tidstrend" && (
