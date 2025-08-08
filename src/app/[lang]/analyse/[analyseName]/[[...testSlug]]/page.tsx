@@ -10,7 +10,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Header from "@/components/Header";
 import { Analyse, Lang } from "@/types";
-import { InteractiveChartContainer } from "@/components/AnalyseBox/InteractiveChartContainer";
+import { ChartContainer } from "@/components/AnalyseBox/ChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
@@ -185,11 +185,7 @@ async function AnalysePageContent(props: { lang: Lang; analyse: Analyse }) {
           }}
         />
       </Box>
-      <InteractiveChartContainer
-        analyse={props.analyse}
-        lang={props.lang}
-        dict={dict}
-      />
+      <ChartContainer analyse={props.analyse} lang={props.lang} dict={dict} />
       <Box sx={{ padding: 2 }}>
         <Typography variant="h3">{dict.analysebox.discussion}</Typography>
         <Typography

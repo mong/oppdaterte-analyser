@@ -19,8 +19,11 @@ const schemaType = {
   views: [
     {
       name: String,
+      type: { type: String },
+      aggregering: String,
+      year_range: [Number],
       title: { no: String, en: String },
-      variables: [{ no: String, en: String }],
+      variables: [{ no: String, en: String, name: String }],
       _id: false,
     },
   ],
@@ -32,20 +35,13 @@ const schemaType = {
         type: Map,
         of: {
           type: Map,
-          of: [Number],
-        },
-      },
-    },
-  },
-  demografi: {
-    type: Map,
-    of: {
-      type: Map,
-      of: {
-        type: Map,
-        of: {
-          type: Map,
-          of: [Number],
+          of: {
+            type: Map,
+            of: {
+              type: Map,
+              of: Number,
+            },
+          },
         },
       },
     },

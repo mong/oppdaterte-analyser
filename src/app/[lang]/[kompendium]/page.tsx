@@ -8,7 +8,7 @@ import { getDictionary } from "@/lib/dictionaries";
 
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import AnalyseBoxWrapper from "@/components/AnalyseBoxWrapper";
+import AnalyseLink from "@/components/AnalyseLink";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 
 export const generateMetadata = async (props: {
@@ -87,11 +87,7 @@ export default async function KompendiumPage(props: {
           >
             {analyser.map((analyse) => {
               return (
-                <AnalyseBoxWrapper
-                  key={analyse.name}
-                  analyse={analyse}
-                  lang={lang}
-                />
+                <AnalyseLink key={analyse.name} analyse={analyse} lang={lang} />
               );
             })}
           </Suspense>

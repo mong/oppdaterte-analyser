@@ -8,8 +8,11 @@ export interface Text {
 
 export interface View {
   name: string;
+  type: string;
+  aggregering: string;
+  year_range: [number, number];
   title: Text;
-  variables: Text[];
+  variables: (Text & { name: string })[];
 }
 
 export interface Analyse {
@@ -33,16 +36,11 @@ export interface Analyse {
     [key: string]: {
       [key: string]: {
         [key: string]: {
-          [key: string]: number[];
-        };
-      };
-    };
-  };
-  demografi: {
-    [key: string]: {
-      [key: string]: {
-        [key: string]: {
-          [key: string]: number[];
+          [key: string]: {
+            [key: string]: {
+              [key: string]: number;
+            };
+          };
         };
       };
     };
@@ -54,11 +52,4 @@ export interface Tag {
   name: string;
   fullname: Text;
   introduction: Text;
-}
-
-export interface ApiUser {
-  _id: Types.ObjectId;
-  apiKey: string;
-  apiKeyHash: string;
-  userName: string;
 }

@@ -50,27 +50,35 @@ import { saveAs } from "file-saver";
 import { getDescription } from "@/lib/helpers";
 import AnalyseDemography from "./AnalyseDemography";
 
-export type InteractiveChartContainerProps = {
+export type ChartContainerProps = {
   analyse: Analyse;
   lang: Lang;
   dict: { [k: string]: { [k: string]: string } };
 };
 
-export function InteractiveChartContainer({
-  analyse,
-  lang,
-  dict,
-}: InteractiveChartContainerProps) {
+export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
   if (analyse.views[0].name !== "total") {
     throw new Error(
       "Incorrect view order in datafile; the first view should be a total",
     );
   }
 
-  const years = Object.keys(analyse.data.region["1"]).map(Number);
-  years.sort((a, b) => b - a);
+  const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
+  const [view, setView] = React.useState("total");
 
-  const lastYear = Math.max(...years);
+  const year_range = (
+    analyse.views.find(
+      (v) =>
+        v.name === (["demografi", "tidstrend"].includes(view) ? "total" : view),
+    ) as View
+  ).year_range;
+  const years = Array.from(
+    { length: year_range[1] - year_range[0] + 1 },
+    (_, i) => year_range[0] + i,
+  ).toReversed();
+
+  const lastYear = year_range[1];
+  console.log("Last year:", lastYear);
   const [year, setYear] = React.useState<number | "all_years">(lastYear);
   const [variable, setVariable] = React.useState<[string, number]>([
     "total",
@@ -79,7 +87,6 @@ export function InteractiveChartContainer({
   const [showNorway, setShowNorway] = React.useState(false);
   const [showGenders, setShowGenders] = React.useState(true);
   const [demographyAndel, setDemographyAndel] = React.useState(false);
-
   const [yearSelector, setYearSelector] = React.useState(false);
 
   const [animating, setAnimating] = React.useState(false);
@@ -88,8 +95,6 @@ export function InteractiveChartContainer({
     animatingRef.current = animating;
   }, [animating]);
 
-  const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
-  const [view, setView] = React.useState("total");
   const graphRef = React.useRef<null | HTMLDivElement>(null);
 
   const currentView = analyse.views.find((v) => v.name === view);
@@ -151,10 +156,10 @@ export function InteractiveChartContainer({
     return mapping;
   }, [analyse, level, showNorway]);
 
-  const demographyAvailable = !analyse.demografi
+  const demographyAvailable = !analyse.data.demografi
     ? {}
     : Object.fromEntries(
-        Object.keys(analyse.demografi[lastYear][analyse.age_range[0]])
+        Object.keys(analyse.data.demografi[lastYear][analyse.age_range[0]])
           .filter((v) => v !== "population")
           .map((v) => [v, true]),
       );
@@ -208,7 +213,7 @@ export function InteractiveChartContainer({
                   <Grid>{dict.analysebox.time_series}</Grid>
                 </Grid>
               </MenuItem>
-              {analyse.demografi && (
+              {analyse.data.demografi && (
                 <MenuItem value={"demografi"}>
                   <Grid container alignItems="center">
                     <Grid display="flex">
