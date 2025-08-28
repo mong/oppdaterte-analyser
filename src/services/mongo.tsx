@@ -14,7 +14,7 @@ export const dbConnect = async (): Promise<any> => {
   try {
     return await mongoose.connect(
       String(
-        TEST_DATABASE ? process.env.MONGO_URI_TEST : process.env.MONGO_URI,
+        TEST_DATABASE ? process.env.MONGO_URI_TEST : process.env.MONGO_URI_NEW,
       ),
     );
   } catch (err) {
