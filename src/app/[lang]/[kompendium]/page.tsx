@@ -45,7 +45,11 @@ export default async function KompendiumPage(props: {
   }
 
   const dict = await getDictionary(lang);
-  const analyser = await getAnalyserByTag(kompendium, `title.${lang}`);
+  const analyser = await getAnalyserByTag(
+    kompendium,
+    `title.${lang}`,
+    "-data -demografi -views -discussion -info",
+  );
 
   const breadcrumbs: BreadCrumbStop[] = [
     {

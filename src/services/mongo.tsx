@@ -45,10 +45,16 @@ export const getAnalyseVersions = async (
   );
 };
 
-export const getAnalyser = async (sort = "name"): Promise<Analyse[]> => {
+export const getAnalyser = async (
+  sort = "name",
+  projection: string | undefined = undefined,
+): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
-    await AnalyseModel.find({ published: true, version: { $gt: 0 } })
+    await AnalyseModel.find(
+      { published: true, version: { $gt: 0 } },
+      projection,
+    )
       .sort(sort)
       .exec(),
   );
@@ -84,14 +90,18 @@ export const getUnpublishedAnalyser = async (
 export const getAnalyserByTag = async (
   tag: string,
   sort = "name",
+  projection: string | undefined = undefined,
 ): Promise<Analyse[]> => {
   await dbConnect();
   return toPlainObject(
-    await AnalyseModel.find({
-      tags: tag,
-      published: true,
-      version: { $gt: 0 },
-    })
+    await AnalyseModel.find(
+      {
+        tags: tag,
+        published: true,
+        version: { $gt: 0 },
+      },
+      projection,
+    )
       .sort(sort)
       .exec(),
   );
