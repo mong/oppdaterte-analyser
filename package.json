@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^7.0.0",
+    "@mui/lab": "^7.0.0-beta.16",
     "@mui/material": "^7.0.0",
     "@mui/material-nextjs": "^7.0.0",
     "@mui/system": "^7.0.0",

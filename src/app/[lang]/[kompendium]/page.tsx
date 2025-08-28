@@ -1,6 +1,14 @@
 import { Suspense } from "react";
-import { CircularProgress, Container, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
+import {
+  CircularProgress,
+  Container,
+  Stack,
+  Box,
+  Grid,
+  Link,
+  Paper,
+  Typography,
+} from "@mui/material";
 import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
@@ -8,8 +16,8 @@ import { getDictionary } from "@/lib/dictionaries";
 
 import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import AnalyseLink from "@/components/AnalyseLink";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
+import { getSubHeader, makeDateElem } from "@/lib/helpers";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
@@ -73,11 +81,7 @@ export default async function KompendiumPage(props: {
         />
       </Header>
       <main>
-        <Container
-          maxWidth="xl"
-          disableGutters={false}
-          sx={{ paddingY: 4, paddingX: { xs: 0, md: 4 } }}
-        >
+        <Container maxWidth="xl" disableGutters={true}>
           <Suspense
             fallback={
               <Grid container justifyContent="center" sx={{ padding: 10 }}>
@@ -85,11 +89,61 @@ export default async function KompendiumPage(props: {
               </Grid>
             }
           >
-            {analyser.map((analyse) => {
-              return (
-                <AnalyseLink key={analyse.name} analyse={analyse} lang={lang} />
-              );
-            })}
+            <Stack spacing={4} sx={{ padding: 4 }}>
+              {analyser.map(async (analyse) => (
+                <Link
+                  href={`/${lang}/analyse/${analyse.name}`}
+                  target="_blank"
+                  underline="none"
+                  color="inherit"
+                >
+                  <Paper
+                    sx={{
+                      padding: 2,
+                      "&:hover": {
+                        boxShadow: 3,
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <Grid container sx={{ justifyContent: "space-between" }}>
+                        <Grid
+                          size="grow"
+                          sx={{ paddingTop: 1, paddingLeft: 1 }}
+                        >
+                          <Typography variant="h4">
+                            {analyse.title[lang]}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Box sx={{ paddingX: 1, marginTop: 0.5 }}>
+                        <Typography variant="body1" sx={{ color: "#444" }}>
+                          {getSubHeader(analyse, lang)}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          component="div"
+                          sx={{
+                            width: "100%",
+                            "@media print": { fontSize: "1rem" },
+                          }}
+                          dangerouslySetInnerHTML={{
+                            __html: await markdownToHtml(analyse.summary[lang]),
+                          }}
+                        />
+                      </Box>
+                      <Grid>
+                        <Typography variant="body2">
+                          {makeDateElem(analyse.createdAt, lang)}
+                        </Typography>
+                      </Grid>
+                    </Box>
+                  </Paper>
+                </Link>
+              ))}
+            </Stack>
           </Suspense>
         </Container>
       </main>

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { hospitalStructure, regions_dict, Selection } from "@/lib/nameMapping";
+import { hospitalStructure, regions_dict, Selection } from "@/lib/selection";
 import { Lang } from "@/types";
 import {
   Accordion,

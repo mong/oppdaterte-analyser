@@ -1,44 +1,44 @@
 import { Analyse, Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { regions_dict, Selection } from "@/lib/nameMapping";
+import { Selection } from "@/lib/selection";
 import React from "react";
 import { formatNumber } from "@/lib/helpers";
 import { SeriesValueFormatterContext } from "@mui/x-charts/internals";
 
 const linechart_colors: {
-  sykehus: { [k: number]: string };
-  region: { [k: number]: string };
+  sykehus: { [k: string]: string };
+  region: { [k: string]: string };
 } = {
   sykehus: {
-    1: "#C3A687",
-    2: "#B8FFF5",
-    3: "#003283",
-    4: "#2F654A",
-    6: "#F38411",
-    7: "#42E0F5",
-    8: "#81BD00",
-    10: "#839C8F",
-    11: "#5C3229",
-    12: "#11F063",
-    13: "#6B9B3A",
-    14: "#D9CB68",
-    15: "#BD0C2E",
-    16: "#C5F542",
-    17: "#E3A611",
-    18: "#EF42F5",
-    19: "#F0116E",
-    20: "#8D6A59",
-    21: "#101010",
-    22: "#81A9E1",
-    23: "#FFA3EB",
-    8888: "#9AA2AB",
+    Finnmark: "#C3A687",
+    UNN: "#B8FFF5",
+    Nordland: "#003283",
+    Helgeland: "#2F654A",
+    NordTrøndelag: "#F38411",
+    St_Olav: "#42E0F5",
+    Møre_og_Romsdal: "#81BD00",
+    Førde: "#839C8F",
+    Bergen: "#5C3229",
+    Fonna: "#11F063",
+    Stavanger: "#6B9B3A",
+    Østfold: "#D9CB68",
+    Akershus: "#BD0C2E",
+    OUS: "#C5F542",
+    Lovisenberg: "#E3A611",
+    Diakonhjemmet: "#EF42F5",
+    Innlandet: "#F0116E",
+    Vestre_Viken: "#8D6A59",
+    Vestfold: "#101010",
+    Telemark: "#81A9E1",
+    Sørlandet: "#FFA3EB",
+    Norge: "#9AA2AB",
   },
   region: {
-    1: "#C5F542",
-    2: "#F38411",
-    3: "#81A9E1",
-    4: "#BD0C2E",
-    8888: "#9AA2AB",
+    Helse_Nord: "#C5F542",
+    Helse_MidtNorge: "#F38411",
+    Helse_Vest: "#81A9E1",
+    Helse_SørØst: "#BD0C2E",
+    Norge: "#9AA2AB",
   },
 };
 
@@ -46,11 +46,13 @@ type AnalyseLineChartProps = {
   analyse: Analyse;
   years: number[];
   level: "region" | "sykehus";
-  variable: [string, number];
+  variable: { viewName: string; name: string };
+  categoryFmt: (category: string) => string;
   showNorway: boolean;
   selection: Selection;
-  lang: Lang;
+  inflection: string;
   maxValue: number;
+  lang: Lang;
 };
 
 export const useWindowWidth = () => {
@@ -72,35 +74,45 @@ export const AnalyseLineChart = ({
   variable,
   showNorway,
   selection,
-  lang,
+  inflection,
+  categoryFmt,
   maxValue,
+  lang,
 }: AnalyseLineChartProps) => {
   const windowWidth = useWindowWidth();
 
   const dataset: { [k: number]: number; year: number }[] = React.useMemo(() => {
-    return [...years].reverse().map((year) => {
+    return [...years].map((year) => {
       return {
         year: year,
         ...Object.fromEntries(
-          Object.keys(analyse.data[level]).map((area) => [
-            area,
-            Number(analyse.data[level][area][year][variable[0]][variable[1]]),
-          ]),
+          Object.keys(analyse.data[variable.viewName][year][level]).map(
+            (area) => [
+              area,
+              Number(
+                analyse.data[variable.viewName][year][level][area][
+                  variable.name
+                ][inflection],
+              ),
+            ],
+          ),
         ),
       };
     });
   }, [analyse, years, level, variable]);
 
+  console.log("LineChart dataset:", dataset);
+
   const smallFactor = Math.min(windowWidth / 1000, 1);
-  const selectionIDs = ["8888", ...selection[level].map(String)];
+  const selectionIDs = ["Norge", ...Array.from(selection[level]).map(String)];
 
   const getValueFormatter = (area: string) => {
     return (value: number | null, context: SeriesValueFormatterContext) => {
       const year = Number(years.at(-context.dataIndex - 1));
 
       var parenthesis = "";
-
-      if (String(variable) === "total,0") {
+      /*
+      if (String(variable) === `total,${analyse.name}`) {
         var parenthesis = `(n = ${formatNumber(
           analyse.data[level][area][year]["total"][1],
           lang,
@@ -111,7 +123,7 @@ export const AnalyseLineChart = ({
         );
         var parenthesis = `(${formatNumber(analyse.data[level][area][year][variable[0]][variable[1]] / sum, lang, { style: "percent" })})`;
       }
-
+*/
       return `${formatNumber(value || 0, lang)} ${parenthesis}`;
     };
   };
@@ -119,10 +131,11 @@ export const AnalyseLineChart = ({
   return (
     <LineChart
       margin={{
-        left: 50,
+        left: 60,
         top: 60 + 5 * selectionIDs.length,
         bottom: 25,
       }}
+      height={600}
       dataset={dataset}
       xAxis={[
         {
@@ -133,18 +146,15 @@ export const AnalyseLineChart = ({
       ]}
       yAxis={[{ min: 0, max: maxValue * 1.01 }]}
       series={selectionIDs
-        .filter(
-          (area) =>
-            area !== "8888" || variable.toString() !== "total,1" || showNorway,
-        )
+        .filter((area) => area !== "Norge" || showNorway)
         .map((area) => ({
           dataKey: area,
           id: area,
           valueFormatter: getValueFormatter(area),
           curve: "monotoneX",
           showMark: false,
-          label: regions_dict[lang][level][Number(area)],
-          color: linechart_colors[level][Number(area)],
+          label: categoryFmt(area),
+          color: linechart_colors[level][area],
         }))}
       slotProps={{
         legend: {
@@ -161,7 +171,10 @@ export const AnalyseLineChart = ({
           },
         },
         noDataOverlay: {
-          message: { no: "Ingen områder valgt", en: "No areas chosen" }[lang],
+          message: {
+            no: "Ingen opptaksområder valgt",
+            en: "No referrral areas chosen",
+          }[lang],
         },
       }}
       sx={{

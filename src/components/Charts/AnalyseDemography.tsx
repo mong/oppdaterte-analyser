@@ -10,7 +10,7 @@ type AnalyseDemographyProps = {
   showGenders: boolean;
   andel: boolean;
   lang: Lang;
-  variable: [string, number];
+  variable: { viewName: string; name: string };
 };
 
 const AnalyseDemography = ({
@@ -33,17 +33,21 @@ const AnalyseDemography = ({
         year,
         aldre.map((alder) => {
           const kvinner =
-            analyse.demografi[year][alder][variable[0]]?.["kvinner"]?.[
-              variable[1]
-            ];
+            analyse.data.demografi[year][variable.viewName][alder][
+              variable.name
+            ]["kvinner"];
           const kvinner_pop =
-            analyse.demografi[year][alder]["population"]?.["kvinner"]?.[0];
-          const menn =
-            analyse.demografi[year][alder][variable[0]]?.["menn"]?.[
-              variable[1]
+            analyse.data.demografi[year]["population"][alder]["population"][
+              "kvinner"
             ];
+          const menn =
+            analyse.data.demografi[year][variable.viewName][alder][
+              variable.name
+            ]["menn"];
           const menn_pop =
-            analyse.demografi[year][alder]["population"]?.["menn"]?.[0];
+            analyse.data.demografi[year]["population"][alder]["population"][
+              "menn"
+            ];
 
           return {
             alder: alder,
@@ -67,28 +71,33 @@ const AnalyseDemography = ({
       const kvinner = years
         .map(
           (year) =>
-            analyse.demografi[year][alder][variable[0]]?.["kvinner"]?.[
-              variable[1]
-            ],
+            analyse.data.demografi[year][variable.viewName][alder][
+              variable.name
+            ]["kvinner"],
         )
         .reduce((a, b) => a + b, 0);
       const kvinner_pop = years
         .map(
           (year) =>
-            analyse.demografi[year][alder]["population"]?.["kvinner"]?.[0],
+            analyse.data.demografi[year]["population"][alder]["population"][
+              "kvinner"
+            ],
         )
         .reduce((a, b) => a + b, 0);
       const menn = years
         .map(
           (year) =>
-            analyse.demografi[year][alder][variable[0]]?.["menn"]?.[
-              variable[1]
-            ],
+            analyse.data.demografi[year][variable.viewName][alder][
+              variable.name
+            ]["menn"],
         )
         .reduce((a, b) => a + b, 0);
       const menn_pop = years
         .map(
-          (year) => analyse.demografi[year][alder]["population"]?.["menn"]?.[0],
+          (year) =>
+            analyse.data.demografi[year]["population"][alder]["population"][
+              "menn"
+            ],
         )
         .reduce((a, b) => a + b, 0);
 
@@ -198,6 +207,7 @@ const AnalyseDemography = ({
       ).map((series, i) => ({
         ...series,
         showMark: false,
+        baseline: "min",
         color: ["#00509E", "#95BDE6"][i],
         valueFormatter: (value: number | null) =>
           andel
@@ -205,7 +215,7 @@ const AnalyseDemography = ({
             : formatNumber(value || 0, lang),
       }))}
       margin={{
-        left: 50,
+        left: 60,
         top: 60,
         bottom: 25,
       }}

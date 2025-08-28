@@ -14,7 +14,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
 import { formatDate, formatNumber } from "@/lib/helpers";
-import { regions_dict } from "@/lib/nameMapping";
+import { regions_dict } from "@/lib/selection";
 import { BarChart } from "@mui/x-charts";
 import React from "react";
 

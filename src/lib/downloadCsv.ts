@@ -1,13 +1,12 @@
 import { Analyse, Lang } from "@/types";
 import { mkConfig, generateCsv, download } from "export-to-csv";
-import { regions_dict } from "./nameMapping";
 
 export default function downloadCsv(analyse: Analyse, lang: Lang): void {
   const csvConfig = mkConfig({
     useKeysAsHeaders: true,
     filename: `${analyse.name}_${lang}`,
   });
-
+  /*
   const data = ["sykehus", "region"].flatMap((nivå) =>
     Object.keys(analyse.data[nivå])
       .filter((area) => nivå === "region" || area !== "8888")
@@ -27,7 +26,8 @@ export default function downloadCsv(analyse: Analyse, lang: Lang): void {
           ),
         })),
       ),
-  );
+  );*/
+  return;
 
-  download(csvConfig)(generateCsv(csvConfig)(data));
+  //download(csvConfig)(generateCsv(csvConfig)(data));
 }

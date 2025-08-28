@@ -21,6 +21,7 @@ export async function uploadAnalyseAction(prevState: any, formData: FormData) {
     return { success: false, message: "Feil filtype", name: "" };
 
   const analyse: Analyse = JSON.parse(await file.text());
+
   await uploadAnalyse(analyse);
 
   return {
