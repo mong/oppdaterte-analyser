@@ -47,7 +47,10 @@ export default async function MainPage(props: MainPageProps) {
 
   const dict = await getDictionary(lang);
   const kompendier = await getKompendier(`fullname.${lang}`);
-  const analyser = await getAnalyser(`title.${lang}`);
+  const analyser = await getAnalyser(
+    `title.${lang}`,
+    "-data -demografi -views -discussion -info",
+  );
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
