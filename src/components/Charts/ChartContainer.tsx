@@ -59,14 +59,19 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
-import { getDescription } from "@/lib/helpers";
+import {
+  capitalize,
+  formatNumber,
+  getDescription,
+  getVariableText,
+} from "@/lib/helpers";
 import AnalyseDemography from "./AnalyseDemography";
 import { textTransform } from "@mui/system";
 import { ChildFriendlyOutlined } from "@mui/icons-material";
 import { backgroundClip } from "html2canvas/dist/types/css/property-descriptors/background-clip";
 import { zIndex } from "html2canvas/dist/types/css/property-descriptors/z-index";
 
-const BACKGROUND_COLOR = "#F4F8FF";
+const BACKGROUND_COLOR = "#F8F8FF";
 
 export type VariableSelectorProps = {
   analyse: Analyse;
@@ -88,7 +93,9 @@ function VariableSelector({
 }: VariableSelectorProps) {
   return (
     <FormControl size="small" focused={false}>
-      <InputLabel id="select-variable-label">{"Velg variabel"}</InputLabel>
+      <InputLabel id="select-variable-label">
+        {dict.analysebox.choose_variable}
+      </InputLabel>
       <Select
         labelId="select-variable-label"
         id="select-variable"
@@ -97,7 +104,7 @@ function VariableSelector({
             ? ""
             : (`${variable.viewName}.${variable.name}` as string)
         }
-        label={"Velg variabel"}
+        label={dict.analysebox.choose_variable}
         sx={{ minWidth: 250, height: "100%" }}
         onChange={(e) => {
           const [viewName, name] =
@@ -115,7 +122,7 @@ function VariableSelector({
         }}
       >
         <MenuItem value={"fjern_valg"} disabled={variable.viewName === "total"}>
-          <em>Fjern valg</em>
+          <em>{dict.analysebox.remove_choice}</em>
         </MenuItem>
         {views.map((v, i) => {
           return [
@@ -143,8 +150,23 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)({
   },
 });
 
+const GraphBox = styled(Box)({
+  width: "100%",
+  height: "80vw",
+  maxHeight: "700px",
+  minHeight: "370px",
+  marginTop: 0,
+  position: "sticky",
+});
+
+const DescriptionBox = styled(Box)({
+  textAlign: "center",
+  padding: 10,
+  paddingBottom: 0,
+  "@media print": { padding: 0 },
+});
+
 const MyTabList = styled(TabList)({
-  // marginBottom: -1,
   ["& .Mui-selected"]: { background: BACKGROUND_COLOR },
   ["& .MuiButtonBase-root"]: {
     minHeight: "unset",
@@ -169,10 +191,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
 
   const [showNorway, setShowNorway] = React.useState(false);
   const [verdiType, setVerdiType] = React.useState<"rate" | "n">("rate");
-  const [tidstrendType, setTidstrendType] = React.useState<"rate" | "n">(
-    "rate",
-  );
-  const [enkeltårType, setEnkeltårType] = React.useState<"rate" | "n">("rate");
+
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
   const [aggregering, setAggregering] = React.useState<"kont" | "pas">("kont");
   const [mainTab, setMainTab] = React.useState<"analyse" | "demografi">(
@@ -381,7 +400,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
   const [areasOpen, setAreasOpen] = React.useState(false);
 
   const chooseAreasText =
-    "Velg opptaksområder" +
+    dict.analysebox.choose_area +
     (selection[level].size ? ` (${selection[level].size})` : "");
 
   const areaAndAggregationSelect = (
@@ -419,8 +438,6 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   : selection.toggleSykehus(changedArea),
               );
             }
-
-            console.log(changedArea);
           }}
           MenuProps={{
             sx: {
@@ -434,7 +451,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           }}
         >
           <MenuItem value="fjern_valg" disabled={selection[level].size === 0}>
-            <em>Fjern valg</em>
+            <em>{dict.analysebox.remove_choice}</em>
           </MenuItem>
 
           {Object.keys(hospitalStructure).map((region) =>
@@ -491,10 +508,12 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         }}
       >
         <ToggleButton value={"kont"} sx={{ transition: "all 0.3s ease" }}>
-          Kontakter
+          {analyse.kontakt_begrep
+            ? capitalize(analyse.kontakt_begrep[lang])
+            : dict.analysebox.kontakter}
         </ToggleButton>
         <ToggleButton value={"pas"} sx={{ transition: "all 0.3s ease" }}>
-          Pasienter
+          {dict.analysebox.pasienter}
         </ToggleButton>
       </StyledToggleButtonGroup>
       <StyledToggleButtonGroup
@@ -504,7 +523,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         onChange={() => setVerdiType(verdiType === "rate" ? "n" : "rate")}
       >
         <ToggleButton value={"rate"}>Rate</ToggleButton>
-        <ToggleButton value={"n"}>Antall</ToggleButton>
+        <ToggleButton value={"n"}>{dict.analysebox.antall}</ToggleButton>
       </StyledToggleButtonGroup>
     </Stack>
   );
@@ -535,7 +554,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           sx={{ background: BACKGROUND_COLOR, borderRadius: "0px 0px 8px 8px" }}
           elevation={2}
         >
-          <TabPanel value="analyse" sx={{ paddingX: 0 }}>
+          <TabPanel value="analyse" sx={{ paddingX: 0, paddingBottom: 0 }}>
             {areaAndAggregationSelect}
             <TabContext value={analyseTab}>
               <Box sx={{ borderBottom: 1, borderColor: "divider", marginX: 4 }}>
@@ -548,14 +567,14 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   <Tab
                     icon={<BarChartIcon fontSize="small" />}
                     iconPosition="start"
-                    label="Enkeltår"
+                    label={dict.analysebox.single_year}
                     value="enkeltår"
                     sx={{ textTransform: "none" }}
                   />
                   <Tab
                     icon={<InsightsIcon fontSize="small" />}
                     iconPosition="start"
-                    label="Tidstrend"
+                    label={dict.analysebox.time_series}
                     value="tidstrend"
                     sx={{ textTransform: "none" }}
                   />
@@ -569,13 +588,13 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 >
                   <FormControl size="small" focused={false}>
                     <InputLabel id="select-view-label">
-                      Velg fokusområde
+                      {dict.analysebox.choose_focus_area}
                     </InputLabel>
                     <Select
                       labelId="select-view-label"
                       id="select-view"
                       value={viewName === "total" ? "" : viewName}
-                      label={"Velg fokusområde"}
+                      label={dict.analysebox.choose_focus_area}
                       sx={{ minWidth: 250, height: "100%" }}
                       onChange={(e) => {
                         setViewName(
@@ -596,7 +615,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                         value={"fjern_valg"}
                         disabled={viewName === "total"}
                       >
-                        <em>Fjern valg</em>
+                        <em>{dict.analysebox.remove_choice}</em>
                       </MenuItem>
                       {analyse.views
                         .filter(
@@ -614,39 +633,53 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   </FormControl>
                 </Stack>
                 {yearSelector}
-                <AnalyseBarChart
-                  categories={Object.keys(
-                    analyse.data[viewName][lastYear][level],
-                  ).filter((cat) => cat !== "Norge" || verdiType === "rate")}
-                  variables={currentView.variables.map(
-                    (variable) => variable.name,
-                  )}
-                  valueGetter={(category, variable) =>
-                    analyse.data[viewName][year][level][category][variable][
-                      `${aggregering}_${verdiType}`
-                    ]
-                  }
-                  variableFmt={(variable) => varNames[variable][lang]}
-                  categoryFmt={(category) => getAreaName(category, lang)}
-                  valueAxisFmt={(v) => new Intl.NumberFormat(lang).format(v)}
-                  special_values={new Set(["Norge"])}
-                  selection={
-                    level === "region" ? selection.region : selection.sykehus
-                  }
-                  onClick={(area) =>
-                    area !== "Norge" &&
-                    setSelection(
-                      level === "region"
-                        ? selection.toggleRegion(area)
-                        : selection.toggleSykehus(area),
-                    )
-                  }
-                  maxValue={
-                    maxValues["total"][level][analyse.name][
-                      `${aggregering}_${verdiType}`
-                    ].withoutNorway
-                  }
-                />
+                <GraphBox>
+                  <AnalyseBarChart
+                    categories={Object.keys(
+                      analyse.data[viewName][lastYear][level],
+                    ).filter((cat) => cat !== "Norge" || verdiType === "rate")}
+                    variables={currentView.variables.map(
+                      (variable) => variable.name,
+                    )}
+                    valueGetter={(category, variable) =>
+                      analyse.data[viewName][year][level][category][variable][
+                        `${aggregering}_${verdiType}`
+                      ]
+                    }
+                    variableFmt={(variable) => varNames[variable][lang]}
+                    categoryFmt={(category) => getAreaName(category, lang)}
+                    valueAxisFmt={(v) => new Intl.NumberFormat(lang).format(v)}
+                    valueFmt={(v) =>
+                      formatNumber(
+                        v || 0,
+                        lang,
+                        verdiType === "n" && aggregering === "pas"
+                          ? { maximumFractionDigits: 0 }
+                          : undefined,
+                      )
+                    }
+                    special_values={new Set(["Norge"])}
+                    selection={
+                      level === "region" ? selection.region : selection.sykehus
+                    }
+                    onClick={(area) =>
+                      area !== "Norge" &&
+                      setSelection(
+                        level === "region"
+                          ? selection.toggleRegion(area)
+                          : selection.toggleSykehus(area),
+                      )
+                    }
+                    maxValue={
+                      maxValues["total"][level][analyse.name][
+                        `${aggregering}_${verdiType}`
+                      ].withoutNorway
+                    }
+                  />
+                </GraphBox>
+                <DescriptionBox>
+                  {getDescription(analyse, lang, verdiType, aggregering)}
+                </DescriptionBox>
               </TabPanel>
               <TabPanel value="tidstrend" sx={{ paddingX: 4 }}>
                 <Stack
@@ -682,24 +715,46 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     />
                   )}
                 </Stack>
-                <AnalyseLineChart
-                  analyse={analyse}
-                  years={years}
-                  level={level}
-                  categoryFmt={(category) => getAreaName(category, lang)}
-                  inflection={`${aggregering}_${verdiType}`}
-                  variable={tidstrendVariable}
-                  showNorway={verdiType === "rate" || showNorway}
-                  selection={selection}
-                  lang={lang}
-                  maxValue={
-                    maxValues[tidstrendVariable.viewName][level][
-                      tidstrendVariable.name
-                    ][`${aggregering}_${verdiType}`][
-                      showNorway ? "all" : "withoutNorway"
-                    ]
-                  }
-                />
+                <GraphBox>
+                  <AnalyseLineChart
+                    analyse={analyse}
+                    years={years}
+                    level={level}
+                    categoryFmt={(category) => getAreaName(category, lang)}
+                    valueFmt={(v) =>
+                      formatNumber(
+                        v || 0,
+                        lang,
+                        verdiType === "n" && aggregering === "pas"
+                          ? { maximumFractionDigits: 0 }
+                          : undefined,
+                      )
+                    }
+                    inflection={`${aggregering}_${verdiType}`}
+                    variable={tidstrendVariable}
+                    showNorway={verdiType === "rate" || showNorway}
+                    selection={selection}
+                    lang={lang}
+                    maxValue={
+                      maxValues[tidstrendVariable.viewName][level][
+                        tidstrendVariable.name
+                      ][`${aggregering}_${verdiType}`][
+                        showNorway ? "all" : "withoutNorway"
+                      ]
+                    }
+                  />
+                </GraphBox>
+                <DescriptionBox>
+                  {getDescription(
+                    analyse,
+                    lang,
+                    verdiType,
+                    aggregering,
+                    tidstrendVariable.name !== analyse.name
+                      ? tidstrendVariable
+                      : undefined,
+                  )}
+                </DescriptionBox>
               </TabPanel>
             </TabContext>
           </TabPanel>
@@ -711,8 +766,12 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 exclusive
                 onChange={() => setShowGenders(!showGenders)}
               >
-                <ToggleButton value={false}>Alle</ToggleButton>
-                <ToggleButton value={true}>Del på kjønn</ToggleButton>
+                <ToggleButton value={false}>
+                  {dict.analysebox.alle}
+                </ToggleButton>
+                <ToggleButton value={true}>
+                  {dict.analysebox.demography_split_gender}
+                </ToggleButton>
               </StyledToggleButtonGroup>
               <StyledToggleButtonGroup
                 color="primary"
@@ -720,8 +779,12 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 exclusive
                 onChange={() => setDemographyAndel(!demographyAndel)}
               >
-                <ToggleButton value={false}>Antall</ToggleButton>
-                <ToggleButton value={true}>Andel</ToggleButton>
+                <ToggleButton value={false}>
+                  {dict.analysebox.antall}
+                </ToggleButton>
+                <ToggleButton value={true}>
+                  {dict.analysebox.andel}
+                </ToggleButton>
               </StyledToggleButtonGroup>
               <VariableSelector
                 analyse={analyse}
@@ -742,23 +805,16 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 <ToggleButton value={true}>
                   {dict.analysebox.all_years}
                 </ToggleButton>
-                <ToggleButton value={false}>Velg år</ToggleButton>
+                <ToggleButton value={false}>
+                  {dict.analysebox.choose_year}
+                </ToggleButton>
               </StyledToggleButtonGroup>
             </Stack>
             <Zoom in={!allYears}>
               {!allYears ? yearSelector : <span></span>}
             </Zoom>
 
-            <Box
-              sx={{
-                width: "100%",
-                height: "80vw",
-                maxHeight: "700px",
-                minHeight: "370px",
-                marginTop: 0,
-                position: "sticky",
-              }}
-            >
+            <GraphBox>
               <AnalyseDemography
                 analyse={analyse}
                 showGenders={showGenders}
@@ -768,7 +824,24 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 year={allYears ? "all_years" : year}
                 years={years}
               />
-            </Box>
+            </GraphBox>
+            <DescriptionBox>
+              <Typography variant="body2">
+                {demographyAndel
+                  ? dict.analysebox[
+                      showGenders
+                        ? "demography_proportion_gender"
+                        : "demography_proportion"
+                    ]
+                  : dict.analysebox[
+                      showGenders
+                        ? "demography_n_people_gender"
+                        : "demography_n_people"
+                    ]}
+                {demografiVariable.name !== analyse.name &&
+                  getVariableText(analyse, lang, demografiVariable)}
+              </Typography>
+            </DescriptionBox>
           </TabPanel>
         </Paper>
       </TabContext>
@@ -1143,6 +1216,22 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     setYear(
                       e.target.value === "all_years"
                         ? "all_years"
+                          if (currentYear < lastYear && animatingRef.current) {
+                            currentYear++;
+                            setYear(currentYear);
+
+                            loop();
+                          } else {
+                            setAnimating(false);
+                          }
+                        },
+                        600 + 400 * Number(view !== "demografi"),
+                      );
+                    })();
+                  }}
+                >
+                  <PlayArrowIcon />
+                </IconButton>
                         : Number(e.target.value),
                     )
                   }

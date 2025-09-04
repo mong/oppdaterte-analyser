@@ -15,7 +15,7 @@ import { ChartContainer } from "@/components/Charts/ChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyseMarkdown } from "@/lib/getMarkdown";
 import { getAnalyse, getTags } from "@/services/mongo";
-import { getSubHeader, makeDateElem } from "@/lib/helpers";
+import { makeDateElem } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
@@ -102,7 +102,7 @@ export default async function AnalysePage(props: {
       <HeaderTop breadcrumbs={breadcrumbs} lang={lang}></HeaderTop>
       <main>
         <Container
-          maxWidth="xl"
+          maxWidth="xxl"
           disableGutters={false}
           sx={{ paddingBottom: 4, paddingX: { xs: 2, md: 4 } }}
         >
@@ -136,11 +136,7 @@ export default async function AnalysePage(props: {
               </Paper>
             )} */}
             <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">
-                {analyse.title[lang]}
-                {", "}
-                {getSubHeader(analyse, lang)}
-              </Typography>
+              <Typography variant="h3">{analyse.title[lang]}</Typography>
               <Typography
                 variant="body1"
                 component="div"

@@ -212,7 +212,7 @@ const AnalyseDemography = ({
         valueFormatter: (value: number | null) =>
           andel
             ? formatNumber((value || 0) / 100, lang, { style: "percent" })
-            : formatNumber(value || 0, lang),
+            : formatNumber(value || 0, lang, { maximumFractionDigits: 0 }),
       }))}
       margin={{
         left: 60,

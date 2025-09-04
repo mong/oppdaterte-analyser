@@ -23,6 +23,8 @@ export interface Analyse {
   tags: string[];
   age_range: [number, number];
   kjonn: "begge" | "menn" | "kvinner";
+  kontakt_begrep: Text;
+  kategori_begrep: Text;
   title: Text;
   description: Text;
   summary: Text;

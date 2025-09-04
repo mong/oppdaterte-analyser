@@ -45,7 +45,7 @@ export default async function AdministrerAnalysePage(props: {
   return (
     <>
       <HeaderTop breadcrumbs={breadcrumbs} />
-      <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+      <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
         <AnalyseDashboard analyseName={analyseName} analyser={analyser} />
       </Container>
     </>

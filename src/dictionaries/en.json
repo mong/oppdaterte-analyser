@@ -33,7 +33,15 @@
     "discussion": "Discussion",
     "number_variable": "Number",
     "totalrate": "Total rate",
-    "alle": "All"
+    "kontakter": "Contacts",
+    "pasienter": "Patients",
+    "alle": "All",
+    "andel": "Proportion",
+    "antall": "Number",
+    "choose_year": "Choose year",
+    "choose_variable": "Choose variable",
+    "remove_choice": "Remove choice",
+    "choose_focus_area": "Choose focus area"
   },
   "general": {
     "updated_health_atlas": "Updated Health Atlas",

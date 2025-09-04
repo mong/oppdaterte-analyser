@@ -97,7 +97,7 @@ export default async function MainPage(props: MainPageProps) {
         />
       </Header>
       <main>
-        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
           <Typography variant="h3">{dict.frontpage.fagområder}</Typography>
           <br />
           <Typography>{dict.frontpage.fagområder_text}</Typography>

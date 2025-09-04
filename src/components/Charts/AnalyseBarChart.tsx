@@ -4,14 +4,6 @@ import { Selection } from "@/lib/selection";
 import { ChartsText } from "@mui/x-charts/ChartsText";
 import React from "react";
 import { formatNumber } from "@/lib/helpers";
-import {
-  BarPlot,
-  ChartsXAxis,
-  LinePlot,
-  ResponsiveChartContainer,
-  ScatterChart,
-  ScatterPlot,
-} from "@mui/x-charts";
 
 type AnalyseBarChartProps = {
   categories: string[];
@@ -20,6 +12,7 @@ type AnalyseBarChartProps = {
   variableFmt: (variable: string) => string;
   valueGetter: (category: string, variable: string) => number;
   valueAxisFmt: (value: number) => string;
+  valueFmt: (value: number | null) => string;
   special_values: Set<string>;
   selection: Set<string>;
   onClick: (category: string) => void;
@@ -33,6 +26,7 @@ export const AnalyseBarChart = ({
   variableFmt,
   valueGetter,
   valueAxisFmt,
+  valueFmt,
   special_values,
   selection,
   onClick,
@@ -60,6 +54,7 @@ export const AnalyseBarChart = ({
       series={variables.map((variable, i) => ({
         dataKey: variable,
         label: variableFmt(variable),
+        valueFormatter: valueFmt,
         stack: "yes",
         id: `${i}`,
         color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
@@ -79,7 +74,6 @@ export const AnalyseBarChart = ({
           valueFormatter: valueAxisFmt,
         },
       ]}
-      height={600}
       layout="horizontal"
       slots={{
         bar: ({ ownerState, ...otherProps }) => (

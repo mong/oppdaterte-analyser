@@ -111,7 +111,7 @@ export default async function AdministrerPage() {
   return (
     <>
       <HeaderTop breadcrumbs={breadcrumbs} />
-      <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+      <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
         <Typography variant="h3">Administrer analyser</Typography>
         <Typography variant="body1" sx={{ marginY: 2 }}>
           Denne siden gir en oversikt over hva som ligger i databasen av

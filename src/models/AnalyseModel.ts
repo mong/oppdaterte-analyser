@@ -8,6 +8,8 @@ const schemaType = {
   tags: [String],
   age_range: [Number],
   kjonn: { type: String, enum: ["begge", "menn", "kvinner"] },
+  kontakt_begrep: { no: String, en: String },
+  kategori_begrep: { no: String, en: String },
   title: { no: String, en: String },
   description: { no: String, en: String },
   summary: { no: String, en: String },

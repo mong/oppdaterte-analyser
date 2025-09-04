@@ -35,7 +35,7 @@ export default async function UploadPage() {
   return (
     <>
       <HeaderTop breadcrumbs={breadcrumbs} />
-      <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+      <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
         <Typography variant="h3">Last opp analyse</Typography>
         <Typography variant="body1" sx={{ marginY: 2 }}>
           Analysen er en .json fil som blir generert av makroen{" "}

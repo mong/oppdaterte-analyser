@@ -35,7 +35,7 @@ export default function AdminBar({ email, userName }: AdminBarProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ margin: 0 }}>
-        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 0 }}>
+        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 0 }}>
           <Toolbar disableGutters>
             <Box sx={{ flexGrow: 1, display: "flex" }}>
               <Avatar sx={{ bgcolor: colors.green["A200"], marginRight: 1 }}>

@@ -85,7 +85,7 @@ export default async function KompendiumPage(props: {
         />
       </Header>
       <main>
-        <Container maxWidth="xl" disableGutters={true}>
+        <Container maxWidth="xxl" disableGutters={true}>
           <Suspense
             fallback={
               <Grid container justifyContent="center" sx={{ padding: 10 }}>

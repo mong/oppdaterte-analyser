@@ -18,7 +18,7 @@ export default function Footer() {
           color: "footer1.contrastText",
         }}
       >
-        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
           <Grid container size={{ xs: 12 }} sx={{ displayPrint: "none" }}>
             <Grid size={{ xs: 12, sm: 6 }} marginBottom={2} marginTop={2}>
               <Stack spacing={3}>
@@ -58,7 +58,7 @@ export default function Footer() {
         </Container>
       </Box>
       <Box sx={{ bgcolor: "footer2.main", color: "footer2.contrastText" }}>
-        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 4 }}>
+        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
           <Grid
             size={{ xs: 12 }}
             container

@@ -3,7 +3,6 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import { Selection } from "@/lib/selection";
 import React from "react";
 import { formatNumber } from "@/lib/helpers";
-import { SeriesValueFormatterContext } from "@mui/x-charts/internals";
 
 const linechart_colors: {
   sykehus: { [k: string]: string };
@@ -48,6 +47,7 @@ type AnalyseLineChartProps = {
   level: "region" | "sykehus";
   variable: { viewName: string; name: string };
   categoryFmt: (category: string) => string;
+  valueFmt: (value: number | null) => string;
   showNorway: boolean;
   selection: Selection;
   inflection: string;
@@ -76,6 +76,7 @@ export const AnalyseLineChart = ({
   selection,
   inflection,
   categoryFmt,
+  valueFmt,
   maxValue,
   lang,
 }: AnalyseLineChartProps) => {
@@ -101,32 +102,8 @@ export const AnalyseLineChart = ({
     });
   }, [analyse, years, level, variable]);
 
-  console.log("LineChart dataset:", dataset);
-
   const smallFactor = Math.min(windowWidth / 1000, 1);
   const selectionIDs = ["Norge", ...Array.from(selection[level]).map(String)];
-
-  const getValueFormatter = (area: string) => {
-    return (value: number | null, context: SeriesValueFormatterContext) => {
-      const year = Number(years.at(-context.dataIndex - 1));
-
-      var parenthesis = "";
-      /*
-      if (String(variable) === `total,${analyse.name}`) {
-        var parenthesis = `(n = ${formatNumber(
-          analyse.data[level][area][year]["total"][1],
-          lang,
-        )})`;
-      } else if (String(variable) !== "total,1") {
-        let sum = analyse.data[level][area][year][variable[0]].reduce(
-          (acc, current) => acc + current,
-        );
-        var parenthesis = `(${formatNumber(analyse.data[level][area][year][variable[0]][variable[1]] / sum, lang, { style: "percent" })})`;
-      }
-*/
-      return `${formatNumber(value || 0, lang)} ${parenthesis}`;
-    };
-  };
 
   return (
     <LineChart
@@ -135,7 +112,6 @@ export const AnalyseLineChart = ({
         top: 60 + 5 * selectionIDs.length,
         bottom: 25,
       }}
-      height={600}
       dataset={dataset}
       xAxis={[
         {
@@ -150,7 +126,7 @@ export const AnalyseLineChart = ({
         .map((area) => ({
           dataKey: area,
           id: area,
-          valueFormatter: getValueFormatter(area),
+          valueFormatter: valueFmt,
           curve: "monotoneX",
           showMark: false,
           label: categoryFmt(area),
