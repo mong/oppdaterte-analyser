@@ -20,6 +20,7 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
+import { Compare } from "@/components/Compare";
 //import { Compare } from "@/components/Compare";
 
 const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {
@@ -118,13 +119,14 @@ export default async function AnalysePage(props: {
               </Grid>
             }
           >
-            {/* {testPage && (
+            {testPage && (
               <Paper
                 elevation={0}
                 sx={{
                   marginTop: 2,
                   padding: 2,
                   paddingY: 4,
+                  borderRadius: 10,
                   boxShadow: "inset 0 0 25px #003087",
                   background: "#F9F9F9",
                 }}
@@ -134,7 +136,7 @@ export default async function AnalysePage(props: {
                   oldAnalyse={await getAnalyse(analyseName, "published")}
                 />
               </Paper>
-            )} */}
+            )}
             <Box sx={{ padding: 2 }}>
               <Typography variant="h3">{analyse.title[lang]}</Typography>
               <Typography

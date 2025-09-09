@@ -14,7 +14,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
 import { formatDate, formatNumber } from "@/lib/helpers";
-import { regions_dict } from "@/lib/selection";
 import { BarChart } from "@mui/x-charts";
 import React from "react";
 
@@ -131,62 +130,92 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
     ];
   };
 
-  const newYears = [
-    Math.min(...Object.keys(newAnalyse.data.sykehus[1]).map(Number)),
-    Math.max(...Object.keys(newAnalyse.data.sykehus[1]).map(Number)),
-  ];
+  const findYears = (
+    analyse: Analyse,
+  ): { [k: string]: undefined | { range: number[]; span: [number, number] } } =>
+    Object.fromEntries(
+      analyse.views.map((v) => {
+        if (Object.keys(analyse.data[v.name])[0] === "NA") {
+          return [v.name, undefined];
+        } else {
+          return [
+            v.name,
+            {
+              span: v.year_range,
+              range: Array.from(
+                { length: v.year_range[1] - v.year_range[0] + 1 },
+                (_, i) => v.year_range[0] + i,
+              ),
+            },
+          ];
+        }
+      }),
+    );
 
-  const newYearsRange = Array.from(
-    { length: newYears[1] - newYears[0] + 1 },
-    (_, i) => newYears[0] + i,
-  );
+  const newYears = findYears(newAnalyse);
 
-  const internalIntegrity = newYearsRange.flatMap((year) =>
-    ["sykehus", "region"].flatMap((level) =>
-      newAnalyse.views
-        .filter((view) => view.name !== "total")
-        .flatMap((view) => {
-          const viewData = Object.keys(newAnalyse.data[level])
-            .map((area) => {
-              const sum = newAnalyse.data[level][area][year][view.name].reduce(
-                (a, b) => a + b,
-              );
-              const correctSum = newAnalyse.data[level][area][year]["total"][0];
-              const raw_diff = (sum / correctSum - 1) * 1000;
+  const internalIntegrity = newAnalyse.views
+    .filter((view) => view.name !== "total" && view.type === "standard")
+    .flatMap((view) => {
+      const variables = view.variables.map((v) => v.name);
+      return (newYears[view.name]?.range || ["NA"]).flatMap((year) =>
+        ["sykehus", "region"].flatMap((level) =>
+          (view.aggregering === "begge"
+            ? ["kont", "pas"]
+            : [view.aggregering]
+          ).flatMap((aggregering) => {
+            const viewData = Object.keys(
+              newAnalyse.data[view.name][year][level],
+            )
+              .map((area) => {
+                const sum = variables
+                  .map(
+                    (varName) =>
+                      newAnalyse.data[view.name][year][level][area][varName][
+                        `${aggregering}_rate`
+                      ],
+                  )
+                  .reduce((a, b) => a + b, 0);
 
-              return {
-                areaName:
-                  regions_dict["no"][level as "sykehus" | "region"][
-                    Number(area)
-                  ],
-                sum,
-                correctSum,
-                diff: Math.abs(raw_diff),
-                neg_diff: Math.abs(Math.min(raw_diff, 0)),
-                pos_diff: Math.max(raw_diff, 0),
-              };
-            })
-            .toSorted((a, b) => b.diff - a.diff);
+                const correctSum =
+                  newAnalyse.data["total"][year][level][area][newAnalyse.name][
+                    `${aggregering}_rate`
+                  ];
+                const raw_diff = (sum / correctSum - 1) * 1000;
 
-          if (viewData.some((area) => area.diff > 5)) {
-            return [
-              {
-                severity: Severity.Warning,
-                Elem: () => (
-                  <Box key={`${year}-${level}-${view.name}`}>
-                    <Typography variant="h5" sx={{ marginTop: 1 }}>
-                      Mulig avvik i {year}, på {level}-nivå, i visningen{" "}
-                      {`"${view.name}"`}
-                    </Typography>
-                    <DiffChart data={viewData}></DiffChart>
-                  </Box>
-                ),
-              },
-            ];
-          } else return [];
-        }),
-    ),
-  );
+                return {
+                  areaName: String(area),
+                  sum,
+                  correctSum,
+                  diff: Math.abs(raw_diff),
+                  neg_diff: Math.abs(Math.min(raw_diff, 0)),
+                  pos_diff: Math.max(raw_diff, 0),
+                };
+              })
+              .toSorted((a, b) => b.diff - a.diff);
+
+            if (viewData.some((area) => area.diff > 5)) {
+              return [
+                {
+                  severity: Severity.Error,
+                  Elem: () => (
+                    <Box key={`${year}-${level}-${view.name}`}>
+                      <Typography variant="h5" sx={{ marginTop: 1 }}>
+                        Mulig avvik i {year}, på {level}-nivå, i visningen{" "}
+                        <em>{view.name}</em>, aggregert på{" "}
+                        {{ kont: "kontakter", pas: "pasienter" }[aggregering]}
+                      </Typography>
+                      <DiffChart data={viewData}></DiffChart>
+                    </Box>
+                  ),
+                },
+              ];
+            } else return [];
+          }),
+        ),
+      );
+    });
+
   const internalIntegrityReport = makeReport(
     "Intern integritet",
     internalIntegrity.length
@@ -206,10 +235,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
   var externalReports: ReportResults = [];
 
   if (oldAnalyse) {
-    const oldYears = [
-      Math.min(...Object.keys(oldAnalyse.data.sykehus[1]).map(Number)),
-      Math.max(...Object.keys(oldAnalyse.data.sykehus[1]).map(Number)),
-    ];
+    const oldYears = findYears(oldAnalyse);
 
     const oldTags = new Set(oldAnalyse.tags);
     const newTags = new Set(newAnalyse.tags);
@@ -329,47 +355,38 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
 
     const yearReport = makeReport(
       "Årstall",
-      oldYears.toString() === newYears.toString()
-        ? [
-            {
-              severity: Severity.Message,
-              Elem: () => (
-                <span>
-                  Den nye analysen har data for samme tidsperiode som den gamle
-                  analysen: {oldYears.join("–")}
-                </span>
-              ),
-            },
-          ]
-        : oldYears[0] !== newYears[0] || oldYears[1] + 1 !== newYears[1]
-          ? [
-              {
-                severity: Severity.Warning,
-                Elem: () => (
-                  <span>
-                    Årstallene inkludert i den nye analysen skiller seg på en
-                    uvanlig måte fra den gamle.
-                  </span>
-                ),
-              },
-              {
-                severity: Severity.Warning,
-                Elem: () => (
-                  <span>
-                    Årstall for den gamle analysen: {oldYears.join("–")}.
-                  </span>
-                ),
-              },
-              {
-                severity: Severity.Warning,
-                Elem: () => (
-                  <span>
-                    Årstall for den nye analysen: {newYears.join("–")}.
-                  </span>
-                ),
-              },
-            ]
-          : [],
+      Array.from(oldViews.intersection(newViews)).flatMap(
+        (viewName): ReportResults => {
+          if (
+            oldYears[viewName] !== undefined &&
+            newYears[viewName] !== undefined
+          ) {
+            return oldYears[viewName].span[0] !== newYears[viewName].span[0] ||
+              ![
+                oldYears[viewName].span[1],
+                (oldYears[viewName].span[1] as number) + 1,
+              ].includes(newYears[viewName].span[1])
+              ? [
+                  {
+                    severity: Severity.Warning,
+                    Elem: () => (
+                      <span>
+                        Årstallene i visningen <em>{viewName}</em> i den nye
+                        analysen skiller seg på en uvanlig måte fra den gamle.
+                        Årstall i den gamle analysen:{" "}
+                        {oldYears[viewName]!.span.join("–")}. Årstall for
+                        visnigen den nye analysen:{" "}
+                        {newYears[viewName]!.span.join("–")}.
+                      </span>
+                    ),
+                  },
+                ]
+              : [];
+          } else {
+            return [];
+          }
+        },
+      ),
     );
 
     const ageReport = makeReport(
@@ -418,8 +435,8 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
               severity: Severity.Warning,
               Elem: () => (
                 <span>
-                  Den nye analysen har kjønn {newAnalyse.kjonn}, mens den gamle
-                  har {oldAnalyse.kjonn}.
+                  Den nye analysen har kjønn <em>{newAnalyse.kjonn}</em>, mens
+                  den gamle har <em>{oldAnalyse.kjonn}</em>.
                 </span>
               ),
             },
@@ -474,68 +491,113 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
         newAnalyse.views.find((v) => v.name === viewName)?.variables.length,
     );
 
-    const commonYears = [
-      Math.max(newYears[0], oldYears[0]),
-      Math.min(newYears[1], oldYears[1]),
-    ];
-    const commonYearsRange = Array.from(
-      { length: commonYears[1] - commonYears[0] + 1 },
-      (_, i) => commonYears[0] + i,
-    );
+    const commonYearsRange: { [k: string]: ["NA"] | number[] } =
+      Object.fromEntries(
+        identicalViews.map((viewName) => {
+          if ([oldYears[viewName], newYears[viewName]].includes(undefined)) {
+            return [viewName, ["NA"]];
+          } else {
+            const maxYear = Math.max(
+              newYears[viewName]!.span[0] as number,
+              oldYears[viewName]!.span[0] as number,
+            );
+            const minYear = Math.min(
+              newYears[viewName]!.span[1] as number,
+              oldYears[viewName]!.span[1] as number,
+            );
 
-    const externalIntegrity = commonYearsRange.flatMap((year) =>
-      ["sykehus", "region"].flatMap((level) =>
-        identicalViews.flatMap((viewName) => {
+            return [
+              viewName,
+              Array.from(
+                { length: minYear - maxYear + 1 },
+                (_, i) => maxYear + i,
+              ),
+            ];
+          }
+        }),
+      );
+
+    const externalIntegrity = identicalViews.flatMap((viewName) =>
+      commonYearsRange[viewName].flatMap((year) =>
+        Object.keys(newAnalyse.data[viewName][year]).flatMap((categoryType) => {
           const view = newAnalyse.views.find(
             (v) => v.name === viewName,
           ) as View;
-          return view.variables.flatMap((variable, i) => {
-            const graphData = Object.keys(oldAnalyse.data[level])
-              .map((area) => {
-                const oldValue =
-                  oldAnalyse.data[level][area][year][viewName][i];
-                const newValue =
-                  newAnalyse.data[level][area][year][viewName][i];
-                const raw_diff = (newValue / oldValue - 1) * 1000 || 0;
 
-                return {
-                  areaName:
-                    regions_dict["no"][level as "sykehus" | "region"][
-                      Number(area)
-                    ],
-                  oldValue: oldValue,
-                  newValue: newValue,
-                  diff: Math.abs(raw_diff),
-                  neg_diff: Math.abs(Math.min(raw_diff, 0)),
-                  pos_diff: Math.max(raw_diff, 0),
-                };
-              })
-              .toSorted((a, b) => b.diff - a.diff);
+          return view.variables.flatMap((variable) => {
+            const inflections = new Set(
+              Object.keys(
+                newAnalyse.data[viewName][year][categoryType][
+                  Array.from(
+                    Object.keys(newAnalyse.data[viewName][year][categoryType]),
+                  )[0]
+                ][variable.name],
+              ),
+            ).intersection(
+              new Set(
+                Object.keys(
+                  oldAnalyse.data[viewName][year][categoryType][
+                    Array.from(
+                      Object.keys(
+                        oldAnalyse.data[viewName][year][categoryType],
+                      ),
+                    )[0]
+                  ][variable.name],
+                ),
+              ),
+            );
+            return Array.from(inflections).flatMap((inflection, i) => {
+              const graphData = Object.keys(
+                oldAnalyse.data[viewName][String(year)][categoryType],
+              )
+                .map((category) => {
+                  const oldValue =
+                    oldAnalyse.data[viewName][year][categoryType][category][
+                      variable.name
+                    ][inflection];
+                  const newValue =
+                    newAnalyse.data[viewName][year][categoryType][category][
+                      variable.name
+                    ][inflection];
+                  const raw_diff = (newValue / oldValue - 1) * 1000 || 0;
 
-            if (graphData.some((data) => data.diff > 0)) {
-              return [
-                {
-                  severity: graphData.some(
-                    (data) => data.diff > 100 /* more than 10% difference */,
-                  )
-                    ? Severity.Error
-                    : Severity.Warning,
-                  Elem: () => (
-                    <Box key={`${year}-${level}-${viewName}-${i}`}>
-                      <Typography variant="h5" sx={{ marginTop: 1 }}>
-                        Mulig avvik i {year}, i visningen {viewName}, for
-                        variabelen {variable.no}
-                      </Typography>
-                      <DiffChart data={graphData} />
-                    </Box>
-                  ),
-                },
-              ];
-            } else return [];
+                  return {
+                    areaName: String(category),
+                    oldValue: oldValue,
+                    newValue: newValue,
+                    diff: Math.abs(raw_diff),
+                    neg_diff: Math.abs(Math.min(raw_diff, 0)),
+                    pos_diff: Math.max(raw_diff, 0),
+                  };
+                })
+                .toSorted((a, b) => b.diff - a.diff);
+
+              if (graphData.some((data) => data.diff > 0)) {
+                return [
+                  {
+                    severity: graphData.some(
+                      (data) => data.diff > 100, // more than 10% difference,
+                    )
+                      ? Severity.Error
+                      : Severity.Warning,
+                    Elem: () => (
+                      <Box key={`${year}-${categoryType}-${viewName}-${i}`}>
+                        <Typography variant="h5" sx={{ marginTop: 1 }}>
+                          Mulig avvik i {year}, i visningen {viewName}, for
+                          variabelen {variable.no} ({inflection})
+                        </Typography>
+                        <DiffChart data={graphData} />
+                      </Box>
+                    ),
+                  },
+                ];
+              } else return [];
+            });
           });
         }),
       ),
     );
+
     const externalIntegrityReport = makeReport(
       "Extern integritet",
       externalIntegrity.length
@@ -566,6 +628,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
       Infinity,
     );
   }
+
   const OuterReport = makeReport(
     "Integritetssjekk",
     internalIntegrityReport.concat(oldAnalyse ? externalReports : []),

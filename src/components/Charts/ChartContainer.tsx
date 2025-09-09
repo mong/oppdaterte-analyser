@@ -234,10 +234,12 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
       ) as View
     ).year_range;
 
-    return Array.from(
-      { length: year_range[1] - year_range[0] + 1 },
-      (_, i) => year_range[0] + i,
-    );
+    return !year_range?.length
+      ? ["NA"]
+      : Array.from(
+          { length: year_range[1] - year_range[0] + 1 },
+          (_, i) => year_range[0] + i,
+        );
   };
 
   const years = getYears(viewName);
@@ -341,7 +343,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
             onClick={() => {
               setAnimating(true);
               var currentYear =
-                lastYear === year ? Math.min(...years) - 1 : year;
+                lastYear === year ? Math.min(...(years as number[])) - 1 : year;
               (function loop() {
                 setTimeout(
                   () => {
@@ -367,7 +369,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           track={false}
           value={year}
           step={1}
-          min={Math.min(...years)}
+          min={Math.min(...(years as number[]))}
           max={lastYear}
           onChange={(_, value) => setYear(value as number)}
           valueLabelFormat={(value) =>
@@ -378,7 +380,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           valueLabelDisplay="auto"
           marks={years
             .map((year) => ({
-              value: year,
+              value: year as number,
               label: year.toString(),
             }))
             .concat({
@@ -718,7 +720,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 <GraphBox>
                   <AnalyseLineChart
                     analyse={analyse}
-                    years={years}
+                    years={years as number[]}
                     level={level}
                     categoryFmt={(category) => getAreaName(category, lang)}
                     valueFmt={(v) =>
@@ -822,7 +824,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 andel={demographyAndel}
                 lang={lang}
                 year={allYears ? "all_years" : year}
-                years={years}
+                years={years as number[]}
               />
             </GraphBox>
             <DescriptionBox>
