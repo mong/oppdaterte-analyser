@@ -18,6 +18,11 @@ import { getAnalyserByTag, getTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
+import RichText from "@/components/RichText";
+
+import { getPayload } from "payload";
+import config from "@payload-config";
+import React, { cache } from "react";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
@@ -44,6 +49,9 @@ export default async function KompendiumPage(props: {
     notFound();
   }
 
+  const payload_tag = await getPayloadTag({ identifier: kompendium, lang });
+  console.log("payload_tags::", payload_tag);
+  console.log("payload_tags::", payload_tag.beskrivelse);
   const dict = await getDictionary(lang);
   const analyser = await getAnalyserByTag(
     kompendium,
@@ -82,6 +90,11 @@ export default async function KompendiumPage(props: {
           dangerouslySetInnerHTML={{
             __html: await markdownToHtml(tag.introduction?.[lang] || ""),
           }}
+        />
+        <RichText
+          data={payload_tag.beskrivelse}
+          enableGutter={false}
+          enableProse={false}
         />
       </Header>
       <main>
@@ -154,3 +167,23 @@ export default async function KompendiumPage(props: {
     </>
   );
 }
+
+const getPayloadTag = cache(
+  async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
+    const payload = await getPayload({ config: config });
+
+    const result = await payload.find({
+      collection: "tags",
+      limit: 1,
+      locale: { en: "en", no: "nb" }[lang] as "en" | "nb",
+      pagination: false,
+      where: {
+        identifier: {
+          equals: identifier,
+        },
+      },
+    });
+
+    return result.docs?.[0] || null;
+  },
+);
