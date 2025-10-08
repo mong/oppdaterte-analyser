@@ -9,26 +9,18 @@ import { Media } from "./collections/Media";
 import { Datafiler } from "./collections/Datafiler";
 import { Users } from "./collections/Users";
 import { Tags } from "./collections/Tags";
+import { Rapporter } from "./collections/Rapporter";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
-  admin: {
-    autoLogin:
-      process.env.NODE_ENV === "development"
-        ? {
-            email: "test@example.com",
-            password: "test",
-            prefillOnly: false,
-          }
-        : false,
-  },
+  admin: {},
   editor: lexicalEditor(),
-  collections: [Media, Datafiler, Users, Tags],
+  collections: [Rapporter, Media, Datafiler, Users, Tags],
   localization: {
-    locales: ["en", "nb", "nn"],
-    defaultLocale: "nb",
+    locales: ["en", "no"],
+    defaultLocale: "no",
   },
   i18n: {
     supportedLanguages: { nb },

@@ -4,6 +4,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
   Container,
   IconButton,
   Link,
@@ -16,21 +17,26 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import { colors } from "@mui/material";
-import React from "react";
+import React, { use } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 type AdminBarProps = {
   email: string;
   userName: string;
+  preview: boolean;
 };
 
 const settings = [
+  { tekst: "Gå til admin dashboard", url: "/admin" },
   { tekst: "Last opp analyse", url: "/admin/last-opp/" },
   { tekst: "Administrer analyser", url: "/admin/administrer/" },
   { tekst: "Logg ut", url: "/.auth/logout" },
 ];
 
-export default function AdminBar({ email, userName }: AdminBarProps) {
+export default function AdminBar({ email, userName, preview }: AdminBarProps) {
   const [anchorElem, setAnchorElem] = React.useState<null | HTMLElement>(null);
+  const router = useRouter()
+  const pathName = usePathname();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -45,7 +51,18 @@ export default function AdminBar({ email, userName }: AdminBarProps) {
                 {userName} / {email}
               </Typography>
             </Box>
-            <Box sx={{ flexGrow: 0 }}></Box>
+            {preview && pathName.match(/\/(en|no)\/rapporter\/.+/) &&  (
+              <Box sx={{ flexGrow: 0, marginX: 5 }}>
+                <Button
+                  sx={{ textTransform: "none", color: "white" }}
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => fetch('/next/exit-preview').then(() => router.refresh())}
+                >
+                  Forlat forhåndsvisning
+                </Button>
+              </Box>
+            )}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton

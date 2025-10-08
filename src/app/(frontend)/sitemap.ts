@@ -1,8 +1,9 @@
-import { getAnalyser, getKompendier } from "@/services/mongo";
+import { getAnalyser } from "@/services/mongo";
+import { getPayloadKompendier } from "@/services/payload";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const kompendier = await getKompendier();
+  const kompendier = await getPayloadKompendier({ lang: 'no' });
   const analyser = await getAnalyser();
 
   return [
@@ -23,9 +24,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
     .concat(
       kompendier.map((komp) => ({
-        url: `https://analyser.skde.no/no/${komp.name}/`,
+        url: `https://analyser.skde.no/no/${komp.identifier}/`,
         lastModified: analyser
-          .filter((analyse) => analyse.tags.includes(komp.name))
+          .filter((analyse) => analyse.tags.includes(komp.identifier))
           .map((analyse) => analyse.createdAt)
           .reduce(
             (acc, val) => (acc > new Date(val) ? acc : new Date(val)),
@@ -33,8 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           ),
         alternates: {
           languages: {
-            en: `https://analyser.skde.no/en/${komp.name}/`,
-            no: `https://analyser.skde.no/no/${komp.name}/`,
+            en: `https://analyser.skde.no/en/${komp.identifier}/`,
+            no: `https://analyser.skde.no/no/${komp.identifier}/`,
           },
         },
       })),

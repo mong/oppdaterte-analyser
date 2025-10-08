@@ -8,11 +8,12 @@ import {
 } from "@mui/material";
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
-import { getAnalyser, getKompendier } from "@/services/mongo";
+import { getAnalyser } from "@/services/mongo";
 import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
+import { getPayloadKompendier } from "@/services/payload";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
@@ -46,7 +47,9 @@ export default async function MainPage(props: MainPageProps) {
   }
 
   const dict = await getDictionary(lang);
-  const kompendier = await getKompendier(`fullname.${lang}`);
+
+  const kompendier = await getPayloadKompendier({ lang });
+  
   const analyser = await getAnalyser(
     `title.${lang}`,
     "-data -demografi -views -discussion -info",
@@ -106,11 +109,11 @@ export default async function MainPage(props: MainPageProps) {
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/${komp.name}/`}
+                href={`/${lang}/${komp.identifier}/`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
-                  primary={`${komp.fullname[lang]} (${analyser.filter((analyse) => analyse.tags.includes(komp.name)).length})`}
+                  primary={`${komp.title} (${analyser.filter((analyse) => analyse.tags.includes(komp.identifier)).length})`}
                 />
               </ListItemButton>
             ))}

@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 
 export async function loginCredentials() {
   if (process.env.NODE_ENV === "development") {
-    return { userName: "Test User", email: "test@test.test" };
+    return { userName: "Example user", email: "example@example.test" };
   }
 
   const headerList = await headers();
@@ -23,5 +23,6 @@ export async function loginCredentials() {
   const userName: string = (parsed.claims as Array<any>).find(
     (claim) => claim.typ === "name",
   ).val;
+
   return { userName, email };
 }

@@ -107,30 +107,6 @@ export const getAnalyserByTag = async (
   );
 };
 
-export const getTag = async (tag: string): Promise<Tag> => {
-  await dbConnect();
-  return toPlainObject(await TagModel.findOne({ name: tag }).exec());
-};
-
-export const getKompendier = async (sort = "name"): Promise<Tag[]> => {
-  await dbConnect();
-  return toPlainObject(
-    await TagModel.find({ introduction: { $exists: true } })
-      .sort(sort)
-      .exec(),
-  );
-};
-
-export const getTags = async (
-  tags: string[],
-): Promise<{ [k: string]: Tag }> => {
-  await dbConnect();
-  const tagData = toPlainObject(
-    await TagModel.find({ name: { $in: tags } }).exec(),
-  );
-  return Object.fromEntries(tagData.map((tag) => [tag.name, tag]));
-};
-
 export const uploadAnalyse = async (analyse: Analyse): Promise<void> => {
   await dbConnect();
 

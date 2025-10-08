@@ -8,6 +8,7 @@ import { Lang } from "@/types";
 import MatomoTracker from "./MatomoTracker";
 import { loginCredentials } from "@/lib/authorization";
 import AdminBar from "@/components/AdminBar";
+import { draftMode } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -18,6 +19,7 @@ export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { lang: Lang };
 }) {
+  const { isEnabled } = await draftMode()
   const params = props.params;
 
   const credentials = await loginCredentials();
@@ -29,7 +31,8 @@ export default async function RootLayout(props: {
         <AppRouterCacheProvider>
           <ThemeProvider theme={skdeTheme}>
             <CssBaseline />
-            {credentials && <AdminBar {...credentials} />}
+
+            {credentials && <AdminBar {...credentials} preview={isEnabled} />}
             <Box
               sx={{
                 height: "100vh",

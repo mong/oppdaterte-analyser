@@ -9,18 +9,19 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Header, { HeaderTop } from "@/components/Header";
+import { HeaderTop } from "@/components/Header";
 import { Analyse, Lang } from "@/types";
 import { ChartContainer } from "@/components/Charts/ChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
 import { getAnalyseMarkdown } from "@/lib/getMarkdown";
-import { getAnalyse, getTags } from "@/services/mongo";
+import { getAnalyse } from "@/services/mongo";
 import { makeDateElem } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
 import { Compare } from "@/components/Compare";
+import { getTags } from "@/services/payload";
 //import { Compare } from "@/components/Compare";
 
 const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {
@@ -51,14 +52,15 @@ export const generateMetadata = async (props: {
 
   if (!analyse) notFound();
 
-  const tags = await getTags(analyse.tags);
+  const tags = await getTags({ tags: analyse.tags, lang });
+
   const dict = await getDictionary(lang);
 
   return {
     title: `${analyse.title[lang]} - ${dict.general.updated_health_atlas}`,
     description: `${dict.general.updated_health_atlas}`,
     keywords: `${Object.values(tags)
-      .map((tag) => tag.fullname[lang])
+      .map((tag) => tag.title)
       .join(", ")}, ${dict.general.metadata_keywords}`,
   };
 };
@@ -76,8 +78,10 @@ export default async function AnalysePage(props: {
   const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);
   //const oldAnalyse = testPage && (await getAnalyse(analyseName, "published"));
 
-  const tags = await getTags(analyse.tags);
   const dict = await getDictionary(lang);
+
+  const tags = await getTags({ tags: analyse.tags, lang });
+  console.log({ tags });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {

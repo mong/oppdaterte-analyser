@@ -1,3 +1,5 @@
+import { ResultBoxBlock } from "@/blocks/ResultBox/Component";
+import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -27,7 +29,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    // resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock className="col-start-2 mb-4" {...node.fields} />,
+    resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock {...node.fields} />,
     // mediaBlock: ({ node }) => (
     //   <MediaBlock
     //     className="col-start-1 col-span-3"

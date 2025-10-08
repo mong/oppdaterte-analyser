@@ -14,11 +14,15 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
-import { getAnalyserByTag, getTag } from "@/services/mongo";
+import { getAnalyserByTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
+import { markdownToHtml } from "@/lib/getMarkdown";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import RichText from "@/components/RichText";
+
+import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
+
+import { getPayloadTag } from "@/services/payload";
 
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -28,15 +32,15 @@ export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
 }) => {
   const { kompendium, lang } = await props.params;
-  const tag = await getTag(kompendium);
+  const tag = await getPayloadTag({ identifier: kompendium, lang });
   const dict = await getDictionary(lang);
 
   return {
-    title: `${tag.fullname[lang]} - ${dict.general.updated_health_atlas}`,
-    description: tag.introduction
-      ? await stripMarkdown(tag.introduction[lang])
-      : `${dict.general.updated_health_atlas}: ${tag.fullname[lang]}`,
-    keywords: `${tag.fullname[lang]}, ${dict.general.metadata_keywords}`,
+    title: `${tag.title} - ${dict.general.updated_health_atlas}`,
+    description: tag.description
+      ? convertLexicalToPlaintext({ data: tag.description })
+      : `${dict.general.updated_health_atlas}: ${tag.title}`,
+    keywords: `${tag.title}, ${dict.general.metadata_keywords}`,
   };
 };
 
@@ -44,14 +48,14 @@ export default async function KompendiumPage(props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
 }) {
   const { kompendium, lang } = await props.params;
-  const tag = await getTag(kompendium);
+
+  const tag = await getPayloadTag({ identifier: kompendium, lang });
+
+
   if (!tag || !["en", "no"].includes(lang)) {
     notFound();
   }
 
-  const payload_tag = await getPayloadTag({ identifier: kompendium, lang });
-  console.log("payload_tags::", payload_tag);
-  console.log("payload_tags::", payload_tag.beskrivelse);
   const dict = await getDictionary(lang);
   const analyser = await getAnalyserByTag(
     kompendium,
@@ -74,25 +78,22 @@ export default async function KompendiumPage(props: {
     },
     {
       link: `/${lang}/${kompendium}/`,
-      text: tag.fullname[lang],
+      text: tag.title,
     },
   ];
 
   return (
     <>
-      <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.fullname[lang]}>
+      <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.title}>
         <Typography
           variant="h6"
           sx={{
             "& > p": { margin: 0, marginTop: 2 },
             "& a": { color: "primary.main" },
           }}
-          dangerouslySetInnerHTML={{
-            __html: await markdownToHtml(tag.introduction?.[lang] || ""),
-          }}
         />
         <RichText
-          data={payload_tag.beskrivelse}
+          data={tag.description}
           enableGutter={false}
           enableProse={false}
         />
@@ -168,22 +169,3 @@ export default async function KompendiumPage(props: {
   );
 }
 
-const getPayloadTag = cache(
-  async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
-    const payload = await getPayload({ config: config });
-
-    const result = await payload.find({
-      collection: "tags",
-      limit: 1,
-      locale: { en: "en", no: "nb" }[lang] as "en" | "nb",
-      pagination: false,
-      where: {
-        identifier: {
-          equals: identifier,
-        },
-      },
-    });
-
-    return result.docs?.[0] || null;
-  },
-);

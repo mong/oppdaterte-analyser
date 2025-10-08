@@ -10,7 +10,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export const Datafiler: CollectionConfig = {
-  slug: "json",
+  slug: "datafiler",
   folders: true,
   labels: {
     singular: "Datafil",
@@ -24,6 +24,6 @@ export const Datafiler: CollectionConfig = {
   },
   fields: [],
   upload: {
-    staticDir: path.resolve(dirname, "../../data"),
+    staticDir: path.resolve(dirname, "../../datafiler"),
   },
 };
