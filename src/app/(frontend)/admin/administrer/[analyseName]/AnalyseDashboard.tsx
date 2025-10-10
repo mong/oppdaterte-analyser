@@ -94,7 +94,7 @@ export default function AnalyseDashboard({
                 </TableCell>
                 <TableCell>
                   <Link
-                    href={`/no/analyse/${analyse.name}/${!isPublished(analyse) ? `test/${analyse.version > 0 ? analyse.version + "/" : ""}` : ""}`}
+                    href={`/no/analyse/${analyse.name}${!isPublished(analyse) ? `/test${analyse.version > 0 ? "/" + analyse.version : ""}` : ""}`}
                   >
                     {analyse.title["no"]}
                   </Link>

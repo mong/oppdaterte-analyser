@@ -69,15 +69,15 @@ export default async function KompendiumPage(props: {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${lang}/`,
+      link: `/${lang}`,
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/${lang}/${kompendium}/`,
+      link: `/${lang}/${kompendium}`,
       text: tag.title,
     },
   ];

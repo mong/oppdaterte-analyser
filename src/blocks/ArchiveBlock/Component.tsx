@@ -6,13 +6,15 @@ import React from 'react'
 import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { Lang } from '@/types'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
+    lang: Lang
   }
 > = async (props) => {
-  const { id, tags, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const { id, tags, introContent, limit: limitFromProps, populateBy, selectedDocs, lang } = props
 
   const limit = limitFromProps || 3
 
@@ -59,7 +61,7 @@ export const ArchiveBlock: React.FC<
           <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
         </div>
       )}
-      <CollectionArchive rapporter={rapporter} />
+      <CollectionArchive rapporter={rapporter} lang={lang}/>
     </div>
   )
 }

@@ -7,11 +7,19 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import { Container } from '@mui/material'
+import { Lang } from '@/types'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-export default async function Page() {
+type Args = {
+  params: Promise<{
+    lang: Lang;
+  }>
+}
+
+export default async function Page({ params: paramsPromise }: Args) {
+  const { lang } = await paramsPromise;
   const payload = await getPayload({ config: configPromise })
 
   const rapporter = await payload.find({
@@ -40,10 +48,9 @@ export default async function Page() {
           limit={12}
           totalDocs={rapporter.totalDocs}
         />
-        <CollectionArchive rapporter={rapporter.docs} />
-
+        <CollectionArchive rapporter={rapporter.docs} lang={lang} />
         {rapporter.totalPages > 1 && rapporter.page && (
-          <Pagination page={rapporter.page} totalPages={rapporter.totalPages} />
+          <Pagination page={rapporter.page} totalPages={rapporter.totalPages} lang={lang}/>
         )}
       </Container>
     </>

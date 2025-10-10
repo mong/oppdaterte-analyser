@@ -89,15 +89,15 @@ export default async function AnalysePage(props: {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${lang}/`,
+      link: `/${lang}`,
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/${lang}/analyse/${analyse.name}/`,
+      link: `/${lang}/analyse/${analyse.name}`,
       text: analyse.title[lang],
     },
   ];

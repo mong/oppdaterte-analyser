@@ -27,9 +27,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
-import { useLocale } from '@payloadcms/ui'
-
-export const Rapporter: CollectionConfig<'rapporter'> = {
+export const Rapporter: CollectionConfig = {
   slug: 'rapporter',
   labels: {
     singular: 'Rapport',
@@ -179,19 +177,14 @@ export const Rapporter: CollectionConfig<'rapporter'> = {
     },
     {
       name: "norskType",
+      label: "Norsktype",
       type: 'radio',
-      localized: true,
       options: [{ label: "Bokmål", value: "nb" }, { label: "Nynorsk", value: "nn" }],
       admin: {
         position: 'sidebar',
         components: {
-          Field: '@/components/DynamicRadionButtons#DynamicRadioButtons', 
+          Field: '@/components/NorskType', 
         },
-        condition: (data, siblingData, ctx) => {
-          const locale = useLocale()
-          console.log("Dataaaa:", locale);
-          return true
-        }
       },
     },
     {

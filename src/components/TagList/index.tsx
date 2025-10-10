@@ -23,7 +23,7 @@ export default function TagList({ tags, lang }: TagListProps) {
         <Chip
           clickable
           component={Link}
-          href={`/${lang}/${typeof tag === "string" ? tag : tag.identifier}/`}
+          href={`/${lang}/${typeof tag === "string" ? tag : tag.identifier}`}
           target="_blank"
           onClick={(event) => event.stopPropagation()}
           label={typeof tag === "string" ? tag : tag.title}

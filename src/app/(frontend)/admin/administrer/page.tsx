@@ -66,7 +66,7 @@ const AnalyseList = function ({ analyser }: { analyser: Analyse[] }) {
               <TableCell align="right">
                 <IconButton
                   aria-label="endre analyse"
-                  href={`/admin/administrer/${analyse.name}/`}
+                  href={`/admin/administrer/${analyse.name}`}
                 >
                   <SettingsIcon />
                 </IconButton>
@@ -92,7 +92,7 @@ export default async function AdministrerPage() {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
@@ -100,7 +100,7 @@ export default async function AdministrerPage() {
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: "/admin/administrer/",
+      link: "/admin/administrer",
       text: "Administrer analyser",
     },
   ];

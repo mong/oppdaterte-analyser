@@ -19,7 +19,7 @@ export default async function UploadPage() {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
@@ -27,7 +27,7 @@ export default async function UploadPage() {
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: "/admin/upload/",
+      link: "/admin/upload",
       text: "Last opp analyse",
     },
   ];

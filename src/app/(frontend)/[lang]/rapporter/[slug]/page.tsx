@@ -16,6 +16,7 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Container } from '@mui/material'
 import { SelectionProvider } from '@/lib/SelectionContext'
 import { notFound } from 'next/navigation'
+import { Lang } from '@/types'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -40,13 +41,14 @@ export async function generateStaticParams() {
 type Args = {
   params: Promise<{
     slug?: string
+    lang: Lang
   }>
 }
 
 export default async function Rapport({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
 
-  const { slug = '' } = await paramsPromise
+  const { slug = '', lang } = await paramsPromise
   const rapport = await queryRapportBySlug({ slug })
 
   if (!rapport) return notFound()
@@ -62,6 +64,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
           <RichText className="pt-4" data={rapport.content} enableGutter={false} />
           {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
             <RelatedRapporter
+              lang={lang}
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
               docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
             />

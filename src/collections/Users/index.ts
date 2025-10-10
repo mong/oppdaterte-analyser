@@ -1,7 +1,35 @@
 import type { CollectionConfig } from "payload";
 
 import { authenticated } from "../../access/authenticated";
-import { loginCredentials } from "@/lib/authorization";
+
+export async function loginCredentials(headers: Headers) {
+  /*
+  More or less a copy of{ loginCredentials } from "@/lib/authorization"; (the import "server-only" makes Payload crash)
+  */
+  if (process.env.NODE_ENV === "development") {
+    return { userName: "Example user", email: "example@example.test" };
+  }
+
+  const email = headers.get("x-ms-client-principal-name");
+  const authInfo = headers.get("x-ms-client-principal");
+
+  if (!(email && authInfo)) {
+    return false;
+  }
+
+  try {
+    var parsed = JSON.parse(Buffer.from(authInfo, "base64").toString());
+  } catch (e) {
+    return false;
+  }
+
+  const userName: string = (parsed.claims as Array<any>).find(
+    (claim) => claim.typ === "name",
+  ).val;
+
+  return { userName, email };
+}
+
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -22,7 +50,8 @@ export const Users: CollectionConfig = {
       {
         name: 'entra-id-strategy',
         authenticate: async ({ payload, headers }) => {
-          const credentials = await loginCredentials();
+
+          const credentials = await loginCredentials(headers);
           if (!credentials) {
             return { user: null };
           }

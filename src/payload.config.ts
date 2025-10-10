@@ -17,7 +17,7 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {},
   editor: lexicalEditor(),
-  collections: [Rapporter, Media, Datafiler, Users, Tags],
+  collections: [Rapporter, Users, Datafiler, Media, Tags],
   localization: {
     locales: ["en", "no"],
     defaultLocale: "no",

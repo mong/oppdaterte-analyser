@@ -8,17 +8,19 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { Lang } from '@/types'
 
 export const revalidate = 600
 
 type Args = {
   params: Promise<{
-    pageNumber: string
+    pageNumber: string;
+    lang: Lang;
   }>
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const { pageNumber } = await paramsPromise
+  const { pageNumber, lang } = await paramsPromise;
   const payload = await getPayload({ config: configPromise })
 
   const sanitizedPageNumber = Number(pageNumber)
@@ -51,11 +53,11 @@ export default async function Page({ params: paramsPromise }: Args) {
         />
       </div>
 
-      <CollectionArchive rapporter={rapporter.docs} />
+      <CollectionArchive rapporter={rapporter.docs} lang={lang} />
 
       <div className="container">
         {rapporter?.page && rapporter?.totalPages > 1 && (
-          <Pagination page={rapporter.page} totalPages={rapporter.totalPages} />
+          <Pagination page={rapporter.page} totalPages={rapporter.totalPages} lang={lang} />
         )}
       </div>
     </div>

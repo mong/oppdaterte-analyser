@@ -61,11 +61,11 @@ export default async function MainPage(props: MainPageProps) {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
-      link: `/${lang}/`,
+      link: `/${lang}`,
       text: dict.breadcrumbs.updated_health_atlas,
     },
   ];
@@ -109,7 +109,7 @@ export default async function MainPage(props: MainPageProps) {
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/${komp.identifier}/`}
+                href={`/${lang}/${komp.identifier}`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
@@ -132,7 +132,7 @@ export default async function MainPage(props: MainPageProps) {
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/analyse/${analyse.name}/`}
+                href={`/${lang}/analyse/${analyse.name}`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText

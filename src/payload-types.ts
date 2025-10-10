@@ -68,9 +68,9 @@ export interface Config {
   blocks: {};
   collections: {
     rapporter: Rapporter;
-    media: Media;
-    datafiler: Datafiler;
     users: User;
+    datafiler: Datafiler;
+    media: Media;
     tags: Tag;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -80,14 +80,14 @@ export interface Config {
   };
   collectionsJoins: {
     'payload-folders': {
-      documentsAndFolders: 'payload-folders' | 'media' | 'datafiler';
+      documentsAndFolders: 'payload-folders' | 'datafiler' | 'media';
     };
   };
   collectionsSelect: {
     rapporter: RapporterSelect<false> | RapporterSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -100,7 +100,7 @@ export interface Config {
   };
   globals: {};
   globalsSelect: {};
-  locale: 'en' | 'nb' | 'nn';
+  locale: 'en' | 'no';
   user: User & {
     collection: 'users';
   };
@@ -167,6 +167,7 @@ export interface Rapporter {
   };
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
+  norskType?: ('nb' | 'nn') | null;
   relatedRapporter?: (string | Rapporter)[] | null;
   tags?: (string | Tag)[] | null;
   slug?: string | null;
@@ -190,20 +191,39 @@ export interface FolderInterface {
           value: string | FolderInterface;
         }
       | {
-          relationTo?: 'media';
-          value: string | Media;
-        }
-      | {
           relationTo?: 'datafiler';
           value: string | Datafiler;
+        }
+      | {
+          relationTo?: 'media';
+          value: string | Media;
         }
     )[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  folderType?: ('media' | 'datafiler')[] | null;
+  folderType?: ('datafiler' | 'media')[] | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datafiler".
+ */
+export interface Datafiler {
+  id: string;
+  folder?: (string | null) | FolderInterface;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -300,25 +320,6 @@ export interface Media {
       filename?: string | null;
     };
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "datafiler".
- */
-export interface Datafiler {
-  id: string;
-  folder?: (string | null) | FolderInterface;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -465,16 +466,16 @@ export interface PayloadLockedDocument {
         value: string | Rapporter;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: 'users';
+        value: string | User;
       } | null)
     | ({
         relationTo: 'datafiler';
         value: string | Datafiler;
       } | null)
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'media';
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'tags';
@@ -548,6 +549,7 @@ export interface RapporterSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   author?: T;
+  norskType?: T;
   relatedRapporter?: T;
   tags?: T;
   slug?: T;
@@ -555,6 +557,34 @@ export interface RapporterSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datafiler_select".
+ */
+export interface DatafilerSelect<T extends boolean = true> {
+  folder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -649,34 +679,6 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "datafiler_select".
- */
-export interface DatafilerSelect<T extends boolean = true> {
-  folder?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,4 +1,6 @@
 import { ResultBoxBlock } from "@/blocks/ResultBox/Component";
+import { MediaBlock } from '@/blocks/MediaBlock/Component'
+
 import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
 import {
   DefaultNodeTypes,
@@ -30,16 +32,16 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
     resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock {...node.fields} />,
-    // mediaBlock: ({ node }) => (
-    //   <MediaBlock
-    //     className="col-start-1 col-span-3"
-    //     imgClassName="m-0"
-    //     {...node.fields}
-    //     captionClassName="mx-auto max-w-[48rem]"
-    //     enableGutter={false}
-    //     disableInnerContainer={true}
-    //   />
-    // ),
+    mediaBlock: ({ node }) => (
+      <MediaBlock
+        className="col-start-1 col-span-3"
+        imgClassName="m-0"
+        {...node.fields}
+        captionClassName="mx-auto max-w-[48rem]"
+        enableGutter={false}
+        disableInnerContainer={true}
+      />
+    ),
   },
 });
 

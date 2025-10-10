@@ -25,7 +25,7 @@ export default async function AdministrerAnalysePage(props: {
       text: dict.breadcrumbs.homepage,
     },
     {
-      link: "https://www.skde.no/helseatlas/",
+      link: "https://www.skde.no/helseatlas",
       text: dict.breadcrumbs.health_atlas,
     },
     {
@@ -33,11 +33,11 @@ export default async function AdministrerAnalysePage(props: {
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: "/admin/administrer/",
+      link: "/admin/administrer",
       text: "Administrer analyser",
     },
     {
-      link: `/admin/administrer/${analyseName}/`,
+      link: `/admin/administrer/${analyseName}`,
       text: analyseName,
     },
   ];

@@ -17,14 +17,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
       alternates: {
         languages: {
-          en: "https://analyser.skde.no/en/",
+          en: "https://analyser.skde.no/en",
         },
       },
     },
   ]
     .concat(
       kompendier.map((komp) => ({
-        url: `https://analyser.skde.no/no/${komp.identifier}/`,
+        url: `https://analyser.skde.no/no/${komp.identifier}`,
         lastModified: analyser
           .filter((analyse) => analyse.tags.includes(komp.identifier))
           .map((analyse) => analyse.createdAt)
@@ -34,20 +34,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           ),
         alternates: {
           languages: {
-            en: `https://analyser.skde.no/en/${komp.identifier}/`,
-            no: `https://analyser.skde.no/no/${komp.identifier}/`,
+            en: `https://analyser.skde.no/en/${komp.identifier}`,
+            no: `https://analyser.skde.no/no/${komp.identifier}`,
           },
         },
       })),
     )
     .concat(
       analyser.map((analyse) => ({
-        url: `https://analyser.skde.no/no/analyse/${analyse.name}/`,
+        url: `https://analyser.skde.no/no/analyse/${analyse.name}`,
         lastModified: new Date(analyse.createdAt),
         alternates: {
           languages: {
-            en: `https://analyser.skde.no/en/analyse/${analyse.name}/`,
-            no: `https://analyser.skde.no/no/analyse/${analyse.name}/`,
+            en: `https://analyser.skde.no/en/analyse/${analyse.name}`,
+            no: `https://analyser.skde.no/no/analyse/${analyse.name}`,
           },
         },
       })),

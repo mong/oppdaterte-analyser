@@ -6,15 +6,17 @@ import type { Rapporter } from '@/payload-types'
 
 import { Card } from '../../components/Card'
 import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import { Lang } from '@/types'
 
 export type RelatedRapporterProps = {
   className?: string
   docs?: Rapporter[]
   introContent?: SerializedEditorState
+  lang: Lang
 }
 
 export const RelatedRapporter: React.FC<RelatedRapporterProps> = (props) => {
-  const { className, docs, introContent } = props
+  const { className, docs, introContent, lang } = props
 
   return (
     <div className={clsx('lg:container', className)}>
@@ -24,7 +26,7 @@ export const RelatedRapporter: React.FC<RelatedRapporterProps> = (props) => {
         {docs?.map((doc, index) => {
           if (typeof doc === 'string') return null
 
-          return <Card key={index} doc={doc} relationTo="rapporter" showTags />
+          return <Card key={index} doc={doc} relationTo="rapporter" showTags lang={lang}/>
         })}
       </div>
     </div>

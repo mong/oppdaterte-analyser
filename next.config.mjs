@@ -1,9 +1,28 @@
 import { withPayload } from '@payloadcms/next/withPayload';
 
+const NEXT_PUBLIC_SERVER_URL = "https://analyser.skde.no"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "standalone",
-    trailingSlash: true,
+    trailingSlash: false,
+    images: {
+      remotePatterns: [
+        ...[NEXT_PUBLIC_SERVER_URL, 'http://localhost:3000'].map((item) => {
+          const url = new URL(item)
+          return {
+            hostname: url.hostname,
+            protocol: url.protocol.replace(':', ''),
+          }
+      }),
+    ],
+      qualities: [25, 50, 75, 100],
+      localPatterns: [
+        {
+          pathname: '/api/media/**',
+        },
+      ],
+    },
     async redirects() {
         return [
           {

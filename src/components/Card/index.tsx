@@ -7,6 +7,7 @@ import React, { Fragment } from 'react'
 import type { Rapporter } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { Lang } from '@/types'
 
 export type CardPostData = Pick<Rapporter, 'slug' | 'tags' | 'meta' | 'title'>
 
@@ -17,9 +18,10 @@ export const Card: React.FC<{
   relationTo?: 'rapporter'
   showTags?: boolean
   title?: string
+  lang: Lang
 }> = (props) => {
   const { card, link } = useClickableCard({})
-  const { className, doc, relationTo, showTags, title: titleFromProps } = props
+  const { className, doc, relationTo, showTags, title: titleFromProps, lang } = props
 
   const { slug, tags, meta, title } = doc || {}
   const { description, image: metaImage } = meta || {}
@@ -27,7 +29,7 @@ export const Card: React.FC<{
   const hasTags = tags && Array.isArray(tags) && tags.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
-  const href = `/${relationTo}/${slug}`
+  const href = `/${lang}/${relationTo}/${slug}`
 
   return (
     <article

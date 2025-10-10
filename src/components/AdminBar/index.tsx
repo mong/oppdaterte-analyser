@@ -28,8 +28,8 @@ type AdminBarProps = {
 
 const settings = [
   { tekst: "Gå til admin dashboard", url: "/admin" },
-  { tekst: "Last opp analyse", url: "/admin/last-opp/" },
-  { tekst: "Administrer analyser", url: "/admin/administrer/" },
+  { tekst: "Last opp analyse", url: "/admin/last-opp" },
+  { tekst: "Administrer analyser", url: "/admin/administrer" },
   { tekst: "Logg ut", url: "/.auth/logout" },
 ];
 

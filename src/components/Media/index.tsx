@@ -20,7 +20,6 @@ export const Media: React.FC<Props> = (props) => {
         }
         : {})}
     >
-      {/* <span>{typeof props.resource === 'object' && props.resource?.mimeType}</span> */}
       {isVideo ? <VideoMedia {...props} /> : <ImageMedia {...props} />}
     </Tag>
   )
