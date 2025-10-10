@@ -42,5 +42,5 @@ next-env.d.ts
 
 
 # Data files
-data
+datafiler/*
 public/media/
