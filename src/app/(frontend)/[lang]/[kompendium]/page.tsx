@@ -108,12 +108,13 @@ export default async function KompendiumPage(props: {
             }
           >
             <Stack spacing={4} sx={{ padding: 4 }}>
-              {analyser.map(async (analyse) => (
+              {analyser.map(async (analyse, i) => (
                 <Link
                   href={`/${lang}/analyse/${analyse.name}`}
                   target="_blank"
                   underline="none"
                   color="inherit"
+                  key={i}
                 >
                   <Paper
                     sx={{

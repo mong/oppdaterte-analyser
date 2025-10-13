@@ -17,7 +17,6 @@ export const ResultBox: Block = {
       type: "relationship",
       relationTo: 'datafiler',
       filterOptions: async ({ data, req }) => {
-        console.log("data.folder:", data.folder)
 
         const media = await req.payload.find({
           collection: "datafiler",

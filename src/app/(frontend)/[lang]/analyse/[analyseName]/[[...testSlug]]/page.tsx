@@ -81,7 +81,6 @@ export default async function AnalysePage(props: {
   const dict = await getDictionary(lang);
 
   const tags = await getTags({ tags: analyse.tags, lang });
-  console.log({ tags });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
