@@ -4,13 +4,12 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Box, CssBaseline } from "@mui/material";
 import skdeTheme from "@/themes/SkdeTheme";
 import Footer from "@/components/Footer";
-import { Lang } from "@/types";
-import MatomoTracker from "./MatomoTracker";
+import MatomoTracker from "../MatomoTracker";
 import { loginCredentials } from "@/lib/authorization";
 import AdminBar from "@/components/AdminBar";
 import { draftMode } from "next/headers";
 
-import './globals.css';
+import './tailwind.css'
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -19,15 +18,15 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { lang: Lang };
+  params: Promise<{ lang: string }>;
 }) {
   const { isEnabled } = await draftMode()
-  const params = props.params;
+  const { lang } = await props.params;
 
   const credentials = await loginCredentials();
 
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <MatomoTracker />
       <body>
         <AppRouterCacheProvider>

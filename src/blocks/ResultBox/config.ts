@@ -66,6 +66,16 @@ export const ResultBox: Block = {
       },
     },
     {
+      name: 'oppsummering',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, InlineToolbarFeature()]
+        },
+      }),
+      required: true,
+    },
+    {
       name: 'diskusjon',
       type: 'richText',
       editor: lexicalEditor({

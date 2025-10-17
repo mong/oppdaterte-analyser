@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 import {
   Alert,
   Box,
@@ -13,53 +13,39 @@ import { HeaderTop } from "@/components/Header";
 import { Analyse, Lang } from "@/types";
 import { ChartContainer } from "@/components/Charts/ChartContainer";
 import { getDictionary } from "@/lib/dictionaries";
-import { getAnalyseMarkdown } from "@/lib/getMarkdown";
-import { getAnalyse } from "@/services/mongo";
 import { makeDateElem } from "@/lib/helpers";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import TagList from "@/components/TagList";
 import DownloadDataButton from "./DownloadDataButton";
 import { notFound } from "next/navigation";
 import { Compare } from "@/components/Compare";
-import { getTags } from "@/services/payload";
+import { draftMode } from "next/headers";
+import { getPayload } from "payload";
+import configPromise from '@payload-config'
+import { LivePreviewListener } from "@/components/LivePreviewListener";
+import RichText from "@/components/RichText";
+
 //import { Compare } from "@/components/Compare";
 
-const getCorrectAnalyse = async (analyseName: string, testSlug: string[]) => {
-  const testPage = Boolean(
-    testSlug !== undefined &&
-      [1, 2].includes(testSlug.length) &&
-      testSlug[0] === "test" &&
-      (testSlug.length === 1 || testSlug[1].match(/^\d+$/)),
-  );
 
-  if (testSlug && !testPage) {
-    notFound();
-  }
-
-  const analyse = await getAnalyse(
-    analyseName,
-    !testPage ? "published" : Number(testSlug[1] || 0),
-  );
-
-  return { testPage, analyse };
-};
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
 }) => {
   const { lang, analyseName, testSlug } = await props.params;
-  const { analyse } = await getCorrectAnalyse(analyseName, testSlug);
 
-  if (!analyse) notFound();
+  const payload_analyse = await queryAnalyseBySlug({ slug: analyseName, lang })
 
-  const tags = await getTags({ tags: analyse.tags, lang });
+  if (!payload_analyse) notFound();
+
+  const tags = payload_analyse.tags?.filter((tag) => typeof tag === 'object' && tag !== null) || [];
 
   const dict = await getDictionary(lang);
 
   return {
-    title: `${analyse.title[lang]} - ${dict.general.updated_health_atlas}`,
+    title: `${payload_analyse.title} - ${dict.general.updated_health_atlas}`,
     description: `${dict.general.updated_health_atlas}`,
-    keywords: `${Object.values(tags)
+    keywords: `${tags
       .map((tag) => tag.title)
       .join(", ")}, ${dict.general.metadata_keywords}`,
   };
@@ -69,18 +55,19 @@ export default async function AnalysePage(props: {
   params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
 }) {
   const { lang, analyseName, testSlug } = await props.params;
-  const { testPage, analyse } = await getCorrectAnalyse(analyseName, testSlug);
+  // const { testPage, analyse } = await getCorrectAnalyse(analyseName, testSlug);
 
-  if (!analyse || !["en", "no"].includes(lang)) {
+  const { isEnabled: draft } = await draftMode()
+
+  const payload_analyse = await queryAnalyseBySlug({ slug: analyseName, lang })
+
+  if (!payload_analyse || !["en", "no"].includes(lang)) {
     notFound();
   }
 
-  const rawHtmlFromMarkdown = await getAnalyseMarkdown(analyse, lang);
-  //const oldAnalyse = testPage && (await getAnalyse(analyseName, "published"));
 
   const dict = await getDictionary(lang);
 
-  const tags = await getTags({ tags: analyse.tags, lang });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -96,8 +83,8 @@ export default async function AnalysePage(props: {
       text: dict.breadcrumbs.updated_health_atlas,
     },
     {
-      link: `/${lang}/analyse/${analyse.name}`,
-      text: analyse.title[lang],
+      link: `/${lang}/analyse/${payload_analyse.slug}`,
+      text: payload_analyse.title,
     },
   ];
 
@@ -105,12 +92,13 @@ export default async function AnalysePage(props: {
     <>
       <HeaderTop breadcrumbs={breadcrumbs} lang={lang}></HeaderTop>
       <main>
+        {draft && <LivePreviewListener />}
         <Container
           maxWidth="xxl"
           disableGutters={false}
           sx={{ paddingBottom: 4, paddingX: { xs: 2, md: 4 } }}
         >
-          {analyse.version === 0 && (
+          {payload_analyse.test && (
             <Alert severity="warning">
               Dette er en test-side! Denne analysen er fortsatt ikke publisert.
             </Alert>
@@ -122,54 +110,28 @@ export default async function AnalysePage(props: {
               </Grid>
             }
           >
-            {testPage && (
-              <Paper
-                elevation={0}
-                sx={{
-                  marginTop: 2,
-                  padding: 2,
-                  paddingY: 4,
-                  borderRadius: 10,
-                  boxShadow: "inset 0 0 25px #003087",
-                  background: "#F9F9F9",
-                }}
-              >
-                <Compare
-                  newAnalyse={analyse}
-                  oldAnalyse={await getAnalyse(analyseName, "published")}
-                />
-              </Paper>
-            )}
             <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">{analyse.title[lang]}</Typography>
-              <Typography
-                variant="body1"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-                dangerouslySetInnerHTML={{
-                  __html: rawHtmlFromMarkdown.summary,
-                }}
-              />
+              <Typography variant="h3">{payload_analyse.title}</Typography>
+              <RichText data={payload_analyse.summary} enableGutter={true} />
             </Box>
-            <ChartContainer analyse={analyse} lang={lang} dict={dict} />
+            {payload_analyse.data?.name ?
+              <ChartContainer
+                key={JSON.stringify(payload_analyse.data)} // Providing key to update state when new files are uploaded in preview
+                analyse={payload_analyse.data} lang={lang} dict={dict}
+              />
+              : <Alert severity="error">JSON-fil mangler</Alert>}
 
-            <Typography
-              variant="body1"
-              component="div"
-              sx={{ "@media print": { fontSize: "1rem" }, marginTop: 4 }}
-              dangerouslySetInnerHTML={{
-                __html: rawHtmlFromMarkdown.discussion,
-              }}
-            />
+            <RichText data={payload_analyse.discussion} enableGutter={true} />
 
             <Stack spacing={2} sx={{ marginTop: 2, marginBottom: 4 }}>
-              <TagList
-                tags={analyse.tags.map((tagName) => tags[tagName] || tagName)}
-                lang={lang}
-              />
+              {payload_analyse.tags &&
+                <TagList
+                  tags={payload_analyse.tags.filter((tag) => typeof tag === 'object' && tag !== null)}
+                  lang={lang}
+                />}
               <Typography variant="body2">
                 {dict.analysebox.updated}{" "}
-                {makeDateElem(analyse.createdAt, lang)}
+                {makeDateElem(payload_analyse.createdAt, lang)}
               </Typography>
             </Stack>
 
@@ -184,12 +146,7 @@ export default async function AnalysePage(props: {
               <Typography variant="h5" sx={{ color: "white" }}>
                 {dict.analysebox.info}
               </Typography>
-              <Typography
-                variant="body2"
-                component="div"
-                sx={{ "@media print": { fontSize: "1rem" } }}
-                dangerouslySetInnerHTML={{ __html: rawHtmlFromMarkdown.info }}
-              />
+              <RichText data={payload_analyse.about} enableGutter={true} />
             </Box>
           </Suspense>
         </Container>
@@ -197,3 +154,27 @@ export default async function AnalysePage(props: {
     </>
   );
 }
+
+
+const queryAnalyseBySlug = cache(async ({ slug, lang }: { slug: string, lang: Lang }) => {
+  const { isEnabled: draft } = await draftMode()
+
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'analyser',
+    draft,
+    limit: 1,
+    overrideAccess: draft,
+    pagination: false,
+    locale: lang,
+    fallbackLocale: false,
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  })
+
+  return result.docs?.[0] || null
+})

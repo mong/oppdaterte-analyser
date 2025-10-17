@@ -33,8 +33,8 @@ export const AnnualVariation = function ({
     <>
       <Group top={yScale.bandwidth() / 2}>
         <line
-          x1={xScale(min(annualRates))}
-          x2={xScale(max(annualRates))}
+          x1={xScale(min(annualRates)!)}
+          x2={xScale(max(annualRates)!)}
           y1={yScale(data[y].toString())}
           y2={yScale(data[y].toString())}
           stroke={"black"}
@@ -48,7 +48,7 @@ export const AnnualVariation = function ({
               r={sizeScale(lab) ?? 7}
               cx={xScale(data[d] as number)}
               cy={yScale(data[y].toString())}
-              fill={i !== 0 ? colorFillScale(lab).toString() : "none"}
+              fill={i !== 0 ? colorFillScale(lab)!.toString() : "none"}
               stroke={"black"}
               strokeWidth="1"
             />

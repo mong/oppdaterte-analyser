@@ -17,7 +17,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import { colors } from "@mui/material";
-import React, { use } from "react";
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 type AdminBarProps = {
@@ -28,8 +28,6 @@ type AdminBarProps = {
 
 const settings = [
   { tekst: "Gå til admin dashboard", url: "/admin" },
-  { tekst: "Last opp analyse", url: "/admin/last-opp" },
-  { tekst: "Administrer analyser", url: "/admin/administrer" },
   { tekst: "Logg ut", url: "/.auth/logout" },
 ];
 

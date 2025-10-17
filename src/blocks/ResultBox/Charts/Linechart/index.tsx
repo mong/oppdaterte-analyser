@@ -49,11 +49,11 @@ export const Linechart = ({
   });
 
   const accessors = {
-    xAccessor: (d) =>
+    xAccessor: (d: any) =>
       format_x === "month"
         ? new Date(2020, d.x - 1).toLocaleString(lang, { month: "long" })
         : d.x,
-    yAccessor: (d) => (format_y ? customFormat(format_y, lang)(d.y) : d.y),
+    yAccessor: (d: any) => (format_y ? customFormat(format_y, lang)(d.y) : d.y),
   };
 
   const yvaluesMaxTextLength = Math.max(
@@ -77,8 +77,8 @@ export const Linechart = ({
       <Box
         sx={{
           backgroundImage: `url(${{
-            "Helse Førde": "/logos/helse-forde-graa.svg",
-            SKDE: "/logos/logo-skde-graa.svg",
+            "Helse Førde": "/img/helse-forde-graa.svg",
+            SKDE: "/img/logo-skde-graa.svg",
           }[forfatter]
             })`,
           backgroundRepeat: "no-repeat",
@@ -99,7 +99,7 @@ export const Linechart = ({
         >
           <Axis
             orientation="bottom"
-            label={xLabel[lang]}
+            label={xLabel![lang]}
             labelProps={{
               fontSize: 14,
               textAnchor: "middle",
@@ -126,7 +126,7 @@ export const Linechart = ({
               textAnchor: "end",
             })}
             numTicks={4}
-            label={yLabel[lang]}
+            label={yLabel![lang]}
             labelProps={{
               fontSize: 14,
               textAnchor: "start",
@@ -160,10 +160,10 @@ export const Linechart = ({
             glyphStyle={{ fill: linechartColors[0] }}
             renderTooltip={({ tooltipData }) => (
               <>
-                {xLabel[lang].split(/[^A-Za-zæøåÆØÅ]/)[0]}
+                {xLabel![lang].split(/[^A-Za-zæøåÆØÅ]/)[0]}
                 {": "}
-                {accessors.xAccessor(tooltipData.nearestDatum.datum)}
-                {Object.keys(tooltipData.datumByKey)
+                {accessors.xAccessor(tooltipData!.nearestDatum!.datum)}
+                {Object.keys(tooltipData!.datumByKey)
                   .filter((value) => linevars.includes(value))
                   .map((d) => {
                     return (
@@ -171,7 +171,7 @@ export const Linechart = ({
                         <div style={{ color: colorScale(d) }}>
                           {getLinevarLabel(d)}
                           {": "}
-                          {accessors.yAccessor(tooltipData.datumByKey[d].datum)}
+                          {accessors.yAccessor(tooltipData!.datumByKey[d].datum)}
                         </div>
                       </div>
                     );

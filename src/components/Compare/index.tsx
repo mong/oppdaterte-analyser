@@ -232,7 +232,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
         ],
   );
 
-  var externalReports: ReportResults = [];
+  let externalReports: ReportResults = [];
 
   if (oldAnalyse) {
     const oldYears = findYears(oldAnalyse);

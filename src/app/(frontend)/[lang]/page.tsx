@@ -13,11 +13,11 @@ import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
-import { getPayloadKompendier } from "@/services/payload";
+import { getPayloadAnalyser, getPayloadKompendier } from "@/services/payload";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
-  return [{ lang: "no" }, { lang: "en" }];
+  return [{ lang: "no" }, { lang: "en" }] as { lang: Lang}[];
 }
 
 export async function generateMetadata(props: {
@@ -54,6 +54,9 @@ export default async function MainPage(props: MainPageProps) {
     `title.${lang}`,
     "-data -demografi -views -discussion -info",
   );
+
+  const payload_analyser = await getPayloadAnalyser({ lang });
+
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -124,20 +127,20 @@ export default async function MainPage(props: MainPageProps) {
           <Typography>
             {dict.frontpage.all_analyses_text.replace(
               "<n>",
-              analyser.length.toString(),
+              payload_analyser.length.toString(),
             )}
           </Typography>
           <List dense>
-            {analyser.map((analyse, i) => (
+            {payload_analyser.map((analyse, i) => (
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
-                href={`/${lang}/analyse/${analyse.name}`}
+                href={`/${lang}/analyse/${analyse.slug}`}
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
-                  primary={analyse.title[lang]}
-                  secondary={getSubHeader(analyse, lang)}
+                  primary={analyse.title}
+                  secondary={getSubHeader(analyse.data, lang)}
                 />
               </ListItemButton>
             ))}

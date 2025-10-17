@@ -1,7 +1,7 @@
 import { Analyse, Lang, View } from "@/types";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
-export function formatDate(date: Date, lang: Lang) {
+export function formatDate(date: Date | string, lang: Lang) {
   return new Date(date).toLocaleString({ en: "en-GB", no: "nb-NO" }[lang], {
     year: "numeric",
     month: "long",
@@ -9,7 +9,7 @@ export function formatDate(date: Date, lang: Lang) {
   });
 }
 
-export function makeDateElem(date: Date, lang: Lang) {
+export function makeDateElem(date: Date | string, lang: Lang) {
   return (
     <time dateTime={new Date(date).toISOString()}>
       {formatDate(date, lang)}
@@ -75,6 +75,7 @@ export function getVariableText(
   const variableObject = view.variables.find(
     (v) => v.name === variable.name,
   ) as View["variables"][0];
+  console.log("Variable object:", variableObject)
   return (
     <>
       {` (`}
@@ -96,7 +97,7 @@ export function getDescription(
   const age_range = getAgeRange(analyse, lang);
   const age = age_range ? `, ${age_range}` : "";
 
-  let variableText = variable && getVariableText(analyse, lang, variable);
+  const variableText = variable && getVariableText(analyse, lang, variable);
 
   let kontaktType = {
     kont: { no: "kontakter", en: "contacts" },
@@ -106,7 +107,7 @@ export function getDescription(
     kontaktType = analyse.kontakt_begrep[lang];
   }
 
-  let kategori = getCategory(analyse)[lang];
+  const kategori = getCategory(analyse)[lang];
 
   return (
     <Typography variant="body2">

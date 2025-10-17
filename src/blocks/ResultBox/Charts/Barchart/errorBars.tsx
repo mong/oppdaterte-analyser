@@ -24,8 +24,8 @@ export const ErrorBars = function ({
     <>
       <Group top={yScale.bandwidth() / 2}>
         <line
-          x1={xScale(min(allBars))}
-          x2={xScale(max(allBars))}
+          x1={xScale(min(allBars)!)}
+          x2={xScale(max(allBars)!)}
           y1={yScale(data[y].toString())}
           y2={yScale(data[y].toString())}
           stroke={"black"}
@@ -36,8 +36,8 @@ export const ErrorBars = function ({
             <line
               x1={xScale(Number(data[d]))}
               x2={xScale(Number(data[d]))}
-              y1={yScale(data[y].toString()) + 3}
-              y2={yScale(data[y].toString()) - 3}
+              y1={yScale(data[y].toString())! + 3}
+              y2={yScale(data[y].toString())! - 3}
               stroke={"black"}
               strokeWidth="2"
               key={`${d}_errorbar`}

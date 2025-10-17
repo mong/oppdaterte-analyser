@@ -9,7 +9,7 @@ import type { Rapporter } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { Lang } from '@/types'
 
-export type CardPostData = Pick<Rapporter, 'slug' | 'tags' | 'meta' | 'title'>
+export type CardPostData = Pick<Rapporter, 'slug' | 'tags' | 'bilde' | 'title' | 'meta'>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -23,8 +23,8 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showTags, title: titleFromProps, lang } = props
 
-  const { slug, tags, meta, title } = doc || {}
-  const { description, image: metaImage } = meta || {}
+  const { slug, tags, bilde, meta, title } = doc || {}
+  const { description, } = meta || {}
 
   const hasTags = tags && Array.isArray(tags) && tags.length > 0
   const titleToUse = titleFromProps || title
@@ -40,8 +40,8 @@ export const Card: React.FC<{
       ref={card.ref}
     >
       <div className=" ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+        {!bilde && <div className="">No image</div>}
+        {bilde && typeof bilde !== 'string' && <Media resource={bilde} size="33vw" />}
       </div>
       <div className="p-4">
         {showTags && hasTags && (

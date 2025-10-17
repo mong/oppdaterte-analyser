@@ -14,7 +14,7 @@ import { stack } from "d3-shape";
 export const toBarchart = (data: DataItemPoint[], dataKeys: string[]) => {
   const stackGen = stack().keys(dataKeys);
   const stackData = stackGen(data as { [k: string]: number }[]).map(
-    (d) => (d.forEach((v) => (v["key"] = d.key)), d),
+    (d) => (d.forEach((v: any) => (v["key"] = d.key)), d),
   );
 
   return stackData;
@@ -151,7 +151,7 @@ export const Barchart = ({
   });
 
   const xScale = scaleLinear<number>({
-    domain: [xMin, xMaxValue],
+    domain: [xMin, xMaxValue!],
     range: [0, innerWidth],
   });
 
@@ -164,10 +164,10 @@ export const Barchart = ({
 
   //annual var scales
   const colorFillScale = scaleLinear()
-    .domain([min(varLabels ?? [0]), max(varLabels ?? [1])])
+    .domain([min(varLabels ?? [0])!, max(varLabels ?? [1])!])
     .range(["black", "white"]);
   const sizeScale = scaleLinear<number>()
-    .domain([min(varLabels ?? [0]), max(varLabels ?? [0])])
+    .domain([min(varLabels ?? [0])!, max(varLabels ?? [0])!])
     .range([2, 7]);
 
   return (
@@ -180,8 +180,8 @@ export const Barchart = ({
       <Box
         sx={{
           backgroundImage: `url(${{
-            "Helse Førde": "/logos/helse-forde-graa.svg",
-            SKDE: "/logos/logo-skde-graa.svg",
+            "Helse Førde": "/img/helse-forde-graa.svg",
+            SKDE: "/img/logo-skde-graa.svg",
           }[forfatter]
             })`,
           backgroundRepeat: "no-repeat",
@@ -309,7 +309,7 @@ export const Barchart = ({
                     yScale={yScale}
                     lollipopVar={lollipopVar}
                     y={y}
-                    label={lollipopLabel[lang]}
+                    label={lollipopLabel![lang]}
                     key={`${d[y]}${i}`}
                   />
                 );
@@ -338,11 +338,11 @@ export const Barchart = ({
           labels={varLabels}
         />
       )}
-      {lollipopVar && <LollipopLegend label={lollipopLabel[lang]} />}
+      {lollipopVar && <LollipopLegend label={lollipopLabel![lang]} />}
       {x.length > 1 && (
         <ColorLegend
           colorScale={colorScale}
-          labels={xLegend[lang]}
+          labels={xLegend![lang]}
           values={x}
         />
       )}

@@ -6,6 +6,8 @@ import type { ServerFunctionClient } from "payload";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import React from "react";
 
+import './tailwind.css';
+
 import { importMap } from "./admin/importMap.js";
 
 type Args = {

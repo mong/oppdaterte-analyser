@@ -11,25 +11,21 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
 }) => {
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
-      const en_path = `/en/rapporter/${doc.slug}`
-      const no_path = `/no/rapporter/${doc.slug}`
-      payload.logger.info(`Revalidating rapport at path: ${en_path} and ${no_path}`)
+      const path = `/[lang]/rapporter/${doc.slug}`
+      payload.logger.info(`Revalidating rapport at path: ${path}`)
 
-      revalidatePath(en_path)
-      revalidatePath(no_path)
+      revalidatePath(path)
 
       revalidateTag('rapporter-sitemap')
     }
 
     // If the rapport was previously published, we need to revalidate the old path
     if (previousDoc._status === 'published' && doc._status !== 'published') {
-      const en_oldPath = `/en/rapporter/${previousDoc.slug}`
-      const no_oldPath = `/no/rapporter/${previousDoc.slug}`
+      const oldPath = `/[lang]/rapporter/${previousDoc.slug}`
 
-      payload.logger.info(`Revalidating old rapport at path: ${en_oldPath} and ${no_oldPath}`)
+      payload.logger.info(`Revalidating old rapport at path: ${oldPath}`)
 
-      revalidatePath(en_oldPath)
-      revalidatePath(no_oldPath)
+      revalidatePath(oldPath)
       revalidateTag('rapporter-sitemap')
     }
   }
@@ -38,11 +34,9 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Rapporter> = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
-    const no_path = `/no/rapporter/${doc?.slug}`
-    const en_path = `/en/rapporter/${doc?.slug}`
+    const path = `/[lang]/rapporter/${doc?.slug}`
 
-    revalidatePath(en_path)
-    revalidatePath(no_path)
+    revalidatePath(path)
     revalidateTag('rapporter-sitemap')
   }
 

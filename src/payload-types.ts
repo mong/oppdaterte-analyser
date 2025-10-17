@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     rapporter: Rapporter;
+    analyser: Analyser;
     users: User;
     datafiler: Datafiler;
     media: Media;
@@ -79,12 +80,16 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
+    tags: {
+      taggedRapporter: 'rapporter';
+    };
     'payload-folders': {
       documentsAndFolders: 'payload-folders' | 'datafiler' | 'media';
     };
   };
   collectionsSelect: {
     rapporter: RapporterSelect<false> | RapporterSelect<true>;
+    analyser: AnalyserSelect<false> | AnalyserSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -141,7 +146,7 @@ export interface Rapporter {
   id: string;
   title: string;
   folder: string | FolderInterface;
-  heroImage?: (string | null) | Media;
+  bilde?: (string | null) | Media;
   content: {
     root: {
       type: string;
@@ -159,15 +164,12 @@ export interface Rapporter {
   };
   meta?: {
     title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
     description?: string | null;
   };
+  test?: boolean | null;
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
-  norskType?: ('nb' | 'nn') | null;
+  norskType: 'nb' | 'nn';
   relatedRapporter?: (string | Rapporter)[] | null;
   tags?: (string | Tag)[] | null;
   slug?: string | null;
@@ -348,8 +350,79 @@ export interface Tag {
     };
     [k: string]: unknown;
   } | null;
+  taggedRapporter?: {
+    docs?: (string | Rapporter)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analyser".
+ */
+export interface Analyser {
+  id: string;
+  title: string;
+  data: {
+    [k: string]: unknown;
+  };
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  discussion: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  about: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  test?: boolean | null;
+  publishedAt?: string | null;
+  author: 'SKDE' | 'Helse Førde';
+  norskType: 'nb' | 'nn';
+  tags?: (string | Tag)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -466,6 +539,10 @@ export interface PayloadLockedDocument {
         value: string | Rapporter;
       } | null)
     | ({
+        relationTo: 'analyser';
+        value: string | Analyser;
+      } | null)
+    | ({
         relationTo: 'users';
         value: string | User;
       } | null)
@@ -538,19 +615,40 @@ export interface PayloadMigration {
 export interface RapporterSelect<T extends boolean = true> {
   title?: T;
   folder?: T;
-  heroImage?: T;
+  bilde?: T;
   content?: T;
   meta?:
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
       };
+  test?: T;
   publishedAt?: T;
   author?: T;
   norskType?: T;
   relatedRapporter?: T;
+  tags?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analyser_select".
+ */
+export interface AnalyserSelect<T extends boolean = true> {
+  title?: T;
+  data?: T;
+  summary?: T;
+  discussion?: T;
+  about?: T;
+  test?: T;
+  publishedAt?: T;
+  author?: T;
+  norskType?: T;
   tags?: T;
   slug?: T;
   slugLock?: T;
@@ -689,6 +787,7 @@ export interface TagsSelect<T extends boolean = true> {
   identifier?: T;
   isKompendium?: T;
   description?: T;
+  taggedRapporter?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -775,10 +874,15 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?: {
-      relationTo: 'rapporter';
-      value: string | Rapporter;
-    } | null;
+    doc?:
+      | ({
+          relationTo: 'rapporter';
+          value: string | Rapporter;
+        } | null)
+      | ({
+          relationTo: 'analyser';
+          value: string | Analyser;
+        } | null);
     global?: string | null;
     user?: (string | null) | User;
   };
@@ -791,6 +895,21 @@ export interface TaskSchedulePublish {
 export interface ResultBoxBlock {
   media: string | Datafiler;
   kart: string | Datafiler;
+  oppsummering: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   diskusjon: {
     root: {
       type: string;

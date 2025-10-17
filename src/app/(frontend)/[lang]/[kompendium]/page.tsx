@@ -24,8 +24,6 @@ import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintex
 
 import { getPayloadTag } from "@/services/payload";
 
-import { getPayload } from "payload";
-import config from "@payload-config";
 import React, { cache } from "react";
 
 export const generateMetadata = async (props: {
@@ -93,7 +91,7 @@ export default async function KompendiumPage(props: {
           }}
         />
         <RichText
-          data={tag.description}
+          data={tag.description!}
           enableGutter={false}
           enableProse={false}
         />

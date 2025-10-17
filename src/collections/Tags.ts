@@ -66,5 +66,12 @@ export const Tags: CollectionConfig = {
         },
       }),
     },
+    {
+      name: "taggedRapporter",
+      label: "Rapporter med denne taggen",
+      type: "join",
+      collection: "rapporter",
+      on: "tags"
+    },
   ],
 };

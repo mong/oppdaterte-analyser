@@ -18,7 +18,6 @@ import React, { useRef } from "react";
  */
 export const useKeys = (
   key: string[],
-  eventName: string,
   handler: (event: KeyboardEvent) => void,
   targetElement = global,
 ) => {
@@ -36,11 +35,11 @@ export const useKeys = (
       listenerRef.current &&
       key.includes(event.key) &&
       listenerRef.current(event);
-    targetElement.addEventListener(eventName, eventListener);
+    targetElement.addEventListener("keydown", eventListener);
     return () => {
-      targetElement.removeEventListener(eventName, eventListener);
+      targetElement.removeEventListener("keydown", eventListener);
     };
-  }, [eventName, targetElement]);
+  }, [targetElement]);
 };
 
 
@@ -52,16 +51,16 @@ export const useKeys = (
  * @param {boolean} active - Whether the effect should be active or not.
  * @returns {React.MutableRefObject<T>} - The ref that should be passed to the element.
  */
-export const useOnClickOutside = <T extends Element>(
+export const useOnClickOutside = (
   handler: () => void,
   active: boolean,
 ) => {
-  const ref = React.useRef<T>(undefined);
+  const ref = React.useRef<HTMLDivElement>(undefined);
 
   React.useEffect(() => {
-    const clickHandler = (event) => {
+    const clickHandler = (event: MouseEvent) => {
       if (!ref.current) return;
-      if (!ref.current.contains(event.target)) {
+      if (!ref.current.contains(event.target as any)) {
         handler();
       }
     };
@@ -95,7 +94,7 @@ export const PopUpContent = ({
     padding: 0,
   },
 }: PopUpContentProps) => {
-  const ref = useOnClickOutside<HTMLDivElement>(() => setActive(false), active);
+  const ref = useOnClickOutside(() => setActive(false), active);
 
   const transitions = useTransition(active, {
     from: { background: "rgba(172, 181, 189, 0)", transform: "scale(0.95)" },
@@ -111,7 +110,7 @@ export const PopUpContent = ({
     setActive(false);
     event.preventDefault();
   };
-  useKeys(["Escape", "Esc"], "keydown", handleKeyDown);
+  useKeys(["Escape", "Esc"], handleKeyDown);
   return (
     <>
       {transitions(
@@ -125,7 +124,7 @@ export const PopUpContent = ({
             >
               <div
                 className={classNames.popUpContent}
-                ref={ref}
+                ref={ref as any}
                 style={innerContentStyle}
                 data-testid="popUpContent"
               >

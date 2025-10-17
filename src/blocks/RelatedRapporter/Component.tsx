@@ -1,17 +1,16 @@
-import clsx from 'clsx'
 import React from 'react'
 import RichText from '@/components/RichText'
 
 import type { Rapporter } from '@/payload-types'
 
 import { Card } from '../../components/Card'
-import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import { Lang } from '@/types'
 
 export type RelatedRapporterProps = {
   className?: string
   docs?: Rapporter[]
-  introContent?: SerializedEditorState
+  introContent?: DefaultTypedEditorState
   lang: Lang
 }
 
@@ -19,7 +18,7 @@ export const RelatedRapporter: React.FC<RelatedRapporterProps> = (props) => {
   const { className, docs, introContent, lang } = props
 
   return (
-    <div className={clsx('lg:container', className)}>
+    <div className={className}>
       {introContent && <RichText data={introContent} enableGutter={false} />}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">

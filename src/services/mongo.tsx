@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import { AnalyseModel } from "@/models/AnalyseModel";
 import { Analyse } from "@/types";
-import TagModel from "@/models/TagModel";
-import { Tag } from "@/types";
 
 const TEST_DATABASE = false;
 
@@ -142,7 +140,7 @@ export const publishAnalyseVersion = async (
 
 export const publishTestAnalyse = async (
   analyseName: string,
-): Promise<Boolean> => {
+): Promise<boolean> => {
   await dbConnect();
 
   const oldAnalyse = await AnalyseModel.findOne({

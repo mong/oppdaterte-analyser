@@ -13,7 +13,7 @@ type FeatureShape = {
   };
   properties: {
     OBJECTID_1: number;
-    BoHF_num: number;
+    area: number;
     OBJECTID: number;
     Shape_Leng: number;
     Shape_Le_1: number;
@@ -93,15 +93,15 @@ export const Map = ({
           {mapData.features.map((d, i) => {
             const area = d.properties["area"];
             const val = data.find((attribute) => attribute["area"] === area)?.[
-              attrName
+              attrName!
             ];
 
             return (
               <path
                 key={`map-feature-${i}`}
-                d={pathGenerator(d.geometry)}
+                d={pathGenerator(d.geometry) || undefined}
                 fill={
-                  selection.has(area as string)
+                  selection.has(area.toString())
                     ? abacusColors[2] :
                     val
                       ? colorScale(val as number)
@@ -114,7 +114,7 @@ export const Map = ({
                 style={{
                   cursor: "pointer",
                 }}
-                onClick={() => toggleSelection(area as string)}
+                onClick={() => toggleSelection(area.toString())}
               />
             );
           })}
@@ -144,7 +144,7 @@ export const Map = ({
                         {customFormat(
                           format ? format : ".1f",
                           lang,
-                        )(colorScale.invertExtent(d)[0])}
+                        )(colorScale.invertExtent(d)[0]!)}
                       </text>
                     </>
                   )}

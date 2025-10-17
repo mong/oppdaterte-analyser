@@ -13,7 +13,7 @@ export const ResultBoxBlock: React.FC<ResultBoxBlockProps> = async ({ kart, disk
   if (!media || typeof media === "string" || !media.url || !media.filename) return
   if (!kart || typeof kart === "string" || !kart.filename) return
 
-  const getPath = (filename: string) => `${process.cwd()}/datafiler/${filename}`
+  const getPath = (filename: string) => `${process.cwd()}/public/data/${filename}`
 
   const mapData = JSON.parse(await fs.readFile(getPath(kart.filename), 'utf8'));
   const data = JSON.parse(await fs.readFile(getPath(media.filename), 'utf8'));

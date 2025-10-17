@@ -3,6 +3,8 @@ import { PayloadRequest, CollectionSlug } from 'payload'
 const collectionPrefixMap = {
   rapporter: (locale: string) =>
     `/${locale}/rapporter`,
+  analyser: (locale: string) =>
+    `/${locale}/analyse`,
   pages: () => '',
 }
 

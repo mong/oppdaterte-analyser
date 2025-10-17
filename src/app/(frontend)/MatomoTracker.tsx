@@ -15,6 +15,7 @@ export default function MatomoTracker() {
       s = d.getElementsByTagName("script")[0];
     g.async = true;
     g.src = "https://statistikk.fnsp.no/js/container_wcHdDuAW.js";
+    /* eslint-disable  @typescript-eslint/no-unused-expressions */
     s.parentNode && s.parentNode.insertBefore(g, s);
   }, []);
   return <></>;

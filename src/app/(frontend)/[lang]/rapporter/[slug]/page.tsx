@@ -7,7 +7,6 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
-import type { Rapporter } from '@/payload-types'
 
 import { RapportHero } from '@/components/RapportHero'
 import { generateMeta } from '@/utilities/generateMeta'
@@ -20,22 +19,23 @@ import { Lang } from '@/types'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-  const rapporter = await payload.find({
-    collection: 'rapporter',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = rapporter.docs.map(({ slug }) => {
-    return { slug }
-  })
-
-  return params
+  return (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
+    (await payload.find({
+      collection: 'rapporter',
+      draft: false,
+      limit: 0,
+      locale: lang,
+      fallbackLocale: false,
+      overrideAccess: false,
+      pagination: false,
+      where: {
+        test: { equals: false }
+      },
+      select: {
+        slug: true,
+      },
+    })).docs.map(({ slug }) => ({ slug, lang }))
+  ))).flat();
 }
 
 type Args = {
@@ -49,7 +49,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
 
   const { slug = '', lang } = await paramsPromise
-  const rapport = await queryRapportBySlug({ slug })
+  const rapport = await queryRapportBySlug({ slug, lang })
 
   if (!rapport) return notFound()
 
@@ -57,11 +57,14 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     <article className="pt-16 pb-16">
       {draft && <LivePreviewListener />}
 
-      <RapportHero rapport={rapport} />
+      <RapportHero rapport={rapport} lang={lang} />
 
       <Container maxWidth="xl">
         <SelectionProvider>
-          <RichText className="pt-4" data={rapport.content} enableGutter={false} />
+          <div className="my-8">
+            <RichText data={rapport.content} enableGutter={true} />
+          </div>
+
           {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
             <RelatedRapporter
               lang={lang}
@@ -76,13 +79,13 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = '' } = await paramsPromise
-  const rapport = await queryRapportBySlug({ slug })
+  const { slug = '', lang } = await paramsPromise
+  const rapport = await queryRapportBySlug({ slug, lang })
 
   return generateMeta({ doc: rapport })
 }
 
-const queryRapportBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryRapportBySlug = cache(async ({ slug, lang }: { slug: string, lang: Lang }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -93,6 +96,8 @@ const queryRapportBySlug = cache(async ({ slug }: { slug: string }) => {
     limit: 1,
     overrideAccess: draft,
     pagination: false,
+    locale: lang,
+    fallbackLocale: false,
     where: {
       slug: {
         equals: slug,

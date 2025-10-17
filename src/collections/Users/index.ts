@@ -17,8 +17,9 @@ export async function loginCredentials(headers: Headers) {
     return false;
   }
 
+  let parsed;
   try {
-    var parsed = JSON.parse(Buffer.from(authInfo, "base64").toString());
+    parsed = JSON.parse(Buffer.from(authInfo, "base64").toString());
   } catch (_) {
     return false;
   }

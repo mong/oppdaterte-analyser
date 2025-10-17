@@ -24,6 +24,6 @@ export const Datafiler: CollectionConfig = {
   },
   fields: [],
   upload: {
-    staticDir: path.resolve(dirname, "../../datafiler"),
+    staticDir: path.resolve(dirname, "../../public/data"),
   },
 };

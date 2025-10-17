@@ -3,32 +3,23 @@ import React from 'react'
 
 import type { Rapporter } from '@/payload-types'
 
-import { Media } from '@/components/Media'
 import HeaderMiddle from '@/components/Header/HeaderMiddle'
+import TagList from '../TagList'
+import { Lang } from '@/types'
 
 export const RapportHero: React.FC<{
-  rapport: Rapporter
-}> = ({ rapport }) => {
+  rapport: Rapporter;
+  lang: Lang;
+}> = ({ rapport, lang }) => {
   const { tags, author, publishedAt, title } = rapport
 
   return (
     <HeaderMiddle title={title}>
-      <div className="text-sm my-4">
-        {tags?.map((tag, index) => {
-          if (typeof tag === 'object' && tag !== null) {
-            const { title: tagTitle } = tag
-
-            const titleToUse = tagTitle || 'Untitled tag'
-
-            return (
-              <span key={index} className="text-white bg-blue-900 rounded-xl p-2 mr-3">
-                {titleToUse}
-              </span>
-            )
-          }
-          return null
-        })}
-      </div>
+      {tags &&
+        <TagList
+          tags={tags.filter((tag) => typeof tag === 'object' && tag !== null)}
+          lang={lang}
+        />}
       <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">

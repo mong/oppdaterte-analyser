@@ -126,11 +126,12 @@ export const ResultBox = ({
         value={expandedResultBox ? "open" : "closed"}
       >
 
-        <AccordionItem value="open" className="shadow-[0_5px_15px_rgba(0,0,0,0.25)] border-b-[0.1875rem] border-primary">
+        <AccordionItem value="open" className="mt-8 shadow-[0_5px_15px_rgba(0,0,0,0.25)] border-b-[0.1875rem] border-primary">
           <Box
             onClick={() => setExpandedResultBox(!expandedResultBox)}
             sx={{
               backgroundColor: "#FAFAFA",
+              padding: 2,
               fontSize: "1.1rem",
               ":hover": {
                 backgroundColor: "rgb(241, 241, 241)",
@@ -140,7 +141,7 @@ export const ResultBox = ({
             }}
           >
             <div className={classNames.resultBoxTitleWrapper}>
-              <h3>{title}</h3>
+              <h3 className="text-xl font-bold mb-4">{title}</h3>
               <Markdown lang={"nb"}>{"*Hello, dis bist texktt"}</Markdown>
               {figData && (
                 <Abacus

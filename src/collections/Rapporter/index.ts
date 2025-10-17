@@ -46,13 +46,13 @@ export const Rapporter: CollectionConfig = {
     title: true,
     slug: true,
     tags: true,
+    bilde: true,
     meta: {
-      image: true,
       description: true,
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'updatedAt', 'test'],
     livePreview: {
       url: ({ data, req, locale }) => {
         const path = generatePreviewPath({
@@ -77,6 +77,7 @@ export const Rapporter: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       name: 'folder',
@@ -91,13 +92,14 @@ export const Rapporter: CollectionConfig = {
         {
           fields: [
             {
-              name: 'heroImage',
+              name: 'bilde',
               type: 'upload',
               relationTo: 'media',
             },
             {
               name: 'content',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -122,16 +124,11 @@ export const Rapporter: CollectionConfig = {
           fields: [
             OverviewField({
               titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-              imagePath: 'meta.image',
+              descriptionPath: 'meta.description'
             }),
             MetaTitleField({
               hasGenerateFn: true,
             }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
             MetaDescriptionField({}),
             PreviewField({
               // if the `generateUrl` function is configured
@@ -146,7 +143,18 @@ export const Rapporter: CollectionConfig = {
       ],
     },
     {
+      name: "test",
+      localized: true,
+      label: "Test-versjon (ikke publisert på forsiden)",
+      type: "checkbox",
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'publishedAt',
+      localized: true,
       type: 'date',
       admin: {
         date: {
@@ -180,6 +188,8 @@ export const Rapporter: CollectionConfig = {
       label: "Norsktype",
       type: 'radio',
       options: [{ label: "Bokmål", value: "nb" }, { label: "Nynorsk", value: "nn" }],
+      defaultValue: "nb",
+      required: true,
       admin: {
         position: 'sidebar',
         components: {
@@ -190,6 +200,7 @@ export const Rapporter: CollectionConfig = {
     {
       name: 'relatedRapporter',
       type: 'relationship',
+      localized: true,
       admin: {
         position: 'sidebar',
       },

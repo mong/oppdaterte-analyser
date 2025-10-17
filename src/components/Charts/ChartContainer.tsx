@@ -159,6 +159,9 @@ export type ChartContainerProps = {
 };
 
 export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
+
+  console.log("Inside ChartContainer", analyse)
+
   const [animating, setAnimating] = React.useState(false);
   const animatingRef = React.useRef(false);
   React.useEffect(() => {
@@ -177,8 +180,6 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
       new Set(curr.aggregering === "begge" ? ["kont", "pas"] : [curr.aggregering as "kont" | "pas"])),
     new Set<"kont" | "pas">()
   )
-  console.log("AggregeringTypes", aggregeringTypes, aggregeringTypes.size)
-
 
   const [aggregering, setAggregering] = React.useState<"kont" | "pas">(
     aggregeringTypes.size === 1 ? aggregeringTypes.values().next().value! : "kont"
@@ -226,9 +227,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     return !year_range?.length
       ? ["NA"]
       : Array.from(
-          { length: year_range[1] - year_range[0] + 1 },
-          (_, i) => year_range[0] + i,
-        );
+        { length: year_range[1] - year_range[0] + 1 },
+        (_, i) => year_range[0] + i,
+      );
   };
 
   const years = getYears(viewName);
@@ -256,12 +257,12 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               );
               const variables = Object.keys(
                 analyse.data[viewName][view_years[0]][level_or_view][
-                  categories[0]
+                categories[0]
                 ],
               );
               const inflections = Object.keys(
                 analyse.data[viewName][view_years[0]][level_or_view][
-                  categories[0]
+                categories[0]
                 ][variables[0]],
               );
               return [
@@ -279,7 +280,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                                 categories.map(
                                   (category) =>
                                     analyse.data[viewName][year][level_or_view][
-                                      category
+                                    category
                                     ][variable][inflection],
                                 ),
                               ),
@@ -291,7 +292,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                                   .map(
                                     (category) =>
                                       analyse.data[viewName][year][
-                                        level_or_view
+                                      level_or_view
                                       ][category][variable][inflection],
                                   ),
                               ),
@@ -309,6 +310,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
       }),
     );
   }, [analyse]);
+
+  console.log("MaxValues", maxValues)
+  console.log(level, analyse.name, tidstrendVariable)
 
   const varNames = React.useMemo(
     () =>
@@ -331,7 +335,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           <IconButton
             onClick={() => {
               setAnimating(true);
-              var currentYear =
+              let currentYear =
                 lastYear === year ? Math.min(...(years as number[])) - 1 : year;
               (function loop() {
                 setTimeout(
@@ -480,34 +484,34 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         <ToggleButton value={"region"}>{dict.analysebox.region}</ToggleButton>
       </StyledToggleButtonGroup>
       {aggregeringTypes.size === 2 &&
-      <StyledToggleButtonGroup
-        color="primary"
-        value={aggregering}
-        exclusive
-        onChange={() => {
-          const newAggregering = aggregering === "kont" ? "pas" : "kont";
-          setAggregering(newAggregering);
-          if (!["begge", newAggregering].includes(currentView.aggregering)) {
-            setViewName("total");
-          }
-          if (
-            !["begge", newAggregering].includes(
-              views[tidstrendVariable.viewName].aggregering,
-            )
-          ) {
-            setTidstrendVariable({ viewName: "total", name: analyse.name });
-          }
-        }}
-      >
-        <ToggleButton value={"kont"} sx={{ transition: "all 0.3s ease" }}>
-          {analyse.kontakt_begrep
-            ? capitalize(analyse.kontakt_begrep[lang])
-            : dict.analysebox.kontakter}
-        </ToggleButton>
-        <ToggleButton value={"pas"} sx={{ transition: "all 0.3s ease" }}>
-          {dict.analysebox.pasienter}
-        </ToggleButton>
-      </StyledToggleButtonGroup>}
+        <StyledToggleButtonGroup
+          color="primary"
+          value={aggregering}
+          exclusive
+          onChange={() => {
+            const newAggregering = aggregering === "kont" ? "pas" : "kont";
+            setAggregering(newAggregering);
+            if (!["begge", newAggregering].includes(currentView.aggregering)) {
+              setViewName("total");
+            }
+            if (
+              !["begge", newAggregering].includes(
+                views[tidstrendVariable.viewName].aggregering,
+              )
+            ) {
+              setTidstrendVariable({ viewName: "total", name: analyse.name });
+            }
+          }}
+        >
+          <ToggleButton value={"kont"} sx={{ transition: "all 0.3s ease" }}>
+            {analyse.kontakt_begrep
+              ? capitalize(analyse.kontakt_begrep[lang])
+              : dict.analysebox.kontakter}
+          </ToggleButton>
+          <ToggleButton value={"pas"} sx={{ transition: "all 0.3s ease" }}>
+            {dict.analysebox.pasienter}
+          </ToggleButton>
+        </StyledToggleButtonGroup>}
       <StyledToggleButtonGroup
         color="primary"
         value={verdiType}
@@ -635,7 +639,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     )}
                     valueGetter={(category, variable) =>
                       analyse.data[viewName][year][level][category][variable][
-                        `${aggregering}_${verdiType}`
+                      `${aggregering}_${verdiType}`
                       ]
                     }
                     variableFmt={(variable) => varNames[variable][lang]}
@@ -729,9 +733,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     lang={lang}
                     maxValue={
                       maxValues[tidstrendVariable.viewName][level][
-                        tidstrendVariable.name
+                      tidstrendVariable.name
                       ][`${aggregering}_${verdiType}`][
-                        showNorway ? "all" : "withoutNorway"
+                      showNorway ? "all" : "withoutNorway"
                       ]
                     }
                   />
@@ -821,15 +825,15 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               <Typography variant="body2">
                 {demographyAndel
                   ? dict.analysebox[
-                      showGenders
-                        ? "demography_proportion_gender"
-                        : "demography_proportion"
-                    ]
+                  showGenders
+                    ? "demography_proportion_gender"
+                    : "demography_proportion"
+                  ]
                   : dict.analysebox[
-                      showGenders
-                        ? "demography_n_people_gender"
-                        : "demography_n_people"
-                    ]}
+                  showGenders
+                    ? "demography_n_people_gender"
+                    : "demography_n_people"
+                  ]}
                 {demografiVariable.name !== analyse.name &&
                   getVariableText(analyse, lang, demografiVariable)}
               </Typography>

@@ -73,7 +73,7 @@ export const DataTable = ({
 
   const [order, setOrder] = React.useState<"asc" | "desc">("desc");
   const [orderBy, setOrderBy] = React.useState(headers[1].id);
-  const createSortHandler = (property) => () => {
+  const createSortHandler = (property: string) => () => {
     (() => {
       const isAsc = orderBy === property && order === "asc";
       setOrder(isAsc ? "desc" : "asc");
@@ -115,7 +115,7 @@ export const DataTable = ({
               getOrderComparator(
                 order,
                 orderBy,
-                headers.find((header) => header.id === orderBy).typeVar,
+                headers.find((header) => header.id === orderBy)!.typeVar,
               ),
             )
             .map((row, i) => (

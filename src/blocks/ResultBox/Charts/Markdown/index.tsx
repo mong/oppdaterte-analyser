@@ -22,8 +22,8 @@ export const Markdown = ({ children, lang }: MarkdownProp) => {
   const components: Components = {
     p({ children, node }) {
       if (
-        node.children[0].type === "element" &&
-        ["img", "a"].includes(node.children[0].tagName)
+        node!.children[0].type === "element" &&
+        ["img", "a"].includes(node!.children[0].tagName)
       ) {
         return <>{children}</>;
       }

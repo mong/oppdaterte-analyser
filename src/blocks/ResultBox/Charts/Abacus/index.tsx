@@ -42,7 +42,6 @@ export const Abacus = ({
   xMax,
   areaType,
   areaName,
-  format,
   national,
 }: AbacusProps) => {
   const { selection, toggleSelection } = useSelection(areaType, national);
@@ -59,7 +58,7 @@ export const Abacus = ({
 
 
   const values = [...figData.flatMap((dt) => dt[x] as number)];
-  const xMaxVal = xMax ? xMax : max(values) * 1.1;
+  const xMaxVal = xMax ? xMax : max(values)! * 1.1;
   const innerWidth = width - margin.left - margin.right;
   const colors = abacusColors;
 

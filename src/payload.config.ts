@@ -10,6 +10,8 @@ import { Datafiler } from "./collections/Datafiler";
 import { Users } from "./collections/Users";
 import { Tags } from "./collections/Tags";
 import { Rapporter } from "./collections/Rapporter";
+import { Analyser } from "./collections/Analyser";
+import { getServerSideURL } from "./utilities/getURL";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -17,11 +19,12 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {},
   editor: lexicalEditor(),
-  collections: [Rapporter, Users, Datafiler, Media, Tags],
+  collections: [Rapporter, Analyser, Users, Datafiler, Media, Tags],
   localization: {
     locales: ["en", "no"],
     defaultLocale: "no",
   },
+  serverURL: getServerSideURL(),
   i18n: {
     supportedLanguages: { nb },
   },
