@@ -140,7 +140,7 @@ export default async function AnalysePage(props: {
             {analyse.data?.name && analyse.data.name === analyse.slug ? (
               <ChartContainer
                 key={dataHash} // Providing key to update state when new files are uploaded in preview
-                analyse={analyse.data}
+                analyse={analyse}
                 lang={lang}
                 dict={dict}
               />

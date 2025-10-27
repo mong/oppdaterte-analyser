@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { JSX, PropsWithChildren } from "react";
 import {
   Select,
   FormControl,
@@ -21,6 +21,10 @@ import {
   Stack,
   styled,
   toggleButtonGroupClasses,
+  Tooltip,
+  Menu,
+  Snackbar,
+  Slide,
 } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -31,6 +35,11 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import CloseIcon from "@mui/icons-material/Close";
+
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
 
 import { Lang, View } from "@/types";
 import { AnalyseBarChart } from "./AnalyseBarChart";
@@ -126,21 +135,181 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)({
   },
 });
 
-const GraphBox = styled(Box)({
-  width: "100%",
-  height: "80vw",
-  maxHeight: "700px",
-  minHeight: "370px",
-  marginTop: 0,
-  position: "sticky",
-});
+type ScreenshotBoxProps = {
+  analyse: Analyser;
+  dict: { [k: string]: { [k: string]: string } };
+  filename: string;
+  description: JSX.Element;
+};
 
-const DescriptionBox = styled(Box)({
-  textAlign: "center",
-  padding: 10,
-  paddingBottom: 0,
-  "@media print": { padding: 0 },
-});
+export function ScreenshotBox({
+  children,
+  analyse,
+  dict,
+  filename,
+  description
+}: PropsWithChildren<ScreenshotBoxProps>) {
+
+  const getCanvas = async () => {
+    if (graphRef.current) {
+      return await html2canvas(graphRef.current, {
+        onclone: (_, elem) => {
+          Array.from(elem.querySelectorAll("*")).forEach((e) => {
+            let existingStyle = e.getAttribute("style") || "";
+            e.setAttribute(
+              "style",
+              `${existingStyle}; font-family: sans-serif`,
+            );
+          });
+        },
+      });
+    }
+    return Promise.reject(new Error("No ref to graph"));
+  };
+
+  const graphRef = React.useRef<null | HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  return (
+    <Box sx={{ position: "sticky" }}>
+      <Tooltip title={dict.analysebox.copy_graph_tooltip}>
+        <IconButton
+          aria-label="screenshot"
+          size="large"
+          sx={{
+            position: "absolute",
+            right: 10,
+            top: 10,
+            zIndex: 2,
+            color: "rgba(0, 0, 0, 0.2)",
+            "&:hover": { color: "rgba(0, 0, 0, 0.6)" },
+            displayPrint: "none",
+          }}
+          aria-controls={open ? "screenshot-meny" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <PhotoCameraIcon />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        id="screenshot-meny"
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+      >
+        <MenuItem
+          onClick={(e) => {
+            getCanvas().then((canvas) =>
+              canvas.toBlob(
+                (blob) =>
+                  blob &&
+                  navigator.clipboard
+                    .write([
+                      new ClipboardItem({
+                        "image/png": blob,
+                      }),
+                    ])
+                    .then(() => setOpenSnackbar(true)),
+              ),
+            );
+            handleClose(e);
+          }}
+        >
+          {dict.analysebox.copy_graph}
+        </MenuItem>
+
+        <MenuItem
+          onClick={(e) => {
+            getCanvas().then((canvas) =>
+              canvas.toBlob((blob) => blob && saveAs(blob, filename)),
+            );
+            handleClose(e);
+          }}
+        >
+          {dict.analysebox.download_graph}
+        </MenuItem>
+      </Menu>
+      <Box ref={graphRef}>
+        <Box
+          sx={{
+            width: "100%",
+            height: "80vw",
+            maxHeight: "700px",
+            minHeight: "370px",
+            marginTop: 0,
+            position: "sticky",
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+            }}
+          >
+            <Box
+              component="img"
+              alt="SKDE Logo."
+              src={analyse.author === "SKDE" ? "/img/logo-skde-graa.svg" : "/img/helse-forde-graa.svg"}
+              sx={{
+                width: "15vw",
+                maxWidth: 125,
+                position: "absolute",
+                bottom: 40,
+                right: 30,
+                printColorAdjust: "exact",
+                "@media print": { bottom: 110 },
+              }}
+            />
+          </Box>
+          {children}
+        </Box>
+        <Box sx={{
+          textAlign: "center",
+          padding: 2,
+          paddingBottom: 3,
+          "@media print": { padding: 0, paddingBottom: 3 },
+        }}>
+          {description}
+        </Box>
+      </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setOpenSnackbar(false)}
+        slots={{ transition: Slide }}
+        message={dict.analysebox.copy_graph_snackbar_message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => setOpenSnackbar(false)}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
+    </Box>
+  );
+}
 
 const MyTabList = styled(TabList)({
   ["& .Mui-selected"]: { background: BACKGROUND_COLOR },
@@ -153,7 +322,7 @@ const MyTabList = styled(TabList)({
 });
 
 export type ChartContainerProps = {
-  analyse: Analyser["data"];
+  analyse: Analyser;
   lang: Lang;
   dict: { [k: string]: { [k: string]: string } };
 };
@@ -170,7 +339,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
 
   const [level, setLevel] = React.useState<"region" | "sykehus">("sykehus");
 
-  const aggregeringTypes = analyse.views.reduce(
+  const aggregeringTypes = analyse.data.views.reduce(
     (prev, curr) =>
       prev.union(
         new Set(
@@ -196,7 +365,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
   const [allYears, setAllYears] = React.useState(true);
 
   const views = React.useMemo(
-    () => Object.fromEntries(analyse.views.map((v) => [v.name, v])),
+    () => Object.fromEntries(analyse.data.views.map((v) => [v.name, v])),
     [analyse],
   );
   const [viewName, setViewName] = React.useState("total");
@@ -204,11 +373,11 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
 
   const [tidstrendVariable, setTidstrendVariable] = React.useState({
     viewName: "total",
-    name: analyse.name,
+    name: analyse.data.name,
   });
   const [demografiVariable, setDemografiVariable] = React.useState({
     viewName: "total",
-    name: analyse.name,
+    name: analyse.data.name,
   });
 
   const [showGenders, setShowGenders] = React.useState(true);
@@ -220,7 +389,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
 
   const getYears = (viewName: string) => {
     const year_range = (
-      analyse.views.find(
+      analyse.data.views.find(
         (v) =>
           v.name ===
           (["demografi", "tidstrend"].includes(viewName) ? "total" : viewName),
@@ -230,9 +399,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     return !year_range?.length
       ? ["NA"]
       : Array.from(
-          { length: year_range[1] - year_range[0] + 1 },
-          (_, i) => year_range[0] + i,
-        );
+        { length: year_range[1] - year_range[0] + 1 },
+        (_, i) => year_range[0] + i,
+      );
   };
 
   const years = getYears(viewName);
@@ -240,32 +409,32 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
   const [year, setYear] = React.useState<number>(lastYear);
 
   const demographyAvailable = new Set(
-    Object.keys(analyse.data.demografi[lastYear]),
+    Object.keys(analyse.data.data.demografi[lastYear]),
   ).difference(new Set(["population"]));
 
   const maxValues = React.useMemo(() => {
     /* Calculates the max for all values accross years and areas (or other categories) */
     return Object.fromEntries(
-      ["demografi", ...analyse.views.map((v) => v.name)].map((viewName) => {
+      ["demografi", ...analyse.data.views.map((v) => v.name)].map((viewName) => {
         const view_years = getYears(viewName);
         const levels_or_views = Object.keys(
-          analyse.data[viewName][view_years[0]],
+          analyse.data.data[viewName][view_years[0]],
         );
         return [
           viewName,
           Object.fromEntries(
             levels_or_views.map((level_or_view) => {
               const categories = Object.keys(
-                analyse.data[viewName][view_years[0]][level_or_view],
+                analyse.data.data[viewName][view_years[0]][level_or_view],
               );
               const variables = Object.keys(
-                analyse.data[viewName][view_years[0]][level_or_view][
-                  categories[0]
+                analyse.data.data[viewName][view_years[0]][level_or_view][
+                categories[0]
                 ],
               );
               const inflections = Object.keys(
-                analyse.data[viewName][view_years[0]][level_or_view][
-                  categories[0]
+                analyse.data.data[viewName][view_years[0]][level_or_view][
+                categories[0]
                 ][variables[0]],
               );
               return [
@@ -282,8 +451,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                               ...view_years.flatMap((year) =>
                                 categories.map(
                                   (category) =>
-                                    analyse.data[viewName][year][level_or_view][
-                                      category
+                                    analyse.data.data[viewName][year][level_or_view][
+                                    category
                                     ][variable][inflection],
                                 ),
                               ),
@@ -294,8 +463,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                                   .filter((c) => c !== "Norge")
                                   .map(
                                     (category) =>
-                                      analyse.data[viewName][year][
-                                        level_or_view
+                                      analyse.data.data[viewName][year][
+                                      level_or_view
                                       ][category][variable][inflection],
                                   ),
                               ),
@@ -317,7 +486,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
   const varNames = React.useMemo(
     () =>
       Object.fromEntries(
-        analyse.views.flatMap((view) =>
+        analyse.data.views.flatMap((view) =>
           view.variables.map((variable) => [variable.name, variable]),
         ),
       ),
@@ -499,13 +668,13 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 views[tidstrendVariable.viewName].aggregering,
               )
             ) {
-              setTidstrendVariable({ viewName: "total", name: analyse.name });
+              setTidstrendVariable({ viewName: "total", name: analyse.data.name });
             }
           }}
         >
           <ToggleButton value={"kont"} sx={{ transition: "all 0.3s ease" }}>
-            {analyse.kontakt_begrep
-              ? capitalize(analyse.kontakt_begrep[lang])
+            {analyse.data.kontakt_begrep
+              ? capitalize(analyse.data.kontakt_begrep[lang])
               : dict.analysebox.kontakter}
           </ToggleButton>
           <ToggleButton value={"pas"} sx={{ transition: "all 0.3s ease" }}>
@@ -577,7 +746,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   />
                 </MyTabList>
               </Box>
-              <TabPanel value="enkeltår" sx={{ paddingX: 4 }}>
+              <TabPanel value="enkeltår" sx={{ paddingX: 4, paddingBottom: 0 }}>
                 <Stack
                   direction="row"
                   spacing={3}
@@ -614,7 +783,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                       >
                         <em>{dict.analysebox.remove_choice}</em>
                       </MenuItem>
-                      {analyse.views
+                      {analyse.data.views
                         .filter(
                           (v) =>
                             v.type === "standard" &&
@@ -630,17 +799,22 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   </FormControl>
                 </Stack>
                 {yearSelector}
-                <GraphBox>
+                <ScreenshotBox
+                  analyse={analyse}
+                  dict={dict}
+                  filename={`${analyse.data.name}_${currentView.title[lang].toLowerCase().replace(" ", "_")}_${year}.png`}
+                  description={getDescription(analyse.data, lang, verdiType, aggregering)}
+                >
                   <AnalyseBarChart
                     categories={Object.keys(
-                      analyse.data[viewName][lastYear][level],
+                      analyse.data.data[viewName][lastYear][level],
                     ).filter((cat) => cat !== "Norge" || verdiType === "rate")}
                     variables={currentView.variables.map(
                       (variable) => variable.name,
                     )}
                     valueGetter={(category, variable) =>
-                      analyse.data[viewName][year][level][category][variable][
-                        `${aggregering}_${verdiType}`
+                      analyse.data.data[viewName][year][level][category][variable][
+                      `${aggregering}_${verdiType}`
                       ]
                     }
                     variableFmt={(variable) => varNames[variable][lang]}
@@ -668,25 +842,22 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                       )
                     }
                     maxValue={
-                      maxValues["total"][level][analyse.name][
+                      maxValues["total"][level][analyse.data.name][
                         `${aggregering}_${verdiType}`
                       ].withoutNorway
                     }
                   />
-                </GraphBox>
-                <DescriptionBox>
-                  {getDescription(analyse, lang, verdiType, aggregering)}
-                </DescriptionBox>
+                </ScreenshotBox>
               </TabPanel>
-              <TabPanel value="tidstrend" sx={{ paddingX: 4 }}>
+              <TabPanel value="tidstrend" sx={{ paddingX: 4, paddingBottom: 0 }}>
                 <Stack
                   direction="row"
                   spacing={3}
                   sx={{ paddingY: 1, height: 60 }}
                 >
                   <VariableSelector
-                    analyse={analyse}
-                    views={analyse.views
+                    analyse={analyse.data}
+                    views={analyse.data.views
                       .filter((v) =>
                         ["begge", aggregering].includes(v.aggregering),
                       )
@@ -712,9 +883,14 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     />
                   )}
                 </Stack>
-                <GraphBox>
+                <ScreenshotBox
+                  analyse={analyse}
+                  dict={dict}
+                  filename={`${analyse.data.name}_tidstrend.png`}
+                  description={getDescription(analyse.data, lang, verdiType, aggregering, tidstrendVariable.name !== analyse.data.name ? tidstrendVariable : undefined)}
+                >
                   <AnalyseLineChart
-                    analyse={analyse}
+                    analyse={analyse.data}
                     years={years as number[]}
                     level={level}
                     categoryFmt={(category) => getAreaName(category, lang)}
@@ -734,28 +910,18 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     lang={lang}
                     maxValue={
                       maxValues[tidstrendVariable.viewName][level][
-                        tidstrendVariable.name
+                      tidstrendVariable.name
                       ][`${aggregering}_${verdiType}`][
-                        showNorway ? "all" : "withoutNorway"
+                      showNorway ? "all" : "withoutNorway"
                       ]
                     }
                   />
-                </GraphBox>
-                <DescriptionBox>
-                  {getDescription(
-                    analyse,
-                    lang,
-                    verdiType,
-                    aggregering,
-                    tidstrendVariable.name !== analyse.name
-                      ? tidstrendVariable
-                      : undefined,
-                  )}
-                </DescriptionBox>
+                </ScreenshotBox>
+
               </TabPanel>
             </TabContext>
           </TabPanel>
-          <TabPanel value="demografi" sx={{ paddingX: 4 }}>
+          <TabPanel value="demografi" sx={{ paddingX: 4, paddingBottom: 0 }}>
             <Stack direction="row" spacing={3} sx={{ paddingY: 1, height: 60 }}>
               <StyledToggleButtonGroup
                 color="primary"
@@ -784,8 +950,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 </ToggleButton>
               </StyledToggleButtonGroup>
               <VariableSelector
-                analyse={analyse}
-                views={analyse.views
+                analyse={analyse.data}
+                views={analyse.data.views
                   .slice(1)
                   .filter((v) => demographyAvailable.has(v.name))}
                 dict={dict}
@@ -811,9 +977,30 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               {!allYears ? yearSelector : <span></span>}
             </Zoom>
 
-            <GraphBox>
+            <ScreenshotBox
+              analyse={analyse}
+              dict={dict}
+              filename={`${analyse.data.name}_demografi.png`}
+              description={(
+                <Typography variant="body2">
+                  {demographyAndel
+                    ? dict.analysebox[
+                    showGenders
+                      ? "demography_proportion_gender"
+                      : "demography_proportion"
+                    ]
+                    : dict.analysebox[
+                    showGenders
+                      ? "demography_n_people_gender"
+                      : "demography_n_people"
+                    ]}
+                  {demografiVariable.name !== analyse.data.name &&
+                    getVariableText(analyse.data, lang, demografiVariable)}
+                </Typography>
+              )}
+            >
               <AnalyseDemography
-                analyse={analyse}
+                analyse={analyse.data}
                 showGenders={showGenders}
                 variable={demografiVariable}
                 andel={demographyAndel}
@@ -821,24 +1008,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 year={allYears ? "all_years" : year}
                 years={years as number[]}
               />
-            </GraphBox>
-            <DescriptionBox>
-              <Typography variant="body2">
-                {demographyAndel
-                  ? dict.analysebox[
-                      showGenders
-                        ? "demography_proportion_gender"
-                        : "demography_proportion"
-                    ]
-                  : dict.analysebox[
-                      showGenders
-                        ? "demography_n_people_gender"
-                        : "demography_n_people"
-                    ]}
-                {demografiVariable.name !== analyse.name &&
-                  getVariableText(analyse, lang, demografiVariable)}
-              </Typography>
-            </DescriptionBox>
+            </ScreenshotBox>
           </TabPanel>
         </Paper>
       </TabContext>
