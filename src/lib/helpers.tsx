@@ -1,4 +1,5 @@
-import { Analyse, Lang, View } from "@/types";
+import { Analyser } from "@/payload-types";
+import { Lang, View } from "@/types";
 import { Typography } from "@mui/material";
 
 export function formatDate(date: Date | string, lang: Lang) {
@@ -31,7 +32,7 @@ export function formatNumber(
   }).format(number);
 }
 
-export function getAgeRange(analyse: Analyse, lang: Lang) {
+export function getAgeRange(analyse: Analyser["data"], lang: Lang) {
   const [min_age, max_age] = analyse.age_range;
   switch (true) {
     case min_age === 0 && max_age > 100:
@@ -47,27 +48,30 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getCategory(analyse: Analyse) {
+export function getCategory(analyse: Analyser["data"]) {
   if (analyse.kategori_begrep) {
-    return analyse.kategori_begrep;
+    return {
+      ...analyse.kategori_begrep,
+      special: true,
+    };
   } else if (analyse.age_range[1] < 20) {
     return {
-      begge: { en: "children", no: "barn" },
-      kvinner: { en: "girls", no: "jenter" },
-      menn: { en: "boys", no: "gutter" },
+      begge: { en: "children", no: "barn", special: true },
+      kvinner: { en: "girls", no: "jenter", special: true },
+      menn: { en: "boys", no: "gutter", special: true },
     }[analyse.kjonn];
   } else if (new Set(["kvinner", "menn"]).has(analyse.kjonn)) {
     return {
-      kvinner: { en: "women", no: "kvinner" },
-      menn: { en: "men", no: "menn" },
+      kvinner: { en: "women", no: "kvinner", special: true },
+      menn: { en: "men", no: "menn", special: true },
     }[analyse.kjonn as "menn" | "kvinner"];
   } else {
-    return { en: "inhabitants", no: "innbyggere" };
+    return { en: "inhabitants", no: "innbyggere", special: false };
   }
 }
 
 export function getVariableText(
-  analyse: Analyse,
+  analyse: Analyser["data"],
   lang: Lang,
   variable: { viewName: string; name: string },
 ) {
@@ -75,7 +79,6 @@ export function getVariableText(
   const variableObject = view.variables.find(
     (v) => v.name === variable.name,
   ) as View["variables"][0];
-  console.log("Variable object:", variableObject)
   return (
     <>
       {` (`}
@@ -88,7 +91,7 @@ export function getVariableText(
 }
 
 export function getDescription(
-  analyse: Analyse,
+  analyse: Analyser["data"],
   lang: Lang,
   type: "rate" | "n",
   aggregering: "kont" | "pas",
@@ -130,7 +133,14 @@ export function getDescription(
   );
 }
 
-export function getSubHeader(analyse: Analyse, lang: Lang) {
+export function getSubHeader(analyse: Analyser["data"], lang: Lang) {
   const age_range = getAgeRange(analyse, lang);
-  return `${age_range}, personer`;
+  const category = getCategory(analyse);
+
+  const parts = [
+    category.special && capitalize(category[lang]),
+    age_range,
+  ].filter(Boolean);
+
+  return parts.join(", ");
 }

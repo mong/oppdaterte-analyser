@@ -8,16 +8,15 @@ import {
 } from "@mui/material";
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
-import { getAnalyser } from "@/services/mongo";
 import { notFound } from "next/navigation";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
-import { getPayloadAnalyser, getPayloadKompendier } from "@/services/payload";
+import { getAnalyser, getKompendier } from "@/services/payload";
 
 export const dynamicParams = false;
 export async function generateStaticParams() {
-  return [{ lang: "no" }, { lang: "en" }] as { lang: Lang}[];
+  return [{ lang: "no" }, { lang: "en" }] as { lang: Lang }[];
 }
 
 export async function generateMetadata(props: {
@@ -48,15 +47,8 @@ export default async function MainPage(props: MainPageProps) {
 
   const dict = await getDictionary(lang);
 
-  const kompendier = await getPayloadKompendier({ lang });
-  
-  const analyser = await getAnalyser(
-    `title.${lang}`,
-    "-data -demografi -views -discussion -info",
-  );
-
-  const payload_analyser = await getPayloadAnalyser({ lang });
-
+  const kompendier = await getKompendier({ lang });
+  const payload_analyser = await getAnalyser({ lang });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -116,7 +108,17 @@ export default async function MainPage(props: MainPageProps) {
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
-                  primary={`${komp.title} (${analyser.filter((analyse) => analyse.tags.includes(komp.identifier)).length})`}
+                  primary={`${komp.title} (${
+                    payload_analyser
+                      .map((analyse) => analyse.tags || [])
+                      .filter((tags) =>
+                        tags.some((tag) =>
+                          typeof tag === "string"
+                            ? false
+                            : tag.identifier === komp.identifier,
+                        ),
+                      ).length
+                  })`}
                 />
               </ListItemButton>
             ))}

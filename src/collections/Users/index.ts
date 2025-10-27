@@ -31,7 +31,6 @@ export async function loginCredentials(headers: Headers) {
   return { userName, email };
 }
 
-
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
@@ -49,40 +48,41 @@ export const Users: CollectionConfig = {
     disableLocalStrategy: true,
     strategies: [
       {
-        name: 'entra-id-strategy',
+        name: "entra-id-strategy",
         authenticate: async ({ payload, headers }) => {
-
           const credentials = await loginCredentials(headers);
           if (!credentials) {
             return { user: null };
           }
 
           const usersQuery = await payload.find({
-            collection: 'users',
+            collection: "users",
             where: {
               email: {
                 equals: credentials.email,
               },
             },
-          })
-          
+          });
+
           if (!usersQuery.docs[0]) {
             const user = await payload.create({
-              collection: 'users',
+              collection: "users",
               data: {
                 name: credentials.userName,
                 email: credentials.email,
               },
             });
-            return { user: { collection: 'users', ...user } };
+            return { user: { collection: "users", ...user } };
           }
 
           return {
-            user: usersQuery.docs[0] ? { collection: 'users', ...usersQuery.docs[0]} : null,
-          }
-        }
-      }
-    ]
+            user: usersQuery.docs[0]
+              ? { collection: "users", ...usersQuery.docs[0] }
+              : null,
+          };
+        },
+      },
+    ],
   },
   fields: [
     {
@@ -95,7 +95,7 @@ export const Users: CollectionConfig = {
       type: "email",
       unique: true,
       required: true,
-    }
+    },
   ],
   timestamps: true,
 };

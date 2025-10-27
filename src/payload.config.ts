@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 import { nb } from "@payloadcms/translations/languages/nb";
 import { Media } from "./collections/Media";
@@ -32,9 +33,15 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "",
   // Whichever Database Adapter you're using should go here
   // Mongoose is shown as an example, but you can also use Postgres
-  db: mongooseAdapter({
-    url: process.env.PAYLOAD_URI || "",
+  indexSortableFields: true,
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URI || "",
+    },
   }),
+  // db: mongooseAdapter({
+  //   url: process.env.DATABASE_URI || ""
+  // }),
   sharp, // <- If you want to resize images, crop, set focal point, etc.
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

@@ -1,4 +1,3 @@
-import { Analyse, Lang } from "@/types";
 import { remark } from "remark";
 import html from "remark-html";
 import strip from "strip-markdown";

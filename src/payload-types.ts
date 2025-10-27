@@ -13,53 +13,53 @@
  * via the `definition` "supportedTimezones".
  */
 export type SupportedTimezones =
-  | 'Pacific/Midway'
-  | 'Pacific/Niue'
-  | 'Pacific/Honolulu'
-  | 'Pacific/Rarotonga'
-  | 'America/Anchorage'
-  | 'Pacific/Gambier'
-  | 'America/Los_Angeles'
-  | 'America/Tijuana'
-  | 'America/Denver'
-  | 'America/Phoenix'
-  | 'America/Chicago'
-  | 'America/Guatemala'
-  | 'America/New_York'
-  | 'America/Bogota'
-  | 'America/Caracas'
-  | 'America/Santiago'
-  | 'America/Buenos_Aires'
-  | 'America/Sao_Paulo'
-  | 'Atlantic/South_Georgia'
-  | 'Atlantic/Azores'
-  | 'Atlantic/Cape_Verde'
-  | 'Europe/London'
-  | 'Europe/Berlin'
-  | 'Africa/Lagos'
-  | 'Europe/Athens'
-  | 'Africa/Cairo'
-  | 'Europe/Moscow'
-  | 'Asia/Riyadh'
-  | 'Asia/Dubai'
-  | 'Asia/Baku'
-  | 'Asia/Karachi'
-  | 'Asia/Tashkent'
-  | 'Asia/Calcutta'
-  | 'Asia/Dhaka'
-  | 'Asia/Almaty'
-  | 'Asia/Jakarta'
-  | 'Asia/Bangkok'
-  | 'Asia/Shanghai'
-  | 'Asia/Singapore'
-  | 'Asia/Tokyo'
-  | 'Asia/Seoul'
-  | 'Australia/Brisbane'
-  | 'Australia/Sydney'
-  | 'Pacific/Guam'
-  | 'Pacific/Noumea'
-  | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | "Pacific/Midway"
+  | "Pacific/Niue"
+  | "Pacific/Honolulu"
+  | "Pacific/Rarotonga"
+  | "America/Anchorage"
+  | "Pacific/Gambier"
+  | "America/Los_Angeles"
+  | "America/Tijuana"
+  | "America/Denver"
+  | "America/Phoenix"
+  | "America/Chicago"
+  | "America/Guatemala"
+  | "America/New_York"
+  | "America/Bogota"
+  | "America/Caracas"
+  | "America/Santiago"
+  | "America/Buenos_Aires"
+  | "America/Sao_Paulo"
+  | "Atlantic/South_Georgia"
+  | "Atlantic/Azores"
+  | "Atlantic/Cape_Verde"
+  | "Europe/London"
+  | "Europe/Berlin"
+  | "Africa/Lagos"
+  | "Europe/Athens"
+  | "Africa/Cairo"
+  | "Europe/Moscow"
+  | "Asia/Riyadh"
+  | "Asia/Dubai"
+  | "Asia/Baku"
+  | "Asia/Karachi"
+  | "Asia/Tashkent"
+  | "Asia/Calcutta"
+  | "Asia/Dhaka"
+  | "Asia/Almaty"
+  | "Asia/Jakarta"
+  | "Asia/Bangkok"
+  | "Asia/Shanghai"
+  | "Asia/Singapore"
+  | "Asia/Tokyo"
+  | "Asia/Seoul"
+  | "Australia/Brisbane"
+  | "Australia/Sydney"
+  | "Pacific/Guam"
+  | "Pacific/Noumea"
+  | "Pacific/Auckland"
+  | "Pacific/Fiji";
 
 export interface Config {
   auth: {
@@ -73,18 +73,19 @@ export interface Config {
     datafiler: Datafiler;
     media: Media;
     tags: Tag;
-    'payload-jobs': PayloadJob;
-    'payload-folders': FolderInterface;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
+    "payload-jobs": PayloadJob;
+    "payload-folders": FolderInterface;
+    "payload-locked-documents": PayloadLockedDocument;
+    "payload-preferences": PayloadPreference;
+    "payload-migrations": PayloadMigration;
   };
   collectionsJoins: {
     tags: {
-      taggedRapporter: 'rapporter';
+      taggedRapporter: "rapporter";
+      taggedAnalyser: "analyser";
     };
-    'payload-folders': {
-      documentsAndFolders: 'payload-folders' | 'datafiler' | 'media';
+    "payload-folders": {
+      documentsAndFolders: "payload-folders" | "datafiler" | "media";
     };
   };
   collectionsSelect: {
@@ -94,20 +95,26 @@ export interface Config {
     datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
-    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
-    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+    "payload-jobs": PayloadJobsSelect<false> | PayloadJobsSelect<true>;
+    "payload-folders": PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
+    "payload-locked-documents":
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>;
+    "payload-preferences":
+      | PayloadPreferencesSelect<false>
+      | PayloadPreferencesSelect<true>;
+    "payload-migrations":
+      | PayloadMigrationsSelect<false>
+      | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {};
   globalsSelect: {};
-  locale: 'en' | 'no';
+  locale: "en" | "no";
   user: User & {
-    collection: 'users';
+    collection: "users";
   };
   jobs: {
     tasks: {
@@ -143,10 +150,10 @@ export interface UserAuthOperations {
  * via the `definition` "rapporter".
  */
 export interface Rapporter {
-  id: string;
+  id: number;
   title: string;
-  folder: string | FolderInterface;
-  bilde?: (string | null) | Media;
+  folder: number | FolderInterface;
+  bilde?: (number | null) | Media;
   content: {
     root: {
       type: string;
@@ -155,8 +162,8 @@ export interface Rapporter {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -168,43 +175,43 @@ export interface Rapporter {
   };
   test?: boolean | null;
   publishedAt?: string | null;
-  author: 'SKDE' | 'Helse Førde';
-  norskType: 'nb' | 'nn';
-  relatedRapporter?: (string | Rapporter)[] | null;
-  tags?: (string | Tag)[] | null;
+  author: "SKDE" | "Helse Førde";
+  norskType: "nb" | "nn";
+  relatedRapporter?: (number | Rapporter)[] | null;
+  tags?: (number | Tag)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  _status?: ("draft" | "published") | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-folders".
  */
 export interface FolderInterface {
-  id: string;
+  id: number;
   name: string;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   documentsAndFolders?: {
     docs?: (
       | {
-          relationTo?: 'payload-folders';
-          value: string | FolderInterface;
+          relationTo?: "payload-folders";
+          value: number | FolderInterface;
         }
       | {
-          relationTo?: 'datafiler';
-          value: string | Datafiler;
+          relationTo?: "datafiler";
+          value: number | Datafiler;
         }
       | {
-          relationTo?: 'media';
-          value: string | Media;
+          relationTo?: "media";
+          value: number | Media;
         }
     )[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  folderType?: ('datafiler' | 'media')[] | null;
+  folderType?: ("datafiler" | "media")[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -213,8 +220,8 @@ export interface FolderInterface {
  * via the `definition` "datafiler".
  */
 export interface Datafiler {
-  id: string;
-  folder?: (string | null) | FolderInterface;
+  id: number;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -232,7 +239,7 @@ export interface Datafiler {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   /**
    * Alternativ tekst for bildet, brukes for tilgjengelighet
    */
@@ -245,14 +252,14 @@ export interface Media {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
     [k: string]: unknown;
   } | null;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -328,7 +335,7 @@ export interface Media {
  * via the `definition` "tags".
  */
 export interface Tag {
-  id: string;
+  id: number;
   title: string;
   /**
    * Unik ID for taggen.
@@ -343,15 +350,20 @@ export interface Tag {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   taggedRapporter?: {
-    docs?: (string | Rapporter)[];
+    docs?: (number | Rapporter)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  taggedAnalyser?: {
+    docs?: (number | Analyser)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -363,9 +375,95 @@ export interface Tag {
  * via the `definition` "analyser".
  */
 export interface Analyser {
-  id: string;
+  id: number;
   title: string;
   data: {
+    name: string;
+    /**
+     * @minItems 2
+     * @maxItems 2
+     */
+    age_range: [number, number];
+    kjonn: "begge" | "menn" | "kvinner";
+    kontakt_begrep?: {
+      en: string;
+      no: string;
+    };
+    kategori_begrep?: {
+      en: string;
+      no: string;
+    };
+    description: {
+      en: string;
+      no: string;
+    };
+    generated: number;
+    views: {
+      name: string;
+      type: string;
+      aggregering: "kont" | "pas" | "begge";
+      /**
+       * @minItems 2
+       * @maxItems 2
+       */
+      year_range: [number, number];
+      title: {
+        en: string;
+        no: string;
+      };
+      /**
+       * @minItems 1
+       */
+      variables: [
+        {
+          en: string;
+          no: string;
+          name: string;
+        },
+        ...{
+          en: string;
+          no: string;
+          name: string;
+        }[],
+      ];
+    }[];
+    data: {
+      /**
+       * This interface was referenced by `undefined`'s JSON-Schema definition
+       * via the `patternProperty` ".*".
+       */
+      [k: string]: {
+        /**
+         * This interface was referenced by `undefined`'s JSON-Schema definition
+         * via the `patternProperty` ".*".
+         */
+        [k: string]: {
+          /**
+           * This interface was referenced by `undefined`'s JSON-Schema definition
+           * via the `patternProperty` ".*".
+           */
+          [k: string]: {
+            /**
+             * This interface was referenced by `undefined`'s JSON-Schema definition
+             * via the `patternProperty` ".*".
+             */
+            [k: string]: {
+              /**
+               * This interface was referenced by `undefined`'s JSON-Schema definition
+               * via the `patternProperty` ".*".
+               */
+              [k: string]: {
+                /**
+                 * This interface was referenced by `undefined`'s JSON-Schema definition
+                 * via the `patternProperty` ".*".
+                 */
+                [k: string]: number;
+              };
+            };
+          };
+        };
+      };
+    };
     [k: string]: unknown;
   };
   summary: {
@@ -376,8 +474,8 @@ export interface Analyser {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -391,8 +489,8 @@ export interface Analyser {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -406,8 +504,8 @@ export interface Analyser {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -415,21 +513,21 @@ export interface Analyser {
   };
   test?: boolean | null;
   publishedAt?: string | null;
-  author: 'SKDE' | 'Helse Førde';
-  norskType: 'nb' | 'nn';
-  tags?: (string | Tag)[] | null;
+  author: "SKDE" | "Helse Førde";
+  norskType: "nb" | "nn";
+  tags?: (number | Tag)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  _status?: ("draft" | "published") | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   updatedAt: string;
@@ -440,7 +538,7 @@ export interface User {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -487,7 +585,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: "inline" | "schedulePublish";
         taskID: string;
         input?:
           | {
@@ -507,7 +605,7 @@ export interface PayloadJob {
           | number
           | boolean
           | null;
-        state: 'failed' | 'succeeded';
+        state: "failed" | "succeeded";
         error?:
           | {
               [k: string]: unknown;
@@ -520,7 +618,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ("inline" | "schedulePublish") | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -532,44 +630,44 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
-        relationTo: 'rapporter';
-        value: string | Rapporter;
+        relationTo: "rapporter";
+        value: number | Rapporter;
       } | null)
     | ({
-        relationTo: 'analyser';
-        value: string | Analyser;
+        relationTo: "analyser";
+        value: number | Analyser;
       } | null)
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: "users";
+        value: number | User;
       } | null)
     | ({
-        relationTo: 'datafiler';
-        value: string | Datafiler;
+        relationTo: "datafiler";
+        value: number | Datafiler;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: "media";
+        value: number | Media;
       } | null)
     | ({
-        relationTo: 'tags';
-        value: string | Tag;
+        relationTo: "tags";
+        value: number | Tag;
       } | null)
     | ({
-        relationTo: 'payload-jobs';
-        value: string | PayloadJob;
+        relationTo: "payload-jobs";
+        value: number | PayloadJob;
       } | null)
     | ({
-        relationTo: 'payload-folders';
-        value: string | FolderInterface;
+        relationTo: "payload-folders";
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
-    relationTo: 'users';
-    value: string | User;
+    relationTo: "users";
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -579,10 +677,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
-    relationTo: 'users';
-    value: string | User;
+    relationTo: "users";
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -602,7 +700,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -788,6 +886,7 @@ export interface TagsSelect<T extends boolean = true> {
   isKompendium?: T;
   description?: T;
   taggedRapporter?: T;
+  taggedAnalyser?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -872,19 +971,19 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface TaskSchedulePublish {
   input: {
-    type?: ('publish' | 'unpublish') | null;
+    type?: ("publish" | "unpublish") | null;
     locale?: string | null;
     doc?:
       | ({
-          relationTo: 'rapporter';
-          value: string | Rapporter;
+          relationTo: "rapporter";
+          value: number | Rapporter;
         } | null)
       | ({
-          relationTo: 'analyser';
-          value: string | Analyser;
+          relationTo: "analyser";
+          value: number | Analyser;
         } | null);
     global?: string | null;
-    user?: (string | null) | User;
+    user?: (number | null) | User;
   };
   output?: unknown;
 }
@@ -893,8 +992,8 @@ export interface TaskSchedulePublish {
  * via the `definition` "ResultBoxBlock".
  */
 export interface ResultBoxBlock {
-  media: string | Datafiler;
-  kart: string | Datafiler;
+  media: number | Datafiler;
+  kart: number | Datafiler;
   oppsummering: {
     root: {
       type: string;
@@ -903,8 +1002,8 @@ export interface ResultBoxBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -918,8 +1017,8 @@ export interface ResultBoxBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -933,8 +1032,8 @@ export interface ResultBoxBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -942,14 +1041,14 @@ export interface ResultBoxBlock {
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'resultBox';
+  blockType: "resultBox";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
+  style: "info" | "warning" | "error" | "success";
   content: {
     root: {
       type: string;
@@ -958,8 +1057,8 @@ export interface BannerBlock {
         version: number;
         [k: string]: unknown;
       }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      direction: ("ltr" | "rtl") | null;
+      format: "left" | "start" | "center" | "right" | "end" | "justify" | "";
       indent: number;
       version: number;
     };
@@ -967,28 +1066,28 @@ export interface BannerBlock {
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'banner';
+  blockType: "banner";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CodeBlock".
  */
 export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
+  language?: ("typescript" | "javascript" | "css") | null;
   code: string;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'code';
+  blockType: "code";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'mediaBlock';
+  blockType: "mediaBlock";
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -998,7 +1097,6 @@ export interface Auth {
   [k: string]: unknown;
 }
 
-
-declare module 'payload' {
+declare module "payload" {
   export interface GeneratedTypes extends Config {}
 }

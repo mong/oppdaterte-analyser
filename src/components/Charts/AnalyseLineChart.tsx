@@ -1,8 +1,9 @@
-import { Analyse, Lang } from "@/types";
+import { Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { Selection } from "@/lib/selection";
 import React from "react";
 import { formatNumber } from "@/lib/helpers";
+import { Analyser } from "@/payload-types";
 
 const linechart_colors: {
   sykehus: { [k: string]: string };
@@ -42,7 +43,7 @@ const linechart_colors: {
 };
 
 type AnalyseLineChartProps = {
-  analyse: Analyse;
+  analyse: Analyser["data"];
   years: number[];
   level: "region" | "sykehus";
   variable: { viewName: string; name: string };

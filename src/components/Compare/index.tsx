@@ -1,6 +1,6 @@
 "use client";
 
-import { Analyse, View } from "@/types";
+import { View } from "@/types";
 import {
   Accordion,
   AccordionDetails,
@@ -16,6 +16,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import { formatDate, formatNumber } from "@/lib/helpers";
 import { BarChart } from "@mui/x-charts";
 import React from "react";
+import { Analyser } from "@/payload-types";
 
 const DiffChart = ({ data }: { data: any }) => {
   const valueFormatter = (value: number | null) =>
@@ -48,8 +49,8 @@ const DiffChart = ({ data }: { data: any }) => {
 };
 
 type CompareProps = {
-  oldAnalyse: Analyse | false;
-  newAnalyse: Analyse;
+  oldAnalyse: Analyser["data"] | false;
+  newAnalyse: Analyser["data"];
 };
 
 enum Severity {
@@ -131,7 +132,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
   };
 
   const findYears = (
-    analyse: Analyse,
+    analyse: Analyser["data"],
   ): { [k: string]: undefined | { range: number[]; span: [number, number] } } =>
     Object.fromEntries(
       analyse.views.map((v) => {

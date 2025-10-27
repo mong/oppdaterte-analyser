@@ -1,10 +1,11 @@
 import React from "react";
 import { LineChart } from "@mui/x-charts";
-import { Analyse, Lang } from "@/types";
+import { Lang } from "@/types";
 import { formatNumber } from "@/lib/helpers";
+import { Analyser } from "@/payload-types";
 
 type AnalyseDemographyProps = {
-  analyse: Analyse;
+  analyse: Analyser["data"];
   year: number | "all_years";
   years: number[];
   showGenders: boolean;

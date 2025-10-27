@@ -14,23 +14,21 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
-import { getAnalyserByTag } from "@/services/mongo";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import { markdownToHtml } from "@/lib/getMarkdown";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import RichText from "@/components/RichText";
 
-import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
+import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 
-import { getPayloadTag } from "@/services/payload";
+import { getAnalyserByTag, getTag } from "@/services/payload";
 
-import React, { cache } from "react";
+import React from "react";
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
 }) => {
   const { kompendium, lang } = await props.params;
-  const tag = await getPayloadTag({ identifier: kompendium, lang });
+  const tag = await getTag({ identifier: kompendium, lang });
   const dict = await getDictionary(lang);
 
   return {
@@ -47,19 +45,18 @@ export default async function KompendiumPage(props: {
 }) {
   const { kompendium, lang } = await props.params;
 
-  const tag = await getPayloadTag({ identifier: kompendium, lang });
-
+  const tag = await getTag({ identifier: kompendium, lang });
 
   if (!tag || !["en", "no"].includes(lang)) {
     notFound();
   }
 
   const dict = await getDictionary(lang);
-  const analyser = await getAnalyserByTag(
-    kompendium,
-    `title.${lang}`,
-    "-data -demografi -views -discussion -info",
-  );
+
+  const payload_analyser = await getAnalyserByTag({
+    identifier: kompendium,
+    lang,
+  });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -105,10 +102,10 @@ export default async function KompendiumPage(props: {
               </Grid>
             }
           >
-            <Stack spacing={4} sx={{ padding: 4 }}>
-              {analyser.map(async (analyse, i) => (
+            <Stack spacing={5} sx={{ padding: 4 }}>
+              {payload_analyser.map(async (analyse, i) => (
                 <Link
-                  href={`/${lang}/analyse/${analyse.name}`}
+                  href={`/${lang}/analyse/${analyse.slug}`}
                   target="_blank"
                   underline="none"
                   color="inherit"
@@ -117,7 +114,11 @@ export default async function KompendiumPage(props: {
                   <Paper
                     sx={{
                       padding: 2,
+                      borderRadius: "1rem",
+                      filter: "brightness(1.05)",
+                      bgcolor: "primary.light",
                       "&:hover": {
+                        filter: "brightness(1.07)",
                         boxShadow: 3,
                         cursor: "pointer",
                       },
@@ -129,31 +130,22 @@ export default async function KompendiumPage(props: {
                           size="grow"
                           sx={{ paddingTop: 1, paddingLeft: 1 }}
                         >
-                          <Typography variant="h4">
-                            {analyse.title[lang]}
-                          </Typography>
+                          <Typography variant="h4">{analyse.title}</Typography>
                         </Grid>
                       </Grid>
 
                       <Box sx={{ paddingX: 1, marginTop: 0.5 }}>
                         <Typography variant="body1" sx={{ color: "#444" }}>
-                          {getSubHeader(analyse, lang)}
+                          {getSubHeader(analyse.data, lang)}
                         </Typography>
-                        <Typography
-                          variant="body1"
-                          component="div"
-                          sx={{
-                            width: "100%",
-                            "@media print": { fontSize: "1rem" },
-                          }}
-                          dangerouslySetInnerHTML={{
-                            __html: await markdownToHtml(analyse.summary[lang]),
-                          }}
-                        />
+                        <RichText data={analyse.summary} enableGutter={true} />
                       </Box>
                       <Grid>
                         <Typography variant="body2">
-                          {makeDateElem(analyse.createdAt, lang)}
+                          {makeDateElem(
+                            analyse.publishedAt || analyse.createdAt,
+                            lang,
+                          )}
                         </Typography>
                       </Grid>
                     </Box>
@@ -167,4 +159,3 @@ export default async function KompendiumPage(props: {
     </>
   );
 }
-

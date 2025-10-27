@@ -1,7 +1,11 @@
-import { Analyse, Lang } from "@/types";
+import { Analyser } from "@/payload-types";
+import { Lang } from "@/types";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 
-export default function downloadCsv(analyse: Analyse, lang: Lang): void {
+export default function downloadCsv(
+  analyse: Analyser["data"],
+  lang: Lang,
+): void {
   const csvConfig = mkConfig({
     useKeysAsHeaders: true,
     filename: `${analyse.name}_${lang}`,

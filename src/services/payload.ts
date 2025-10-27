@@ -4,7 +4,7 @@ import { cache } from "react";
 import config from "@payload-config";
 import { Analyser, Tag } from "@/payload-types";
 
-export const getPayloadTag = cache(
+export const getTag = cache(
   async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
     const payload = await getPayload({ config: config });
 
@@ -21,31 +21,29 @@ export const getPayloadTag = cache(
       fallbackLocale: false,
     });
 
-    return result.docs?.[0] as Tag || null;
+    return (result.docs?.[0] as Tag) || null;
   },
 );
 
-export const getPayloadKompendier = cache(
-  async ({ lang }: { lang: Lang }) => {
-    const payload = await getPayload({ config: config });
+export const getKompendier = cache(async ({ lang }: { lang: Lang }) => {
+  const payload = await getPayload({ config: config });
 
-    const result = await payload.find({
-      collection: "tags",
-      limit: 0,
-      locale: lang,
-      pagination: false,
-      sort: "title",
-      where: {
-        isKompendium: { equals: true },
-      },
-    });
+  const result = await payload.find({
+    collection: "tags",
+    limit: 0,
+    locale: lang,
+    pagination: false,
+    sort: "title",
+    where: {
+      isKompendium: { equals: true },
+    },
+  });
 
-    return result.docs as Tag[];
-  },
-);
+  return result.docs as Tag[];
+});
 
 export const getTags = cache(
-  async ({ tags, lang }: { tags: string[], lang: Lang }) => {
+  async ({ tags, lang }: { tags: string[]; lang: Lang }) => {
     const payload = await getPayload({ config: config });
 
     const result = await payload.find({
@@ -59,14 +57,34 @@ export const getTags = cache(
       },
     });
 
-    return Object.fromEntries((result.docs as Tag[]).map((tag) => [tag.identifier, tag]));
+    return Object.fromEntries(
+      (result.docs as Tag[]).map((tag) => [tag.identifier, tag]),
+    );
   },
 );
 
+export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
+  const payload = await getPayload({ config: config });
 
-export const getPayloadAnalyser = cache(
-  async ({ lang }: { lang: Lang }) => {
+  const result = await payload.find({
+    collection: "analyser",
+    limit: 0,
+    locale: lang,
+    pagination: false,
+    sort: "title",
+    where: {
+      test: { equals: false },
+    },
+  });
+
+  return result.docs as Analyser[];
+});
+
+export const getAnalyserByTag = cache(
+  async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
     const payload = await getPayload({ config: config });
+
+    const tag = await getTag({ identifier, lang });
 
     const result = await payload.find({
       collection: "analyser",
@@ -74,8 +92,10 @@ export const getPayloadAnalyser = cache(
       locale: lang,
       pagination: false,
       sort: "title",
+      depth: 0,
       where: {
         test: { equals: false },
+        tags: { contains: tag.id },
       },
     });
 

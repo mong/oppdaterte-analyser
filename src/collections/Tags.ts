@@ -54,7 +54,7 @@ export const Tags: CollectionConfig = {
       type: "richText",
       localized: true,
       admin: {
-        condition: (_, siblingData) => siblingData.isKompendium
+        condition: (_, siblingData) => siblingData.isKompendium,
       },
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
@@ -71,7 +71,14 @@ export const Tags: CollectionConfig = {
       label: "Rapporter med denne taggen",
       type: "join",
       collection: "rapporter",
-      on: "tags"
+      on: "tags",
+    },
+    {
+      name: "taggedAnalyser",
+      label: "Analyser med denne taggen",
+      type: "join",
+      collection: "analyser",
+      on: "tags",
     },
   ],
 };

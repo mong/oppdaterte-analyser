@@ -33,7 +33,7 @@ const settings = [
 
 export default function AdminBar({ email, userName, preview }: AdminBarProps) {
   const [anchorElem, setAnchorElem] = React.useState<null | HTMLElement>(null);
-  const router = useRouter()
+  const router = useRouter();
   const pathName = usePathname();
 
   return (
@@ -49,18 +49,21 @@ export default function AdminBar({ email, userName, preview }: AdminBarProps) {
                 {userName} / {email}
               </Typography>
             </Box>
-            {preview && pathName.match(/\/(en|no)\/rapporter\/.+/) &&  (
-              <Box sx={{ flexGrow: 0, marginX: 5 }}>
-                <Button
-                  sx={{ textTransform: "none", color: "white" }}
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => fetch('/next/exit-preview').then(() => router.refresh())}
-                >
-                  Forlat forhåndsvisning
-                </Button>
-              </Box>
-            )}
+            {preview &&
+              pathName.match(/\/(en|no)\/(rapporter|analyse)\/.+/) && (
+                <Box sx={{ flexGrow: 0, marginX: 5 }}>
+                  <Button
+                    sx={{ textTransform: "none", color: "white" }}
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      fetch("/next/exit-preview").then(() => router.refresh())
+                    }
+                  >
+                    Forlat forhåndsvisning
+                  </Button>
+                </Box>
+              )}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton

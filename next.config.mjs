@@ -26,6 +26,11 @@ const nextConfig = {
   eslint: {
     dirs: ['src']
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '4mb',
+    },
+  },
   async redirects() {
     return [
       {

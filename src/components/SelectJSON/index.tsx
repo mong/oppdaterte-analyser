@@ -1,12 +1,11 @@
-'use client'
-import React from 'react'
-import { JSONField } from '@payloadcms/ui'
-import type { JSONFieldClientComponent } from 'payload'
-import { useField } from '@payloadcms/ui'
-import { Button, styled } from '@mui/material'
-import { CloudUploadIcon } from 'lucide-react'
-import { Analyse } from '@/types'
-
+"use client";
+import React from "react";
+import { JSONField, useForm } from "@payloadcms/ui";
+import type { JSONFieldClientComponent } from "payload";
+import { useField } from "@payloadcms/ui";
+import { Button, styled } from "@mui/material";
+import { CloudUploadIcon } from "lucide-react";
+import { Analyser } from "@/payload-types";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -20,49 +19,74 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-
 export const SelectJSON: JSONFieldClientComponent = (props) => {
-  const { value, setValue, valid, showError, errorMessage } = useField<Analyse>();
+  const { value, setValue, valid, showError, errorMessage } =
+    useField<Analyser["data"]>();
+  const [edit, setEdit] = React.useState(false);
+  const { dispatchFields } = useForm();
 
-  return <div>
-    <div className="flex items-center m-2 mb-4 gap-4">
-      <Button
-        color={showError ? "error" : "primary"}
-        component="label"
-        sx={{ textTransform: "none" }}
-        role={undefined}
-        variant="contained"
-        tabIndex={-1}
-        startIcon={<CloudUploadIcon />}
-      >
-        Last opp JSON
-        <VisuallyHiddenInput
-          type="file"
-          name="analyse"
-          id="analyseFile"
-          accept="application/json"
-          required
-          onChange={(event) => {
-            const file = event.target.files?.length && event.target.files[0];
-            if (!file) return;
+  return (
+    <div className="">
+      <div className="flex items-center m-2 mb-4 gap-4 justify-between">
+        <Button
+          color={showError ? "error" : "primary"}
+          component="label"
+          sx={{ textTransform: "none" }}
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+        >
+          Last opp JSON
+          <VisuallyHiddenInput
+            type="file"
+            name="analyse"
+            id="analyseFile"
+            accept="application/json"
+            required
+            onChange={(event) => {
+              const file = event.target.files?.length && event.target.files[0];
+              if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = () => {
-              if (typeof reader.result === "string") {
-                const parsed = JSON.parse(reader.result)
-                setValue(parsed);
-              }
-            }
-            reader.readAsText(file);
-          }}
-        />
-      </Button>
-      {Boolean(value?.name) &&
-        <p>Lastet opp: {value.name}, generert {new Date(value.generated).toDateString()}</p>
-      }
+              const reader = new FileReader();
+              reader.onload = () => {
+                if (typeof reader.result === "string") {
+                  const parsed = JSON.parse(reader.result);
+                  setValue(parsed);
+
+                  if (parsed.name)
+                    dispatchFields({
+                      type: "UPDATE",
+                      path: "slug",
+                      value: parsed.name,
+                    });
+                }
+              };
+              reader.readAsText(file);
+            }}
+          />
+        </Button>
+        {Boolean(value?.name) && (
+          <span>
+            <pre style={{ display: "inline" }}>{value.name}</pre>, generert{" "}
+            {new Date(value.generated).toDateString()}
+          </span>
+        )}
+        <Button
+          sx={{ textTransform: "none" }}
+          variant={edit ? "contained" : "outlined"}
+          onClick={() => setEdit(!edit)}
+        >
+          Rediger JSON
+        </Button>
+      </div>
+      {showError && <p>Noe er galt med JSON-fila: {errorMessage}</p>}
+      {edit && (
+        <div className="[&_#field-data]:max-h-[400px]">
+          <JSONField {...props} />
+        </div>
+      )}
     </div>
-    {showError && <p>Noe er galt med JSON-fila: {errorMessage}</p>}
-    {/* <JSONField {...props} /> */}
-  </div>
-}
+  );
+};
 export default SelectJSON;
