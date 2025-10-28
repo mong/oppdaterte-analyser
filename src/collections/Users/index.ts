@@ -51,6 +51,7 @@ export const Users: CollectionConfig = {
         name: "entra-id-strategy",
         authenticate: async ({ payload, headers }) => {
           const credentials = await loginCredentials(headers);
+          // return { user: null };
           if (!credentials) {
             return { user: null };
           }

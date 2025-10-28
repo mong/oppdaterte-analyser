@@ -505,7 +505,7 @@ export interface Analyser {
     };
     [k: string]: unknown;
   };
-  test?: boolean | null;
+  publiseringsStatus?: ('published' | 'test' | 'hidden') | null;
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
   norskType: 'nb' | 'nn';
@@ -737,7 +737,7 @@ export interface AnalyserSelect<T extends boolean = true> {
   summary?: T;
   discussion?: T;
   about?: T;
-  test?: T;
+  publiseringsStatus?: T;
   publishedAt?: T;
   author?: T;
   norskType?: T;

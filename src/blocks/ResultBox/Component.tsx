@@ -16,9 +16,9 @@ export const ResultBoxBlock: React.FC<ResultBoxBlockProps> = async ({
   media,
   blockName,
 }) => {
-  if (!media || typeof media === "string" || !media.url || !media.filename)
+  if (!media || typeof media === "number" || !media.url || !media.filename)
     return;
-  if (!kart || typeof kart === "string" || !kart.filename) return;
+  if (!kart || typeof kart === "number" || !kart.filename) return;
 
   const getPath = (filename: string) =>
     `${process.cwd()}/public/data/${filename}`;

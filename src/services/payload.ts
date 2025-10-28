@@ -3,6 +3,7 @@ import { getPayload, PaginatedDocs } from "payload";
 import { cache } from "react";
 import config from "@payload-config";
 import { Analyser, Tag } from "@/payload-types";
+import { draftMode } from "next/headers";
 
 export const getTag = cache(
   async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
@@ -64,6 +65,7 @@ export const getTags = cache(
 );
 
 export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
+
   const payload = await getPayload({ config: config });
 
   const result = await payload.find({
@@ -71,9 +73,10 @@ export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
     limit: 0,
     locale: lang,
     pagination: false,
+    fallbackLocale: false,
     sort: "title",
     where: {
-      test: { equals: false },
+      publiseringsStatus: { equals: "published" },
     },
   });
 
@@ -82,6 +85,7 @@ export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
 
 export const getAnalyserByTag = cache(
   async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
+
     const payload = await getPayload({ config: config });
 
     const tag = await getTag({ identifier, lang });
@@ -91,11 +95,12 @@ export const getAnalyserByTag = cache(
       limit: 0,
       locale: lang,
       pagination: false,
+      fallbackLocale: false,
       sort: "title",
       depth: 0,
       where: {
-        test: { equals: false },
         tags: { contains: tag.id },
+        publiseringsStatus: { equals: "published" },
       },
     });
 

@@ -155,7 +155,7 @@ export function ScreenshotBox({
       return await html2canvas(graphRef.current, {
         onclone: (_, elem) => {
           Array.from(elem.querySelectorAll("*")).forEach((e) => {
-            let existingStyle = e.getAttribute("style") || "";
+            const existingStyle = e.getAttribute("style") || "";
             e.setAttribute(
               "style",
               `${existingStyle}; font-family: sans-serif`,

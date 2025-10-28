@@ -14,6 +14,7 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
+
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import RichText from "@/components/RichText";
@@ -21,8 +22,31 @@ import RichText from "@/components/RichText";
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 
 import { getAnalyserByTag, getTag } from "@/services/payload";
-
 import React from "react";
+import { getPayload } from "payload";
+import configPromise from "@payload-config";
+
+export async function generateStaticParams() {
+  if (process.env.NODE_ENV === 'development') return [];
+  
+  const payload = await getPayload({ config: configPromise })
+  const result = (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
+    (await payload.find({
+      collection: 'tags',
+      draft: false,
+      limit: 0,
+      locale: lang,
+      fallbackLocale: false,
+      overrideAccess: false,
+      pagination: false,
+      select: {
+        identifier: true,
+      },
+    })).docs.map(({ identifier }) => ({ kompendium: identifier, lang }))
+  ))).flat();
+  return result;
+}
+
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;

@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: analyser
           .filter((analyse) =>
             analyse.tags
-              ?.filter((tag) => !(typeof tag === "string"))
+              ?.filter((tag) => !(typeof tag === "number"))
               .map((tag) => tag.identifier)
               .includes(komp.identifier),
           )

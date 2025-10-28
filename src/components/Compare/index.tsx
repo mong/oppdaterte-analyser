@@ -195,7 +195,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
               })
               .toSorted((a, b) => b.diff - a.diff);
 
-            if (viewData.some((area) => area.diff > 5)) {
+            if (viewData.some((area) => area.diff > 10)) {
               return [
                 {
                   severity: Severity.Error,
@@ -237,50 +237,6 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
 
   if (oldAnalyse) {
     const oldYears = findYears(oldAnalyse);
-
-    const oldTags = new Set(oldAnalyse.tags);
-    const newTags = new Set(newAnalyse.tags);
-    const oldTagsDiff = oldTags.difference(newTags);
-    const newTagsDiff = newTags.difference(oldTags);
-
-    const tagReport = makeReport(
-      "Tags",
-      oldTagsDiff.size + newTagsDiff.size === 0
-        ? [
-            {
-              severity: Severity.Message,
-              Elem: () => <span>Taggene i de to analysene er identiske.</span>,
-            },
-          ]
-        : [
-            ...(oldTagsDiff.size > 0
-              ? [
-                  {
-                    severity: Severity.Warning,
-                    Elem: () => (
-                      <span>
-                        Disse taggene finnes bare i den gamle versjonen:{" "}
-                        {Array.from(oldTagsDiff).join(", ")}.
-                      </span>
-                    ),
-                  },
-                ]
-              : []),
-            ...(newTagsDiff.size > 0
-              ? [
-                  {
-                    severity: Severity.Warning,
-                    Elem: () => (
-                      <span>
-                        Disse taggene finnes bare i den nye versjonen:{" "}
-                        {Array.from(newTagsDiff).join(", ")}.
-                      </span>
-                    ),
-                  },
-                ]
-              : []),
-          ],
-    );
 
     const oldViews = new Set(oldAnalyse.views.map((view) => view.name));
     const newViews = new Set(newAnalyse.views.map((view) => view.name));
@@ -376,7 +332,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
                         analysen skiller seg på en uvanlig måte fra den gamle.
                         Årstall i den gamle analysen:{" "}
                         {oldYears[viewName]!.span.join("–")}. Årstall for
-                        visnigen den nye analysen:{" "}
+                        visningen den nye analysen:{" "}
                         {newYears[viewName]!.span.join("–")}.
                       </span>
                     ),
@@ -464,7 +420,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
         : oldAnalyse.generated === newAnalyse.generated
           ? [
               {
-                severity: Severity.Warning,
+                severity: Severity.Message,
                 Elem: () => (
                   <span>
                     Den gamle og den nye versjonen ble generert i SAS på samme
@@ -618,8 +574,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
 
     externalReports = makeReport(
       "Sammenligning med publisert versjon",
-      tagReport.concat(
-        viewReport,
+      viewReport.concat(
         yearReport,
         ageReport,
         kjonnReport,
@@ -631,7 +586,7 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
   }
 
   const OuterReport = makeReport(
-    "Integritetssjekk",
+    "Dataintegritet",
     internalIntegrityReport.concat(oldAnalyse ? externalReports : []),
     Infinity,
   )[0].Elem;

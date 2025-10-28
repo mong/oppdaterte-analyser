@@ -25,13 +25,39 @@ import configPromise from "@payload-config";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import RichText from "@/components/RichText";
 
-//import { Compare } from "@/components/Compare";
 import { createHash } from "crypto";
 
+export async function generateStaticParams() {
+  if (process.env.NODE_ENV === 'development') return [];
+  
+  const payload = await getPayload({ config: configPromise })
+  const result = (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
+    (await payload.find({
+      collection: 'analyser',
+      draft: false,
+      limit: 0,
+      locale: lang,
+      fallbackLocale: false,
+      overrideAccess: false,
+      pagination: false,
+      where: {
+        publiseringsStatus: { not_equals: "hidden" }
+      },
+      select: {
+        slug: true,
+      },
+    })).docs.map(({ slug }) => ({ analyseName: slug, lang }))
+  ))).flat();
+
+  return result;
+}
+
+
+
 export const generateMetadata = async (props: {
-  params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
+  params: Promise<{ lang: Lang; analyseName: string; }>;
 }) => {
-  const { lang, analyseName, testSlug } = await props.params;
+  const { lang, analyseName } = await props.params;
 
   const analyse = await queryAnalyseBySlug({ slug: analyseName, lang });
 
@@ -53,19 +79,28 @@ export const generateMetadata = async (props: {
 };
 
 export default async function AnalysePage(props: {
-  params: Promise<{ lang: Lang; analyseName: string; testSlug: string[] }>;
+  params: Promise<{ lang: Lang; analyseName: string; }>;
 }) {
-  const { lang, analyseName, testSlug } = await props.params;
+  const { lang, analyseName } = await props.params;
   const { isEnabled: draft } = await draftMode();
 
   const analyse = await queryAnalyseBySlug({ slug: analyseName, lang });
 
-  if (!analyse || !["en", "no"].includes(lang)) {
+  if (!analyse || analyse.publiseringsStatus === "hidden" || !["en", "no"].includes(lang)) {
     notFound();
   }
 
+
+  const oldAnalyse = draft && analyse._status === "draft"
+    ? (await queryAnalyseBySlug({ slug: analyseName, lang, disableDraft: true }))
+    : false;
+
   const dataHash = createHash("md5")
     .update(JSON.stringify(analyse.data || ""))
+    .digest("hex");
+
+  const oldDataHash = createHash("md5")
+    .update(JSON.stringify(oldAnalyse && oldAnalyse.data || ""))
     .digest("hex");
 
   const dict = await getDictionary(lang);
@@ -121,11 +156,27 @@ export default async function AnalysePage(props: {
           disableGutters={false}
           sx={{ paddingY: 4, paddingX: { xs: 2, md: 4 } }}
         >
-          {analyse.test && (
+          {analyse.publiseringsStatus === "test" && (
             <Alert severity="warning">
               Dette er en test-side! Denne analysen er fortsatt ikke publisert.
             </Alert>
           )}
+          {analyse.publiseringsStatus === "test" && (
+            <Paper
+              elevation={0}
+              sx={{
+                marginTop: 2,
+                padding: 2,
+                paddingY: 4,
+                boxShadow: "inset 0 0 25px #003087",
+                background: "#F9F9F9",
+              }}
+            >
+              <Compare
+                newAnalyse={analyse.data}
+                oldAnalyse={oldAnalyse && oldDataHash !== dataHash && oldAnalyse.data}
+              />
+            </Paper>)}
           <Suspense
             fallback={
               <Grid container justifyContent="center" sx={{ padding: 10 }}>
@@ -161,6 +212,20 @@ export default async function AnalysePage(props: {
               {dict.analysebox.info}
             </Typography>
             <RichText data={analyse.about} enableGutter={true} />
+            <Typography variant="h3">Data</Typography>
+            <Typography
+              variant="body1"
+              component="div"
+              sx={{ "@media print": { fontSize: "1rem" } }}
+            >
+              <p>{dict.analysebox.download_data_text}</p>
+            </Typography>
+            <Box sx={{ displayPrint: "none" }}>
+              <DownloadDataButton
+                analyse={analyse.data}
+                dict={dict}
+              />
+            </Box>
           </Suspense>
         </Container>
       </main>
@@ -169,14 +234,14 @@ export default async function AnalysePage(props: {
 }
 
 const queryAnalyseBySlug = cache(
-  async ({ slug, lang }: { slug: string; lang: Lang }) => {
+  async ({ slug, lang, disableDraft = false }: { slug: string; lang: Lang, disableDraft?: boolean }) => {
     const { isEnabled: draft } = await draftMode();
 
     const payload = await getPayload({ config: configPromise });
 
     const result = await payload.find({
       collection: "analyser",
-      draft,
+      draft: draft && !disableDraft,
       limit: 1,
       overrideAccess: draft,
       pagination: false,

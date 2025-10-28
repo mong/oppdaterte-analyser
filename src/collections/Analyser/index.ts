@@ -220,12 +220,18 @@ export const Analyser: CollectionConfig = {
       required: true,
     },
     {
-      name: "test",
+      name: "publiseringsStatus",
       localized: true,
-      label: "Test-versjon (ikke publisert på forsiden)",
-      type: "checkbox",
-      defaultValue: true,
+      label: "Publiseringsstatus",
+      type: "radio",
+      defaultValue: "test",
+      options: [
+        { label: "Publisert", value: "published" },
+        { label: "Testversjon (bare de med link har tilgang)", value: "test" },
+        { label: "Skjult", value: "hidden" },
+      ],
       admin: {
+        layout: "vertical",
         position: "sidebar",
       },
     },

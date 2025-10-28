@@ -48,7 +48,7 @@ export default async function MainPage(props: MainPageProps) {
   const dict = await getDictionary(lang);
 
   const kompendier = await getKompendier({ lang });
-  const payload_analyser = await getAnalyser({ lang });
+  const analyser = await getAnalyser({ lang });
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -109,11 +109,11 @@ export default async function MainPage(props: MainPageProps) {
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
                   primary={`${komp.title} (${
-                    payload_analyser
+                    analyser
                       .map((analyse) => analyse.tags || [])
                       .filter((tags) =>
                         tags.some((tag) =>
-                          typeof tag === "string"
+                          typeof tag === "number"
                             ? false
                             : tag.identifier === komp.identifier,
                         ),
@@ -129,11 +129,11 @@ export default async function MainPage(props: MainPageProps) {
           <Typography>
             {dict.frontpage.all_analyses_text.replace(
               "<n>",
-              payload_analyser.length.toString(),
+              analyser.length.toString(),
             )}
           </Typography>
           <List dense>
-            {payload_analyser.map((analyse, i) => (
+            {analyser.map((analyse, i) => (
               <ListItemButton
                 key={i}
                 LinkComponent={"a"}
