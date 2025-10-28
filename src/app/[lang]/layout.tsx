@@ -5,7 +5,7 @@ import { Box, CssBaseline } from "@mui/material";
 import skdeTheme from "@/themes/SkdeTheme";
 import Footer from "@/components/Footer";
 import { Lang } from "@/types";
-import MatomoTracker from "./MatomoTracker";
+import MatomoTracker from "../MatomoTracker";
 import { loginCredentials } from "@/lib/authorization";
 import AdminBar from "@/components/AdminBar";
 
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { lang: Lang };
+  params: Promise<{ lang: string }>;
 }) {
-  const params = props.params;
+  const params = await props.params;
 
   const credentials = await loginCredentials();
 
