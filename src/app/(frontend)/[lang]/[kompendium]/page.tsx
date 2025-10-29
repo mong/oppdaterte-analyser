@@ -28,7 +28,7 @@ import configPromise from "@payload-config";
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
-  
+
   const payload = await getPayload({ config: configPromise })
   const result = (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
     (await payload.find({
@@ -53,6 +53,11 @@ export const generateMetadata = async (props: {
 }) => {
   const { kompendium, lang } = await props.params;
   const tag = await getTag({ identifier: kompendium, lang });
+
+  if (!tag || !["en", "no"].includes(lang)) {
+    notFound();
+  }
+
   const dict = await getDictionary(lang);
 
   return {

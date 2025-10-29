@@ -82,7 +82,7 @@ export const SelectJSON: JSONFieldClientComponent = (props) => {
       </div>
       {showError && <p>Noe er galt med JSON-fila: {errorMessage}</p>}
       {edit && (
-        <div className="[&_#field-data]:max-h-[400px]">
+        <div className="[&_#field-data]:max-h-[600px]">
           <JSONField {...props} />
         </div>
       )}

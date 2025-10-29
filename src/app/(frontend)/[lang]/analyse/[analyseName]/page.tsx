@@ -29,7 +29,7 @@ import { createHash } from "crypto";
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
-  
+
   const payload = await getPayload({ config: configPromise })
   const result = (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
     (await payload.find({
@@ -174,7 +174,8 @@ export default async function AnalysePage(props: {
             >
               <Compare
                 newAnalyse={analyse.data}
-                oldAnalyse={oldAnalyse && oldDataHash !== dataHash && oldAnalyse.data}
+                different={oldDataHash !== dataHash}
+                oldAnalyse={oldAnalyse && oldAnalyse.data}
               />
             </Paper>)}
           <Suspense

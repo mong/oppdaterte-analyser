@@ -48,10 +48,6 @@ const DiffChart = ({ data }: { data: any }) => {
   );
 };
 
-type CompareProps = {
-  oldAnalyse: Analyser["data"] | false;
-  newAnalyse: Analyser["data"];
-};
 
 enum Severity {
   Message,
@@ -64,7 +60,14 @@ type ReportResults = {
   Elem: ({ depth }: { depth: number }) => React.JSX.Element;
 }[];
 
-export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
+type CompareProps = {
+  oldAnalyse: Analyser["data"] | false;
+  newAnalyse: Analyser["data"];
+  different: boolean;
+};
+
+
+export const Compare = ({ oldAnalyse, newAnalyse, different }: CompareProps) => {
   const makeReport = (
     title: string,
     results: ReportResults,
@@ -235,7 +238,23 @@ export const Compare = ({ oldAnalyse, newAnalyse }: CompareProps) => {
 
   let externalReports: ReportResults = [];
 
-  if (oldAnalyse) {
+  if (!different) {
+    externalReports = makeReport(
+      "Sammenligning med publisert versjon",
+      [
+        {
+          severity: Severity.Message,
+          Elem: () => (
+            <span>
+              Den publiserte versjonen og den nye versjonen av analysen er
+              identiske.
+            </span>
+          ),
+        },
+      ],
+    );
+  }
+  else if (oldAnalyse) {
     const oldYears = findYears(oldAnalyse);
 
     const oldViews = new Set(oldAnalyse.views.map((view) => view.name));

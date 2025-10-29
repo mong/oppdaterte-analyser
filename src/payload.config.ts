@@ -2,7 +2,6 @@ import sharp from "sharp";
 import path from "path";
 import { fileURLToPath } from "url";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { buildConfig } from "payload";
 import { nb } from "@payloadcms/translations/languages/nb";
@@ -36,12 +35,9 @@ export default buildConfig({
   indexSortableFields: true,
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: process.env.POSTGRES_URI || "",
     },
   }),
-  // db: mongooseAdapter({
-  //   url: process.env.DATABASE_URI || ""
-  // }),
   sharp, // <- If you want to resize images, crop, set focal point, etc.
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
