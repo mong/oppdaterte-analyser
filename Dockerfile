@@ -34,7 +34,7 @@ RUN \
     --mount=type=secret,id=mongo_uri,env=MONGO_URI \
     --mount=type=secret,id=payload_secret,env=PAYLOAD_SECRET \
     --mount=type=secret,id=preview_secret,env=PREVIEW_SECRET \
-    --mount=type=secret,id=postgres_secret,env=POSTGRES_SECRET \
+    --mount=type=secret,id=postgres_uri,env=POSTGRES_URI \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
