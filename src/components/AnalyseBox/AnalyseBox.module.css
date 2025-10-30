@@ -1,8 +1,0 @@
-.analyse-box {
-  outline: 1px solid rgb(0, 48, 135);
-  overflow: clip;
-  margin-bottom: 40px;
-}
-.analyse-box:last-child {
-  margin-bottom: 0px;
-}

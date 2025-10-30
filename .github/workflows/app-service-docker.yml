@@ -37,6 +37,9 @@ jobs:
           file: ./Dockerfile
           secrets: |
             "mongo_uri=${{ secrets.MONGO_URI }}"
+            "payload_secret=${{ secrets.PAYLOAD_SECRET }}"
+            "preview_secret=${{ secrets.PREVIEW_SECRET }}"
+            "postgres_uri=${{ secrets.POSTGRES_URI }}"
 
   deploy:
     runs-on: ubuntu-latest

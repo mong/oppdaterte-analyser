@@ -19,7 +19,7 @@ export function HeaderMiddle({
       }}
     >
       <Container
-        maxWidth="xl"
+        maxWidth="xxl"
         disableGutters={false}
         sx={{ padding: 4, "@media print": { paddingY: 0 } }}
       >

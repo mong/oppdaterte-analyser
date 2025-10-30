@@ -1,6 +1,8 @@
-import { Analyse, Lang } from "@/types";
+import { Analyser } from "@/payload-types";
+import { Lang, View } from "@/types";
+import { Typography } from "@mui/material";
 
-export function formatDate(date: Date, lang: Lang) {
+export function formatDate(date: Date | string, lang: Lang) {
   return new Date(date).toLocaleString({ en: "en-GB", no: "nb-NO" }[lang], {
     year: "numeric",
     month: "long",
@@ -8,7 +10,7 @@ export function formatDate(date: Date, lang: Lang) {
   });
 }
 
-export function makeDateElem(date: Date, lang: Lang) {
+export function makeDateElem(date: Date | string, lang: Lang) {
   return (
     <time dateTime={new Date(date).toISOString()}>
       {formatDate(date, lang)}
@@ -30,7 +32,7 @@ export function formatNumber(
   }).format(number);
 }
 
-export function getAgeRange(analyse: Analyse, lang: Lang) {
+export function getAgeRange(analyse: Analyser["data"], lang: Lang) {
   const [min_age, max_age] = analyse.age_range;
   switch (true) {
     case min_age === 0 && max_age > 100:
@@ -42,60 +44,103 @@ export function getAgeRange(analyse: Analyse, lang: Lang) {
   }
 }
 
-export function getDescriptionParts(description_string: string) {
-  const match = /(.*)(\spe?r 1[\s,]000\s)(.*)/.exec(description_string);
-
-  if (match === null) return false;
-
-  const [_, description, per_1000, category] = match;
-  return {
-    description,
-    per_1000,
-    category,
-    category_is_population: ["innbyggere", "inhabitants"].includes(category),
-  };
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getDescription(
-  analyse: Analyse,
-  lang: Lang,
-  type: "rate" | "antall",
-) {
-  const parts = getDescriptionParts(analyse.description[lang]);
-
-  if (!parts) return "Parse error. Noe er feil med beskrivelsen!";
-
-  const { description, per_1000, category, category_is_population } = parts;
-
-  const age_range = getAgeRange(analyse, lang);
-  const age = age_range ? `, ${age_range}` : "";
-
-  switch (type) {
-    case "rate":
-      return description + per_1000 + category + age;
-    case "antall":
-      return (
-        description +
-        (category_is_population || description.includes(` ${category} `)
-          ? ""
-          : `, ${category}`) +
-        age
-      );
+export function getCategory(analyse: Analyser["data"]) {
+  if (analyse.kategori_begrep) {
+    return {
+      ...analyse.kategori_begrep,
+      special: true,
+    };
+  } else if (analyse.age_range[1] < 20) {
+    return {
+      begge: { en: "children", no: "barn", special: true },
+      kvinner: { en: "girls", no: "jenter", special: true },
+      menn: { en: "boys", no: "gutter", special: true },
+    }[analyse.kjonn];
+  } else if (new Set(["kvinner", "menn"]).has(analyse.kjonn)) {
+    return {
+      kvinner: { en: "women", no: "kvinner", special: true },
+      menn: { en: "men", no: "menn", special: true },
+    }[analyse.kjonn as "menn" | "kvinner"];
+  } else {
+    return { en: "inhabitants", no: "innbyggere", special: false };
   }
 }
 
-export function getSubHeader(analyse: Analyse, lang: Lang) {
-  const parts = getDescriptionParts(analyse.description[lang]);
+export function getVariableText(
+  analyse: Analyser["data"],
+  lang: Lang,
+  variable: { viewName: string; name: string },
+) {
+  const view = analyse.views.find((v) => v.name === variable.viewName) as View;
+  const variableObject = view.variables.find(
+    (v) => v.name === variable.name,
+  ) as View["variables"][0];
+  return (
+    <>
+      {` (`}
+      <i>{view.title[lang]}</i>
+      {" = "}
+      <i>{variableObject[lang]}</i>
+      {")"}
+    </>
+  );
+}
 
-  if (!parts) return "Parse error. Noe er feil med beskrivelsen!";
-  const { category, category_is_population } = parts;
+export function getDescription(
+  analyse: Analyser["data"],
+  lang: Lang,
+  type: "rate" | "n",
+  aggregering: "kont" | "pas",
+  variable?: { viewName: string; name: string },
+) {
+  const age_range = getAgeRange(analyse, lang);
+  const age = age_range ? `, ${age_range}` : "";
 
-  const ageRangeText = getAgeRange(analyse, lang);
-  return [
-    !category_is_population &&
-      category[0].toUpperCase() + category.substring(1),
-    ageRangeText,
-  ]
-    .filter(Boolean)
-    .join(", ");
+  const variableText = variable && getVariableText(analyse, lang, variable);
+
+  let kontaktType = {
+    kont: { no: "kontakter", en: "contacts" },
+    pas: { no: "pasienter", en: "patients" },
+  }[aggregering][lang];
+  if (aggregering === "kont" && analyse.kontakt_begrep) {
+    kontaktType = analyse.kontakt_begrep[lang];
+  }
+
+  const kategori = getCategory(analyse)[lang];
+
+  return (
+    <Typography variant="body2">
+      {type === "rate" ? (
+        <>
+          {analyse.description[lang]} – {kontaktType}{" "}
+          {{ en: "per 1,000", no: "pr 1 000" }[lang]} {kategori}
+          {age}
+          {variableText}
+        </>
+      ) : (
+        <>
+          {analyse.description[lang]}
+          {age}
+          {variableText} – {{ en: "number of", no: "antall" }[lang]}{" "}
+          {kontaktType}
+        </>
+      )}
+    </Typography>
+  );
+}
+
+export function getSubHeader(analyse: Analyser["data"], lang: Lang) {
+  const age_range = getAgeRange(analyse, lang);
+  const category = getCategory(analyse);
+
+  const parts = [
+    category.special && capitalize(category[lang]),
+    age_range,
+  ].filter(Boolean);
+
+  return parts.join(", ");
 }

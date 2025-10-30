@@ -40,3 +40,8 @@ yarn-error.log*
 next-env.d.ts
 .yarn/
 
+
+# Data files
+datafiler/*
+public/media/
+public/data
