@@ -12,12 +12,11 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 RUN \
-    yarn;
-# if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-# elif [ -f package-lock.json ]; then npm ci; \
-# elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-# else echo "Lockfile not found." && exit 1; \
-# fi
+    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
 
 
 # Rebuild the source code only when needed
@@ -33,6 +32,9 @@ COPY . .
 
 RUN \
     --mount=type=secret,id=mongo_uri,env=MONGO_URI \
+    --mount=type=secret,id=payload_secret,env=PAYLOAD_SECRET \
+    --mount=type=secret,id=preview_secret,env=PREVIEW_SECRET \
+    --mount=type=secret,id=postgres_secret,env=POSTGRES_SECRET \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
