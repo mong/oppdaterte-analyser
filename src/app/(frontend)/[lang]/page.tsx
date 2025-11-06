@@ -113,7 +113,7 @@ export default async function MainPage(props: MainPageProps) {
                       .map((analyse) => analyse.tags || [])
                       .filter((tags) =>
                         tags.some((tag) =>
-                          typeof tag === "number"
+                          typeof tag !== "object"
                             ? false
                             : tag.identifier === komp.identifier,
                         ),

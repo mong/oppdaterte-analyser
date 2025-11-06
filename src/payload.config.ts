@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { buildConfig } from "payload";
 import { nb } from "@payloadcms/translations/languages/nb";
 import { Media } from "./collections/Media";
@@ -12,6 +13,7 @@ import { Tags } from "./collections/Tags";
 import { Rapporter } from "./collections/Rapporter";
 import { Analyser } from "./collections/Analyser";
 import { getServerSideURL } from "./utilities/getURL";
+import mongoose from "mongoose";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -33,7 +35,9 @@ export default buildConfig({
   // Whichever Database Adapter you're using should go here
   // Mongoose is shown as an example, but you can also use Postgres
   indexSortableFields: true,
-  db: postgresAdapter({
+  db: process.env.DEVELOPMENT_MONGO_URI ? mongooseAdapter({
+    url: process.env.DEVELOPMENT_MONGO_URI,
+  }) : postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URI || "",
     },

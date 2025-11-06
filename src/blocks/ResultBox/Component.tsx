@@ -1,4 +1,3 @@
-"use server";
 import type { ResultBoxBlock as ResultBoxBlockProps } from "src/payload-types";
 
 import React from "react";
@@ -16,21 +15,27 @@ export const ResultBoxBlock: React.FC<ResultBoxBlockProps> = async ({
   media,
   blockName,
 }) => {
-  if (!media || typeof media === "number" || !media.url || !media.filename)
+  if (!media || !(typeof media === "object") || !media.url || !media.filename)
     return;
-  if (!kart || typeof kart === "number" || !kart.filename) return;
+  if (!kart || !(typeof kart === "object") || !kart.filename) return;
 
   const getPath = (filename: string) =>
     `${process.cwd()}/public/data/${filename}`;
 
-  const mapData = JSON.parse(await fs.readFile(getPath(kart.filename), "utf8"));
-  const data = JSON.parse(await fs.readFile(getPath(media.filename), "utf8"));
+  // Promise.all to read both files concurrently
+  const [mapData, data] = await Promise.all([
+    fs.readFile(getPath(kart.filename), "utf8"),
+    fs.readFile(getPath(media.filename), "utf8"),
+  ]);
+
+  const parsedMapData = JSON.parse(mapData);
+  const parsedData = JSON.parse(data);
 
   return (
     <ResultBox
       title={blockName || "Uten tittel"}
-      boxData={data.innhold}
-      mapData={mapData}
+      boxData={parsedData.innhold}
+      mapData={parsedMapData}
       summary={
         <RichText
           data={oppsummering}

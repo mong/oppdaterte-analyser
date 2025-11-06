@@ -18,6 +18,8 @@ import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
 export async function generateStaticParams() {
+  if (process.env.NODE_ENV === 'development') return [];
+
   const payload = await getPayload({ config: configPromise })
   return (await Promise.all((["en", "no"] as Lang[]).map(async (lang) =>
     (await payload.find({
@@ -51,7 +53,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   const { slug = '', lang } = await paramsPromise
   const rapport = await queryRapportBySlug({ slug, lang })
 
-  if (!rapport) return notFound()
+  if (!rapport) return notFound();
 
   return (
     <article className="pt-16 pb-16">
