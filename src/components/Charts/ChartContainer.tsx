@@ -76,8 +76,9 @@ function VariableSelector({
   onClick,
   lang,
 }: VariableSelectorProps) {
+
   return (
-    <FormControl size="small" focused={false}>
+    <FormControl size="small" focused={false} sx={{display: views.length ? "block" : "none" }}>
       <InputLabel id="select-variable-label">
         {dict.analysebox.choose_variable}
       </InputLabel>
@@ -90,7 +91,7 @@ function VariableSelector({
             : (`${variable.viewName}.${variable.name}` as string)
         }
         label={dict.analysebox.choose_variable}
-        sx={{ minWidth: 250, height: "100%" }}
+        sx={{ width: { md: 250, sm: 220, xs: 200 }, height: "100%" }}
         onChange={(e) => {
           const [viewName, name] =
             e.target.value === "fjern_valg"
@@ -129,10 +130,127 @@ function VariableSelector({
   );
 }
 
+export type YearSelectorProps = {
+  years: number[];
+  lastYear: number;
+  year: number;
+  setYear: (year: number) => void;
+  dict: { [k: string]: { [k: string]: string } };
+  speed: number;
+};
+
+
+function YearSelector({
+  years,
+  lastYear,
+  year,
+  setYear,
+  dict,
+  speed,
+}: YearSelectorProps) {
+  const [animating, setAnimating] = React.useState(false);
+  const animatingRef = React.useRef(false);
+  React.useEffect(() => {
+    animatingRef.current = animating;
+  }, [animating]);
+
+  return (
+    <div>
+      <div className="py-4 block sm:hidden">
+        <FormControl size="small">
+          <InputLabel id="demo-simple-select-label">{dict.analysebox.choose_year}</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={year}
+            label={dict.analysebox.choose_year}
+            onChange={(e) => setYear(e.target.value as number)}
+
+          >
+            {years.toReversed().map((y) => (
+              <MenuItem key={y} value={y}>
+                {y}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <div className="py-4 hidden sm:block">
+        <Stack direction="row">
+          <Box>
+            {animating ? (
+              <IconButton onClick={() => setAnimating(false)}>
+                <PauseIcon />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={() => {
+                  setAnimating(true);
+                  let currentYear =
+                    lastYear === year ? Math.min(...(years as number[])) - 1 : year;
+                  (function loop() {
+                    setTimeout(
+                      () => {
+                        if (currentYear < lastYear && animatingRef.current) {
+                          currentYear++;
+                          setYear(currentYear);
+                          loop();
+                        } else {
+                          setAnimating(false);
+                        }
+                      },
+                      speed,
+                    );
+                  })();
+                }}
+              >
+                <PlayArrowIcon />
+              </IconButton>
+            )}
+          </Box>
+          <Box sx={{ flexGrow: 1, marginX: 2, marginRight: 4 }}>
+            <Slider
+              track={false}
+              value={year}
+              step={1}
+              min={Math.min(...(years as number[]))}
+              max={lastYear}
+              onChange={(_, value) => setYear(value as number)}
+              valueLabelFormat={(value) =>
+                value === lastYear + 1
+                  ? dict.analysebox.all_years
+                  : value.toString()
+              }
+              valueLabelDisplay="auto"
+              marks={years
+                .map((year) => ({
+                  value: year as number,
+                  label: year.toString(),
+                }))
+                .concat({
+                  value: lastYear + 1,
+                  label: dict.analysebox.all_years,
+                })}
+              sx={{
+                "@media (max-width: 600px)": {
+                  "& .MuiSlider-markLabel": {
+                    fontSize: "0.75rem",
+                  },
+                },
+              }}
+            />
+          </Box>
+        </Stack>
+      </div>
+    </div>
+  );
+}
+
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
     textTransform: "none",
   },
+  height: "44px",
 });
 
 type ScreenshotBoxProps = {
@@ -182,7 +300,7 @@ export function ScreenshotBox({
   };
 
   return (
-    <Box sx={{ position: "sticky" }}>
+    <div className="sticky px-0 md:px-8">
       <Tooltip title={dict.analysebox.copy_graph_tooltip}>
         <IconButton
           aria-label="screenshot"
@@ -307,7 +425,7 @@ export function ScreenshotBox({
           </IconButton>
         }
       />
-    </Box>
+    </div>
   );
 }
 
@@ -328,11 +446,6 @@ export type ChartContainerProps = {
 };
 
 export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
-  const [animating, setAnimating] = React.useState(false);
-  const animatingRef = React.useRef(false);
-  React.useEffect(() => {
-    animatingRef.current = animating;
-  }, [animating]);
 
   const [showNorway, setShowNorway] = React.useState(false);
   const [verdiType, setVerdiType] = React.useState<"rate" | "n">("rate");
@@ -493,74 +606,6 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     [analyse],
   );
 
-  const yearSelector = (
-    <Stack direction="row" sx={{ paddingY: 2 }}>
-      <Box>
-        {animating ? (
-          <IconButton onClick={() => setAnimating(false)}>
-            <PauseIcon />
-          </IconButton>
-        ) : (
-          <IconButton
-            onClick={() => {
-              setAnimating(true);
-              let currentYear =
-                lastYear === year ? Math.min(...(years as number[])) - 1 : year;
-              (function loop() {
-                setTimeout(
-                  () => {
-                    if (currentYear < lastYear && animatingRef.current) {
-                      currentYear++;
-                      setYear(currentYear);
-                      loop();
-                    } else {
-                      setAnimating(false);
-                    }
-                  },
-                  600 + 400 * Number(mainTab !== "demografi"),
-                );
-              })();
-            }}
-          >
-            <PlayArrowIcon />
-          </IconButton>
-        )}
-      </Box>
-      <Box sx={{ flexGrow: 1, marginX: 2, marginRight: 4 }}>
-        <Slider
-          track={false}
-          value={year}
-          step={1}
-          min={Math.min(...(years as number[]))}
-          max={lastYear}
-          onChange={(_, value) => setYear(value as number)}
-          valueLabelFormat={(value) =>
-            value === lastYear + 1
-              ? dict.analysebox.all_years
-              : value.toString()
-          }
-          valueLabelDisplay="auto"
-          marks={years
-            .map((year) => ({
-              value: year as number,
-              label: year.toString(),
-            }))
-            .concat({
-              value: lastYear + 1,
-              label: dict.analysebox.all_years,
-            })}
-          sx={{
-            "@media (max-width: 600px)": {
-              "& .MuiSlider-markLabel": {
-                fontSize: "0.75rem",
-              },
-            },
-          }}
-        />
-      </Box>
-    </Stack>
-  );
-
   const [areasOpen, setAreasOpen] = React.useState(false);
 
   const chooseAreasText =
@@ -568,12 +613,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     (selection[level].size ? ` (${selection[level].size})` : "");
 
   const areaAndAggregationSelect = (
-    <Stack
-      direction="row"
-      spacing={3}
-      sx={{ paddingY: 1, paddingX: 4, height: 60, marginBottom: 1 }}
-    >
-      <FormControl size="small" focused={false} sx={{ width: 300 }}>
+    <div className="flex flex-wrap gap-4 px-4 sm:px-8 mb-4">
+      <FormControl size="small" focused={false} sx={{ width: 300 }} className="col-span-3 md:col-span-1">
         <InputLabel htmlFor="grouped-select">{chooseAreasText}</InputLabel>
         <Select
           multiple
@@ -691,7 +732,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         <ToggleButton value={"rate"}>Rate</ToggleButton>
         <ToggleButton value={"n"}>{dict.analysebox.antall}</ToggleButton>
       </StyledToggleButtonGroup>
-    </Stack>
+    </div>
   );
 
   return (
@@ -723,7 +764,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           <TabPanel value="analyse" sx={{ paddingX: 0, paddingBottom: 0 }}>
             {areaAndAggregationSelect}
             <TabContext value={analyseTab}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider", marginX: 4 }}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="mx-4 sm:mx-8">
                 <MyTabList
                   onChange={(_, value) => {
                     setAnalyseTab(value);
@@ -746,143 +787,154 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   />
                 </MyTabList>
               </Box>
-              <TabPanel value="enkeltår" sx={{ paddingX: 4, paddingBottom: 0 }}>
-                <Stack
-                  direction="row"
-                  spacing={3}
-                  sx={{ paddingY: 1, height: 60 }}
-                >
-                  <FormControl size="small" focused={false}>
-                    <InputLabel id="select-view-label">
-                      {dict.analysebox.choose_focus_area}
-                    </InputLabel>
-                    <Select
-                      labelId="select-view-label"
-                      id="select-view"
-                      value={viewName === "total" ? "" : viewName}
-                      label={dict.analysebox.choose_focus_area}
-                      sx={{ minWidth: 250, height: "100%" }}
-                      onChange={(e) => {
-                        setViewName(
-                          e.target.value === "fjern_valg"
-                            ? "total"
-                            : e.target.value,
-                        );
-                      }}
-                      MenuProps={{
-                        sx: {
-                          ["& .MuiList-root, & .MuiListSubheader-root"]: {
-                            backgroundColor: BACKGROUND_COLOR,
+              <TabPanel value="enkeltår" sx={{ paddingX: 0, paddingBottom: 0 }}>
+                <div className="px-4 sm:px-8 grid grid-cols-[max-content_1fr] sm:grid-cols-1 items-center gap-4">
+                  <div>
+                    <FormControl size="small" focused={false}>
+                      <InputLabel id="select-view-label">
+                        {dict.analysebox.choose_focus_area}
+                      </InputLabel>
+                      <Select
+                        labelId="select-view-label"
+                        id="select-view"
+                        value={viewName === "total" ? "" : viewName}
+                        label={dict.analysebox.choose_focus_area}
+                        sx={{ width: { md: 250, sm: 220, xs: 200 }, height: "100%" }}
+                        onChange={(e) => {
+                          setViewName(
+                            e.target.value === "fjern_valg"
+                              ? "total"
+                              : e.target.value,
+                          );
+                        }}
+                        MenuProps={{
+                          sx: {
+                            ["& .MuiList-root, & .MuiListSubheader-root"]: {
+                              backgroundColor: BACKGROUND_COLOR,
+                            },
                           },
-                        },
-                      }}
-                    >
-                      <MenuItem
-                        value={"fjern_valg"}
-                        disabled={viewName === "total"}
+                        }}
                       >
-                        <em>{dict.analysebox.remove_choice}</em>
-                      </MenuItem>
-                      {analyse.data.views
-                        .filter(
-                          (v) =>
-                            v.type === "standard" &&
-                            v.name !== "total" &&
-                            ["begge", aggregering].includes(v.aggregering),
-                        )
-                        .map((view, i) => (
-                          <MenuItem key={i} value={view.name}>
-                            {view.title[lang]}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                </Stack>
-                {yearSelector}
-                <ScreenshotBox
-                  analyse={analyse}
-                  dict={dict}
-                  filename={`${analyse.data.name}_${currentView.title[lang].toLowerCase().replace(" ", "_")}_${year}.png`}
-                  description={getDescription(analyse.data, lang, verdiType, aggregering)}
-                >
-                  <AnalyseBarChart
-                    categories={Object.keys(
-                      analyse.data.data[viewName][lastYear][level],
-                    ).filter((cat) => cat !== "Norge" || verdiType === "rate")}
-                    variables={currentView.variables.map(
-                      (variable) => variable.name,
-                    )}
-                    valueGetter={(category, variable) =>
-                      analyse.data.data[viewName][year][level][category][variable][
-                      `${aggregering}_${verdiType}`
-                      ]
-                    }
-                    variableFmt={(variable) => varNames[variable][lang]}
-                    categoryFmt={(category) => getAreaName(category, lang)}
-                    valueAxisFmt={(v) => new Intl.NumberFormat(lang).format(v)}
-                    valueFmt={(v) =>
-                      formatNumber(
-                        v || 0,
-                        lang,
-                        verdiType === "n" && aggregering === "pas"
-                          ? { maximumFractionDigits: 0 }
-                          : undefined,
-                      )
-                    }
-                    special_values={new Set(["Norge"])}
-                    selection={
-                      level === "region" ? selection.region : selection.sykehus
-                    }
-                    onClick={(area) =>
-                      area !== "Norge" &&
-                      setSelection(
-                        level === "region"
-                          ? selection.toggleRegion(area)
-                          : selection.toggleSykehus(area),
-                      )
-                    }
-                    maxValue={
-                      maxValues["total"][level][analyse.data.name][
-                        `${aggregering}_${verdiType}`
-                      ].withoutNorway
-                    }
-                  />
-                </ScreenshotBox>
-              </TabPanel>
-              <TabPanel value="tidstrend" sx={{ paddingX: 4, paddingBottom: 0 }}>
-                <Stack
-                  direction="row"
-                  spacing={3}
-                  sx={{ paddingY: 1, height: 60 }}
-                >
-                  <VariableSelector
-                    analyse={analyse.data}
-                    views={analyse.data.views
-                      .filter((v) =>
-                        ["begge", aggregering].includes(v.aggregering),
-                      )
-                      .slice(1)}
+                        <MenuItem
+                          value={"fjern_valg"}
+                          disabled={viewName === "total"}
+                        >
+                          <em>{dict.analysebox.remove_choice}</em>
+                        </MenuItem>
+                        {analyse.data.views
+                          .filter(
+                            (v) =>
+                              v.type === "standard" &&
+                              v.name !== "total" &&
+                              ["begge", aggregering].includes(v.aggregering),
+                          )
+                          .map((view, i) => (
+                            <MenuItem key={i} value={view.name}>
+                              {view.title[lang]}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div>
+                    <YearSelector
+                      years={years as number[]}
+                      lastYear={lastYear}
+                      year={year}
+                      setYear={setYear}
+                      dict={dict}
+                      speed={600}
+                    />
+                  </div>
+                </div>
+                <div >
+                  <ScreenshotBox
+                    analyse={analyse}
                     dict={dict}
-                    lang={lang}
-                    variable={tidstrendVariable}
-                    onClick={(v) => setTidstrendVariable(v)}
-                  />
-                  {verdiType === "n" && (
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={showNorway}
-                          onChange={() => setShowNorway(!showNorway)}
-                        />
+                    filename={`${analyse.data.name}_${currentView.title[lang].toLowerCase().replace(" ", "_")}_${year}.png`}
+                    description={getDescription(analyse.data, lang, verdiType, aggregering)}
+                  >
+                    <AnalyseBarChart
+                      categories={Object.keys(
+                        analyse.data.data[viewName][lastYear][level],
+                      ).filter((cat) => cat !== "Norge" || verdiType === "rate")}
+                      variables={currentView.variables.map(
+                        (variable) => variable.name,
+                      )}
+                      valueGetter={(category, variable) =>
+                        analyse.data.data[viewName][year][level][category][variable][
+                        `${aggregering}_${verdiType}`
+                        ]
                       }
-                      label={
-                        <Typography variant="body2" sx={{ display: "inline" }}>
-                          {dict.analysebox.show_norway}
-                        </Typography>
+                      variableFmt={(variable) => varNames[variable][lang]}
+                      categoryFmt={(category) => getAreaName(category, lang)}
+                      valueAxisFmt={(v) => new Intl.NumberFormat(lang).format(v)}
+                      valueFmt={(v) =>
+                        formatNumber(
+                          v || 0,
+                          lang,
+                          verdiType === "n" && aggregering === "pas"
+                            ? { maximumFractionDigits: 0 }
+                            : undefined,
+                        )
+                      }
+                      special_values={new Set(["Norge"])}
+                      selection={
+                        level === "region" ? selection.region : selection.sykehus
+                      }
+                      onClick={(area) =>
+                        area !== "Norge" &&
+                        setSelection(
+                          level === "region"
+                            ? selection.toggleRegion(area)
+                            : selection.toggleSykehus(area),
+                        )
+                      }
+                      maxValue={
+                        maxValues["total"][level][analyse.data.name][
+                          `${aggregering}_${verdiType}`
+                        ].withoutNorway
                       }
                     />
-                  )}
-                </Stack>
+                  </ScreenshotBox>
+                </div>
+              </TabPanel>
+              <TabPanel value="tidstrend" sx={{ paddingX: 0, paddingBottom: 0 }}>
+                <div className="px-4 sm:px-8">
+                  <Stack
+                    direction="row"
+                    spacing={3}
+                    sx={{ paddingY: 1, height: 60 }}
+                  >
+                    <VariableSelector
+                      analyse={analyse.data}
+                      views={analyse.data.views
+                        .filter((v) =>
+                          ["begge", aggregering].includes(v.aggregering),
+                        )
+                        .slice(1)}
+                      dict={dict}
+                      lang={lang}
+                      variable={tidstrendVariable}
+                      onClick={(v) => setTidstrendVariable(v)}
+                    />
+                    {verdiType === "n" && (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={showNorway}
+                            onChange={() => setShowNorway(!showNorway)}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" sx={{ display: "inline" }}>
+                            {dict.analysebox.show_norway}
+                          </Typography>
+                        }
+                      />
+                    )}
+                  </Stack>
+                </div>
                 <ScreenshotBox
                   analyse={analyse}
                   dict={dict}
@@ -921,62 +973,73 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               </TabPanel>
             </TabContext>
           </TabPanel>
-          <TabPanel value="demografi" sx={{ paddingX: 4, paddingBottom: 0 }}>
-            <Stack direction="row" spacing={3} sx={{ paddingY: 1, height: 60 }}>
-              <StyledToggleButtonGroup
-                color="primary"
-                value={showGenders}
-                exclusive
-                onChange={() => setShowGenders(!showGenders)}
-              >
-                <ToggleButton value={false}>
-                  {dict.analysebox.alle}
-                </ToggleButton>
-                <ToggleButton value={true}>
-                  {dict.analysebox.demography_split_gender}
-                </ToggleButton>
-              </StyledToggleButtonGroup>
-              <StyledToggleButtonGroup
-                color="primary"
-                value={demographyAndel}
-                exclusive
-                onChange={() => setDemographyAndel(!demographyAndel)}
-              >
-                <ToggleButton value={false}>
-                  {dict.analysebox.antall}
-                </ToggleButton>
-                <ToggleButton value={true}>
-                  {dict.analysebox.andel}
-                </ToggleButton>
-              </StyledToggleButtonGroup>
-              <VariableSelector
-                analyse={analyse.data}
-                views={analyse.data.views
-                  .slice(1)
-                  .filter((v) => demographyAvailable.has(v.name))}
-                dict={dict}
-                lang={lang}
-                variable={demografiVariable}
-                onClick={(v) => setDemografiVariable(v)}
-              />
-              <StyledToggleButtonGroup
-                color="primary"
-                value={allYears}
-                exclusive
-                onChange={() => setAllYears(!allYears)}
-              >
-                <ToggleButton value={true}>
-                  {dict.analysebox.all_years}
-                </ToggleButton>
-                <ToggleButton value={false}>
-                  {dict.analysebox.choose_year}
-                </ToggleButton>
-              </StyledToggleButtonGroup>
-            </Stack>
-            <Zoom in={!allYears}>
-              {!allYears ? yearSelector : <span></span>}
-            </Zoom>
+          <TabPanel value="demografi" sx={{ paddingX: 0, paddingBottom: 0 }}>
+            <div className="px-4 sm:px-8">
+              <div className="flex flex-wrap gap-4 mb-4">
+                <StyledToggleButtonGroup
+                  color="primary"
+                  value={showGenders}
+                  exclusive
+                  onChange={() => setShowGenders(!showGenders)}
+                >
+                  <ToggleButton value={false}>
+                    {dict.analysebox.alle}
+                  </ToggleButton>
+                  <ToggleButton value={true}>
+                    {dict.analysebox.demography_split_gender}
+                  </ToggleButton>
+                </StyledToggleButtonGroup>
+                <StyledToggleButtonGroup
+                  color="primary"
+                  value={demographyAndel}
+                  exclusive
+                  onChange={() => setDemographyAndel(!demographyAndel)}
+                >
+                  <ToggleButton value={false}>
+                    {dict.analysebox.antall}
+                  </ToggleButton>
+                  <ToggleButton value={true}>
+                    {dict.analysebox.andel}
+                  </ToggleButton>
+                </StyledToggleButtonGroup>
+                <VariableSelector
+                  analyse={analyse.data}
+                  views={analyse.data.views
+                    .slice(1)
+                    .filter((v) => demographyAvailable.has(v.name))}
+                  dict={dict}
+                  lang={lang}
+                  variable={demografiVariable}
+                  onClick={(v) => setDemografiVariable(v)}
+                />
+                <StyledToggleButtonGroup
+                  color="primary"
+                  value={allYears}
+                  exclusive
+                  onChange={() => setAllYears(!allYears)}
+                >
+                  <ToggleButton value={true}>
+                    {dict.analysebox.all_years}
+                  </ToggleButton>
+                  <ToggleButton value={false}>
+                    {dict.analysebox.choose_year}
+                  </ToggleButton>
+                </StyledToggleButtonGroup>
 
+              </div>
+              <Zoom in={!allYears}>
+                <div>
+                  {!allYears && <YearSelector
+                    years={years as number[]}
+                    lastYear={lastYear}
+                    year={year}
+                    setYear={setYear}
+                    dict={dict}
+                    speed={1000}
+                  />}
+                </div>
+              </Zoom>
+            </div>
             <ScreenshotBox
               analyse={analyse}
               dict={dict}

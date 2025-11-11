@@ -11,9 +11,9 @@ const linechart_colors: {
 } = {
   sykehus: {
     Finnmark: "#C3A687",
-    UNN: "#B8FFF5",
+    UNN: "#1F51FF",
     Nordland: "#003283",
-    Helgeland: "#2F654A",
+    Helgeland: "#8C00FF",
     NordTrøndelag: "#F38411",
     St_Olav: "#42E0F5",
     Møre_og_Romsdal: "#81BD00",

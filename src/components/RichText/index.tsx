@@ -4,7 +4,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import type {
   ResultBoxBlock as ResultBoxBlockProps,
   MediaBlock as MediaBlockProps
- } from 'src/payload-types'
+} from 'src/payload-types'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -33,6 +33,12 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
 }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  heading: ({ node, nodesToJSX }) => {
+    const text = nodesToJSX({ nodes: node.children })
+    const id = text.join("").toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    const Tag = node.tag;
+    return <Tag id={id}>{text}</Tag>;
+  },
   blocks: {
     resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock {...node.fields} />,
     mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
