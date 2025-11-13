@@ -262,7 +262,7 @@ export const Compare = ({ oldAnalyse, newAnalyse, different }: CompareProps) => 
     const oldViewsDiff = oldViews.difference(newViews);
     const newViewsDiff = newViews.difference(oldViews);
 
-    const differentVarCount = Array.from(newViews.union(oldViews))
+    const differentVarCount = Array.from(newViews.intersection(oldViews))
       .flatMap((viewName) => {
         const oldVarcount = oldAnalyse.views.find((v) => v.name === viewName)
           ?.variables.length;
