@@ -34,12 +34,14 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        'rounded-[1.5rem] overflow-hidden hover:cursor-pointer',
+        'hover:shadow-lg transition-shadow duration-100 bg-[#e3f3ef] hover:[&_picture]:opacity-[0.8]',
+        '[&_a]:no-underline hover:[&_a]:underline',
         className,
       )}
       ref={card.ref}
     >
-      <div className=" ">
+      <div className="max-h-[350px] overflow-hidden">
         {!bilde && <div className="">No image</div>}
         {bilde && typeof bilde !== 'string' && <Media resource={bilde} size="33vw" />}
       </div>
@@ -73,7 +75,7 @@ export const Card: React.FC<{
         {titleToUse && (
           <div className="prose">
             <h3>
-              <Link className="not-prose" href={href} ref={link.ref}>
+              <Link className="not-prose text-inherit" href={href} ref={link.ref}>
                 {titleToUse}
               </Link>
             </h3>

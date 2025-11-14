@@ -9,7 +9,7 @@ import { loginCredentials } from "@/lib/authorization";
 import AdminBar from "@/components/AdminBar";
 import { draftMode } from "next/headers";
 
-import './tailwind.css'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",

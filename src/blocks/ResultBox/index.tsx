@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Box } from "@mui/material";
 import Carousel from "./Charts/Carousel";
