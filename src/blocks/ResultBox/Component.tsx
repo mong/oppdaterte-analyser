@@ -3,9 +3,8 @@ import type { ResultBoxBlock as ResultBoxBlockProps } from "src/payload-types";
 import React from "react";
 import RichText from "@/components/RichText";
 
-import { promises as fs } from "fs";
-
 import { ResultBox } from ".";
+import { getServerSideURL } from "@/utilities/getURL";
 
 export const ResultBoxBlock: React.FC<ResultBoxBlockProps> = async ({
   kart,
@@ -19,23 +18,20 @@ export const ResultBoxBlock: React.FC<ResultBoxBlockProps> = async ({
     return;
   if (!kart || !(typeof kart === "object") || !kart.filename) return;
 
-  const getPath = (filename: string) =>
-    `${process.cwd()}/public/data/${filename}`;
+  const url = getServerSideURL();
 
   // Promise.all to read both files concurrently
   const [mapData, data] = await Promise.all([
-    fs.readFile(getPath(kart.filename), "utf8"),
-    fs.readFile(getPath(media.filename), "utf8"),
+    fetch(`${url}/api/datafiler/file/${kart.filename}`).then((res) => res.json()),
+    fetch(`${url}/api/datafiler/file/${media.filename}`).then((res) => res.json()),
   ]);
 
-  const parsedMapData = JSON.parse(mapData);
-  const parsedData = JSON.parse(data);
 
   return (
     <ResultBox
       title={blockName || "Uten tittel"}
-      boxData={parsedData.innhold}
-      mapData={parsedMapData}
+      boxData={data.innhold}
+      mapData={mapData}
       summary={
         <RichText
           data={oppsummering}

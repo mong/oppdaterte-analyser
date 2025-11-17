@@ -3,14 +3,12 @@
 import { Abacus } from "./Charts/Abacus";
 import { AtlasDataItem, BarchartItem, DataItemPoint } from "./types";
 import classNames from "./ResultBox.module.css";
-import { Markdown } from "./Charts/Markdown";
 import React from "react";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Box } from "@mui/material";
 import Carousel from "./Charts/Carousel";
@@ -119,7 +117,6 @@ export const ResultBox = ({
       <Accordion
         type="single"
         collapsible
-        className="w-full AccordionRoot"
         value={expandedResultBox ? "open" : "closed"}
       >
         <AccordionItem
