@@ -73,6 +73,7 @@ export interface Config {
     datafiler: Datafiler;
     media: Media;
     tags: Tag;
+    'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
@@ -95,6 +96,7 @@ export interface Config {
     datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -102,7 +104,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {};
   globalsSelect: {};
@@ -144,10 +146,10 @@ export interface UserAuthOperations {
  * via the `definition` "rapporter".
  */
 export interface Rapporter {
-  id: string;
+  id: number;
   title: string;
-  folder: string | FolderInterface;
-  bilde?: (string | null) | Media;
+  folder: number | FolderInterface;
+  bilde?: (number | null) | Media;
   content: {
     root: {
       type: string;
@@ -171,8 +173,8 @@ export interface Rapporter {
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
   norskType: 'nb' | 'nn';
-  relatedRapporter?: (string | Rapporter)[] | null;
-  tags?: (string | Tag)[] | null;
+  relatedRapporter?: (number | Rapporter)[] | null;
+  tags?: (number | Tag)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -184,22 +186,22 @@ export interface Rapporter {
  * via the `definition` "payload-folders".
  */
 export interface FolderInterface {
-  id: string;
+  id: number;
   name: string;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   documentsAndFolders?: {
     docs?: (
       | {
           relationTo?: 'payload-folders';
-          value: string | FolderInterface;
+          value: number | FolderInterface;
         }
       | {
           relationTo?: 'datafiler';
-          value: string | Datafiler;
+          value: number | Datafiler;
         }
       | {
           relationTo?: 'media';
-          value: string | Media;
+          value: number | Media;
         }
     )[];
     hasNextPage?: boolean;
@@ -214,8 +216,8 @@ export interface FolderInterface {
  * via the `definition` "datafiler".
  */
 export interface Datafiler {
-  id: string;
-  folder?: (string | null) | FolderInterface;
+  id: number;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -233,7 +235,7 @@ export interface Datafiler {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   /**
    * Alternativ tekst for bildet, brukes for tilgjengelighet
    */
@@ -253,7 +255,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -329,7 +331,7 @@ export interface Media {
  * via the `definition` "tags".
  */
 export interface Tag {
-  id: string;
+  id: number;
   title: string;
   /**
    * Unik ID for taggen.
@@ -352,12 +354,12 @@ export interface Tag {
     [k: string]: unknown;
   } | null;
   taggedRapporter?: {
-    docs?: (string | Rapporter)[];
+    docs?: (number | Rapporter)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   taggedAnalyser?: {
-    docs?: (string | Analyser)[];
+    docs?: (number | Analyser)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -369,7 +371,7 @@ export interface Tag {
  * via the `definition` "analyser".
  */
 export interface Analyser {
-  id: string;
+  id: number;
   title: string;
   data: {
     name: string;
@@ -509,7 +511,7 @@ export interface Analyser {
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
   norskType: 'nb' | 'nn';
-  tags?: (string | Tag)[] | null;
+  tags?: (number | Tag)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -521,7 +523,7 @@ export interface Analyser {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   updatedAt: string;
@@ -529,10 +531,27 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -624,44 +643,40 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'rapporter';
-        value: string | Rapporter;
+        value: number | Rapporter;
       } | null)
     | ({
         relationTo: 'analyser';
-        value: string | Analyser;
+        value: number | Analyser;
       } | null)
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'datafiler';
-        value: string | Datafiler;
+        value: number | Datafiler;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'tags';
-        value: string | Tag;
-      } | null)
-    | ({
-        relationTo: 'payload-jobs';
-        value: string | PayloadJob;
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'payload-folders';
-        value: string | FolderInterface;
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -671,10 +686,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -694,7 +709,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -886,6 +901,14 @@ export interface TagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
@@ -970,14 +993,14 @@ export interface TaskSchedulePublish {
     doc?:
       | ({
           relationTo: 'rapporter';
-          value: string | Rapporter;
+          value: number | Rapporter;
         } | null)
       | ({
           relationTo: 'analyser';
-          value: string | Analyser;
+          value: number | Analyser;
         } | null);
     global?: string | null;
-    user?: (string | null) | User;
+    user?: (number | null) | User;
   };
   output?: unknown;
 }
@@ -986,8 +1009,8 @@ export interface TaskSchedulePublish {
  * via the `definition` "ResultBoxBlock".
  */
 export interface ResultBoxBlock {
-  media: string | Datafiler;
-  kart: string | Datafiler;
+  media: number | Datafiler;
+  kart: number | Datafiler;
   oppsummering: {
     root: {
       type: string;
@@ -1102,7 +1125,7 @@ export interface CodeBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
