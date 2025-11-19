@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Box } from "@mui/material";
+import { BsCaretDownFill } from "react-icons/bs";
 
 type FactBoxProps = {
   text: React.JSX.Element;
@@ -31,22 +31,17 @@ export const FactBox = ({
     >
       <AccordionItem
         value="open"
-        className="w-full m-0 p-0"
+        className="w-full m-0 p-0 border-b-2 border-b-solid border-b-[rgb(3,63,133)] shadow-[0_1px_3px_rgba(0,0,0,0.2)]"
       >
         <AccordionTrigger
           onClick={() => setExpanded(!expanded)}
           className="bg-[#E6EEF8] cursor-pointer p-4 m-0 text-[#033F85] hover:bg-[rgba(3,69,132,0.2)]"
         >
-          {title}
+          <span className="text-[1rem] font-semibold">{title}</span>
+          <BsCaretDownFill color="#033F85" fontSize="large" />
         </AccordionTrigger>
-        <AccordionContent
-          className="bg-[#FAFAFA] p-0 m-0"
-        >
-          <div>
-            rgd
-            {text}
-            bf
-          </div>
+        <AccordionContent className="bg-[#FAFAFA] p-4 text-[1rem]">
+          {text}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -157,6 +157,7 @@ export const Analyser: CollectionConfig = {
         return path;
       },
     },
+    enableRichTextLink: false,
     preview: (data, { req, locale }) =>
       generatePreviewPath({
         slug: typeof data?.slug === "string" ? data.slug : "",
@@ -179,8 +180,6 @@ export const Analyser: CollectionConfig = {
       required: true,
       typescriptSchema: [
         ({ jsonSchema }) => {
-          // Modify the JSON schema here
-          console.log("JSON Schema::", jsonSchema);
           return jsonSchema;
         },
       ],

@@ -11,7 +11,6 @@ import {
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
 import { ResultBox } from '../../blocks/ResultBox/config'
 import { FactBox } from '../../blocks/FactBox/config'
 import { Code } from '../../blocks/Code/config'
@@ -65,6 +64,7 @@ export const Rapporter: CollectionConfig = {
         return path
       },
     },
+    enableRichTextLink: false,
     preview: (data, { req, locale }) => generatePreviewPath({
           slug: typeof data?.slug === 'string' ? data.slug : '',
           collection: 'rapporter',
@@ -106,7 +106,7 @@ export const Rapporter: CollectionConfig = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [ResultBox, FactBox, Banner, Code, MediaBlock] }),
+                    BlocksFeature({ blocks: [ResultBox, FactBox, Code, MediaBlock] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),

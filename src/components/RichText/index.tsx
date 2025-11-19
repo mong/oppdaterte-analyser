@@ -26,8 +26,15 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   if (typeof value !== "object") {
     throw new Error("Expected value to be an object");
   }
-  const slug = value.slug;
-  return relationTo === "rapporter" ? `/rapporter/${slug}` : `/${slug}`;
+
+  switch (relationTo) {
+    case "media":
+    case "datafiler":
+      return value.url as string;
+    default:
+      return `/${value.slug}`;
+  }
+
 };
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
