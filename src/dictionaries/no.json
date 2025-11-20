@@ -59,6 +59,7 @@
   "breadcrumbs": {
     "homepage": "Forside",
     "health_atlas": "Helseatlas",
-    "updated_health_atlas": "Oppdaterte helseatlas"
+    "updated_health_atlas": "Oppdaterte helseatlas",
+    "reports": "Rapporter"
   }
 }

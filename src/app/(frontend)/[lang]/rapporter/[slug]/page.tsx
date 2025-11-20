@@ -7,8 +7,6 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
-
-import { RapportHero } from '@/components/RapportHero'
 import { generateMeta } from '@/utilities/generateMeta'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
@@ -16,6 +14,11 @@ import { Container } from '@mui/material'
 import { SelectionProvider } from '@/lib/SelectionContext'
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
+import TagList from '@/components/TagList'
+import { formatDateTime } from '@/utilities/formatDateTime'
+import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
+import { getDictionary } from '@/lib/dictionaries'
+import Header from '@/components/Header'
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
@@ -48,36 +51,80 @@ type Args = {
 }
 
 export default async function Rapport({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
+  const { isEnabled: draft } = await draftMode();
 
-  const { slug = '', lang } = await paramsPromise
-  const rapport = await queryRapportBySlug({ slug, lang })
+  const { slug = '', lang } = await paramsPromise;
+  const rapport = await queryRapportBySlug({ slug, lang });
 
   if (!rapport) return notFound();
 
+  const dict = await getDictionary(lang);
+
+  const breadcrumbs: BreadCrumbStop[] = [
+    {
+      link: "https://www.skde.no",
+      text: dict.breadcrumbs.homepage,
+    },
+    {
+      link: `/${lang}`,
+      text: dict.breadcrumbs.health_atlas,
+    },
+    {
+      link: `/${lang}/rapporter`,
+      text: dict.breadcrumbs.reports,
+    },
+    {
+      link: `/${lang}/rapporter/${rapport.slug}`,
+      text: rapport.title,
+    },
+  ];
+
+
   return (
-    <article className="pt-16 pb-16">
+    <>
       {draft && <LivePreviewListener />}
 
-      <RapportHero rapport={rapport} lang={lang} />
-
-      <Container maxWidth="xl">
-        <SelectionProvider>
-          <div className="my-8">
-            <RichText data={rapport.content} enableGutter={true} />
+      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={lang}>
+        {rapport.tags &&
+          <TagList
+            tags={rapport.tags.filter((tag) => typeof tag === 'object' && tag !== null)}
+            lang={lang}
+          />}
+        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm">Forfatter</p>
+              <p>{rapport.author}</p>
+            </div>
           </div>
-
-          {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
-            <RelatedRapporter
-              lang={lang}
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
-            />
+          {rapport.publishedAt && (
+            <div className="flex flex-col gap-1">
+              <p className="text-sm">Publisert</p>
+              <time dateTime={rapport.publishedAt}>{formatDateTime(rapport.publishedAt)}</time>
+            </div>
           )}
-        </SelectionProvider>
+        </div>
+      </Header>
+
+      <Container maxWidth="xxl">
+        <article className="py-8">
+          <SelectionProvider>
+            <div className="my-8">
+              <RichText data={rapport.content} enableGutter={true} />
+            </div>
+
+            {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
+              <RelatedRapporter
+                lang={lang}
+                className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
+                docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
+              />
+            )}
+          </SelectionProvider>
+        </article>
       </Container>
-    </article>
-  )
+    </>
+  );
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
@@ -88,9 +135,9 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryRapportBySlug = cache(async ({ slug, lang }: { slug: string, lang: Lang }) => {
-  const { isEnabled: draft } = await draftMode()
+  const { isEnabled: draft } = await draftMode();
 
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPayload({ config: configPromise });
 
   const result = await payload.find({
     collection: 'rapporter',
@@ -105,7 +152,7 @@ const queryRapportBySlug = cache(async ({ slug, lang }: { slug: string, lang: La
         equals: slug,
       },
     },
-  })
+  });
 
-  return result.docs?.[0] || null
+  return result.docs?.[0] || null;
 })
