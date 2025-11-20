@@ -27,7 +27,7 @@
     "@mui/material": "^7.3.5",
     "@mui/material-nextjs": "^7.3.5",
     "@mui/system": "^7.3.5",
-    "@mui/x-charts": "^7.29.1",
+    "@mui/x-charts": "^8.0.0",
     "@payloadcms/admin-bar": "^3.64.0",
     "@payloadcms/db-mongodb": "^3.64.0",
     "@payloadcms/db-postgres": "^3.64.0",
