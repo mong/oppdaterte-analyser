@@ -13,6 +13,7 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { ResultBox } from '../../blocks/ResultBox/config'
 import { FactBox } from '../../blocks/FactBox/config'
+import { Table } from '../../blocks/Table/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
@@ -20,7 +21,6 @@ import { revalidateDelete, revalidateRapport } from './hooks/revalidateRapport'
 
 import {
   MetaDescriptionField,
-  MetaImageField,
   MetaTitleField,
   OverviewField,
   PreviewField,
@@ -106,7 +106,7 @@ export const Rapporter: CollectionConfig = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [ResultBox, FactBox, Code, MediaBlock] }),
+                    BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),

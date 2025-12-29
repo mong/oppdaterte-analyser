@@ -1,5 +1,6 @@
 import { ResultBoxBlock } from "@/blocks/ResultBox/Component";
 import { FactBoxBlock } from "@/blocks/FactBox/Component";
+import { TableBlock } from "@/blocks/Table/Component";
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 
 import type {
@@ -51,6 +52,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
   blocks: {
     resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock {...node.fields} />,
     factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
+    table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
     mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
       <MediaBlock
         className="col-start-1 col-span-3"
