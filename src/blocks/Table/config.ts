@@ -13,7 +13,7 @@ export const Table: Block = {
       name: 'table',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ }) => {
+        features: () => {
           return [
             EXPERIMENTAL_TableFeature(),
           ]

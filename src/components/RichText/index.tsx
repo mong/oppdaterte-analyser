@@ -6,7 +6,8 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import type {
   ResultBoxBlock as ResultBoxBlockProps,
   FactBoxBlock as FactBoxBlockProps,
-  MediaBlock as MediaBlockProps
+  MediaBlock as MediaBlockProps,
+  TableBlock as TableBlockProps,
 } from 'src/payload-types'
 import {
   DefaultNodeTypes,
