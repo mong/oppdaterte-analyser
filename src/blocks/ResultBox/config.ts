@@ -5,8 +5,9 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
   UploadFeature,
+  BlocksFeature,
 } from '@payloadcms/richtext-lexical'
-
+import { MediaBlock } from '../MediaBlock/config'
 export const ResultBox: Block = {
   slug: 'resultBox',
   fields: [
@@ -80,7 +81,13 @@ export const ResultBox: Block = {
       type: 'richText',
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
-          return [...rootFeatures, FixedToolbarFeature(), UploadFeature(), InlineToolbarFeature()]
+          return [
+            ...rootFeatures,
+            FixedToolbarFeature(),
+            UploadFeature(),
+            InlineToolbarFeature(),
+            BlocksFeature({ blocks: [MediaBlock] }),
+          ]
         },
       }),
       label: "Diskusjon",
