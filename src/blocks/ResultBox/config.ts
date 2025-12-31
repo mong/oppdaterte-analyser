@@ -8,6 +8,7 @@ import {
   BlocksFeature,
 } from '@payloadcms/richtext-lexical'
 import { MediaBlock } from '../MediaBlock/config'
+import { Table } from '../Table/config'
 export const ResultBox: Block = {
   slug: 'resultBox',
   fields: [
@@ -86,7 +87,7 @@ export const ResultBox: Block = {
             FixedToolbarFeature(),
             UploadFeature(),
             InlineToolbarFeature(),
-            BlocksFeature({ blocks: [MediaBlock] }),
+            BlocksFeature({ blocks: [MediaBlock, Table] }),
           ]
         },
       }),
