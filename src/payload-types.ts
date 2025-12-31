@@ -106,6 +106,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'no') | ('en' | 'no')[];
   globals: {};
   globalsSelect: {};
   locale: 'en' | 'no';
