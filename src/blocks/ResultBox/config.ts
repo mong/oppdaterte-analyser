@@ -99,7 +99,11 @@ export const ResultBox: Block = {
       type: 'richText',
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
-          return [...rootFeatures, InlineToolbarFeature()]
+          return [
+            ...rootFeatures,
+            InlineToolbarFeature(),
+            BlocksFeature({ blocks: [MediaBlock, Table] }),
+          ]
         },
       }),
       label: "Utvalg",
