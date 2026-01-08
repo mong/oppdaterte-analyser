@@ -68,7 +68,7 @@
     "html2canvas": "1.4.1",
     "json-schema": "0.4.0",
     "lucide-react": "0.553.0",
-    "mongoose": "~8.16.5",
+    "mongoose": "~8.21.0",
     "next": "15.5.9",
     "payload": "3.69.0",
     "postcss": "8.5.6",
