@@ -43,7 +43,21 @@ const nextConfig = {
         source: '/helseatlas-forside/',
         destination: 'https://www.skde.no/helseatlas/',
         permanent: true,
-      }
+      },
+      {
+        // Alle kall til helseatlas.no (uansett path) skal til skde.no/helseatlas uten å ta med path
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'helsesatlas.no',
+          },
+          // Hvis du også vil støtte www.helsesatlas.no, kan du legge til:
+          // { type: 'host', value: 'www.helsesatlas.no' },
+        ],
+        destination: 'https://skde.no/helseatlas',
+        permanent: false,
+      },
     ]
   },
 };
