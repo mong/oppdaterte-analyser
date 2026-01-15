@@ -56,12 +56,9 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
     table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
     mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
       <MediaBlock
-        className="col-start-1 col-span-3"
         imgClassName="m-0"
         {...node.fields}
-        captionClassName="mx-auto max-w-[48rem]"
         enableGutter={false}
-        disableInnerContainer={true}
       />
     ),
   },
