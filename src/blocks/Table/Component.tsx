@@ -9,9 +9,8 @@ export const TableBlock: React.FC<TableBlockProps> = async ({
   caption
 }) => {
 
-
   return (
-    <div>
+    <figure className="mx-auto max-w-[80%]">
       <div className="leading-none">
         <RichText
           data={table}
@@ -20,10 +19,10 @@ export const TableBlock: React.FC<TableBlockProps> = async ({
         />
       </div>
       {caption && (
-        <div className='mt-6 mx-auto max-w-3xl'>
+        <figcaption className={'mt-6'}>
           <RichText data={caption} enableGutter={false} />
-        </div>
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 };

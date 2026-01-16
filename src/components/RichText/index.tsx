@@ -40,7 +40,7 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
 };
 
-const jsxConverters: (lang: "en"| "nb" | "nn") =>
+const jsxConverters: (lang: "en" | "nb" | "nn") =>
   JSXConvertersFunction<NodeTypes> = (lang) => ({
     defaultConverters,
   }) => ({
@@ -58,12 +58,9 @@ const jsxConverters: (lang: "en"| "nb" | "nn") =>
       table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
       mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
         <MediaBlock
-          className="col-start-1 col-span-3"
           imgClassName="m-0"
           {...node.fields}
-          captionClassName="mx-auto max-w-[48rem]"
           enableGutter={false}
-          disableInnerContainer={true}
         />
       ),
     },
@@ -71,7 +68,7 @@ const jsxConverters: (lang: "en"| "nb" | "nn") =>
 
 type Props = {
   data: DefaultTypedEditorState;
-  lang?: "en"| "nb" | "nn";
+  lang?: "en" | "nb" | "nn";
   enableGutter?: boolean;
   enableProse?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
