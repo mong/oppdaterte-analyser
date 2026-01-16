@@ -24,12 +24,14 @@ type ResultBoxProps = {
   discussion: React.JSX.Element;
   utvalg: React.JSX.Element;
   mapData: any;
+  lang: "en" | "nb" | "nn";
 };
 
 export const ResultBox = ({
   boxData,
   title,
   summary,
+  lang="nb",
   discussion,
   utvalg,
   mapData,
@@ -41,7 +43,7 @@ export const ResultBox = ({
     return;
   }
 
-  const areaName = (boxData[0] as BarchartItem).yLabel["nb"];
+  const areaName = (boxData[0] as BarchartItem).yLabel[lang] as string;
   const areaType = (
     {
       Opptaksområde: "area",
@@ -66,7 +68,7 @@ export const ResultBox = ({
         <Barchart
           {...dataItem}
           data={figData}
-          lang={"nb"}
+          lang={lang}
           national={nationalName}
           areaType={areaType}
           forfatter={"SKDE"}
@@ -77,7 +79,7 @@ export const ResultBox = ({
         <Linechart
           {...dataItem}
           data={figData}
-          lang={"nb"}
+          lang={lang}
           national={nationalName}
           forfatter={"SKDE"}
         />
@@ -87,9 +89,9 @@ export const ResultBox = ({
         <DataTable
           headers={dataItem.columns}
           data={figData}
-          caption={dataItem.caption["nb"]}
+          caption={dataItem.caption[lang]}
           areaType={areaType}
-          lang={"nb"}
+          lang={lang}
           national={nationalName}
         />
       );
@@ -101,9 +103,9 @@ export const ResultBox = ({
           attrName={dataItem.x as string}
           data={figData}
           format={dataItem.format}
-          caption={dataItem.caption["nb"]}
+          caption={dataItem.caption[lang]}
           areaType={areaType}
-          lang={"nb"}
+          lang={lang}
         />
       );
     }
@@ -142,9 +144,9 @@ export const ResultBox = ({
               {figData && (
                 <Abacus
                   data={figData}
-                  lang={"nb"}
+                  lang={lang}
                   x={abacusX}
-                  label={(boxData[0] as BarchartItem).xLabel["nb"]}
+                  label={(boxData[0] as BarchartItem).xLabel[lang]}
                   areaType={areaType}
                   areaName={areaName}
                   format={(boxData[0] as BarchartItem).format}
@@ -163,7 +165,7 @@ export const ResultBox = ({
                 chartElems={chartElems}
                 utvalg={utvalg}
                 boxData={boxData}
-                lang={"nb"}
+                lang={lang}
               />
               <div className={classNames.resultBoxSelectionContent}>
                 {discussion}
