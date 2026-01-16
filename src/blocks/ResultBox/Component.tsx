@@ -6,9 +6,10 @@ import RichText from "@/components/RichText";
 import { ResultBox } from ".";
 import { getServerSideURL } from "@/utilities/getURL";
 
-export const ResultBoxBlock: React.FC<ResultBoxBlockProps & { lang?: "en" | "nb" | "nn" }> = async ({
+export const ResultBoxBlock: React.FC<ResultBoxBlockProps & { lang?: "en" | "nb" | "nn", author?: "SKDE" | "Helse Førde" }> = async ({
   kart,
   lang,
+  author,
   oppsummering,
   diskusjon,
   utvalg,
@@ -31,6 +32,7 @@ export const ResultBoxBlock: React.FC<ResultBoxBlockProps & { lang?: "en" | "nb"
   return (
     <ResultBox
       lang={lang || "nb"}
+      author={author || "SKDE"}
       title={blockName || "Uten tittel"}
       boxData={data.innhold}
       mapData={mapData}

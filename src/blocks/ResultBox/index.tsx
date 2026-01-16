@@ -25,6 +25,7 @@ type ResultBoxProps = {
   utvalg: React.JSX.Element;
   mapData: any;
   lang: "en" | "nb" | "nn";
+  author: "SKDE" | "Helse Førde";
 };
 
 export const ResultBox = ({
@@ -32,6 +33,7 @@ export const ResultBox = ({
   title,
   summary,
   lang="nb",
+  author,
   discussion,
   utvalg,
   mapData,
@@ -71,7 +73,7 @@ export const ResultBox = ({
           lang={lang}
           national={nationalName}
           areaType={areaType}
-          forfatter={"SKDE"}
+          forfatter={author}
         />
       );
     } else if (dataItem.type === "linechart") {
@@ -81,7 +83,7 @@ export const ResultBox = ({
           data={figData}
           lang={lang}
           national={nationalName}
-          forfatter={"SKDE"}
+          forfatter={author}
         />
       );
     } else if (dataItem.type === "table") {
