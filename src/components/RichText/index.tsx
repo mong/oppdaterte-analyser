@@ -20,6 +20,7 @@ import {
   LinkJSXConverter,
   RichText as ConvertRichText,
 } from "@payloadcms/richtext-lexical/react";
+import { Lang } from "@/types";
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode;
 
@@ -39,38 +40,40 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
 };
 
-const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
-  defaultConverters,
-}) => ({
-  ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref }),
-  heading: ({ node, nodesToJSX }) => {
-    const text = nodesToJSX({ nodes: node.children })
-    const id = text.join("").toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-    const Tag = node.tag;
-    return <Tag id={id}>{text}</Tag>;
-  },
-  blocks: {
-    resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock {...node.fields} />,
-    factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
-    table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
-    mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
-      <MediaBlock
-        imgClassName="m-0"
-        {...node.fields}
-        enableGutter={false}
-      />
-    ),
-  },
-});
+const jsxConverters: (lang: "en" | "nb" | "nn") =>
+  JSXConvertersFunction<NodeTypes> = (lang) => ({
+    defaultConverters,
+  }) => ({
+    ...defaultConverters,
+    ...LinkJSXConverter({ internalDocToHref }),
+    heading: ({ node, nodesToJSX }) => {
+      const text = nodesToJSX({ nodes: node.children })
+      const id = text.join("").toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+      const Tag = node.tag;
+      return <Tag id={id}>{text}</Tag>;
+    },
+    blocks: {
+      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock lang={lang} {...node.fields} />,
+      factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
+      table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
+      mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
+        <MediaBlock
+          imgClassName="m-0"
+          {...node.fields}
+          enableGutter={false}
+        />
+      ),
+    },
+  });
 
 type Props = {
   data: DefaultTypedEditorState;
+  lang?: "en" | "nb" | "nn";
   enableGutter?: boolean;
   enableProse?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function RichText(props: Props) {
-  const { className, enableProse = true, enableGutter = true, ...rest } = props;
-  return <ConvertRichText converters={jsxConverters} {...rest} />;
+  const { className, enableProse = true, enableGutter = true, lang = "nb", ...rest } = props;
+  return <ConvertRichText converters={jsxConverters(lang)} {...rest} />;
 }

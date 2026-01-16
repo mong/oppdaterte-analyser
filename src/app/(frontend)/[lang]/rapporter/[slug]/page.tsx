@@ -110,7 +110,11 @@ export default async function Rapport({ params: paramsPromise }: Args) {
         <article className="py-8">
           <SelectionProvider>
             <div className="my-8">
-              <RichText data={rapport.content} enableGutter={true} />
+              <RichText
+                lang={lang === "en" ? "en" : rapport.norskType}
+                data={rapport.content}
+                enableGutter={true}
+              />
             </div>
 
             {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
