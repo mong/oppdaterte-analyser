@@ -22,12 +22,12 @@ export const FactBox = ({
   const [expanded, setExpanded] =
     React.useState<boolean>(false);
 
-
   return (
     <Accordion
       type="single"
       collapsible
       value={expanded ? "open" : "closed"}
+      className="mt-4"
     >
       <AccordionItem
         value="open"
@@ -35,12 +35,12 @@ export const FactBox = ({
       >
         <AccordionTrigger
           onClick={() => setExpanded(!expanded)}
-          className="bg-[#E6EEF8] cursor-pointer p-4 m-0 text-[#033F85] hover:bg-[rgba(3,69,132,0.2)]"
+          className="bg-[#E6EEF8] cursor-pointer p-4 m-0 text-[#033F85] hover:bg-[rgba(3,69,132,0.2)] font-semibold text-[1rem]"
         >
-          <span className="text-[1rem] font-semibold">{title}</span>
+          {title}
           <BsCaretDownFill color="#033F85" fontSize="large" />
         </AccordionTrigger>
-        <AccordionContent className="bg-[#FAFAFA] p-4 text-[1rem]">
+        <AccordionContent className="bg-[#FAFAFA] p-4">
           {text}
         </AccordionContent>
       </AccordionItem>
