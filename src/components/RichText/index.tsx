@@ -40,8 +40,8 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
 };
 
-const jsxConverters: (lang: "en" | "nb" | "nn") =>
-  JSXConvertersFunction<NodeTypes> = (lang) => ({
+const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde") =>
+  JSXConvertersFunction<NodeTypes> = (lang, author) => ({
     defaultConverters,
   }) => ({
     ...defaultConverters,
@@ -53,7 +53,7 @@ const jsxConverters: (lang: "en" | "nb" | "nn") =>
       return <Tag id={id}>{text}</Tag>;
     },
     blocks: {
-      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock lang={lang} {...node.fields} />,
+      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock lang={lang} author={author} {...node.fields} />,
       factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
       table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
       mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
@@ -69,11 +69,12 @@ const jsxConverters: (lang: "en" | "nb" | "nn") =>
 type Props = {
   data: DefaultTypedEditorState;
   lang?: "en" | "nb" | "nn";
+  author?: "SKDE" | "Helse Førde";
   enableGutter?: boolean;
   enableProse?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function RichText(props: Props) {
-  const { className, enableProse = true, enableGutter = true, lang = "nb", ...rest } = props;
-  return <ConvertRichText converters={jsxConverters(lang)} {...rest} />;
+  const { className, enableProse = true, enableGutter = true, author = "SKDE", lang = "nb", ...rest } = props;
+  return <ConvertRichText converters={jsxConverters(lang, author)} {...rest} />;
 }

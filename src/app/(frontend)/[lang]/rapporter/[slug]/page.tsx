@@ -112,6 +112,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
             <div className="my-8">
               <RichText
                 lang={lang === "en" ? "en" : rapport.norskType}
+                author={rapport.author}
                 data={rapport.content}
                 enableGutter={true}
               />
