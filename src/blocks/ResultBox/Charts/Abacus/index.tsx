@@ -3,7 +3,7 @@ import { scaleLinear } from "@visx/scale";
 import { Group } from "@visx/group";
 import { max } from "d3-array";
 import classNames from "../Barchart/ChartLegend.module.css";
-import { abacusColors, nationalLabel } from "../../helpers";
+import { abacusColors, customFormat, nationalLabel } from "../../helpers";
 import { DataItemPoint } from "../../types";
 import { useSelection } from "@/lib/SelectionContext";
 
@@ -42,6 +42,7 @@ export const Abacus = ({
   xMax,
   areaType,
   areaName,
+  format,
   national,
 }: AbacusProps) => {
   const { selection, toggleSelection } = useSelection(areaType, national);
@@ -88,7 +89,7 @@ export const Abacus = ({
             stroke={"black"}
             numTicks={4}
             tickFormat={(val) =>
-              val.toString()
+              format ? customFormat(format, lang)(val) : val.toString()
             }
             tickLength={20}
             tickStroke={"black"}
