@@ -65,6 +65,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
       .join(', ')
   
   return (
+    <>
     <picture className={cn(pictureClassName)}>
       <NextImage
         alt={alt || ''}
@@ -81,5 +82,6 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         width={!fill ? width : undefined}
       />
     </picture>
+    </>
   )
 }

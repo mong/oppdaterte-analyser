@@ -2,14 +2,27 @@ import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { Box, CssBaseline } from "@mui/material";
-import skdeTheme from "@/themes/SkdeTheme";
+//import skdeTheme from "@/themes/SkdeTheme";
 import Footer from "@/components/Footer";
 import MatomoTracker from "../MatomoTracker";
 import { loginCredentials } from "@/lib/authorization";
 import AdminBar from "@/components/AdminBar";
 import { draftMode } from "next/headers";
 
+import skdeTheme from "./skdeTheme";
+
+console.log("THEEEME", skdeTheme)
+
 import './globals.css'
+
+import { Plus_Jakarta_Sans } from "next/font/google";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -26,7 +39,7 @@ export default async function RootLayout(props: {
   const credentials = await loginCredentials();
 
   return (
-    <html lang={lang}>
+    <html lang={lang} className={plusJakartaSans.className}>
       <MatomoTracker />
       <body>
         <AppRouterCacheProvider>
