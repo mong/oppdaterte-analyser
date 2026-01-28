@@ -20,7 +20,9 @@ import {
   LinkJSXConverter,
   RichText as ConvertRichText,
 } from "@payloadcms/richtext-lexical/react";
-import { Lang } from "@/types";
+import { Suspense } from "react";
+import Grid from "@mui/material/Grid";
+import { CircularProgress } from "@mui/material";
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode;
 
@@ -53,7 +55,11 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
       return <Tag id={id}>{text}</Tag>;
     },
     blocks: {
-      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => <ResultBoxBlock lang={lang} author={author} {...node.fields} />,
+      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => (
+        <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>
+          <ResultBoxBlock lang={lang} author={author} {...node.fields} />
+        </Suspense>
+      ),
       factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
       table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
       mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
