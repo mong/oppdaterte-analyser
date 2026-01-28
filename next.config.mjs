@@ -16,15 +16,13 @@ const nextConfig = {
         }
       }),
     ],
+    dangerouslyAllowLocalIP: process.env.DEVELOPMENT === 'true',
     qualities: [25, 50, 75, 100],
     // localPatterns: [
     //   {
     //     pathname: '/api/media/**',
     //   },
     // ],
-  },
-  eslint: {
-    dirs: ['src']
   },
   experimental: {
     serverActions: {
