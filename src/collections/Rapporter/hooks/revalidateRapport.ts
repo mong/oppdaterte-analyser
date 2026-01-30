@@ -16,7 +16,7 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
 
       revalidatePath(path)
 
-      revalidateTag('rapporter-sitemap', 'max')
+      revalidateTag('rapporter-sitemap')
     }
 
     // If the rapport was previously published, we need to revalidate the old path
@@ -26,7 +26,7 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
       payload.logger.info(`Revalidating old rapport at path: ${oldPath}`)
 
       revalidatePath(oldPath)
-      revalidateTag('rapporter-sitemap', 'max')
+      revalidateTag('rapporter-sitemap')
     }
   }
   return doc
@@ -37,7 +37,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Rapporter> = ({ doc, re
     const path = `/[lang]/rapporter/${doc?.slug}`
 
     revalidatePath(path)
-    revalidateTag('rapporter-sitemap', 'max')
+    revalidateTag('rapporter-sitemap')
   }
 
   return doc
