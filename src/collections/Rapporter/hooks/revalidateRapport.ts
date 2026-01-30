@@ -15,7 +15,6 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
       payload.logger.info(`Revalidating rapport at path: ${path}`)
 
       revalidatePath(path)
-
       revalidateTag('rapporter-sitemap')
     }
 
