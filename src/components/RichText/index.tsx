@@ -21,8 +21,12 @@ import {
   RichText as ConvertRichText,
 } from "@payloadcms/richtext-lexical/react";
 import { Suspense } from "react";
+<<<<<<< HEAD
 import Grid from "@mui/material/Grid";
 import { CircularProgress } from "@mui/material";
+=======
+import { Grid, CircularProgress } from "@mui/material";
+>>>>>>> main
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode;
 

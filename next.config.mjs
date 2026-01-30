@@ -23,13 +23,15 @@ const nextConfig = {
     //   },
     // ],
   },
-  eslint: {
-    dirs: ['src']
-  },
   experimental: {
     serverActions: {
       bodySizeLimit: '4mb',
     },
+  },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    }
   },
   async redirects() {
     return [
