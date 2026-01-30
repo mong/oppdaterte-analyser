@@ -28,6 +28,11 @@ const nextConfig = {
       bodySizeLimit: '4mb',
     },
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    }
+  },
   async redirects() {
     return [
       {
