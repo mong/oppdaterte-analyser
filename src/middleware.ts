@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   return NextResponse.rewrite(new URL("/no/", request.url));
 }
 
