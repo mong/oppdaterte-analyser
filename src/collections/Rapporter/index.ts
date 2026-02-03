@@ -15,6 +15,7 @@ import { ResultBox } from '../../blocks/ResultBox/config'
 import { FactBox } from '../../blocks/FactBox/config'
 import { Table } from '../../blocks/Table/config'
 import { Code } from '../../blocks/Code/config'
+import { RawHTML } from '@/blocks/RawHTML/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidateRapport } from './hooks/revalidateRapport'
@@ -26,6 +27,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
+
 
 export const Rapporter: CollectionConfig = {
   slug: 'rapporter',
@@ -106,7 +108,7 @@ export const Rapporter: CollectionConfig = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock] }),
+                    BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock, RawHTML] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
