@@ -1112,6 +1112,16 @@ export interface ResultBoxBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RawHTMLBlock".
+ */
+export interface RawHTMLBlock {
+  html: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'rawHTML';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FactBoxBlock".
  */
 export interface FactBoxBlock {
