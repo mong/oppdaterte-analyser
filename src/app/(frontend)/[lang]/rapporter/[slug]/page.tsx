@@ -32,7 +32,7 @@ export async function generateStaticParams() {
       overrideAccess: false,
       pagination: false,
       where: {
-        test: { equals: false }
+        publiseringsStatus: { equals: "published" }
       },
       select: {
         slug: true,
