@@ -29,7 +29,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     depth: 1,
     limit: 0,
     where: {
-      test: { equals: false }
+      publiseringsStatus: { equals: "published" }
     },
     pagination: false,
     locale: lang,

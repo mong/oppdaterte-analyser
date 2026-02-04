@@ -170,7 +170,6 @@ export interface Rapporter {
     title?: string | null;
     description?: string | null;
   };
-  test?: boolean | null;
   publiseringsStatus?: ('published' | 'test' | 'hidden') | null;
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
@@ -732,7 +731,6 @@ export interface RapporterSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
-  test?: T;
   publiseringsStatus?: T;
   publishedAt?: T;
   author?: T;

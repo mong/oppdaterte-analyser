@@ -146,16 +146,6 @@ export const Rapporter: CollectionConfig = {
       ],
     },
     {
-      name: "test",
-      localized: true,
-      label: "Test-versjon (ikke publisert på forsiden)",
-      type: "checkbox",
-      defaultValue: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
       name: "publiseringsStatus",
       localized: true,
       label: "Publiseringsstatus",
