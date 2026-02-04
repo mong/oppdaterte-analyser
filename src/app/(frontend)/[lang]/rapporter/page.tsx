@@ -1,8 +1,6 @@
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
@@ -77,9 +75,6 @@ export default async function Page({ params: paramsPromise }: Args) {
           <h1>{dict.breadcrumbs.reports}</h1>
         </div>
         <CollectionArchive rapporter={rapporter.docs} lang={lang} />
-        {rapporter.totalPages > 1 && rapporter.page && (
-          <Pagination page={rapporter.page} totalPages={rapporter.totalPages} lang={lang} />
-        )}
       </Container>
     </>
   );
