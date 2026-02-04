@@ -82,9 +82,6 @@ export default async function Page({ params: paramsPromise }: Args) {
         </Typography>
       </Header>
       <Container maxWidth="xl">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>{dict.general.reports}</h1>
-        </div>
         <CollectionArchive rapporter={rapporter.docs} lang={lang} />
       </Container>
     </>
