@@ -7,6 +7,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import { MediaBlock } from '../MediaBlock/config'
 import { Table } from '../Table/config'
+import { RawHTML } from '../RawHTML/config'
 
 export const FactBox: Block = {
   slug: 'factBox',
@@ -19,7 +20,7 @@ export const FactBox: Block = {
           return [
             ...rootFeatures,
             InlineToolbarFeature(),
-            BlocksFeature({ blocks: [Table, MediaBlock] }),
+            BlocksFeature({ blocks: [Table, MediaBlock, RawHTML] }),
           ]
         },
       }),
