@@ -81,7 +81,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           .
         </Typography>
       </Header>
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <CollectionArchive rapporter={rapporter.docs} lang={lang} />
       </Container>
     </>
