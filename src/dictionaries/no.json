@@ -44,8 +44,10 @@
     "choose_focus_area": "Velg fokusområde"
   },
   "general": {
-    "updated_health_atlas": "Oppdaterte helseatlas",
+    "homepage": "Forside",
     "health_atlas": "Helseatlas",
+    "updated_health_atlas": "Oppdaterte helseatlas",
+    "reports": "Rapporter",
     "metadata_keywords": "geografisk variasjon, SKDE, helseatlas, oppdaterte helseatlas"
   },
   "frontpage": {
@@ -56,11 +58,5 @@
     "fagområder_text": "Våre analyser er organisert etter fagområde. Nedenfor finner du samlesider som inneholder alle helseatlas-analyser relatert til et bestemt fagområde.",
     "all_analyses": "Alle analyser",
     "all_analyses_text": "Merk at at en enkeltanalyse kan inngå i flere samlesider, fordi den kan være relevant for flere fagområder. Nedenfor finner du alle våre publiserte analyser, i alfabetisk rekkefølge. Per i dag har vi publisert <n> analyser som skal oppdateres hvert år med nye tall."
-  },
-  "breadcrumbs": {
-    "homepage": "Forside",
-    "health_atlas": "Helseatlas",
-    "updated_health_atlas": "Oppdaterte helseatlas",
-    "reports": "Rapporter"
   }
 }

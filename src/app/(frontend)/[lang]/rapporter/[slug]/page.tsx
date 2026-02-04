@@ -63,15 +63,15 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   const breadcrumbs: BreadCrumbStop[] = [
     {
       link: "https://www.skde.no",
-      text: dict.breadcrumbs.homepage,
+      text: dict.general.homepage,
     },
     {
       link: `/${lang}`,
-      text: dict.breadcrumbs.health_atlas,
+      text: dict.general.health_atlas,
     },
     {
       link: `/${lang}/rapporter`,
-      text: dict.breadcrumbs.reports,
+      text: dict.general.reports,
     },
     {
       link: `/${lang}/rapporter/${rapport.slug}`,

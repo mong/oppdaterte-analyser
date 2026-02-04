@@ -53,15 +53,15 @@ export default async function MainPage(props: MainPageProps) {
   const breadcrumbs: BreadCrumbStop[] = [
     {
       link: "https://www.skde.no",
-      text: dict.breadcrumbs.homepage,
+      text: dict.general.homepage,
     },
     {
       link: "https://www.skde.no/helseatlas",
-      text: dict.breadcrumbs.health_atlas,
+      text: dict.general.health_atlas,
     },
     {
       link: `/${lang}`,
-      text: dict.breadcrumbs.updated_health_atlas,
+      text: dict.general.updated_health_atlas,
     },
   ];
 

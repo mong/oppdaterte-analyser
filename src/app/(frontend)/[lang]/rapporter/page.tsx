@@ -47,15 +47,15 @@ export default async function Page({ params: paramsPromise }: Args) {
   const breadcrumbs: BreadCrumbStop[] = [
     {
       link: "https://www.skde.no",
-      text: dict.breadcrumbs.homepage,
+      text: dict.general.homepage,
     },
     {
       link: `/${lang}`,
-      text: dict.breadcrumbs.health_atlas,
+      text: dict.general.health_atlas,
     },
     {
       link: `/${lang}/rapporter`,
-      text: dict.breadcrumbs.reports,
+      text: dict.general.reports,
     },
   ];
 
@@ -63,7 +63,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <>
       <Header
         lang={lang}
-        title={dict.breadcrumbs.reports}
+        title={dict.general.reports}
         breadcrumbs={breadcrumbs}
       >
         <Typography variant="h6" className="m-8">
@@ -72,7 +72,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       </Header>
       <Container maxWidth="xl">
         <div className="prose dark:prose-invert max-w-none">
-          <h1>{dict.breadcrumbs.reports}</h1>
+          <h1>{dict.general.reports}</h1>
         </div>
         <CollectionArchive rapporter={rapporter.docs} lang={lang} />
       </Container>
@@ -84,6 +84,6 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { lang } = await paramsPromise;
   const dict = await getDictionary(lang);
   return {
-    title: `${dict.breadcrumbs.reports} - ${dict.general.health_atlas}`,
+    title: `${dict.general.reports} - ${dict.general.health_atlas}`,
   };
 }
