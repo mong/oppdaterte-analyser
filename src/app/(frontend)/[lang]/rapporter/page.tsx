@@ -29,7 +29,11 @@ export default async function Page({ params: paramsPromise }: Args) {
   const rapporter = await payload.find({
     collection: 'rapporter',
     depth: 1,
-    limit: 12,
+    limit: 0,
+    where: {
+      test: { equals: false }
+    },
+    pagination: false,
     locale: lang,
     overrideAccess: false,
     select: {
@@ -61,7 +65,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <>
       <Header
         lang={lang}
-        title={"Rapporter"}
+        title={dict.breadcrumbs.reports}
         breadcrumbs={breadcrumbs}
       >
         <Typography variant="h6" className="m-8">
@@ -70,14 +74,8 @@ export default async function Page({ params: paramsPromise }: Args) {
       </Header>
       <Container maxWidth="xl">
         <div className="prose dark:prose-invert max-w-none">
-          <h1>Rapporter</h1>
+          <h1>{dict.breadcrumbs.reports}</h1>
         </div>
-        <PageRange
-          collection="rapporter"
-          currentPage={rapporter.page}
-          limit={12}
-          totalDocs={rapporter.totalDocs}
-        />
         <CollectionArchive rapporter={rapporter.docs} lang={lang} />
         {rapporter.totalPages > 1 && rapporter.page && (
           <Pagination page={rapporter.page} totalPages={rapporter.totalPages} lang={lang} />
@@ -87,8 +85,10 @@ export default async function Page({ params: paramsPromise }: Args) {
   );
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { lang } = await paramsPromise;
+  const dict = await getDictionary(lang);
   return {
-    title: `Payload Website Template Rapporter`,
+    title: `${dict.breadcrumbs.reports} - ${dict.general.health_atlas}`,
   };
 }

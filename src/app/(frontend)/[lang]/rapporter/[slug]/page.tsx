@@ -135,8 +135,11 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '', lang } = await paramsPromise
   const rapport = await queryRapportBySlug({ slug, lang })
-
-  return generateMeta({ doc: rapport })
+  const dict = await getDictionary(lang);
+  
+  return {
+    title: `${rapport.title} - ${dict.general.health_atlas}`,
+  };
 }
 
 const queryRapportBySlug = cache(async ({ slug, lang }: { slug: string, lang: Lang }) => {
