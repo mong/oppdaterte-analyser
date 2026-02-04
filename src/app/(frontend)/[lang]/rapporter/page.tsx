@@ -4,7 +4,7 @@ import { CollectionArchive } from '@/components/CollectionArchive'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import { Container, Typography } from '@mui/material'
+import { Container, Typography, Link } from '@mui/material'
 import { Lang } from '@/types'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
@@ -67,7 +67,18 @@ export default async function Page({ params: paramsPromise }: Args) {
         breadcrumbs={breadcrumbs}
       >
         <Typography variant="h6" className="m-8">
-          Her finner du helseatlas i form av digitale rapporter som omhandler et utvalgt tema, fagområde eller en pasientgruppe. Rapportene gir et overordnet bilde av geografisk variasjon i tjenestebruk for en begrenset tidsperiode.
+          {
+            {
+              no: "Her finner du helseatlas i form av digitale rapporter som omhandler et utvalgt tema, fagområde eller en pasientgruppe. Rapportene gir et overordnet bilde av geografisk variasjon i tjenestebruk for en begrenset tidsperiode. Oppdaterte helseatlas finner du ",
+              en: "Here you will find Health Atlases in the form of digital reports that cover a selected topic, field, or patient group. The reports provide an overview of geographical variation in the use of healthcare services for a defined period. Updated Health Atlases can be found ",
+            }[lang]
+          }
+          <Link
+            href={`https://analyser.skde.no/${lang === "en" ? "en/" : ""}`}
+          >
+            {{ no: "her", en: "here" }[lang]}
+          </Link>
+          .
         </Typography>
       </Header>
       <Container maxWidth="xl">
