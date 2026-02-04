@@ -171,6 +171,7 @@ export interface Rapporter {
     description?: string | null;
   };
   test?: boolean | null;
+  publiseringsStatus?: ('published' | 'test' | 'hidden') | null;
   publishedAt?: string | null;
   author: 'SKDE' | 'Helse Førde';
   norskType: 'nb' | 'nn';
@@ -732,6 +733,7 @@ export interface RapporterSelect<T extends boolean = true> {
         description?: T;
       };
   test?: T;
+  publiseringsStatus?: T;
   publishedAt?: T;
   author?: T;
   norskType?: T;

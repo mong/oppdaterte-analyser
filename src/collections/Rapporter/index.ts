@@ -156,6 +156,22 @@ export const Rapporter: CollectionConfig = {
       },
     },
     {
+      name: "publiseringsStatus",
+      localized: true,
+      label: "Publiseringsstatus",
+      type: "radio",
+      defaultValue: "test",
+      options: [
+        { label: "Publisert", value: "published" },
+        { label: "Testversjon (bare de med link har tilgang)", value: "test" },
+        { label: "Skjult", value: "hidden" },
+      ],
+      admin: {
+        layout: "vertical",
+        position: "sidebar",
+      },
+    },
+    {
       name: 'publishedAt',
       localized: true,
       type: 'date',
