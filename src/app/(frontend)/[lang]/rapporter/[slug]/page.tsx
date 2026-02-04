@@ -7,8 +7,6 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
-import { generateMeta } from '@/utilities/generateMeta'
-
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Container } from '@mui/material'
 import { SelectionProvider } from '@/lib/SelectionContext'
