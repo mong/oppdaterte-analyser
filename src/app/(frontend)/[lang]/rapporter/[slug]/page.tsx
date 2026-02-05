@@ -54,6 +54,21 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   const { slug = '', lang } = await paramsPromise;
   const rapport = await queryRapportBySlug({ slug, lang });
 
+  const payload = await getPayload({ config: configPromise });
+  const otherLang = (await payload.find({
+    collection: 'rapporter',
+    depth: 1,
+    limit: 1,
+    where: {
+      slug: { equals: slug},
+      publiseringsStatus: { equals: "published" }
+    },
+    pagination: false,
+    locale: lang === 'en' ? 'no' : 'en',
+    overrideAccess: false,
+    select: { },
+  })).docs.length > 0;
+
   if (!rapport) return notFound();
 
   const dict = await getDictionary(lang);
@@ -82,7 +97,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     <>
       {draft && <LivePreviewListener />}
 
-      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={lang}>
+      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
         {rapport.tags &&
           <TagList
             tags={rapport.tags.filter((tag) => typeof tag === 'object' && tag !== null)}
@@ -134,7 +149,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '', lang } = await paramsPromise
   const rapport = await queryRapportBySlug({ slug, lang })
   const dict = await getDictionary(lang);
-  
+
   return {
     title: `${rapport.title} - ${dict.general.health_atlas}`,
   };
