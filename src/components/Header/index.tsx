@@ -9,7 +9,7 @@ import { BreadCrumbStop } from "./SkdeBreadcrumbs";
 */
 
 type HeaderProps = {
-  lang: Lang;
+  lang?: Lang;
   breadcrumbs: BreadCrumbStop[];
   title: string;
 };
