@@ -31,11 +31,11 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { default as default_9aeaf11ea6a677f737bab1b0c62cb45a } from '@/components/NorskType'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
 import { default as default_ec1bf550cae820203cf3abbe80654b4d } from '@/components/SelectJSON'
-import { FolderTableCell as FolderTableCell_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
-import { FolderField as FolderField_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
-import { FolderTypeField as FolderTypeField_3817bf644402e67bfe6577f60ef982de } from '@payloadcms/ui'
+import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { FolderTypeField as FolderTypeField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
 import { AzureClientUploadHandler as AzureClientUploadHandler_635fb302eaf52f6baca4f9f8ad9ce104 } from '@payloadcms/storage-azure/client'
-import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
+import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -71,9 +71,9 @@ export const importMap = {
   "@/components/NorskType#default": default_9aeaf11ea6a677f737bab1b0c62cb45a,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
   "@/components/SelectJSON#default": default_ec1bf550cae820203cf3abbe80654b4d,
-  "@payloadcms/ui/rsc#FolderTableCell": FolderTableCell_ab83ff7e88da8d3530831f296ec4756a,
-  "@payloadcms/ui/rsc#FolderField": FolderField_ab83ff7e88da8d3530831f296ec4756a,
-  "@payloadcms/ui#FolderTypeField": FolderTypeField_3817bf644402e67bfe6577f60ef982de,
+  "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/next/client#FolderTypeField": FolderTypeField_2b8867833a34864a02ddf429b0728a40,
   "@payloadcms/storage-azure/client#AzureClientUploadHandler": AzureClientUploadHandler_635fb302eaf52f6baca4f9f8ad9ce104,
-  "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
