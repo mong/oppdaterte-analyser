@@ -107,7 +107,7 @@ export const Rapporter: CollectionConfig = {
                 features: ({ rootFeatures }) => {
                   return [
                     ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+                    HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
                     BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock, RawHTML] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
