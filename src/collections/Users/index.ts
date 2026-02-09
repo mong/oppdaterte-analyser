@@ -73,13 +73,11 @@ export const Users: CollectionConfig = {
                 email: credentials.email,
               },
             });
-            return { user: { collection: "users", ...user } };
+            return { user };
           }
 
           return {
-            user: usersQuery.docs[0]
-              ? { collection: "users", ...usersQuery.docs[0] }
-              : null,
+            user: usersQuery.docs[0] || null,
           };
         },
       },

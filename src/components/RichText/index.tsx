@@ -43,36 +43,63 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
 };
 
+const findParentHeading = (nodes: any, startingHeader: `h${number}`, startIndex: number) => {
+  for (let i = startIndex; i >= 0; i--) {
+    const node = nodes[i];
+    if (node.type === "heading" && Number(node.tag.slice(1)) < Number(startingHeader.slice(1))) {
+      return node;
+    }
+  }
+  return null;
+}
+
+const sanitizeHeader: (heading: string) => string = (heading) => 
+  heading.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+
 const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde") =>
   JSXConvertersFunction<NodeTypes> = (lang, author) => ({
     defaultConverters,
-  }) => ({
-    ...defaultConverters,
-    ...LinkJSXConverter({ internalDocToHref }),
-    heading: ({ node, nodesToJSX }) => {
-      const text = nodesToJSX({ nodes: node.children })
-      const id = text.join("").toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      const Tag = node.tag;
-      return <Tag id={id}>{text}</Tag>;
-    },
-    blocks: {
-      resultBox: ({ node }: { node: SerializedBlockNode<ResultBoxBlockProps> }) => (
-        <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>
-          <ResultBoxBlock lang={lang} author={author} {...node.fields} />
-        </Suspense>
-      ),
-      factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
-      table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
-      rawHTML: ({ node }: { node: SerializedBlockNode<RawHTMLBlockProps> }) => <RawHTMLBlock {...node.fields} />,
-      mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
-        <MediaBlock
-          imgClassName="m-0"
-          {...node.fields}
-          enableGutter={false}
-        />
-      ),
-    },
-  });
+  }) => {
+    return ({
+      ...defaultConverters,
+      ...LinkJSXConverter({ internalDocToHref }),
+      heading: (props) => {
+        const { node, childIndex, nodesToJSX, parent } = props;
+        const text = nodesToJSX({ nodes: node.children })
+        const id = sanitizeHeader(text.join(""))
+
+        const parentHeading = findParentHeading((parent as any).children, node.tag, childIndex - 1);
+        const full_id = parentHeading ? `${sanitizeHeader(nodesToJSX({ nodes: parentHeading.children }).join(""))}_${id}` : id;
+        const Tag = node.tag;
+        return <Tag id={full_id}>{text}</Tag>;
+      },
+      blocks: {
+        resultBox: ({ node, childIndex, parent, nodesToJSX }: { node: SerializedBlockNode<ResultBoxBlockProps>, childIndex: number, parent: any, nodesToJSX: (arg: any) => any }) => {
+          const parentHeading = findParentHeading(parent.children, "h6", childIndex - 1);
+          const id = sanitizeHeader(node.fields.blockName);
+          const full_id = parentHeading ? `${sanitizeHeader(nodesToJSX({ nodes: parentHeading.children }).join(""))}_${id}` : id;
+          return (
+            <div id={full_id}>
+              <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>
+                <ResultBoxBlock lang={lang} author={author} {...node.fields} />
+              </Suspense>
+            </div>
+          )
+        },
+        factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
+        table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
+        rawHTML: ({ node }: { node: SerializedBlockNode<RawHTMLBlockProps> }) => <RawHTMLBlock {...node.fields} />,
+        mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => (
+          <MediaBlock
+            imgClassName="m-0"
+            {...node.fields}
+            enableGutter={false}
+          />
+        ),
+      },
+    })
+  };
 
 type Props = {
   data: DefaultTypedEditorState;
