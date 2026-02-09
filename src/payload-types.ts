@@ -110,9 +110,7 @@ export interface Config {
   globals: {};
   globalsSelect: {};
   locale: 'en' | 'no';
-  user: User & {
-    collection: 'users';
-  };
+  user: User;
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -529,6 +527,7 @@ export interface User {
   email: string;
   updatedAt: string;
   createdAt: string;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
