@@ -69,7 +69,7 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
         const text = nodesToJSX({ nodes: node.children })
         const id = sanitizeHeader(text.join(""))
 
-        const parentHeading = findParentHeading(parent.children, node.tag, childIndex - 1);
+        const parentHeading = findParentHeading((parent as any).children, node.tag, childIndex - 1);
         const full_id = parentHeading ? `${sanitizeHeader(nodesToJSX({ nodes: parentHeading.children }).join(""))}_${id}` : id;
         const Tag = node.tag;
         return <Tag id={full_id}>{text}</Tag>;
