@@ -148,6 +148,7 @@ export const Rapporter: CollectionConfig = {
     {
       name: "publiseringsStatus",
       localized: true,
+      index: true,
       label: "Publiseringsstatus",
       type: "radio",
       defaultValue: "test",
@@ -247,5 +248,5 @@ export const Rapporter: CollectionConfig = {
       schedulePublish: true,
     },
     maxPerDoc: 50,
-  },
+  }
 }
