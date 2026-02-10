@@ -1,9 +1,8 @@
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import React from 'react'
+
+import React, { Suspense } from 'react'
 import { Container, Typography, Link } from '@mui/material'
 import { Lang } from '@/types'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
@@ -22,26 +21,6 @@ type Args = {
 export default async function Page({ params: paramsPromise }: Args) {
   const { lang } = await paramsPromise;
   const dict = await getDictionary(lang);
-  const payload = await getPayload({ config: configPromise });
-
-  const rapporter = await payload.find({
-    collection: 'rapporter',
-    depth: 1,
-    limit: 0,
-    where: {
-      publiseringsStatus: { equals: "published" }
-    },
-    pagination: false,
-    locale: lang,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      tags: true,
-      bilde: true,
-    },
-  });
-
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
@@ -81,7 +60,9 @@ export default async function Page({ params: paramsPromise }: Args) {
         </Typography>
       </Header>
       <Container maxWidth="xxl">
-        <CollectionArchive rapporter={rapporter.docs} lang={lang} />
+        <Suspense>
+          <CollectionArchive lang={lang} />
+        </Suspense>
       </Container>
     </>
   );

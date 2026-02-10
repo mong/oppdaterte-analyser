@@ -1,21 +1,41 @@
-import { cn } from '@/utilities/ui'
 import React from 'react'
 
-import { Card, CardPostData } from '@/components/Card'
+import { Card } from '@/components/Card'
 import { Lang } from '@/types'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 
 export type Props = {
-  rapporter: CardPostData[]
   lang: Lang
 }
 
-export const CollectionArchive: React.FC<Props> = (props) => {
-  const { rapporter, lang } = props
+export const CollectionArchive: React.FC<Props> = async (props) => {
+  const { lang } = props
+
+  const payload = await getPayload({ config: configPromise });
+
+  const rapporter = await payload.find({
+    collection: 'rapporter',
+    depth: 1,
+    limit: 0,
+    where: {
+      publiseringsStatus: { equals: "published" }
+    },
+    pagination: false,
+    locale: lang,
+    overrideAccess: false,
+    select: {
+      title: true,
+      slug: true,
+      tags: true,
+      bilde: true,
+    },
+  });
 
   return (
     <div className="my-8">
       <div className="grid grid-cols-4 sm:grid-cols-8 gap-10">
-        {rapporter?.map((result, index) => {
+        {rapporter.docs?.map((result, index) => {
           if (typeof result === 'object' && result !== null) {
             return (
               <div className="col-span-4" key={index}>
