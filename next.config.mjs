@@ -27,6 +27,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '4mb',
     },
+    imgOptTimeoutInSeconds: 30, // Øker timeout for bildeoptimalisering til 30 sekunder. Default er 7, som ofte fører til timeout problemer (504)
   },
   logging: {
     fetches: {
