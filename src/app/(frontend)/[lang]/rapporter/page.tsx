@@ -3,11 +3,12 @@ import type { Metadata } from 'next/types'
 import { CollectionArchive } from '@/components/CollectionArchive'
 
 import React, { Suspense } from 'react'
-import { Container, Typography, Link } from '@mui/material'
+import { Container, Typography, Link, CircularProgress } from '@mui/material'
 import { Lang } from '@/types'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import Header from '@/components/Header'
+import Grid from "@mui/material/Grid";
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -60,7 +61,11 @@ export default async function Page({ params: paramsPromise }: Args) {
         </Typography>
       </Header>
       <Container maxWidth="xxl">
-        <Suspense>
+        <Suspense fallback={
+          <Grid container justifyContent="center" sx={{ padding: 10 }}>
+            <CircularProgress />
+          </Grid>
+        }>
           <CollectionArchive lang={lang} />
         </Suspense>
       </Container>
