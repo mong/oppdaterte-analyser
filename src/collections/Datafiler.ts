@@ -28,6 +28,6 @@ export const Datafiler: CollectionConfig = {
   },
   fields: [],
   upload: {
-    staticDir: path.resolve(dirname, "../../public/data"),
+    disableLocalStorage: true,
   },
 };
