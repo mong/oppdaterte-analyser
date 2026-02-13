@@ -17,6 +17,7 @@ import { formatDateTime } from '@/utilities/formatDateTime'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import Header from '@/components/Header'
+import { TableOfContents } from '@/components/TableOfContents'
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
@@ -60,13 +61,13 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     depth: 1,
     limit: 1,
     where: {
-      slug: { equals: slug},
+      slug: { equals: slug },
       publiseringsStatus: { equals: "published" }
     },
     pagination: false,
     locale: lang === 'en' ? 'no' : 'en',
     overrideAccess: false,
-    select: { },
+    select: {},
   })).docs.length > 0;
 
   if (!rapport) return notFound();
@@ -92,6 +93,23 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     },
   ];
 
+  const tocData = [
+    { level: 1, elemID: 'Hovudfunn', children: [] },
+    { level: 1, elemID: 'Innleiing', children: [] },
+        {
+      level: 1,
+      elemID: 'Vaksne i behandling',
+      children:
+        [{ level: 2, elemID: 'Poliklinisk behandling', children: [] },
+        {
+          level: 2,
+          elemID: 'poliklinisk-behandling-dps-omrde',
+          children: []
+        }]
+    },
+    { level: 1, elemID: 'Vaksne i psykisk helsevern', children: [] },
+
+  ]
 
   return (
     <>
@@ -120,26 +138,26 @@ export default async function Rapport({ params: paramsPromise }: Args) {
       </Header>
 
       <Container maxWidth="xxl">
-        <article className="py-8">
-          <SelectionProvider>
-            <div className="my-8">
+        <div className="flex flex-col lg:flex-row">
+          <TableOfContents tocData={tocData} />
+          <article className="shrink min-w-0">
+            <SelectionProvider>
               <RichText
                 lang={lang === "en" ? "en" : rapport.norskType}
                 author={rapport.author}
                 data={rapport.content}
                 enableGutter={true}
               />
-            </div>
-
-            {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
-              <RelatedRapporter
-                lang={lang}
-                className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-                docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
-              />
-            )}
-          </SelectionProvider>
-        </article>
+              {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
+                <RelatedRapporter
+                  lang={lang}
+                  className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
+                  docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
+                />
+              )}
+            </SelectionProvider>
+          </article>
+        </div>
       </Container>
     </>
   );

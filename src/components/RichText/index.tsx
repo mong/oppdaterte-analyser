@@ -14,6 +14,7 @@ import type {
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
+  SerializedHeadingNode,
   SerializedLinkNode,
   type DefaultTypedEditorState,
 } from "@payloadcms/richtext-lexical";
@@ -22,6 +23,7 @@ import {
   LinkJSXConverter,
   RichText as ConvertRichText,
 } from "@payloadcms/richtext-lexical/react";
+import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 import { Suspense } from "react";
 import { Grid, CircularProgress } from "@mui/material";
 
@@ -53,8 +55,18 @@ const findParentHeading = (nodes: any, startingHeader: `h${number}`, startIndex:
   return null;
 }
 
-const sanitizeHeader: (heading: string) => string = (heading) => 
+export const sanitizeID: (heading: string) => string = (heading) =>
   heading.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+export const headerNodeToID: (node: SerializedHeadingNode) => string = (node) =>
+  sanitizeID(convertLexicalToPlaintext({
+    data: {
+      root: {
+        children: node.children,
+        type: "root", format: "", indent: 0, direction: null, version: 1
+      }
+    }
+  }));
 
 
 const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde") =>
@@ -67,18 +79,19 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
       heading: (props) => {
         const { node, childIndex, nodesToJSX, parent } = props;
         const text = nodesToJSX({ nodes: node.children })
-        const id = sanitizeHeader(text.join(""))
+        const id = headerNodeToID(node);
 
-        const parentHeading = findParentHeading((parent as any).children, node.tag, childIndex - 1);
-        const full_id = parentHeading ? `${sanitizeHeader(nodesToJSX({ nodes: parentHeading.children }).join(""))}_${id}` : id;
+        const parentHeading: SerializedHeadingNode | null = findParentHeading((parent as any).children, node.tag, childIndex - 1);
+        const full_id = parentHeading ? `${headerNodeToID(parentHeading)}_${id}` : id;
+
         const Tag = node.tag;
         return <Tag id={full_id}>{text}</Tag>;
       },
       blocks: {
-        resultBox: ({ node, childIndex, parent, nodesToJSX }: { node: SerializedBlockNode<ResultBoxBlockProps>, childIndex: number, parent: any, nodesToJSX: (arg: any) => any }) => {
-          const parentHeading = findParentHeading(parent.children, "h6", childIndex - 1);
-          const id = sanitizeHeader(node.fields.blockName);
-          const full_id = parentHeading ? `${sanitizeHeader(nodesToJSX({ nodes: parentHeading.children }).join(""))}_${id}` : id;
+        resultBox: ({ node, childIndex, parent }: { node: SerializedBlockNode<ResultBoxBlockProps>, childIndex: number, parent: any }) => {
+          const parentHeading: SerializedHeadingNode | null = findParentHeading(parent.children, "h6", childIndex - 1);
+          const id = sanitizeID(node.fields.blockName);
+          const full_id = parentHeading ? `${headerNodeToID(parentHeading)}_${id}` : id;
           return (
             <div id={full_id}>
               <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>
