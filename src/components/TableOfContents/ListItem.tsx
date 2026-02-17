@@ -40,7 +40,7 @@ export const useIntersectionByID = (elementID: string, rootMargin: string) => {
 type ListItemProps = {
   children?: React.ReactNode;
   expanded?: string;
-  setExpanded?: React.Dispatch<React.SetStateAction<string>>;
+  setExpanded: React.Dispatch<React.SetStateAction<string>>;
   href: string;
   linkTitle: string;
   i?: string;
