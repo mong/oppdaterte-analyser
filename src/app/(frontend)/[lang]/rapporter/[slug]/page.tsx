@@ -5,7 +5,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/RichText'
+import RichText, { headerNodeToPlaintext, sanitizeID } from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Container } from '@mui/material'
@@ -17,6 +17,40 @@ import { formatDateTime } from '@/utilities/formatDateTime'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import Header from '@/components/Header'
+import { TableOfContents } from '@/components/TableOfContents'
+import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+
+import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
+
+const buildTocData = (content: (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[], level: number = 1): any => {
+  const [first, ...rest] = content;
+
+  if (!first) return [];
+
+  if (first.type === "block") {
+    return [
+      {
+        level,
+        elemID: first.fields.blockName,
+        children: []
+      },
+      ...buildTocData(rest, level)
+    ];
+  }
+  else if (level > 1 || first.tag !== "h2") return buildTocData(rest, level); // Skip headings that are not top-level
+  else {
+    const childrenUntil = rest.findIndex(item => item.type === "heading" && item.tag <= first.tag);
+    return [
+      {
+        level: first.tag,
+        elemID: headerNodeToPlaintext(first),
+        children: buildTocData(rest.slice(0, childrenUntil), level + 1)
+      },
+      ...buildTocData(rest.slice(childrenUntil), level)
+    ];
+  }
+}
+
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
@@ -60,13 +94,13 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     depth: 1,
     limit: 1,
     where: {
-      slug: { equals: slug},
+      slug: { equals: slug },
       publiseringsStatus: { equals: "published" }
     },
     pagination: false,
     locale: lang === 'en' ? 'no' : 'en',
     overrideAccess: false,
-    select: { },
+    select: {},
   })).docs.length > 0;
 
   if (!rapport) return notFound();
@@ -92,6 +126,13 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     },
   ];
 
+
+  const headerData = rapport.content.root.children.filter(
+    (child) => child.type === 'heading'
+      || (child.type === 'block' && (child.fields as any)?.blockType === 'resultBox')
+  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[]
+
+  const tocData = buildTocData(headerData);
 
   return (
     <>
@@ -120,26 +161,26 @@ export default async function Rapport({ params: paramsPromise }: Args) {
       </Header>
 
       <Container maxWidth="xxl">
-        <article className="py-8">
-          <SelectionProvider>
-            <div className="my-8">
+        <div className="flex flex-col lg:flex-row">
+          <TableOfContents tocData={tocData} />
+          <article className="shrink min-w-0">
+            <SelectionProvider>
               <RichText
                 lang={lang === "en" ? "en" : rapport.norskType}
                 author={rapport.author}
                 data={rapport.content}
                 enableGutter={true}
               />
-            </div>
-
-            {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
-              <RelatedRapporter
-                lang={lang}
-                className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-                docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
-              />
-            )}
-          </SelectionProvider>
-        </article>
+              {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
+                <RelatedRapporter
+                  lang={lang}
+                  className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
+                  docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
+                />
+              )}
+            </SelectionProvider>
+          </article>
+        </div>
       </Container>
     </>
   );
