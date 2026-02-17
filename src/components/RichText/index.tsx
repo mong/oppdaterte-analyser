@@ -46,9 +46,10 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 };
 
 const findParentHeading = (nodes: any, startingHeader: `h${number}`, startIndex: number) => {
+  if (["h1", "h2"].includes(startingHeader)) return null;
   for (let i = startIndex; i >= 0; i--) {
     const node = nodes[i];
-    if (node.type === "heading" && Number(node.tag.slice(1)) < Number(startingHeader.slice(1))) {
+    if (node.type === "heading" && node.tag === "h2") {
       return node;
     }
   }
@@ -58,15 +59,15 @@ const findParentHeading = (nodes: any, startingHeader: `h${number}`, startIndex:
 export const sanitizeID: (heading: string) => string = (heading) =>
   heading.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
-export const headerNodeToID: (node: SerializedHeadingNode) => string = (node) =>
-  sanitizeID(convertLexicalToPlaintext({
+export const headerNodeToPlaintext: (node: SerializedHeadingNode) => string = (node) =>
+  convertLexicalToPlaintext({
     data: {
       root: {
         children: node.children,
         type: "root", format: "", indent: 0, direction: null, version: 1
       }
     }
-  }));
+  });
 
 
 const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde") =>
@@ -79,10 +80,10 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
       heading: (props) => {
         const { node, childIndex, nodesToJSX, parent } = props;
         const text = nodesToJSX({ nodes: node.children })
-        const id = headerNodeToID(node);
+        const id = sanitizeID(headerNodeToPlaintext(node));
 
         const parentHeading: SerializedHeadingNode | null = findParentHeading((parent as any).children, node.tag, childIndex - 1);
-        const full_id = parentHeading ? `${headerNodeToID(parentHeading)}_${id}` : id;
+        const full_id = parentHeading ? `${sanitizeID(headerNodeToPlaintext(parentHeading))}_${id}` : id;
 
         const Tag = node.tag;
         return <Tag id={full_id}>{text}</Tag>;
@@ -91,7 +92,7 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
         resultBox: ({ node, childIndex, parent }: { node: SerializedBlockNode<ResultBoxBlockProps>, childIndex: number, parent: any }) => {
           const parentHeading: SerializedHeadingNode | null = findParentHeading(parent.children, "h6", childIndex - 1);
           const id = sanitizeID(node.fields.blockName);
-          const full_id = parentHeading ? `${headerNodeToID(parentHeading)}_${id}` : id;
+          const full_id = parentHeading ? `${sanitizeID(headerNodeToPlaintext(parentHeading))}_${id}` : id;
           return (
             <div id={full_id}>
               <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>

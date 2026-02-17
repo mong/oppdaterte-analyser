@@ -5,7 +5,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/RichText'
+import RichText, { headerNodeToPlaintext, sanitizeID } from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Container } from '@mui/material'
@@ -18,6 +18,39 @@ import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import Header from '@/components/Header'
 import { TableOfContents } from '@/components/TableOfContents'
+import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+
+import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
+
+const buildTocData = (content: (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[], level: number = 1): any => {
+  const [first, ...rest] = content;
+
+  if (!first) return [];
+
+  if (first.type === "block") {
+    return [
+      {
+        level,
+        elemID: first.fields.blockName,
+        children: []
+      },
+      ...buildTocData(rest, level)
+    ];
+  }
+  else if (level > 1 || first.tag !== "h2") return buildTocData(rest, level); // Skip headings that are not top-level
+  else {
+    const childrenUntil = rest.findIndex(item => item.type === "heading" && item.tag <= first.tag);
+    return [
+      {
+        level: first.tag,
+        elemID: headerNodeToPlaintext(first),
+        children: buildTocData(rest.slice(0, childrenUntil), level + 1)
+      },
+      ...buildTocData(rest.slice(childrenUntil), level)
+    ];
+  }
+}
+
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
@@ -93,23 +126,13 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     },
   ];
 
-  const tocData = [
-    { level: 1, elemID: 'Hovudfunn', children: [] },
-    { level: 1, elemID: 'Innleiing', children: [] },
-        {
-      level: 1,
-      elemID: 'Vaksne i behandling',
-      children:
-        [{ level: 2, elemID: 'Poliklinisk behandling', children: [] },
-        {
-          level: 2,
-          elemID: 'poliklinisk-behandling-dps-omrde',
-          children: []
-        }]
-    },
-    { level: 1, elemID: 'Vaksne i psykisk helsevern', children: [] },
 
-  ]
+  const headerData = rapport.content.root.children.filter(
+    (child) => child.type === 'heading'
+      || (child.type === 'block' && (child.fields as any)?.blockType === 'resultBox')
+  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[]
+
+  const tocData = buildTocData(headerData);
 
   return (
     <>

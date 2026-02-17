@@ -9,6 +9,7 @@ import { BsCaretDownFill } from "react-icons/bs";
 import { ListItem } from "./ListItem";
 
 import styles from "./TableOfContents.module.css";
+import { sanitizeID } from "../RichText";
 
 type TocData = {
   level: number;
@@ -27,27 +28,24 @@ const TocDataToList = ({ tocData, parentID }: { tocData: TocData; parentID: stri
   return (
     <ol className={styles.tocList}>
       {tocData.map((content) => {
-        const uniqueID = parentID
-          ? `${parentID}_${content.elemID}`
-          : `#${content.elemID}`;
-        const href = uniqueID.toLowerCase().replace(/\s/g, "-");
+        const uniqueID = (parentID ? `${parentID}_` : '') + sanitizeID(content.elemID);
 
         return content.children.length !== 0 ? (
           <ListItem
             key={content.level + content.elemID}
-            href={href}
+            href={`#${uniqueID}`}
             expanded={expanded}
             setExpanded={setExpanded}
             linkTitle={content.elemID}
           >
-            <TocDataToList tocData={content.children} parentID={href} />
+            <TocDataToList tocData={content.children} parentID={uniqueID} />
           </ListItem>
         ) : (
           <ListItem
             key={content.level + content.elemID}
             expanded={expanded}
             setExpanded={setExpanded}
-            href={href}
+            href={`#${uniqueID}`}
             linkTitle={content.elemID}
           />
         );
