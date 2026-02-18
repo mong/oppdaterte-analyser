@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 
-import { RelatedRapporter } from '@/blocks/RelatedRapporter/Component'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
@@ -171,13 +170,6 @@ export default async function Rapport({ params: paramsPromise }: Args) {
                 data={rapport.content}
                 enableGutter={true}
               />
-              {rapport.relatedRapporter && rapport.relatedRapporter.length > 0 && (
-                <RelatedRapporter
-                  lang={lang}
-                  className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-                  docs={rapport.relatedRapporter.filter((rapport) => typeof rapport === 'object')}
-                />
-              )}
             </SelectionProvider>
           </article>
         </div>
