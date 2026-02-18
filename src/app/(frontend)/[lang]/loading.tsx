@@ -6,10 +6,10 @@ export default function Loading() {
   return (
     <>
       <HeaderTop breadcrumbs={[]} />
-      <Container maxWidth="xxl" disableGutters={true}>
-        <Grid container justifyContent="center" sx={{ padding: 10 }}>
-          <CircularProgress />
-        </Grid>
+      <Container maxWidth="xxl" disableGutters={true}
+        sx={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}
+      >
+        <CircularProgress />
       </Container>
     </>)
 }
