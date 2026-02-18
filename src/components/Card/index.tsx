@@ -46,32 +46,6 @@ export const Card: React.FC<{
         {bilde && typeof bilde !== 'string' && <Media resource={bilde} size="33vw" />}
       </div>
       <div className="p-4">
-        {showTags && hasTags && (
-          <div className="uppercase text-sm mb-4">
-            {showTags && hasTags && (
-              <div>
-                {tags?.map((tag, index) => {
-                  if (typeof tag === 'object') {
-                    const { title: titleFromTag } = tag
-
-                    const tagTitle = titleFromTag || 'Untitled tag'
-
-                    const isLast = index === tags.length - 1
-
-                    return (
-                      <Fragment key={index}>
-                        {tagTitle}
-                        {!isLast && <Fragment>, &nbsp;</Fragment>}
-                      </Fragment>
-                    )
-                  }
-
-                  return null
-                })}
-              </div>
-            )}
-          </div>
-        )}
         {titleToUse && (
           <div className="prose">
             <h3>
