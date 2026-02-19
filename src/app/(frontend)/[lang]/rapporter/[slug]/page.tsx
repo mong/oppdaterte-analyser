@@ -136,7 +136,6 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   return (
     <>
       {draft && <LivePreviewListener />}
-
       <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
         {rapport.tags &&
           <TagList
@@ -147,7 +146,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <p className="text-sm">Forfatter</p>
-              <p>{rapport.author}</p>
+              <p className="m-0">{rapport.author}</p>
             </div>
           </div>
           {rapport.publishedAt && (

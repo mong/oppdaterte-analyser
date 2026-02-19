@@ -1,6 +1,5 @@
 "use client";
 
-import { Lang } from "@/types";
 import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import downloadJSON from "@/lib/downloadJSON";
