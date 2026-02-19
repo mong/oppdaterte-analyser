@@ -55,7 +55,7 @@ export const Carousel = ({
   utvalg,
   lang,
 }: CarouselProps) => {
-  const [activeComp, setActiveComp] = useState<number>(0);
+  const [activeComp, setActiveComp] = useState(0);
 
   const charts = boxData.filter((dataItem) => dataItem.type !== "data")
 
@@ -78,7 +78,7 @@ export const Carousel = ({
           onClick={(i) => setActiveComp(i)}
         />
       )}
-      <Box style={{ width: "95%", minHeight: "540px" }}>
+      <Box style={{ width: "95%", minHeight: "540px" }} key={activeComp}>
         {chartElems[activeComp]}
       </Box>
       <div style={{ alignSelf: "flex-start" }}>
