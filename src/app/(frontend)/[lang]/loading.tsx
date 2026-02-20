@@ -9,7 +9,9 @@ export default function Loading() {
       <Container maxWidth="xxl" disableGutters={true}
         sx={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}
       >
-        <CircularProgress />
+        <div className="my-8">
+          <CircularProgress />
+        </div>
       </Container>
     </>)
 }
