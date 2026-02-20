@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { cn } from '@/utilities/ui'
 import { Media } from '../Media'
+import { makeDateElem } from '@/lib/helpers'
 
 export type Props = {
   lang: Lang
@@ -26,6 +27,8 @@ export const CollectionArchive: React.FC<Props> = async (props) => {
     overrideAccess: false,
     select: {
       title: true,
+      publishedAt: true,
+      createdAt: true,
       slug: true,
       tags: true,
       bilde: true,
@@ -39,10 +42,10 @@ export const CollectionArchive: React.FC<Props> = async (props) => {
           const href = `/${lang}/rapporter/${doc.slug}`;
           return (
             <div className="col-span-4" key={index}>
-              <a href={href} className="no-underline hover:underline text-inherit">
+              <a href={href} className="no-underline hover:[&_h3]:underline text-inherit">
                 <article
                   className={cn(
-                    'rounded-[1.5rem] overflow-hidden hover:cursor-pointer',
+                    'rounded-3xl overflow-hidden hover:cursor-pointer',
                     'hover:shadow-lg transition-shadow duration-100 bg-[#e3f3ef] hover:[&_picture]:opacity-[0.8]',
                     'h-full',
                   )}
@@ -51,8 +54,15 @@ export const CollectionArchive: React.FC<Props> = async (props) => {
                     {!doc.bilde && <div className="">No image</div>}
                     {doc.bilde && typeof doc.bilde !== 'string' && <Media resource={doc.bilde} size="33vw" />}
                   </div>
-                  <div className="p-4">
-                    {doc.title && <h3>{doc.title}</h3>}
+                  <div className="py-5 px-6">
+                    <span className="text-base">
+                      <span className="mr-1">●</span>
+                      {lang === "en" ? "Published: " : "Publisert: "}
+                      <strong>{makeDateElem(doc.publishedAt!, lang)}</strong>
+                    </span>
+                    <div>
+                      {doc.title && <h3>{doc.title}</h3>}
+                    </div>
                   </div>
                 </article>
               </a>

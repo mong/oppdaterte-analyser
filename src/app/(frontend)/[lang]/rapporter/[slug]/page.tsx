@@ -160,7 +160,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 
       <Container maxWidth="xxl">
         <div className="flex flex-col lg:flex-row">
-          <TableOfContents tocData={tocData} />
+          {tocData.length > 0 && <TableOfContents tocData={tocData} />}
           <article className="shrink min-w-0">
             <SelectionProvider>
               <RichText
