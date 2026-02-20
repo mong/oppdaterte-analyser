@@ -138,11 +138,6 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     <>
       {draft && <LivePreviewListener />}
       <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
-        {rapport.tags &&
-          <TagList
-            tags={rapport.tags.filter((tag) => typeof tag === 'object' && tag !== null)}
-            lang={lang}
-          />}
         <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
