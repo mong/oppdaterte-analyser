@@ -20,6 +20,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
 
 import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
+import { makeDateElem } from '@/lib/helpers'
 
 const buildTocData = (content: (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[], level: number = 1): any => {
   const [first, ...rest] = content;
@@ -152,7 +153,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
           {rapport.publishedAt && (
             <div className="flex flex-col gap-1">
               <p className="text-sm">Publisert</p>
-              <time dateTime={rapport.publishedAt}>{formatDateTime(rapport.publishedAt)}</time>
+              {makeDateElem(rapport.publishedAt, lang)}
             </div>
           )}
         </div>
