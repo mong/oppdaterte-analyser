@@ -3,7 +3,8 @@ import type { Block } from 'payload'
 import {
   InlineToolbarFeature,
   lexicalEditor,
-  BlocksFeature
+  BlocksFeature,
+  EXPERIMENTAL_TableFeature
 } from '@payloadcms/richtext-lexical'
 import { MediaBlock } from '../MediaBlock/config'
 import { Table } from '../Table/config'
@@ -20,6 +21,7 @@ export const FactBox: Block = {
           return [
             ...rootFeatures,
             InlineToolbarFeature(),
+            EXPERIMENTAL_TableFeature(),
             BlocksFeature({ blocks: [Table, MediaBlock, RawHTML] }),
           ]
         },

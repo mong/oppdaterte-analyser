@@ -88,6 +88,15 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
         const Tag = node.tag;
         return <Tag id={full_id}>{text}</Tag>;
       },
+      table: (props) => {
+        const { node, nodesToJSX } = props;
+        const content = nodesToJSX({ nodes: node.children })
+        return (
+          <table className="leading-none [&_td]:p-2! [&_p]:m-0 text-base overflow-auto border-collapse">
+            {content}
+          </table>
+        )
+      },
       blocks: {
         resultBox: ({ node, childIndex, parent }: { node: SerializedBlockNode<ResultBoxBlockProps>, childIndex: number, parent: any }) => {
           const parentHeading: SerializedHeadingNode | null = findParentHeading(parent.children, "h6", childIndex - 1);
