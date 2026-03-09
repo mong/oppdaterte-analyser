@@ -8,6 +8,10 @@ import {
 
 export const Table: Block = {
   slug: 'table',
+  labels: {
+    singular: 'Table (with caption)',
+    plural: 'Tables (with caption)',
+  },
   fields: [
     {
       name: 'table',
