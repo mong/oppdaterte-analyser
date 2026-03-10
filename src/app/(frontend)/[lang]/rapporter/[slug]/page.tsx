@@ -21,6 +21,10 @@ import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext
 import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
 import { makeDateElem } from '@/lib/helpers'
 
+
+export const dynamic = 'force-static';
+
+
 const buildTocData = (content: (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[], level: number = 1): any => {
   const [first, ...rest] = content;
 
