@@ -14,7 +14,7 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
       const path = `/[lang]/rapporter/${doc.slug}`
       payload.logger.info(`Revalidating rapport at path: ${path}`)
 
-      revalidatePath(path)
+      revalidatePath(path, "page")
       revalidateTag('rapporter-sitemap')
     }
 
@@ -24,7 +24,7 @@ export const revalidateRapport: CollectionAfterChangeHook<Rapporter> = ({
 
       payload.logger.info(`Revalidating old rapport at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
+      revalidatePath(oldPath, "page")
       revalidateTag('rapporter-sitemap')
     }
   }
@@ -35,7 +35,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Rapporter> = ({ doc, re
   if (!context.disableRevalidate) {
     const path = `/[lang]/rapporter/${doc?.slug}`
 
-    revalidatePath(path)
+    revalidatePath(path, "page")
     revalidateTag('rapporter-sitemap')
   }
 
