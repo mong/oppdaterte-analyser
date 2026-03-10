@@ -11,7 +11,7 @@ import Header from '@/components/Header'
 import Grid from "@mui/material/Grid";
 
 export const dynamic = 'force-static'
-export const revalidate = 600
+export const revalidate = 60
 
 type Args = {
   params: Promise<{
