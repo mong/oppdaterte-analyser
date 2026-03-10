@@ -23,7 +23,7 @@ import { makeDateElem } from '@/lib/helpers'
 
 
 export const dynamic = 'force-static';
-
+export const revalidate = 60
 
 const buildTocData = (content: (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[], level: number = 1): any => {
   const [first, ...rest] = content;
