@@ -26,6 +26,8 @@ import { LivePreviewListener } from "@/components/LivePreviewListener";
 import RichText from "@/components/RichText";
 
 import { createHash } from "crypto";
+export const dynamic = 'force-static';
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   if (process.env.NODE_ENV === 'development') return [];
