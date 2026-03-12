@@ -24,7 +24,6 @@ export default async function Page() {
   return (
     <>
       <Header
-        lang={"no"}
         title={"Klinisk dashbord"}
         breadcrumbs={breadcrumbs}
       >
