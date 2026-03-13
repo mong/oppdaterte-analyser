@@ -3,7 +3,6 @@ import { Container, Typography } from '@mui/material'
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import Header from '@/components/Header'
-
 export const dynamic = 'force-static'
 export const revalidate = 60
 
@@ -28,6 +27,8 @@ export default async function Page() {
         breadcrumbs={breadcrumbs}
       >
         <Typography variant="h6" className="m-8">
+          Klinisk dashbord er en nettside med styringsdata som viser befolkningens bruk av et bredt spekter av helsetjenester i opptaksområder.
+          Hensikten er å gi ledere i spesialisthelsetjenesten et bedre beslutnings- og styringsgrunnlag.
         </Typography>
       </Header>
       <Container maxWidth="xxl" disableGutters>
