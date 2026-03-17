@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     rapporter: Rapporter;
     analyser: Analyser;
+    pages: Page;
     users: User;
     datafiler: Datafiler;
     media: Media;
@@ -92,6 +93,7 @@ export interface Config {
   collectionsSelect: {
     rapporter: RapporterSelect<false> | RapporterSelect<true>;
     analyser: AnalyserSelect<false> | AnalyserSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     datafiler: DatafilerSelect<false> | DatafilerSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -522,6 +524,93 @@ export interface Analyser {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  layout: (ContentBlock | MediaBlock | RawHTMLBlock)[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  publiseringsStatus?: ('published' | 'test' | 'hidden') | null;
+  publishedAt?: string | null;
+  author: 'SKDE' | 'Helse Førde';
+  norskType: 'nb' | 'nn';
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock".
+ */
+export interface ContentBlock {
+  columns?:
+    | {
+        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+        richText?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock".
+ */
+export interface MediaBlock {
+  media: number | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RawHTMLBlock".
+ */
+export interface RawHTMLBlock {
+  html: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'rawHTML';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -657,6 +746,10 @@ export interface PayloadLockedDocument {
         value: number | Analyser;
       } | null)
     | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -765,6 +858,69 @@ export interface AnalyserSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  layout?:
+    | T
+    | {
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        rawHTML?: T | RawHTMLBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  publiseringsStatus?: T;
+  publishedAt?: T;
+  author?: T;
+  norskType?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock_select".
+ */
+export interface ContentBlockSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        size?: T;
+        richText?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock_select".
+ */
+export interface MediaBlockSelect<T extends boolean = true> {
+  media?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RawHTMLBlock_select".
+ */
+export interface RawHTMLBlockSelect<T extends boolean = true> {
+  html?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1011,21 +1167,15 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'analyser';
           value: number | Analyser;
+        } | null)
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1121,16 +1271,6 @@ export interface ResultBoxBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'resultBox';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "RawHTMLBlock".
- */
-export interface RawHTMLBlock {
-  html: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'rawHTML';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

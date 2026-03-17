@@ -104,7 +104,7 @@ export default async function KompendiumPage(props: {
       text: dict.general.updated_health_atlas,
     },
     {
-      link: `/${lang}/${kompendium}`,
+      link: `/${lang}/fag/${kompendium}`,
       text: tag.title,
     },
   ];
@@ -112,13 +112,6 @@ export default async function KompendiumPage(props: {
   return (
     <>
       <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.title}>
-        <Typography
-          variant="h6"
-          sx={{
-            "& > p": { margin: 0, marginTop: 2 },
-            "& a": { color: "primary.main" },
-          }}
-        />
         <RichText
           data={tag.description!}
           enableGutter={false}

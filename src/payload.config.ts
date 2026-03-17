@@ -14,6 +14,8 @@ import { Users } from "./collections/Users";
 import { Tags } from "./collections/Tags";
 import { Rapporter } from "./collections/Rapporter";
 import { Analyser } from "./collections/Analyser";
+import { Pages } from "./collections/Pages";
+
 import { getServerSideURL } from "./utilities/getURL";
 
 
@@ -24,7 +26,7 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {},
   editor: lexicalEditor(),
-  collections: [Rapporter, Analyser, Users, Datafiler, Media, Tags],
+  collections: [Rapporter, Analyser, Pages, Users, Datafiler, Media, Tags],
   localization: {
     locales: ["en", "no"],
     defaultLocale: "no",

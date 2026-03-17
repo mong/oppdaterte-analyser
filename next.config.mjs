@@ -77,6 +77,12 @@ const nextConfig = {
         destination: "/en/rapporter/:slug",
         permanent: false,
       },
+      {
+        // Redirect for gamle URL-er til kompendier
+        source: "/:lang/:slug(barn|dagkirurgi|eldre|gynekologi|hjerte|ore-nese-hals|ortopedi|oye)",
+        destination: "/:lang/fag/:slug",
+        permanent: false,
+      },
     ]
   },
 };

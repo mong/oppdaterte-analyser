@@ -5,7 +5,7 @@ const collectionPrefixMap = {
     `/${locale}/rapporter`,
   analyser: (locale: string) =>
     `/${locale}/analyse`,
-  pages: () => '',
+  pages: (locale: string) => `/${locale}`,
 }
 
 type Props = {
