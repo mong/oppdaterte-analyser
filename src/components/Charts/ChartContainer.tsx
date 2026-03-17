@@ -981,6 +981,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   value={showGenders}
                   exclusive
                   onChange={() => setShowGenders(!showGenders)}
+                  disabled={analyse.data.kjonn !== "begge"}
                 >
                   <ToggleButton value={false}>
                     {dict.analysebox.alle}
