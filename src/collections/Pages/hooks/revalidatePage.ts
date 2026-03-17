@@ -2,9 +2,9 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'paylo
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 
-import type { Pages } from '../../../payload-types'
+import type { Page } from '../../../payload-types'
 
-export const revalidatePage: CollectionAfterChangeHook<Pages> = ({
+export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   doc,
   previousDoc,
   req: { payload, context },
@@ -31,7 +31,7 @@ export const revalidatePage: CollectionAfterChangeHook<Pages> = ({
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Pages> = ({ doc, req: { context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
     const path = `/[lang]/${doc?.slug}`
 
