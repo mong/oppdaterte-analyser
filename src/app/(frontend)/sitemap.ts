@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
     .concat(
       kompendier.map((komp) => ({
-        url: `https://analyser.skde.no/no/${komp.identifier}`,
+        url: `https://analyser.skde.no/no/fag/${komp.identifier}`,
         lastModified: analyser
           .filter((analyse) =>
             analyse.tags
@@ -38,8 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           ),
         alternates: {
           languages: {
-            en: `https://analyser.skde.no/en/${komp.identifier}`,
-            no: `https://analyser.skde.no/no/${komp.identifier}`,
+            en: `https://analyser.skde.no/en/fag/${komp.identifier}`,
+            no: `https://analyser.skde.no/no/fag/${komp.identifier}`,
           },
         },
       })),
