@@ -67,8 +67,18 @@ const nextConfig = {
         destination: 'https://skde.no/helseatlas',
         permanent: false,
       },
+      { // Fikser redirect for URL-er fra gammel CMS-løsning
+        source: "/helseatlas",
+        destination: "/no/rapporter/",
+        permanent: false,
+      },
       {
-        source: "/helseatlas/v2/:slug", // Fikser redirect for URL-er fra gammel CMS-løsning
+        source: "/helseatlas/en",
+        destination: "/en/rapporter/",
+        permanent: false,
+      },
+      {
+        source: "/helseatlas/v2/:slug",
         destination: "/no/rapporter/:slug",
         permanent: false,
       },
