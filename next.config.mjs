@@ -67,11 +67,6 @@ const nextConfig = {
         destination: 'https://skde.no/helseatlas',
         permanent: false,
       },
-      { // Midlertidig fiks for feil i redurect i Azure
-        source: "/helseatlas/%7Bpath%7D",
-        destination: "/no/rapporter/",
-        permanent: false,
-      },
       { // Fikser redirect for URL-er fra gammel CMS-løsning
         source: "/helseatlas",
         destination: "/no/rapporter/",
