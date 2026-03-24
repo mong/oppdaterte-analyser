@@ -10,6 +10,7 @@ import type {
   MediaBlock as MediaBlockProps,
   TableBlock as TableBlockProps,
   RawHTMLBlock as RawHTMLBlockProps,
+  CSVTreeView as CSVTreeViewBlockProps,
 } from 'src/payload-types'
 import {
   DefaultNodeTypes,
@@ -26,6 +27,7 @@ import {
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 import { Suspense } from "react";
 import { Grid, CircularProgress } from "@mui/material";
+import { CSVTreeViewBlock } from "@/blocks/CSVTreeView/Component";
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode;
 
@@ -111,6 +113,7 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
           )
         },
         factBox: ({ node }: { node: SerializedBlockNode<FactBoxBlockProps> }) => <FactBoxBlock {...node.fields} />,
+        csvTreeView: ({ node }: { node: SerializedBlockNode<CSVTreeViewBlockProps> }) => <CSVTreeViewBlock {...node.fields} />,
         table: ({ node }: { node: SerializedBlockNode<TableBlockProps> }) => <TableBlock {...node.fields} />,
         rawHTML: ({ node }: { node: SerializedBlockNode<RawHTMLBlockProps> }) => <RawHTMLBlock {...node.fields} />,
         mediaBlock: ({ node }: { node: SerializedBlockNode<MediaBlockProps> }) => <MediaBlock {...node.fields} />,

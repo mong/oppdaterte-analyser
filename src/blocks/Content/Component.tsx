@@ -21,7 +21,6 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
         {columns &&
           columns.length > 0 &&
           columns.map((col, index) => {
-            console.log("col", col)
             const { richText, size } = col
 
             return (

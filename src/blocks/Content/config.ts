@@ -3,9 +3,11 @@ import type { Block, Field } from 'payload'
 import {
   FixedToolbarFeature,
   HeadingFeature,
+  BlocksFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { CSVTreeView } from '../CSVTreeView/config'
 
 const columnFields: Field[] = [
   {
@@ -41,6 +43,7 @@ const columnFields: Field[] = [
           HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
+          BlocksFeature({ blocks: [CSVTreeView] }),
         ]
       },
     }),

@@ -5,11 +5,13 @@ import type { Page } from '@/payload-types';
 import { ContentBlock } from '@/blocks/Content/Component';
 import { MediaBlock } from '@/blocks/MediaBlock/Component';
 import { RawHTMLBlock } from '@/blocks/RawHTML/Component';
+import { CSVTreeViewBlock } from '@/blocks/CSVTreeView/Component';
 
 const blockComponents = {
   content: ContentBlock,
   mediaBlock: MediaBlock,
-  rawHTML: RawHTMLBlock
+  rawHTML: RawHTMLBlock,
+  csvTreeView: CSVTreeViewBlock
 }
 
 export const RenderBlocks: React.FC<{
