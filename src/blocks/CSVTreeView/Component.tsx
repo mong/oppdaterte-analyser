@@ -25,18 +25,21 @@ const RecursiveTreeView: React.FC<{ records: string[][], indexPath?: string }> =
 
   const subsets = Array.from(generateSubsets(records));
 
+
   return (
     <div style={{ marginLeft: '20px' }}>
       {subsets.map(({ name, children }, index) => {
         const n_children = new Set(children.map((row) => row[0])).size;
 
+        const missing_removed = children.map(child => child.filter(Boolean));
+
         if (name) {
           return (
             <TreeItem
-              itemId={`item${indexPath}-${index}`} label={name + ((children.length > 1 || children[0].length > 0) ? ` (${n_children})` : "")}
+              itemId={`item${indexPath}-${index}`} label={name}
             >
-              {(children.length > 1 || children[0].length > 0) &&
-                <RecursiveTreeView records={children} indexPath={`${indexPath}-${index}`} />
+              {(missing_removed.length > 1 || missing_removed[0].length > 0) &&
+                <RecursiveTreeView records={missing_removed} indexPath={`${indexPath}-${index}`} />
               }
             </TreeItem>
           );
