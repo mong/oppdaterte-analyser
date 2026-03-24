@@ -48,7 +48,7 @@ const RecursiveTreeView: React.FC<{ records: string[][], indexPath?: string }> =
 
 
 export const CSVTreeViewBlock: React.FC<CSVTreeViewBlockProps> = ({ csv }) => {
-  const records = parse<string[], unknown>(csv, { column: false });
+  const records = parse(csv);
 
   return (
     <div>
