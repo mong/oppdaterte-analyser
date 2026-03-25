@@ -70,28 +70,28 @@ const nextConfig = {
       { // Fikser redirect for URL-er fra gammel CMS-løsning
         source: "/helseatlas",
         destination: "/no/rapporter/",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/helseatlas/en",
         destination: "/en/rapporter/",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/helseatlas/v2/:slug",
         destination: "/no/rapporter/:slug",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/helseatlas/en/v2/:slug",
         destination: "/en/rapporter/:slug",
-        permanent: false,
+        permanent: true,
       },
       {
         // Redirect for gamle URL-er til kompendier
         source: "/:lang/:slug(barn|dagkirurgi|eldre|gynekologi|hjerte|ore-nese-hals|ortopedi|oye)",
         destination: "/:lang/fag/:slug",
-        permanent: false,
+        permanent: true,
       },
     ]
   },
