@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import { cn } from '@/utilities/ui'
 import { Media } from '../Media'
 import { makeDateElem } from '@/lib/helpers'
+import { getRapporter } from '@/services/payload'
 
 export type Props = {
   lang: Lang
@@ -15,16 +16,10 @@ export const CollectionArchive: React.FC<Props> = async (props) => {
 
   const payload = await getPayload({ config: configPromise });
 
-  const rapporter = await payload.find({
-    collection: 'rapporter',
-    depth: 1,
-    limit: 0,
-    where: {
-      publiseringsStatus: { equals: "published" }
-    },
-    pagination: false,
-    locale: lang,
-    overrideAccess: false,
+
+  
+  const rapporter = await getRapporter({
+    lang,
     select: {
       title: true,
       publishedAt: true,
@@ -38,7 +33,7 @@ export const CollectionArchive: React.FC<Props> = async (props) => {
   return (
     <div className="my-8">
       <div className="grid grid-cols-4 sm:grid-cols-8 gap-10">
-        {rapporter.docs?.filter(doc => typeof doc === 'object' && doc !== null).map((doc, index) => {
+        {rapporter.map((doc, index) => {
           const href = `/${lang}/rapporter/${doc.slug}`;
           return (
             <div className="col-span-4" key={index}>

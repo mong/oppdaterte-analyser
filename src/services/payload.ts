@@ -1,9 +1,8 @@
 import { Lang } from "@/types";
-import { getPayload, PaginatedDocs } from "payload";
+import { getPayload } from "payload";
 import { cache } from "react";
 import config from "@payload-config";
-import { Analyser, Tag } from "@/payload-types";
-import { draftMode } from "next/headers";
+import { Analyser, Rapporter, Tag } from "@/payload-types";
 
 export const getTag = cache(
   async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
@@ -107,3 +106,27 @@ export const getAnalyserByTag = cache(
     return result.docs as Analyser[];
   },
 );
+
+export const getRapporter = cache(async (
+  { lang, select }:
+  { lang: Lang;
+    select?: { [k in keyof Rapporter]?: true }
+  }) => {
+
+  const payload = await getPayload({ config: config });
+
+  const result = await payload.find({
+    collection: "rapporter",
+    limit: 0,
+    locale: lang,
+    pagination: false,
+    fallbackLocale: false,
+    where: {
+      publiseringsStatus: { equals: "published" },
+    },
+    select,
+  });
+
+  return result.docs as Rapporter[];
+});
+

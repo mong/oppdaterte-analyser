@@ -1,9 +1,11 @@
-import { getAnalyser, getKompendier } from "@/services/payload";
+import { getAnalyser, getKompendier, getRapporter } from "@/services/payload";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const kompendier = await getKompendier({ lang: "no" });
   const analyser = await getAnalyser({ lang: "no" });
+  const rapporter = await getRapporter({ lang: "no" });
+  const rapporter_en = new Set((await getRapporter({ lang: "en", select: { slug: true } })).map(r => r.slug!));
 
   return [
     {
@@ -16,8 +18,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
       alternates: {
         languages: {
+          no: "https://analyser.skde.no/no",
           en: "https://analyser.skde.no/en",
-        },
+        } as { no?: string; en?: string },
+      },
+    },
+    {
+      url: "https://analyser.skde.no/no/rapporter",
+      lastModified: rapporter
+        .map((rapport) => rapport.publishedAt || rapport.createdAt)
+        .reduce(
+          (acc, val) => (acc > new Date(val) ? acc : new Date(val)),
+          new Date(0),
+        ),
+      alternates: {
+        languages: {
+          no: "https://analyser.skde.no/no/rapporter",
+          en: "https://analyser.skde.no/en/rapporter",
+        } as { no?: string; en?: string },
       },
     },
   ]
@@ -54,6 +72,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             no: `https://analyser.skde.no/no/analyse/${analyse.slug}`,
           },
         },
+      })),
+    ).concat(
+      rapporter.map((rapport) => ({
+        url: `https://analyser.skde.no/no/rapporter/${rapport.slug}`,
+        lastModified: new Date(rapport.publishedAt || rapport.createdAt),
+        alternates: {
+          languages: {
+            no: `https://analyser.skde.no/no/rapporter/${rapport.slug}`,
+            ...(rapporter_en.has(rapport.slug!) && { en: `https://analyser.skde.no/en/rapporter/${rapport.slug}` })
+          },
+        }
       })),
     );
 }
