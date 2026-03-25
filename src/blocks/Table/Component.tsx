@@ -1,4 +1,4 @@
-import type { TableBlock as TableBlockProps } from "src/payload-types";
+import type { TableBlock as TableBlockProps } from "@/payload-types";
 
 import React from "react";
 import RichText from "@/components/RichText";

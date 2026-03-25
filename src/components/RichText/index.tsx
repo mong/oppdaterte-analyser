@@ -11,7 +11,7 @@ import type {
   TableBlock as TableBlockProps,
   RawHTMLBlock as RawHTMLBlockProps,
   CSVTreeView as CSVTreeViewBlockProps,
-} from 'src/payload-types'
+} from '@/payload-types'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,

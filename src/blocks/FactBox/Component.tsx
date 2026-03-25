@@ -1,4 +1,4 @@
-import type { FactBoxBlock as FactBoxBlockProps } from "src/payload-types";
+import type { FactBoxBlock as FactBoxBlockProps } from "@/payload-types";
 
 import React from "react";
 import RichText from "@/components/RichText";

@@ -1,4 +1,4 @@
-import type { ResultBoxBlock as ResultBoxBlockProps } from "src/payload-types";
+import type { ResultBoxBlock as ResultBoxBlockProps } from "@/payload-types";
 
 import React, { cache } from "react";
 import RichText from "@/components/RichText";

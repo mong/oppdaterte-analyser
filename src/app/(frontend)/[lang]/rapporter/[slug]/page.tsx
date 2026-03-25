@@ -18,7 +18,7 @@ import Header from '@/components/Header'
 import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
 
-import type { ResultBoxBlock as ResultBoxBlockProps } from 'src/payload-types'
+import type { ResultBoxBlock as ResultBoxBlockProps } from '@/payload-types'
 import { makeDateElem } from '@/lib/helpers'
 
 
