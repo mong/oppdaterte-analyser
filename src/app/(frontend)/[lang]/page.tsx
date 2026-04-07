@@ -14,6 +14,9 @@ import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
 import { getAnalyser, getKompendier } from "@/services/payload";
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export const dynamicParams = false;
 export async function generateStaticParams() {
   return [{ lang: "no" }, { lang: "en" }] as { lang: Lang }[];
