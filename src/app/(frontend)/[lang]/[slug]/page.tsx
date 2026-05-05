@@ -114,10 +114,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '', lang } = await paramsPromise
   const rapport = await queryPageBySlug({ slug, lang })
-  const dict = await getDictionary(lang);
 
   return {
-    title: `${rapport.title} - ${dict.general.health_atlas}`,
+    title: rapport?.meta?.title || rapport.title,
+    description: rapport?.meta?.description || undefined,
   };
 }
 
