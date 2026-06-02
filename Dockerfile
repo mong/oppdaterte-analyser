@@ -16,7 +16,7 @@ ENV PNPM_PACKAGE_MANAGER_STRICT=false
 ENV PNPM_MINIMUM_RELEASE_AGE=0
 
 RUN  corepack enable pnpm;
-RUN  pnpm config list
+RUN  pnpm config list;
 RUN  pnpm i --frozen-lockfile;
 
 
