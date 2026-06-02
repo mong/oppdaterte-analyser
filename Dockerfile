@@ -12,10 +12,8 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc ./
 RUN ls -a
 
-RUN pnpm config list
 ENV PNPM_PACKAGE_MANAGER_STRICT=false
 ENV PNPM_MINIMUM_RELEASE_AGE=0
-RUN pnpm config list
 
 RUN \
     if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
@@ -23,7 +21,7 @@ RUN \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
     else echo "Lockfile not found." && exit 1; \
     fi
-
+RUN pnpm config list
 
 # Rebuild the source code only when needed
 FROM base AS builder
