@@ -1,5 +1,36 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  '@tailwindcss/oxide': true
+minimumReleaseAgeExclude:
+  - '@next/env@15.5.19'
+  - '@next/eslint-plugin-next@16.2.7'
+  - '@next/swc-darwin-arm64@15.5.19'
+  - '@next/swc-darwin-x64@15.5.19'
+  - '@next/swc-linux-arm64-gnu@15.5.19'
+  - '@next/swc-linux-arm64-musl@15.5.19'
+  - '@next/swc-linux-x64-gnu@15.5.19'
+  - '@next/swc-linux-x64-musl@15.5.19'
+  - '@next/swc-win32-arm64-msvc@15.5.19'
+  - '@next/swc-win32-x64-msvc@15.5.19'
+  - '@types/react@19.2.16'
+  - '@typescript-eslint/eslint-plugin@8.60.1'
+  - '@typescript-eslint/parser@8.60.1'
+  - '@typescript-eslint/project-service@8.60.1'
+  - '@typescript-eslint/scope-manager@8.60.1'
+  - '@typescript-eslint/tsconfig-utils@8.60.1'
+  - '@typescript-eslint/type-utils@8.60.1'
+  - '@typescript-eslint/types@8.60.1'
+  - '@typescript-eslint/typescript-estree@8.60.1'
+  - '@typescript-eslint/utils@8.60.1'
+  - '@typescript-eslint/visitor-keys@8.60.1'
+  - eslint-config-next@16.2.7
+  - graphql@16.14.1
+  - next@15.5.19
+  - react-dom@19.2.7
+  - react@19.2.7
+  - typescript-eslint@8.60.1
+overrides:
+  '@types/react': 19.2.16
+  '@types/react-dom': 19.2.3
