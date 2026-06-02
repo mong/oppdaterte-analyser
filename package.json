@@ -74,8 +74,8 @@
     "payload": "3.85.0",
     "postcss": "8.5.15",
     "prism-react-renderer": "2.4.1",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-icons": "5.6.0",
     "react-markdown": "10.1.0",
     "react-spring": "10.0.4",
@@ -94,7 +94,7 @@
     "@eslint/js": "10.0.1",
     "@next/eslint-plugin-next": "16.2.7",
     "@types/node": "24.12.4",
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",
     "eslint": "10.4.1",
     "eslint-config-next": "16.2.7",
@@ -109,7 +109,7 @@
   "packageManager": "pnpm@10.34.1+sha512.b58fbde6dca66a929538021581f648b4570b6ca19b18e7cbd7f2c07a7b24454155388dacdf08f2af3678e88a6d1fe04f9d609df24bf51735a060ea041b374ab7",
   "pnpm": {
     "overrides": {
-      "@types/react": "19.2.14",
+      "@types/react": "19.2.16",
       "@types/react-dom": "19.2.3"
     }
   }
