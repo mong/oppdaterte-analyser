@@ -15,13 +15,10 @@ RUN ls -a
 ENV PNPM_PACKAGE_MANAGER_STRICT=false
 ENV PNPM_MINIMUM_RELEASE_AGE=0
 
-RUN \
-    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
-RUN pnpm config list
+RUN  corepack enable pnpm;
+RUN  pnpm config list
+RUN  pnpm i --frozen-lockfile;
+
 
 # Rebuild the source code only when needed
 FROM base AS builder
