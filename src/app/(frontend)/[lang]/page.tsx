@@ -1,5 +1,5 @@
 import { Container, Typography } from "@mui/material";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
 import {
   List,
   ListItemButton,
@@ -13,6 +13,12 @@ import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
 import { getSubHeader } from "@/lib/helpers";
 import { getAnalyser, getKompendier } from "@/services/payload";
+
+import {
+  Header,
+  Breadcrumbs,
+} from "@mong/material-ui";
+
 
 export const dynamic = 'force-static';
 export const revalidate = 60;
@@ -55,22 +61,18 @@ export default async function MainPage(props: MainPageProps) {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
+      href: "https://www.skde.no/helseatlas",
+      name: dict.general.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas",
-      text: dict.general.health_atlas,
-    },
-    {
-      link: `/${lang}`,
-      text: dict.general.updated_health_atlas,
+      href: `/${lang}`,
+      name: dict.general.updated_health_atlas,
     },
   ];
 
   return (
     <>
-      <Header
+      {/* <Header
         lang={lang}
         title={dict.general.updated_health_atlas}
         breadcrumbs={breadcrumbs}
@@ -96,7 +98,14 @@ export default async function MainPage(props: MainPageProps) {
             __html: await markdownToHtml(dict.frontpage.introduction_2),
           }}
         />
-      </Header>
+      </Header> */}
+      <Header
+        lang={"no"}
+      />
+      <Breadcrumbs
+        pathname={"/"}
+        leading={breadcrumbs}
+      />
       <main>
         <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
           <Typography variant="h3">{dict.frontpage.fagområder}</Typography>
@@ -111,8 +120,7 @@ export default async function MainPage(props: MainPageProps) {
               >
                 <ListItemIcon>•</ListItemIcon>
                 <ListItemText
-                  primary={`${komp.title} (${
-                    analyser
+                  primary={`${komp.title} (${analyser
                       .map((analyse) => analyse.tags || [])
                       .filter((tags) =>
                         tags.some((tag) =>
@@ -121,7 +129,7 @@ export default async function MainPage(props: MainPageProps) {
                             : tag.identifier === komp.identifier,
                         ),
                       ).length
-                  })`}
+                    })`}
                 />
               </ListItemButton>
             ))}

@@ -1,6 +1,11 @@
 @layer theme, base, components, utilities;
+
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities' layer(utilities);
+
+@import "@mong/material-ui/variables.css";
+@import "@mong/material-ui/theme.css";
+@source "../../../../node_modules/@mong/material-ui/dist";
 
 img, video {
     max-width: 100%;

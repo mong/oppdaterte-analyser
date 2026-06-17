@@ -15,8 +15,8 @@ const StyledBreadcrumbSeparator = styled(NavigateNextRounded)(({ theme }) => ({
 }));
 
 export type BreadCrumbStop = {
-  link: string;
-  text: string;
+  href: string;
+  name: string;
 };
 
 export const SkdeBreadcrumbs = ({ path }: { path: BreadCrumbStop[] }) => {
@@ -40,10 +40,10 @@ export const SkdeBreadcrumbs = ({ path }: { path: BreadCrumbStop[] }) => {
         <Link
           underline="hover"
           key="mobile_breadcrumb"
-          href={secondToLastElement?.link}
+          href={secondToLastElement?.href}
           variant="h6"
         >
-          {secondToLastElement?.text}
+          {secondToLastElement?.name}
         </Link>
       </Breadcrumbs>
     );
@@ -55,11 +55,11 @@ export const SkdeBreadcrumbs = ({ path }: { path: BreadCrumbStop[] }) => {
       sx={{ marginTop: 3 }}
     >
       {path.slice(0, -1).map((row, index) => (
-        <Link underline="hover" key={index} color="inherit" href={row.link}>
-          {row.text}
+        <Link underline="hover" key={index} color="inherit" href={row.href}>
+          {row.name}
         </Link>
       ))}
-      <Typography color="text.primary">{path.at(-1)?.text}</Typography>
+      <Typography color="text.primary">{path.at(-1)?.name}</Typography>
     </Breadcrumbs>
   );
 };

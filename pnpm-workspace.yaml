@@ -3,6 +3,7 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
   '@tailwindcss/oxide': true
+  '@mong/material-ui': true
 minimumReleaseAgeExclude:
   - '@next/env@15.5.19'
   - '@next/eslint-plugin-next@16.2.7'
@@ -31,6 +32,7 @@ minimumReleaseAgeExclude:
   - react-dom@19.2.7
   - react@19.2.7
   - typescript-eslint@8.60.1
+  - '@mong/material-ui'
 overrides:
   '@types/react': 19.2.16
   '@types/react-dom': 19.2.3

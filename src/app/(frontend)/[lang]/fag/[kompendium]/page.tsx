@@ -9,7 +9,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
@@ -18,6 +18,11 @@ import { getDictionary } from "@/lib/dictionaries";
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
 import { getSubHeader, makeDateElem } from "@/lib/helpers";
 import RichText from "@/components/RichText";
+
+import {
+  Header,
+  Breadcrumbs,
+} from "@mong/material-ui";
 
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 
@@ -92,32 +97,35 @@ export default async function KompendiumPage(props: {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
+      href: "https://www.skde.no/helseatlas",
+      name: dict.general.health_atlas,
     },
     {
-      link: "https://www.skde.no/helseatlas",
-      text: dict.general.health_atlas,
+      href: `/${lang}`,
+      name: dict.general.updated_health_atlas,
     },
     {
-      link: `/${lang}`,
-      text: dict.general.updated_health_atlas,
-    },
-    {
-      link: `/${lang}/fag/${kompendium}`,
-      text: tag.title,
+      href: `/${lang}/fag/${kompendium}`,
+      name: tag.title,
     },
   ];
 
   return (
     <>
-      <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.title}>
+      {/* <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.title}>
         <RichText
           data={tag.description!}
           enableGutter={false}
           enableProse={false}
         />
-      </Header>
+      </Header> */}
+                  <Header
+              lang={"no"}
+            />
+            <Breadcrumbs
+              pathname={"/"}
+              leading={breadcrumbs}
+            />
       <main>
         <Container maxWidth="xxl" disableGutters={true}>
           <Suspense
