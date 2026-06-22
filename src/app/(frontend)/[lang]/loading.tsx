@@ -1,17 +1,24 @@
-import { Container, CircularProgress, Grid } from "@mui/material";
-// import { HeaderTop } from "@/components/Header";
+import { CircularProgress } from "@mui/material";
+import {
+  PageLayout,
+  PageContent,
+  Header,
+} from "@mong/material-ui";
 
 export default function Loading() {
   // Or a custom loading skeleton component
   return (
     <>
       {/* <HeaderTop breadcrumbs={[]} /> */}
-      <Container maxWidth="xxl" disableGutters={true}
-        sx={{ display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }}
-      >
-        <div className="my-8">
-          <CircularProgress />
-        </div>
-      </Container>
+      <Header
+        lang="no"
+      />
+      <PageLayout>
+        <PageContent>
+          <div className="my-32 justify-center flex">
+            <CircularProgress />
+          </div>
+        </PageContent>
+      </PageLayout>
     </>)
 }

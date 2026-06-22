@@ -7,17 +7,24 @@ import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { Container } from '@mui/material'
-import { SelectionProvider } from '@/lib/SelectionContext'
+
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
-import Header from '@/components/Header'
 
-import { makeDateElem } from '@/lib/helpers'
+
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
+
+import {
+  Header,
+  Breadcrumbs,
+  PageLayout,
+  PageContent,
+  HeroBanner,
+} from "@mong/material-ui";
 
 export const dynamic = 'force-static';
 export const revalidate = 60;
@@ -80,33 +87,37 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
-    },
-    {
-      link: `/${lang}/${slug}`,
-      text: page.title,
+      href: `/${lang}/${slug}`,
+      name: page.title,
     },
   ];
-
-
 
   return (
     <>
       {draft && <LivePreviewListener />}
-      <Header title={page.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
-        <RichText
-          data={page.description!}
-          enableGutter={false}
-          enableProse={false}
-        />
-      </Header>
+      <Header
+        lang={lang}
+        langChoices={otherLang ? [
+          { code: 'no', url: `/no/${page.slug}` },
+          { code: 'en', url: `/en/${page.slug}` },
+        ] : undefined}
+      />
+      <Breadcrumbs
+        explicitTrail={breadcrumbs}
+      />
 
-      <Container maxWidth="xxl">
-        <article className="w-full">
-          <RenderBlocks blocks={page.layout} />
-        </article>
-      </Container>
+      <PageLayout>
+        <HeroBanner
+          description={convertLexicalToPlaintext({ data: page.description! })}
+          image="/hero-bg-3.jpg"
+          title={page.title}
+        />
+        <PageContent>
+          <article className="w-full">
+            <RenderBlocks blocks={page.layout} />
+          </article>
+        </PageContent>
+      </PageLayout>
     </>
   );
 }

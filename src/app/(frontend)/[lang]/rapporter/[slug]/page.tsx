@@ -114,20 +114,20 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
+      href: "https://www.skde.no",
+      name: dict.general.homepage,
     },
     {
-      link: `/${lang}`,
-      text: dict.general.health_atlas,
+      href: `/${lang}`,
+      name: dict.general.health_atlas,
     },
     {
-      link: `/${lang}/rapporter`,
-      text: dict.general.reports,
+      href: `/${lang}/rapporter`,
+      name: dict.general.reports,
     },
     {
-      link: `/${lang}/rapporter/${rapport.slug}`,
-      text: rapport.title,
+      href: `/${lang}/rapporter/${rapport.slug}`,
+      name: rapport.title,
     },
   ];
 
@@ -142,7 +142,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   return (
     <>
       {draft && <LivePreviewListener />}
-      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
+      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}></Header>
         <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
@@ -157,7 +157,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
             </div>
           )}
         </div>
-      </Header>
+
 
       <Container maxWidth="xxl">
         <div className="flex flex-col lg:flex-row">

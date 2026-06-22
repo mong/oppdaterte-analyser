@@ -1,9 +1,4 @@
-// "use client";
 import type { Metadata } from "next";
-//import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-//import { ThemeProvider } from "@mui/material/styles";
-import { Box /*, CssBaseline*/ } from "@mui/material";
-//import skdeTheme from "@/themes/SkdeTheme";
 
 import MatomoTracker from "../MatomoTracker";
 import AdminBar from "@/components/AdminBar";
@@ -12,15 +7,9 @@ import {
   SkdeThemeProvider,
   MainLayout,
   Footer,
-  PageLayout,
 } from "@mong/material-ui";
 
-// import "@mong/material-ui/variables.css";
-// import "@mong/material-ui/theme.css";
 import './globals.css'
-// import "@mong/material-ui/index.css";
-// import "@mong/material/ui-material-ui.css";
-// import "@mong/material/ui-index.css";
 
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
@@ -41,9 +30,8 @@ export default async function RootLayout(props: {
         <AdminBar preview={isEnabled} />
         <SkdeThemeProvider>
           <MainLayout>
-
-            <PageLayout>{props.children}</PageLayout>
-            <Footer lang={"no"} />
+            {props.children}
+            <Footer lang={lang} />
           </MainLayout>
         </SkdeThemeProvider>
       </body>

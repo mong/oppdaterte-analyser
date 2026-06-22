@@ -9,10 +9,10 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
   const { columns } = props
 
   const colsSpanClasses = {
-    full: '6',
-    half: '3',
-    oneThird: '2',
-    twoThirds: '4',
+    full: 'md:col-span-6',
+    half: 'md:col-span-3',
+    oneThird: 'md:col-span-2',
+    twoThirds: 'md:col-span-4',
   }
 
   return (
@@ -25,9 +25,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
 
             return (
               <div
-                className={cn(`col-span-4 md:col-span-${colsSpanClasses[size!]}`, {
-                  'sm:col-span-3': size !== 'full',
-                })}
+                className={cn(`col-span-6 ${colsSpanClasses[size!]}`)}
                 key={index}
               >
                 {richText && <RichText data={richText} enableGutter={false} />}

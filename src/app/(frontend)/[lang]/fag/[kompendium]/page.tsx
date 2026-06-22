@@ -9,7 +9,6 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-// import Header from "@/components/Header";
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
@@ -97,12 +96,8 @@ export default async function KompendiumPage(props: {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      href: "https://www.skde.no/helseatlas",
-      name: dict.general.health_atlas,
-    },
-    {
       href: `/${lang}`,
-      name: dict.general.updated_health_atlas,
+      name: dict.general.health_atlas,
     },
     {
       href: `/${lang}/fag/${kompendium}`,
@@ -112,20 +107,14 @@ export default async function KompendiumPage(props: {
 
   return (
     <>
-      {/* <Header lang={lang} breadcrumbs={breadcrumbs} title={tag.title}>
-        <RichText
-          data={tag.description!}
-          enableGutter={false}
-          enableProse={false}
-        />
-      </Header> */}
-                  <Header
-              lang={"no"}
-            />
-            <Breadcrumbs
-              pathname={"/"}
-              leading={breadcrumbs}
-            />
+
+      <Header
+        lang={"no"}
+      />
+      <Breadcrumbs
+        pathname={"/"}
+        leading={breadcrumbs}
+      />
       <main>
         <Container maxWidth="xxl" disableGutters={true}>
           <Suspense

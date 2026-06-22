@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import downloadJSON from "@/lib/downloadJSON";
 import { Analyser } from "@/payload-types";
+
+import { Button } from "@mong/material-ui";
 
 type DownloadDataButtonProps = {
   analyse: Analyser["data"];
@@ -16,11 +17,12 @@ export default function DownloadDataButton({
 }: DownloadDataButtonProps) {
   return (
     <Button
-      variant="contained"
       startIcon={<DownloadIcon />}
       onClick={() => downloadJSON(analyse)}
+      variant="filled"
     >
       {dict.analysebox.download_data}
     </Button>
+
   );
 }
