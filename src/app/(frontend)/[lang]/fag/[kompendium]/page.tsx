@@ -1,31 +1,24 @@
-import { Suspense } from "react";
-import {
-  CircularProgress,
-  Container,
-  Stack,
-  Box,
-  Grid,
-  Link,
-  Paper,
-  Typography,
-} from "@mui/material";
+
 import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
 
 import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import { getSubHeader, makeDateElem } from "@/lib/helpers";
+import { formatDate, getSubHeader, makeDateElem } from "@/lib/helpers";
 import RichText from "@/components/RichText";
 
 import {
   Header,
   Breadcrumbs,
+  PageLayout,
+  PageContent,
+  AnalysisCard,
 } from "@mong/material-ui";
 
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 
-import { getAnalyserByTag, getTag } from "@/services/payload";
+import { getAnalyserByTag, getTag, getRapporterByTag } from "@/services/payload";
 import React from "react";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
@@ -89,9 +82,21 @@ export default async function KompendiumPage(props: {
 
   const dict = await getDictionary(lang);
 
-  const payload_analyser = await getAnalyserByTag({
+  const analyser = await getAnalyserByTag({
     identifier: kompendium,
     lang,
+  });
+  const rapporter = await getRapporterByTag({
+    identifier: kompendium,
+    lang,
+    select: {
+      title: true,
+      publishedAt: true,
+      createdAt: true,
+      slug: true,
+      tags: true,
+      bilde: true,
+    },
   });
 
   const breadcrumbs: BreadCrumbStop[] = [
@@ -109,75 +114,53 @@ export default async function KompendiumPage(props: {
     <>
 
       <Header
-        lang={"no"}
+        lang={lang}
+        langChoices={[
+          { code: 'no', url: `/no/fag/${tag.identifier}` },
+          { code: 'en', url: `/en/fag/${tag.identifier}` },
+        ]}
       />
       <Breadcrumbs
         pathname={"/"}
         leading={breadcrumbs}
       />
-      <main>
-        <Container maxWidth="xxl" disableGutters={true}>
-          <Suspense
-            fallback={
-              <Grid container justifyContent="center" sx={{ padding: 10 }}>
-                <CircularProgress />
-              </Grid>
-            }
-          >
-            <Stack spacing={5} sx={{ padding: 4 }}>
-              {payload_analyser.map(async (analyse, i) => (
-                <Link
-                  href={`/${lang}/analyse/${analyse.slug}`}
-                  target="_blank"
-                  underline="none"
-                  color="inherit"
+      <PageLayout>
+        <PageContent>
+          <main>
+            <h1>{tag.title}</h1>
+            <h2>{dict.general.analyser}</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {analyser.map(async (analyse, i) => (
+                <AnalysisCard
                   key={i}
-                >
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      borderRadius: "1rem",
-                      filter: "brightness(1.05)",
-                      bgcolor: "primary.light",
-                      "&:hover": {
-                        filter: "brightness(1.07)",
-                        boxShadow: 3,
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <Grid container sx={{ justifyContent: "space-between" }}>
-                        <Grid
-                          size="grow"
-                          sx={{ paddingTop: 1, paddingLeft: 1 }}
-                        >
-                          <Typography variant="h4">{analyse.title}</Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Box sx={{ paddingX: 1, marginTop: 0.5 }}>
-                        <Typography variant="body1" sx={{ color: "#444" }}>
-                          {getSubHeader(analyse.data, lang)}
-                        </Typography>
-                        <RichText data={analyse.summary} enableGutter={true} />
-                      </Box>
-                      <Grid>
-                        <Typography variant="body2">
-                          {makeDateElem(
-                            analyse.publishedAt || analyse.createdAt,
-                            lang,
-                          )}
-                        </Typography>
-                      </Grid>
-                    </Box>
-                  </Paper>
-                </Link>
-              ))}
-            </Stack>
-          </Suspense>
-        </Container>
-      </main>
+                  author={analyse.author}
+                  buttonLabel="Les analyse"
+                  description="I 2026 ble det utført 8 500 synapseoverføringer for å svare på spørsmålet om hva som skal stå her - en økning fra 0 i 2025."
+                  targetGroup={getSubHeader(analyse.data, lang)}
+                  targetUrl={`/${lang}/analyse/${analyse.slug}`}
+                  title={analyse.title}
+                  updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
+                />))}
+            </div>
+            <h2>{dict.general.rapporter}</h2>
+            <div className="flex flex-col gap-8">
+            {rapporter.map((rapport, i) => (
+              <AnalysisCard
+                author={rapport.author}
+                buttonLabel="Les rapport"
+                description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                imageUrl="/hero-bg-3.jpg"
+                isNew={false}
+                targetGroup="Hva skal stå her?"
+                targetUrl={`/${lang}/rapporter/${rapport.slug}`}
+                title={rapport.title}
+                updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
+              />
+            ))}
+            </div>
+          </main>
+        </PageContent>
+      </PageLayout>
     </>
   );
 }

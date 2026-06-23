@@ -7,14 +7,13 @@ import React, { cache } from 'react'
 import RichText, { headerNodeToPlaintext } from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { Container } from '@mui/material'
 import { SelectionProvider } from '@/lib/SelectionContext'
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
-import Header from '@/components/Header'
+import { Header, Breadcrumbs } from "@mong/material-ui"
 import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
 
@@ -114,16 +113,8 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 
   const breadcrumbs: BreadCrumbStop[] = [
     {
-      href: "https://www.skde.no",
-      name: dict.general.homepage,
-    },
-    {
       href: `/${lang}`,
       name: dict.general.health_atlas,
-    },
-    {
-      href: `/${lang}/rapporter`,
-      name: dict.general.reports,
     },
     {
       href: `/${lang}/rapporter/${rapport.slug}`,
@@ -142,38 +133,46 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   return (
     <>
       {draft && <LivePreviewListener />}
-      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}></Header>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.author}</p>
-              <p className="m-0">{rapport.author}</p>
-            </div>
+
+      <Header
+        lang={lang}
+        langChoices={otherLang ? [
+          { code: 'no', url: '/no' },
+          { code: 'en', url: '/en' },
+        ] : undefined}
+      />
+      <Breadcrumbs
+        explicitTrail={breadcrumbs}
+      />
+      <h2>{rapport.title}</h2>
+      <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-sm">{dict.general.author}</p>
+            <p className="m-0">{rapport.author}</p>
           </div>
-          {rapport.publishedAt && (
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.published}</p>
-              {makeDateElem(rapport.publishedAt, lang)}
-            </div>
-          )}
         </div>
+        {rapport.publishedAt && (
+          <div className="flex flex-col gap-1">
+            <p className="text-sm">{dict.general.published}</p>
+            {makeDateElem(rapport.publishedAt, lang)}
+          </div>
+        )}
+      </div>
 
-
-      <Container maxWidth="xxl">
-        <div className="flex flex-col lg:flex-row">
-          {tocData.length > 0 && <TableOfContents tocData={tocData} />}
-          <article className="shrink min-w-0 pb-8 lg:pt-8">
-            <SelectionProvider>
-              <RichText
-                lang={lang === "en" ? "en" : rapport.norskType}
-                author={rapport.author}
-                data={rapport.content}
-                enableGutter={true}
-              />
-            </SelectionProvider>
-          </article>
-        </div>
-      </Container>
+      <div className="flex flex-col lg:flex-row">
+        {tocData.length > 0 && <TableOfContents tocData={tocData} />}
+        <article className="shrink min-w-0 pb-8 lg:pt-8">
+          <SelectionProvider>
+            <RichText
+              lang={lang === "en" ? "en" : rapport.norskType}
+              author={rapport.author}
+              data={rapport.content}
+              enableGutter={true}
+            />
+          </SelectionProvider>
+        </article>
+      </div>
     </>
   );
 }

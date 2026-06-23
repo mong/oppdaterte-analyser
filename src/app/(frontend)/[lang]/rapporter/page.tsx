@@ -34,7 +34,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     },
     {
       link: `/${lang}/rapporter`,
-      text: dict.general.reports,
+      text: dict.general.rapporter,
     },
   ];
 
@@ -42,7 +42,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <>
       <Header
         lang={lang}
-        title={dict.general.reports}
+        title={dict.general.rapporter}
         breadcrumbs={breadcrumbs}
       >
         <Typography variant="h6" className="m-8">
@@ -77,6 +77,6 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { lang } = await paramsPromise;
   const dict = await getDictionary(lang);
   return {
-    title: `${dict.general.reports} - ${dict.general.health_atlas}`,
+    title: `${dict.general.rapporter} - ${dict.general.health_atlas}`,
   };
 }

@@ -1,7 +1,7 @@
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
 import { notFound } from "next/navigation";
-import { getAnalyser, getKompendier } from "@/services/payload";
+import { getAnalyser, getKompendier, getRapporter } from "@/services/payload";
 import Link from "next/link";
 import {
   Header,
@@ -11,6 +11,7 @@ import {
   PageContent,
   SubjectAreaCard,
 } from "@mong/material-ui";
+import { Analyser, Rapporter } from "@/payload-types";
 
 
 export const dynamic = 'force-static';
@@ -50,7 +51,22 @@ export default async function MainPage(props: MainPageProps) {
   const dict = await getDictionary(lang);
 
   const kompendier = await getKompendier({ lang });
-  const analyser = await getAnalyser({ lang });
+  const analyser = await getAnalyser({ lang, select: { tags: true } });
+  const rapporter = await getRapporter({ lang, select: { tags: true } });
+
+
+  function countTags(analyserOrRapporter: (Analyser | Rapporter)[], identifier: string) {
+    return analyserOrRapporter.map((item) => item.tags)
+      .filter((tags) =>
+        tags!.some((tag) =>
+          typeof tag !== "object"
+            ? false
+            : tag.identifier === identifier,
+        ),
+      ).length;
+  }
+
+  console.log(rapporter, analyser);
 
   const breadcrumbs = [{
     href: `/${lang}`,
@@ -69,40 +85,35 @@ export default async function MainPage(props: MainPageProps) {
       <Breadcrumbs
         explicitTrail={breadcrumbs}
       />
+
       <PageLayout>
+
         <HeroBanner
           description={dict.frontpage.introduction}
           image="/hero-bg-3.jpg"
           title={dict.general.health_atlas}
         />
         <PageContent>
+
           <main>
             <h2>{dict.frontpage.fagområder}</h2>
             <div className="grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] gap-4">
-              {/* {["Barn", "Diabetes", "Dagkirurgi", "Gynekologi", "Hjerte- og karsykdommer", "Kreft", "Psykisk helse"].map((title, i) => (
-                <SubjectAreaCard
-                  leftLabelText={`${i} rapporter`}
-                  rightLabelText={`${i} analyser`}
-                  title={title}
-                />
-              ))} */}
-              {kompendier.map((komp, i) => (
-                <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline">
-                  <SubjectAreaCard
-                    leftLabelText="3 rapporter"
-                    rightLabelText={`${analyser
-                      .map((analyse) => analyse.tags || [])
-                      .filter((tags) =>
-                        tags.some((tag) =>
-                          typeof tag !== "object"
-                            ? false
-                            : tag.identifier === komp.identifier,
-                        ),
-                      ).length} analyser`}
-                    title={komp.title}
-                  />
-                </Link>
-              ))}
+              {kompendier.map((komp, i) => {
+                const n_analyser = countTags(analyser, komp.identifier);
+                const n_rapporter = countTags(rapporter, komp.identifier);
+
+                return (
+                  <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
+                    <SubjectAreaCard
+                      isNew={i===0}
+                      leftLabelText={`${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase()}
+                      rightLabelText={`${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase()}
+                      title={komp.title}
+                    />
+                  </Link>
+                );
+              }
+              )}
             </div>
           </main>
         </PageContent>
