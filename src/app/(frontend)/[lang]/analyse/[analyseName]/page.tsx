@@ -188,7 +188,9 @@ export default async function AnalysePage(props: {
             }
           >
             <Box sx={{ padding: 2 }}>
-              <Typography variant="h3">{dict.analysebox.summary}</Typography>
+              <Typography variant="h3">
+                {lang === "no" && analyse.norskType === "nn" ? "Samandrag" : dict.analysebox.summary}
+              </Typography>
               <RichText data={analyse.summary} enableGutter={true} />
             </Box>
             {analyse.data?.name && analyse.data.name === analyse.slug ? (
