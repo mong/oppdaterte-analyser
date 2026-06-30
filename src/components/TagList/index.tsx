@@ -2,40 +2,28 @@
 
 import { Lang } from "@/types";
 import { Tag } from "@/payload-types";
-import { Box, Chip, Link } from "@mui/material";
+
+import {
+  TagButton
+} from "@mong/material-ui";
 
 type TagListProps = {
-  tags: (Tag | string)[];
+  tags: Tag[];
   lang: Lang;
 };
 
 export default function TagList({ tags, lang }: TagListProps) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        rowGap: "10px",
-        marginTop: "8px",
-      }}
-    >
-      {tags.map((tag, i) => (
-        <Chip
-          clickable
-          component={Link}
-          href={`/${lang}/fag/${typeof tag === "string" ? tag : tag.identifier}`}
-          target="_blank"
-          onClick={(event) => event.stopPropagation()}
-          label={typeof tag === "string" ? tag : tag.title}
-          color={typeof tag === "string" ? "error" : "primary"}
-          key={i}
-          sx={{
-            marginRight: "1em",
-            printColorAdjust: "exact",
-            WebkitPrintColorAdjust: "exact",
+    <div className="flex flex-wrap gap-3 mt-4">
+      {tags.map((tag) => (
+        <TagButton
+          key={tag.identifier}
+          label={tag.title}
+          onClick={() => { 
+            window.location.href = `/${lang}/fag/${tag.identifier}`;
           }}
         />
       ))}
-    </Box>
+    </div>
   );
 }

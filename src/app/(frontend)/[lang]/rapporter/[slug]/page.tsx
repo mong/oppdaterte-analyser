@@ -13,9 +13,15 @@ import { Lang } from '@/types'
 
 import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
-import { Header, Breadcrumbs } from "@mong/material-ui"
 import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+
+import {
+  Header,
+  Breadcrumbs,
+  PageLayout,
+  PageContent,
+} from "@mong/material-ui";
 
 import type { ResultBoxBlock as ResultBoxBlockProps } from '@/payload-types'
 import { makeDateElem } from '@/lib/helpers'
@@ -144,35 +150,39 @@ export default async function Rapport({ params: paramsPromise }: Args) {
       <Breadcrumbs
         explicitTrail={breadcrumbs}
       />
-      <h2>{rapport.title}</h2>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm">{dict.general.author}</p>
-            <p className="m-0">{rapport.author}</p>
+      <PageLayout>
+        <h2>{rapport.title}</h2>
+        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm">{dict.general.author}</p>
+              <p className="m-0">{rapport.author}</p>
+            </div>
           </div>
+          {rapport.publishedAt && (
+            <div className="flex flex-col gap-1">
+              <p className="text-sm">{dict.general.published}</p>
+              {makeDateElem(rapport.publishedAt, lang)}
+            </div>
+          )}
         </div>
-        {rapport.publishedAt && (
-          <div className="flex flex-col gap-1">
-            <p className="text-sm">{dict.general.published}</p>
-            {makeDateElem(rapport.publishedAt, lang)}
+        <PageContent>
+          <div className="flex flex-col lg:flex-row">
+            {tocData.length > 0 && <TableOfContents tocData={tocData} />}
+            <article className="shrink min-w-0 pb-8 lg:pt-8">
+              <SelectionProvider>
+                <div className="prose max-w-none prose-li:marker:text-black">
+                  <RichText
+                    lang={lang === "en" ? "en" : rapport.norskType}
+                    author={rapport.author}
+                    data={rapport.content}
+                    enableGutter={true}
+                  /></div>
+              </SelectionProvider>
+            </article>
           </div>
-        )}
-      </div>
-
-      <div className="flex flex-col lg:flex-row">
-        {tocData.length > 0 && <TableOfContents tocData={tocData} />}
-        <article className="shrink min-w-0 pb-8 lg:pt-8">
-          <SelectionProvider>
-            <RichText
-              lang={lang === "en" ? "en" : rapport.norskType}
-              author={rapport.author}
-              data={rapport.content}
-              enableGutter={true}
-            />
-          </SelectionProvider>
-        </article>
-      </div>
+        </PageContent>
+      </PageLayout>
     </>
   );
 }

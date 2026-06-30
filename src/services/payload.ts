@@ -126,7 +126,7 @@ export const getRapporterByTag = cache(
       pagination: false,
       fallbackLocale: false,
       sort: "title",
-      depth: 0,
+      depth: 1,
       where: {
         tags: { contains: tag.id },
         publiseringsStatus: { equals: "published" },

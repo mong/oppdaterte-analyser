@@ -50,6 +50,8 @@ export const Rapporter: CollectionConfig = {
     slug: true,
     tags: true,
     bilde: true,
+    publishedAt: true,
+    publiseringsStatus: true,
     meta: {
       description: true,
     },

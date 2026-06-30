@@ -1,12 +1,12 @@
 "use client";
 
-import { HeaderTop } from "@/components/Header";
 import ErrorPage from "next/error";
+import { Header } from "@mong/material-ui";
 
 export default function NotFound() {
   return (
     <>
-      <HeaderTop breadcrumbs={[]} />
+      <Header lang="no" />
       <ErrorPage statusCode={404} title={"Denne siden finnes ikke"} />
     </>
   );

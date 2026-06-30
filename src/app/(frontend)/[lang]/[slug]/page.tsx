@@ -4,16 +4,13 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
-import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
-
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
@@ -85,7 +82,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const dict = await getDictionary(lang);
 
-  const breadcrumbs: BreadCrumbStop[] = [
+  const breadcrumbs = [
     {
       href: `/${lang}/${slug}`,
       name: page.title,

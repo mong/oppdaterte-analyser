@@ -3,9 +3,7 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
-
-import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import { formatDate, getSubHeader, makeDateElem } from "@/lib/helpers";
+import { formatDate, getSubHeader } from "@/lib/helpers";
 import RichText from "@/components/RichText";
 
 import {
@@ -96,10 +94,11 @@ export default async function KompendiumPage(props: {
       slug: true,
       tags: true,
       bilde: true,
+      author: true,
     },
   });
 
-  const breadcrumbs: BreadCrumbStop[] = [
+  const breadcrumbs = [
     {
       href: `/${lang}`,
       name: dict.general.health_atlas,
@@ -112,7 +111,6 @@ export default async function KompendiumPage(props: {
 
   return (
     <>
-
       <Header
         lang={lang}
         langChoices={[
@@ -125,42 +123,58 @@ export default async function KompendiumPage(props: {
         leading={breadcrumbs}
       />
       <PageLayout>
+        <div className="bg-neutral-0 [&>*]:bg-transparent">
+          <PageContent>
+            <div className="flex justify-center text-center">
+              <div className="max-w-[565px]">
+                <h1>{tag.title}</h1>
+                <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                  <RichText data={tag.description!} enableGutter={true} />
+                </div>
+              </div>
+            </div>
+          </PageContent>
+        </div>
         <PageContent>
-          <main>
-            <h1>{tag.title}</h1>
-            <h2>{dict.general.analyser}</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {analyser.map(async (analyse, i) => (
-                <AnalysisCard
-                  key={i}
-                  author={analyse.author}
-                  buttonLabel="Les analyse"
-                  description="I 2026 ble det utført 8 500 synapseoverføringer for å svare på spørsmålet om hva som skal stå her - en økning fra 0 i 2025."
-                  targetGroup={getSubHeader(analyse.data, lang)}
-                  targetUrl={`/${lang}/analyse/${analyse.slug}`}
-                  title={analyse.title}
-                  updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
-                />))}
-            </div>
-            <h2>{dict.general.rapporter}</h2>
-            <div className="flex flex-col gap-8">
-            {rapporter.map((rapport, i) => (
+          <h2 className="py-8">{dict.general.analyser}</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {analyser.map(async (analyse, i) => (
               <AnalysisCard
-                author={rapport.author}
-                buttonLabel="Les rapport"
-                description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
-                imageUrl="/hero-bg-3.jpg"
-                isNew={false}
-                targetGroup="Hva skal stå her?"
-                targetUrl={`/${lang}/rapporter/${rapport.slug}`}
-                title={rapport.title}
-                updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
-              />
-            ))}
-            </div>
-          </main>
+                key={i}
+                author={analyse.author}
+                buttonLabel="Les analyse"
+                description="I 2026 ble det utført 8 500 synapseoverføringer for å svare på spørsmålet om hva som skal stå her - en økning fra 0 i 2025."
+                targetGroup={getSubHeader(analyse.data, lang)}
+                targetUrl={`/${lang}/analyse/${analyse.slug}`}
+                title={analyse.title}
+                updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
+              />))}
+          </div>
         </PageContent>
-      </PageLayout>
+        {rapporter.length > 0 && (
+          <div className="bg-neutral-0 [&>*]:bg-transparent">
+            <PageContent>
+              <h2 className="py-8">{dict.general.rapporter}</h2>
+              <div className="flex flex-col gap-8">
+                {rapporter.map((rapport, i) => (
+                  <AnalysisCard
+                    key={i}
+                    author={rapport.author}
+                    buttonLabel="Les rapport"
+                    description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                    imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
+                    isNew={false}
+                    targetGroup="Hva skal stå her?"
+                    targetUrl={`/${lang}/rapporter/${rapport.slug}`}
+                    title={rapport.title}
+                    updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
+                  />
+                ))}
+              </div>
+            </PageContent>
+          </div>
+        )}
+      </PageLayout >
     </>
   );
 }

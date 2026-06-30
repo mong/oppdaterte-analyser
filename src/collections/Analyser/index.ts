@@ -143,6 +143,8 @@ export const Analyser: CollectionConfig = {
     slug: true,
     tags: true,
     bilde: true,
+    publishedAt: true,
+    publiseringsStatus: true
   },
   admin: {
     defaultColumns: ["title", "slug", "updatedAt", "test"],
