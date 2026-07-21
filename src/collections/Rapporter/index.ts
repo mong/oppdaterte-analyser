@@ -69,10 +69,10 @@ export const Rapporter: CollectionConfig = {
     },
     enableRichTextLink: false,
     preview: (data, { req, locale }) => generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'rapporter',
-          req,
-          locale: locale,
+      slug: typeof data?.slug === 'string' ? data.slug : '',
+      collection: 'rapporter',
+      req,
+      locale: locale,
     }),
     useAsTitle: 'title',
   },
@@ -84,6 +84,16 @@ export const Rapporter: CollectionConfig = {
       localized: true,
     },
     {
+      name: 'summary',
+      type: 'text',
+      required: true,
+      localized: true,
+      label: "Oppsummering",
+      admin: {
+        description: 'Kort oppsummering som vises på lenker til rapporten.',
+      }
+    },
+    {
       name: 'folder',
       label: "Mappe",
       type: "relationship",
@@ -91,61 +101,29 @@ export const Rapporter: CollectionConfig = {
       required: true
     },
     {
-      type: 'tabs',
-      tabs: [
-        {
-          fields: [
-            {
-              name: 'bilde',
-              type: 'upload',
-              relationTo: 'media',
-            },
-            {
-              name: 'content',
-              type: 'richText',
-              localized: true,
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock, RawHTML] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                    EXPERIMENTAL_TableFeature(),
-                  ]
-                },
-              }),
-              label: false,
-              required: true,
-            },
-          ],
-          label: 'Content',
+      name: 'bilde',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
+      name: 'content',
+      type: 'richText',
+      localized: true,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+            BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock, RawHTML] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            HorizontalRuleFeature(),
+            EXPERIMENTAL_TableFeature(),
+          ]
         },
-        {
-          name: 'meta',
-          label: 'SEO',
-          fields: [
-            OverviewField({
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description'
-            }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaDescriptionField({}),
-            PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-
-              // field paths to match the target field for data
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-            }),
-          ],
-        },
-      ],
+      }),
+      label: false,
+      required: true,
     },
     {
       name: "publiseringsStatus",
@@ -205,7 +183,7 @@ export const Rapporter: CollectionConfig = {
       admin: {
         position: 'sidebar',
         components: {
-          Field: '@/components/NorskType', 
+          Field: '@/components/NorskType',
         },
       },
     },
