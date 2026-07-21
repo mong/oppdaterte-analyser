@@ -40,7 +40,7 @@
     margin: auto;
   }
   .toc_small_wrapper > div > div {
-    box-shadow: 0 0 1rem 0.2rem #fff;
+    box-shadow: 0 0 1rem 0.3rem var(--neutral-100);
   }
   .toc_small_content {
     margin: 1rem auto;

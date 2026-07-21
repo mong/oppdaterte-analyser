@@ -51,12 +51,14 @@
     "rapport": "Report",
     "analyse": "Analysis",
     "published": "Published",
+    "read_report": "Read report",
+    "read_analysis": "Read analysis",
+    "by": "By",
     "updated": "Updated",
     "author": "Author",
     "metadata_keywords": "geographical variation, SKDE, Health Atlas, Updated Health Atlas"
   },
   "frontpage": {
-    "title": "Updated Health Atlas",
     "introduction": "Select the desired specialty area to find reports and analyses of healthcare services, and how they vary across regions and age groups.",
     "fagområder": "Explore medical specialties"
   }

@@ -1,8 +1,9 @@
 import { geoMercator, geoPath } from "d3-geo";
 import { scaleThreshold } from "d3-scale";
 import { DataItemPoint } from "../../types";
-import { abacusColors, customFormat, mapColors } from "../../helpers";
+import { customFormat, mapColors } from "../../helpers";
 import { useSelection } from "@/lib/SelectionContext";
+import classNames from "../Classes.module.css";
 
 type FeatureShape = {
   type: "Feature";
@@ -100,16 +101,10 @@ export const Map = ({
               <path
                 key={`map-feature-${i}`}
                 d={pathGenerator(d.geometry) || undefined}
-                fill={
-                  selection.has(area.toString())
-                    ? abacusColors[2] :
-                    val
-                      ? colorScale(val as number)
-                      : "none"
-                }
+                fill={val ? colorScale(val as number) : "none"}
                 stroke={"black"}
                 strokeWidth={0.4}
-                className={i + ""}
+                className={i + "" + (selection.has(area.toString()) ? " " + classNames.selectedArea : "")}
                 data-testid={`maparea_${area}`}
                 style={{
                   cursor: "pointer",

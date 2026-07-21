@@ -2,15 +2,11 @@
 
 import { Abacus } from "./Charts/Abacus";
 import { AtlasDataItem, BarchartItem, DataItemPoint } from "./types";
-import classNames from "./ResultBox.module.css";
 import React from "react";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-} from "@/components/ui/accordion";
-import { Box } from "@mui/material";
+
+import { Accordion, AccordionItem } from "@mong/material-ui";
+
 import Carousel from "./Charts/Carousel";
 import { Barchart } from "./Charts/Barchart";
 import { Linechart } from "./Charts/Linechart";
@@ -32,7 +28,7 @@ export const ResultBox = ({
   boxData,
   title,
   summary,
-  lang="nb",
+  lang = "nb",
   author,
   discussion,
   utvalg,
@@ -117,74 +113,47 @@ export const ResultBox = ({
   const figData = boxData.find((o) => o.type === "data")!["data"];
 
   return (
-    <div>
-      <Accordion
-        type="single"
-        collapsible
-        value={expandedResultBox ? "open" : "closed"}
-      >
-        <AccordionItem
-          value="open"
-          className="mt-8 shadow-[0_5px_15px_rgba(0,0,0,0.25)] border-b-[0.1875rem] border-primary"
-        >
-          <Box
-            onClick={() => setExpandedResultBox(!expandedResultBox)}
-            sx={{
-              backgroundColor: "#FAFAFA",
-              padding: 2,
-              fontSize: "1.1rem",
-              ":hover": {
-                backgroundColor: "rgb(241, 241, 241)",
-                transition: "200ms ease-in",
-                cursor: "pointer",
-              },
-            }}
-          >
-            <div className={classNames.resultBoxTitleWrapper}>
-              <h3 className="text-xl font-bold mb-4">{title}</h3>
-              {summary}
-              {figData && (
-                <Abacus
-                  data={figData}
-                  lang={lang}
-                  x={abacusX}
-                  label={(boxData[0] as BarchartItem).xLabel[lang]}
-                  areaType={areaType}
-                  areaName={areaName}
-                  format={(boxData[0] as BarchartItem).format}
-                  national={nationalName}
-                />
-              )}
+    <div className="py-4">
+    <Accordion
+      gap="2"
+      type="collapseOthers"
+      variant="compact"
+    >
+      <AccordionItem
+        showIcon={false}
+        title={(
+          <div className="py-7.5 px-5 text-black">
+            <div className="not-prose">
+              <h5 className="text-xl font-bold mb-4">{title}</h5>
             </div>
-          </Box>
-          <AccordionContent className="flex flex-col gap-4 text-balance">
-            <Box
-              sx={{
-                backgroundColor: "#FAFAFA",
-              }}
-            >
-              <Carousel
-                chartElems={chartElems}
-                utvalg={utvalg}
-                boxData={boxData}
+            <div className="prose max-w-none">{summary}</div>
+            {figData && (
+              <Abacus
+                data={figData}
                 lang={lang}
+                x={abacusX}
+                label={(boxData[0] as BarchartItem).xLabel[lang]}
+                areaType={areaType}
+                areaName={areaName}
+                format={(boxData[0] as BarchartItem).format}
+                national={nationalName}
               />
-              <div className={classNames.resultBoxSelectionContent}>
-                {discussion}
-              </div>
-            </Box>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-      <div
-        className={classNames.crossWrapper}
-        role="button"
-        aria-label="Open"
-        onClick={() => setExpandedResultBox(!expandedResultBox)}
+            )}
+          </div>
+        )}
+        variant="compact"
       >
-        <span className={classNames.horizontal} />
-        {!expandedResultBox && <span className={classNames.vertical} />}
-      </div>
+        <Carousel
+          chartElems={chartElems}
+          utvalg={utvalg}
+          boxData={boxData}
+          lang={lang}
+        />
+        <div className="py-7.5 px-5">
+          {discussion}
+        </div>
+      </AccordionItem>
+    </Accordion>
     </div>
   );
 };

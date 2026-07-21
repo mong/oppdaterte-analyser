@@ -1,5 +1,5 @@
 import React, { type JSX } from "react";
-import styles from "./CarouselButtons.module.css";
+import classNames from "../Classes.module.css";
 
 type CarouselButtonsProps = {
   options: {
@@ -17,13 +17,13 @@ export const CarouselButtons = ({
   activeCarousel,
 }: CarouselButtonsProps) => {
   return (
-    <ul className={styles.buttonscontainer}>
+    <ul className={classNames.buttonscontainer}>
       {options.map((optn, i) => {
         return (
-          <li className={styles.bulletcontainer} key={i}>
+          <li className={classNames.bulletcontainer} key={i}>
             <button
               aria-label={"show item " + i}
-              className={`${styles.bullet} ${i === activeCarousel ? styles.active : ""
+              className={`${classNames.bullet} ${i === activeCarousel ? classNames.active : ""
                 }`}
               onClick={() => onClick && onClick(i)}
             >

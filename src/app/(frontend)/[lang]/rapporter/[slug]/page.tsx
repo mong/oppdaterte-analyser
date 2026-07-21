@@ -11,10 +11,10 @@ import { SelectionProvider } from '@/lib/SelectionContext'
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
-import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
 import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+import { MaxWidth } from "@/components/MaxWidth";
 
 import {
   Header,
@@ -113,11 +113,11 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     select: {},
   })).docs.length > 0;
 
-  if (!rapport) return notFound();
+  if (!rapport || rapport.publiseringsStatus === "hidden") return notFound();
 
   const dict = await getDictionary(lang);
 
-  const breadcrumbs: BreadCrumbStop[] = [
+  const breadcrumbs = [
     {
       href: `/${lang}`,
       name: dict.general.health_atlas,
@@ -129,10 +129,10 @@ export default async function Rapport({ params: paramsPromise }: Args) {
   ];
 
 
-  const headerData = rapport.content.root.children.filter(
+  const headerData = rapport.content?.root.children.filter(
     (child) => child.type === 'heading'
       || (child.type === 'block' && (child.fields as any)?.blockType === 'resultBox')
-  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[]
+  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[] || [];
 
   const tocData = buildTocData(headerData);
 
@@ -143,30 +143,30 @@ export default async function Rapport({ params: paramsPromise }: Args) {
       <Header
         lang={lang}
         langChoices={otherLang ? [
-          { code: 'no', url: '/no' },
-          { code: 'en', url: '/en' },
+          { code: 'no', url: `/no/rapporter/${rapport.slug}` },
+          { code: 'en', url: `/en/rapporter/${rapport.slug}` },
         ] : undefined}
       />
       <Breadcrumbs
         explicitTrail={breadcrumbs}
       />
       <PageLayout>
-        <h2>{rapport.title}</h2>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.author}</p>
-              <p className="m-0">{rapport.author}</p>
-            </div>
-          </div>
-          {rapport.publishedAt && (
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.published}</p>
-              {makeDateElem(rapport.publishedAt, lang)}
-            </div>
-          )}
+        <div className="bg-white py-8">
+          <PageContent>
+            <MaxWidth size="small">
+              <h1 className="my-4">{rapport.title}</h1>
+              <div className="flex gap-x-12 gap-y-4 flex-wrap text-small">
+                <span>{dict.general.by}: {rapport.author}</span>
+                <span>
+                  {dict.general.published}{" "}
+                  {makeDateElem(rapport.publishedAt || rapport.createdAt, lang)}
+                </span>
+              </div>
+            </MaxWidth>
+          </PageContent>
         </div>
         <PageContent>
+          <MaxWidth size="large">
           <div className="flex flex-col lg:flex-row">
             {tocData.length > 0 && <TableOfContents tocData={tocData} />}
             <article className="shrink min-w-0 pb-8 lg:pt-8">
@@ -177,10 +177,12 @@ export default async function Rapport({ params: paramsPromise }: Args) {
                     author={rapport.author}
                     data={rapport.content}
                     enableGutter={true}
-                  /></div>
+                  />
+                </div>
               </SelectionProvider>
             </article>
           </div>
+          </MaxWidth>
         </PageContent>
       </PageLayout>
     </>

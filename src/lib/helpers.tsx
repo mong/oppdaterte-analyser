@@ -1,4 +1,4 @@
-import { Analyser } from "@/payload-types";
+import { Analyser, Rapporter } from "@/payload-types";
 import { Lang, View } from "@/types";
 import { Typography } from "@mui/material";
 
@@ -143,4 +143,12 @@ export function getSubHeader(analyse: Analyser["data"], lang: Lang) {
   ].filter(Boolean);
 
   return parts.join(", ");
+}
+
+
+export function isNewRapport(rapport: Rapporter) {
+  const limitDate = new Date();
+  limitDate.setDate(limitDate.getDate() - 365); // Kompendier med rapporter yngre en 365 dager er "new"
+
+  return new Date(rapport.publishedAt as string) > limitDate;
 }

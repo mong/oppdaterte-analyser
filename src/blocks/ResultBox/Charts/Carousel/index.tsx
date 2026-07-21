@@ -1,21 +1,17 @@
 "use client";
-import React, { JSX, useMemo, useState } from "react";
+import React, { JSX, useState } from "react";
 import { CarouselButtons } from "./CarouselButtons";
 
 // Import or define chart item types
-import type { AtlasDataItem, DataItemPoint } from "../../types";
+import type { AtlasDataItem } from "../../types";
 
 import { BiBarChart, BiLineChart, BiMapPin } from "react-icons/bi";
 import { VscTable } from "react-icons/vsc";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
 
-import styles from "./Carousel.module.css";
+import classNames from "../Classes.module.css";
 import { PopUp } from "../../PopUp";
-import { Barchart } from "../Barchart";
-import { Linechart } from "../Linechart";
-import { DataTable } from "../Table";
-import { Map } from "../Map";
 import { Box } from "@mui/material";
 
 const chartIcons = {
@@ -28,7 +24,7 @@ const chartIcons = {
 
 const SelectionBtn = ({ lang }: { lang?: "nb" | "en" | "nn" }) => {
   return (
-    <button className={styles.selectionBtn} data-testid="selectionBtn">
+    <button className={classNames.selectionBtn} data-testid="selectionBtn">
       <AiOutlineInfoCircle color="#033F85" />
       <span>
         {" "}
@@ -70,7 +66,7 @@ export const Carousel = ({
   if (!charts.length) return;
 
   return (
-    <div className={styles.carouselWrapper}>
+    <div className={classNames.carouselWrapper}>
       {charts.length > 1 && (
         <CarouselButtons
           options={options}

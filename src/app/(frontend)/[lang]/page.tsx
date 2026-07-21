@@ -12,7 +12,8 @@ import {
   SubjectAreaCard,
 } from "@mong/material-ui";
 import { Analyser, Rapporter, Tag } from "@/payload-types";
-
+import { MaxWidth } from "@/components/MaxWidth"
+import { isNewRapport } from "@/lib/helpers";
 
 export const dynamic = 'force-static';
 export const revalidate = 60;
@@ -28,7 +29,7 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const dict = await getDictionary(params.lang);
   return {
-    title: dict.frontpage.title,
+    title: dict.general.health_atlas,
     description: dict.frontpage.introduction,
     keywords: dict.general.metadata_keywords,
   };
@@ -52,13 +53,8 @@ export default async function MainPage(props: MainPageProps) {
   const kompendier = Object.groupBy(
     (await getKompendier({ lang }))
       .toSorted((a, b) => a.title.localeCompare(b.title, lang)),
-    ({ taggedRapporter }) => taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).some(
-      rapport => {
-        const limitDate = new Date();
-        limitDate.setDate(limitDate.getDate() - 600); // Kompendier med rapporter yngre en 600 dager er "new"
-
-        return new Date((rapport as Rapporter).publishedAt as string) > limitDate;
-      }) ? "new" : "old"
+    ({ taggedRapporter }) => (taggedRapporter?.docs as Rapporter[])?.filter(d => d.publiseringsStatus === "published").some(
+      isNewRapport) ? "new" : "old"
   )
 
 
@@ -85,27 +81,29 @@ export default async function MainPage(props: MainPageProps) {
           title={dict.general.health_atlas}
         />
         <PageContent>
-          <h2 className="my-8">{dict.frontpage.fagområder}</h2>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 auto-rows-[85px] md:auto-rows-[150px]">
-            {(kompendier.new || [])
-              .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
-              .concat(kompendier.old || []).map((komp) => {
-                const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
-                const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
+          <MaxWidth size="large">
+            <h2 className="my-8">{dict.frontpage.fagområder}</h2>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 auto-rows-[100px] md:auto-rows-[150px]">
+              {(kompendier.new || [])
+                .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
+                .concat(kompendier.old || []).map((komp) => {
+                  const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
+                  const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
 
-                return (
-                  <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
-                    <SubjectAreaCard
-                      isNew={komp.new === true}
-                      leftLabelText={n_rapporter && `${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase() || undefined}
-                      rightLabelText={n_analyser && `${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase() || undefined}
-                      title={komp.title}
-                    />
-                  </Link>
-                );
-              }
-              )}
-          </div>
+                  return (
+                    <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
+                      <SubjectAreaCard
+                        isNew={komp.new === true}
+                        leftLabelText={n_rapporter && `${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase() || undefined}
+                        rightLabelText={n_analyser && `${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase() || undefined}
+                        title={komp.title}
+                      />
+                    </Link>
+                  );
+                }
+                )}
+            </div>
+          </MaxWidth>
         </PageContent>
       </PageLayout>
     </>

@@ -51,12 +51,14 @@
     "rapport": "Rapport",
     "analyse": "Analyse",
     "published": "Publisert",
+    "read_report": "Les rapport",
+    "read_analysis": "Les analyse",
+    "by": "Av",
     "updated": "Oppdatert",
     "author": "Forfatter",
     "metadata_keywords": "geografisk variasjon, SKDE, helseatlas, oppdaterte helseatlas"
   },
   "frontpage": {
-    "title": "Oppdaterte helseatlas",
     "introduction": "Velg ønsket fagområde for å finne rapporter og analyser for behandlingstilbudet i helsetjenesten, og hvordan den varierer mellom regioner og aldersgrupper.",
     "fagområder": "Utforsk fagområder"
   }

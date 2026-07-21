@@ -114,7 +114,7 @@ export const getAnalyserByTag = cache(
 );
 
 export const getRapporterByTag = cache(
-  async ({ identifier, lang, select }: { identifier: string; lang: Lang; select?: { [k in keyof Rapporter]?: true } }) => {
+  async ({ identifier, lang, select, sort="title" }: { identifier: string; lang: Lang; select?: { [k in keyof Rapporter]?: true }; sort?: string }) => {
     const payload = await getPayload({ config: config });
 
     const tag = await getTag({ identifier, lang });
@@ -125,7 +125,7 @@ export const getRapporterByTag = cache(
       locale: lang,
       pagination: false,
       fallbackLocale: false,
-      sort: "title",
+      sort,
       depth: 1,
       where: {
         tags: { contains: tag.id },

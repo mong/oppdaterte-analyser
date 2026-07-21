@@ -3,8 +3,9 @@ import { Lang } from "@/types";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/lib/dictionaries";
 
-import { formatDate, getSubHeader } from "@/lib/helpers";
+import { formatDate, getSubHeader, isNewRapport } from "@/lib/helpers";
 import RichText from "@/components/RichText";
+import { MaxWidth } from "@/components/MaxWidth"
 
 import {
   Header,
@@ -12,6 +13,8 @@ import {
   PageLayout,
   PageContent,
   AnalysisCard,
+  ReportCard,
+  Box
 } from "@mong/material-ui";
 
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
@@ -20,6 +23,7 @@ import { getAnalyserByTag, getTag, getRapporterByTag } from "@/services/payload"
 import React from "react";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
+import { Analyser } from "@/payload-types";
 
 export const dynamic = 'force-static';
 export const revalidate = 60;
@@ -45,6 +49,10 @@ export async function generateStaticParams() {
   return result;
 }
 
+const getSummary = (analyse: Analyser) => {
+  const firstBulletPoint = (analyse.summary.root.children[0] as any)?.children[0]?.children[0]?.text;
+  return firstBulletPoint ? firstBulletPoint + "." : "";
+};
 
 export const generateMetadata = async (props: {
   params: Promise<{ lang: Lang; kompendium: string }>;
@@ -59,10 +67,10 @@ export const generateMetadata = async (props: {
   const dict = await getDictionary(lang);
 
   return {
-    title: `${tag.title} - ${dict.general.updated_health_atlas}`,
+    title: `${tag.title} - ${dict.general.health_atlas}`,
     description: tag.description
       ? convertLexicalToPlaintext({ data: tag.description })
-      : `${dict.general.updated_health_atlas}: ${tag.title}`,
+      : `${dict.general.health_atlas}: ${tag.title}`,
     keywords: `${tag.title}, ${dict.general.metadata_keywords}`,
   };
 };
@@ -84,6 +92,7 @@ export default async function KompendiumPage(props: {
     identifier: kompendium,
     lang,
   });
+
   const rapporter = await getRapporterByTag({
     identifier: kompendium,
     lang,
@@ -96,7 +105,9 @@ export default async function KompendiumPage(props: {
       bilde: true,
       author: true,
     },
+    sort: "-publishedAt",
   });
+  const newRapporter = rapporter.filter(isNewRapport);
 
   const breadcrumbs = [
     {
@@ -123,53 +134,81 @@ export default async function KompendiumPage(props: {
         leading={breadcrumbs}
       />
       <PageLayout>
-        <div className="bg-neutral-0 [&>*]:bg-transparent">
+        <div className="bg-white py-4 md:py-8">
           <PageContent>
-            <div className="flex justify-center text-center">
-              <div className="max-w-[565px]">
+            <MaxWidth size="x-small">
+              <div className="text-center">
                 <h1>{tag.title}</h1>
                 <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
                   <RichText data={tag.description!} enableGutter={true} />
                 </div>
               </div>
-            </div>
+            </MaxWidth>
+            <MaxWidth size="large">
+              {newRapporter.length > 0 && (
+                <div className="flex flex-col gap-8 py-8">
+                  {newRapporter.map((rapport, i) => (
+                    <ReportCard
+                      key={i}
+                      author={`${dict.general.by}: ${rapport.author}`}
+                      buttonLabel={dict.general.read_report}
+                      description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                      imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
+                      isNew
+                      isPromo
+                      targetGroup={undefined}
+                      targetUrl={`/${lang}/rapporter/${rapport.slug}`}
+                      title={rapport.title}
+                      updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
+                    />
+                  ))}
+                </div>)}
+            </MaxWidth>
           </PageContent>
         </div>
         <PageContent>
-          <h2 className="py-8">{dict.general.analyser}</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {analyser.map(async (analyse, i) => (
-              <AnalysisCard
-                key={i}
-                author={analyse.author}
-                buttonLabel="Les analyse"
-                description="I 2026 ble det utført 8 500 synapseoverføringer for å svare på spørsmålet om hva som skal stå her - en økning fra 0 i 2025."
-                targetGroup={getSubHeader(analyse.data, lang)}
-                targetUrl={`/${lang}/analyse/${analyse.slug}`}
-                title={analyse.title}
-                updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
-              />))}
-          </div>
-        </PageContent>
-        {rapporter.length > 0 && (
-          <div className="bg-neutral-0 [&>*]:bg-transparent">
-            <PageContent>
-              <h2 className="py-8">{dict.general.rapporter}</h2>
-              <div className="flex flex-col gap-8">
-                {rapporter.map((rapport, i) => (
+          <MaxWidth size="large">
+            <div className="py-8">
+              <h2 className="pb-8 md:py-8">{dict.general.analyser}</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {analyser.map(async (analyse, i) => (
                   <AnalysisCard
                     key={i}
-                    author={rapport.author}
-                    buttonLabel="Les rapport"
-                    description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
-                    imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
-                    isNew={false}
-                    targetGroup="Hva skal stå her?"
-                    targetUrl={`/${lang}/rapporter/${rapport.slug}`}
-                    title={rapport.title}
-                    updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
-                  />
-                ))}
+                    author={`${dict.general.by}: ${analyse.author}`}
+                    buttonLabel={dict.general.read_analysis}
+                    description={getSummary(analyse)}
+                    targetGroup={getSubHeader(analyse.data, lang)}
+                    targetUrl={`/${lang}/analyse/${analyse.slug}`}
+                    title={analyse.title}
+                    updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
+                  />))}
+              </div>
+            </div>
+          </MaxWidth>
+        </PageContent>
+        {rapporter.length > 0 && (
+          <div className="bg-white">
+            <PageContent>
+              <div className="py-8">
+                <MaxWidth size="large">
+                  <h2 className="pb-8 md:py-8">{dict.general.rapporter}</h2>
+                  <div className="flex flex-col gap-8">
+                    {rapporter.map((rapport, i) => (
+                      <ReportCard
+                        key={i}
+                        author={`${dict.general.by}: ${rapport.author}`}
+                        buttonLabel={dict.general.read_report}
+                        description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                        imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
+                        isNew={false}
+                        targetGroup={undefined}
+                        targetUrl={`/${lang}/rapporter/${rapport.slug}`}
+                        title={rapport.title}
+                        updated={formatDate(rapport.publishedAt || rapport.createdAt, lang)}
+                      />
+                    ))}
+                  </div>
+                </MaxWidth>
               </div>
             </PageContent>
           </div>

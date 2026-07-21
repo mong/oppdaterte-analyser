@@ -19,6 +19,7 @@ import { getPayload } from "payload";
 import configPromise from "@payload-config";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import RichText from "@/components/RichText";
+import { MaxWidth } from "@/components/MaxWidth"
 
 import {
   Header,
@@ -74,8 +75,8 @@ export const generateMetadata = async (props: {
   const dict = await getDictionary(lang);
 
   return {
-    title: `${analyse.title} - ${dict.general.updated_health_atlas}`,
-    description: `${dict.general.updated_health_atlas}`,
+    title: `${analyse.title} - ${dict.general.health_atlas}`,
+    description: `${dict.general.health_atlas}`,
     keywords: `${tags
       .map((tag) => tag.title)
       .join(", ")}, ${dict.general.metadata_keywords}`,
@@ -134,61 +135,61 @@ export default async function AnalysePage(props: {
       />
       {draft && <LivePreviewListener />}
       <PageLayout>
-        <div className="bg-neutral-0 [&>*]:bg-transparent">
-          <PageContent>
-            <h1 className="my-4">
-              {analyse.title}
-            </h1>
-            <h5 className="my-8">
-              {getSubHeader(analyse.data, lang)}
-            </h5>
-            {analyse.tags && (
-              <TagList
-                tags={analyse.tags.filter(
-                  (tag) => typeof tag === "object" && tag !== null,
-                )}
-                lang={lang}
-              />
-            )}
-
-
+        <div className="bg-white py-8">
+          <PageContent color="white">
             {analyse.publiseringsStatus === "test" && (
-              <Alert severity="warning">
-                Dette er en test-side! Denne analysen er fortsatt ikke publisert.
-              </Alert>
+              <MaxWidth size="medium">
+                <Alert severity="warning" className="mt-4">
+                  Dette er en test-side! Denne analysen er fortsatt ikke publisert.
+                </Alert>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    marginTop: 2,
+                    padding: 2,
+                    paddingY: 4,
+                    boxShadow: "inset 0 0 25px #003087",
+                    background: "#F9F9F9",
+                  }}
+                >
+                  <Compare
+                    newAnalyse={analyse.data}
+                    different={oldDataHash !== dataHash}
+                    oldAnalyse={oldAnalyse && oldAnalyse.data}
+                  />
+                </Paper>
+              </MaxWidth>
             )}
-            {analyse.publiseringsStatus === "test" && (
-              <Paper
-                elevation={0}
-                sx={{
-                  marginTop: 2,
-                  padding: 2,
-                  paddingY: 4,
-                  boxShadow: "inset 0 0 25px #003087",
-                  background: "#F9F9F9",
-                }}
-              >
-                <Compare
-                  newAnalyse={analyse.data}
-                  different={oldDataHash !== dataHash}
-                  oldAnalyse={oldAnalyse && oldAnalyse.data}
+            <MaxWidth size="small">
+              <h1 className="my-4">
+                {analyse.title}
+              </h1>
+              <h5 className="my-8">
+                {getSubHeader(analyse.data, lang)}
+              </h5>
+              {analyse.tags && (
+                <TagList
+                  tags={analyse.tags.filter(
+                    (tag) => typeof tag === "object" && tag !== null,
+                  )}
+                  lang={lang}
                 />
-              </Paper>)}
+              )}
 
-            <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0 text-large">
-              <RichText data={analyse.summary} enableGutter={true} />
-            </div>
-            <div className="flex gap-x-12 gap-y-4 flex-wrap text-small">
-              <span>Av: {analyse.author}</span>
-              <span>
-                {dict.general.updated}{" "}
-                {makeDateElem(analyse.publishedAt || analyse.createdAt, lang)}
-              </span>
-            </div>
+              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0 text-large">
+                <RichText data={analyse.summary} enableGutter={true} />
+              </div>
+              <div className="flex gap-x-12 gap-y-4 flex-wrap text-small">
+                <span>{dict.general.by}: {analyse.author}</span>
+                <span>
+                  {dict.general.updated}{" "}
+                  {makeDateElem(analyse.publishedAt || analyse.createdAt, lang)}
+                </span>
+              </div>
+            </MaxWidth>
           </PageContent>
         </div>
-
-        <PageContent>
+        <PageContent className="justify-center flex-col py-8">
           <Suspense
             fallback={
               <Grid container justifyContent="center" sx={{ padding: 10 }}>
@@ -196,13 +197,16 @@ export default async function AnalysePage(props: {
               </Grid>
             }
           >
+
             {analyse.data?.name && analyse.data.name === analyse.slug ? (
-              <ChartContainer
-                key={dataHash} // Providing key to update state when new files are uploaded in preview
-                analyse={analyse}
-                lang={lang}
-                dict={dict}
-              />
+              <MaxWidth size="medium">
+                <ChartContainer
+                  key={dataHash} // Providing key to update state when new files are uploaded in preview
+                  analyse={analyse}
+                  lang={lang}
+                  dict={dict}
+                />
+              </MaxWidth>
             ) : (
               <Alert severity="error">
                 {analyse.data?.name !== analyse.slug
@@ -210,32 +214,33 @@ export default async function AnalysePage(props: {
                   : "JSON-fil mangler eller inneholder feil"}
               </Alert>
             )}
-
-            <h3 className="mt-8">
-              {dict.analysebox.discussion}
-            </h3>
-            <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-              <RichText data={analyse.discussion} enableGutter={true} />
-            </div>
-
-            <h3 className="mt-8">
-              {dict.analysebox.info}
-            </h3>
-            <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-              <RichText data={analyse.about} enableGutter={true} />
-            </div>
-            <h3 className="mt-8">Data</h3>
-            <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-              <div>
-                <p>{dict.analysebox.download_data_text}</p>
+            <MaxWidth size="small">
+              <h3 className="mt-8">
+                {dict.analysebox.discussion}
+              </h3>
+              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                <RichText data={analyse.discussion} enableGutter={true} />
               </div>
-            </div>
-            <Box sx={{ displayPrint: "none" }}>
-              <DownloadDataButton
-                analyse={analyse.data}
-                dict={dict}
-              />
-            </Box>
+
+              <h3 className="mt-8">
+                {dict.analysebox.info}
+              </h3>
+              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                <RichText data={analyse.about} enableGutter={true} />
+              </div>
+              <h3 className="mt-8">Data</h3>
+              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                <div>
+                  <p>{dict.analysebox.download_data_text}</p>
+                </div>
+              </div>
+              <Box sx={{ displayPrint: "none" }}>
+                <DownloadDataButton
+                  analyse={analyse.data}
+                  dict={dict}
+                />
+              </Box>
+            </MaxWidth>
           </Suspense>
         </PageContent>
       </PageLayout>
