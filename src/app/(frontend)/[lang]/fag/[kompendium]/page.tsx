@@ -135,7 +135,7 @@ export default async function KompendiumPage(props: {
       />
       <PageLayout>
         <div className="bg-white py-4 md:py-8">
-          <PageContent>
+          <PageContent color="white">
             <MaxWidth size="x-small">
               <div className="text-center">
                 <h1>{tag.title}</h1>
@@ -188,7 +188,7 @@ export default async function KompendiumPage(props: {
         </PageContent>
         {rapporter.length > 0 && (
           <div className="bg-white">
-            <PageContent>
+            <PageContent color="white">
               <div className="py-8">
                 <MaxWidth size="large">
                   <h2 className="pb-8 md:py-8">{dict.general.rapporter}</h2>

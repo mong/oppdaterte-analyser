@@ -77,7 +77,7 @@ export default async function MainPage(props: MainPageProps) {
       <PageLayout>
         <HeroBanner
           description={dict.frontpage.introduction}
-          image="/hero-bg-3.jpg"
+          image="/background.jpeg"
           title={dict.general.health_atlas}
         />
         <PageContent>

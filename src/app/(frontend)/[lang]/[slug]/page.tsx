@@ -106,7 +106,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PageLayout>
         <HeroBanner
           description={convertLexicalToPlaintext({ data: page.description! })}
-          image="/hero-bg-3.jpg"
+          image="/background.jpeg"
           title={page.title}
         />
         <PageContent>

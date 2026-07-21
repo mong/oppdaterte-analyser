@@ -152,7 +152,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
       />
       <PageLayout>
         <div className="bg-white py-8">
-          <PageContent>
+          <PageContent color="white">
             <MaxWidth size="small">
               <h1 className="my-4">{rapport.title}</h1>
               <div className="flex gap-x-12 gap-y-4 flex-wrap text-small">
