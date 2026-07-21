@@ -152,6 +152,10 @@ export interface UserAuthOperations {
 export interface Rapporter {
   id: number;
   title: string;
+  /**
+   * Kort oppsummering som vises på lenker til rapporten.
+   */
+  summary: string;
   folder: number | FolderInterface;
   bilde?: (number | null) | Media;
   content: {
@@ -168,10 +172,6 @@ export interface Rapporter {
       version: number;
     };
     [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    description?: string | null;
   };
   publiseringsStatus?: ('published' | 'test' | 'hidden') | null;
   publishedAt?: string | null;
@@ -809,15 +809,10 @@ export interface PayloadMigration {
  */
 export interface RapporterSelect<T extends boolean = true> {
   title?: T;
+  summary?: T;
   folder?: T;
   bilde?: T;
   content?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
   publiseringsStatus?: T;
   publishedAt?: T;
   author?: T;
