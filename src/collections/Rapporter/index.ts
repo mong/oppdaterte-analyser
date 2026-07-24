@@ -21,12 +21,6 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidateRapport } from './hooks/revalidateRapport'
 
-import {
-  MetaDescriptionField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 
 
@@ -52,9 +46,7 @@ export const Rapporter: CollectionConfig = {
     bilde: true,
     publishedAt: true,
     publiseringsStatus: true,
-    meta: {
-      description: true,
-    },
+    summary: true,
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt', 'test'],

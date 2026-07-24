@@ -82,26 +82,28 @@ export default async function MainPage(props: MainPageProps) {
         />
         <PageContent>
           <MaxWidth size="large">
-            <h2 className="my-8">{dict.frontpage.fagområder}</h2>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 auto-rows-[100px] md:auto-rows-[150px]">
-              {(kompendier.new || [])
-                .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
-                .concat(kompendier.old || []).map((komp) => {
-                  const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
-                  const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
+            <div className="py-8 md:py-16">
+              <h2 className="mb-8">{dict.frontpage.fagområder}</h2>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 auto-rows-[100px] md:auto-rows-[150px] pb-4">
+                {(kompendier.new || [])
+                  .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
+                  .concat(kompendier.old || []).map((komp) => {
+                    const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
+                    const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
 
-                  return (
-                    <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
-                      <SubjectAreaCard
-                        isNew={komp.new === true}
-                        leftLabelText={n_rapporter && `${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase() || undefined}
-                        rightLabelText={n_analyser && `${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase() || undefined}
-                        title={komp.title}
-                      />
-                    </Link>
-                  );
-                }
-                )}
+                    return (
+                      <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
+                        <SubjectAreaCard
+                          isNew={komp.new === true}
+                          leftLabelText={n_rapporter && `${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase() || undefined}
+                          rightLabelText={n_analyser && `${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase() || undefined}
+                          title={komp.title}
+                        />
+                      </Link>
+                    );
+                  }
+                  )}
+              </div>
             </div>
           </MaxWidth>
         </PageContent>

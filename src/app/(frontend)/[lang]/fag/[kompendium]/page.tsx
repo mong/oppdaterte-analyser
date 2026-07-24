@@ -104,6 +104,7 @@ export default async function KompendiumPage(props: {
       tags: true,
       bilde: true,
       author: true,
+      summary: true,
     },
     sort: "-publishedAt",
   });
@@ -146,13 +147,13 @@ export default async function KompendiumPage(props: {
             </MaxWidth>
             <MaxWidth size="large">
               {newRapporter.length > 0 && (
-                <div className="flex flex-col gap-8 py-8">
+                <div className="grid grid-cols-1 md:auto-rows-[minmax(320px,auto)] gap-8 py-8">
                   {newRapporter.map((rapport, i) => (
                     <ReportCard
                       key={i}
                       author={`${dict.general.by}: ${rapport.author}`}
                       buttonLabel={dict.general.read_report}
-                      description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                      description={rapport.summary}
                       imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
                       isNew
                       isPromo
@@ -166,39 +167,41 @@ export default async function KompendiumPage(props: {
             </MaxWidth>
           </PageContent>
         </div>
-        <PageContent>
-          <MaxWidth size="large">
-            <div className="py-8">
-              <h2 className="pb-8 md:py-8">{dict.general.analyser}</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {analyser.map(async (analyse, i) => (
-                  <AnalysisCard
-                    key={i}
-                    author={`${dict.general.by}: ${analyse.author}`}
-                    buttonLabel={dict.general.read_analysis}
-                    description={getSummary(analyse)}
-                    targetGroup={getSubHeader(analyse.data, lang)}
-                    targetUrl={`/${lang}/analyse/${analyse.slug}`}
-                    title={analyse.title}
-                    updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
-                  />))}
+        {analyser.length > 0 && (
+          <PageContent>
+            <MaxWidth size="large">
+              <div className="py-8 md:py-16">
+                <h2 className="pb-8">{dict.general.analyser}</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {analyser.map(async (analyse, i) => (
+                    <AnalysisCard
+                      key={i}
+                      author={`${dict.general.by}: ${analyse.author}`}
+                      buttonLabel={dict.general.read_analysis}
+                      description={getSummary(analyse)}
+                      targetGroup={getSubHeader(analyse.data, lang)}
+                      targetUrl={`/${lang}/analyse/${analyse.slug}`}
+                      title={analyse.title}
+                      updated={formatDate(analyse.publishedAt || analyse.createdAt, lang)}
+                    />))}
+                </div>
               </div>
-            </div>
-          </MaxWidth>
-        </PageContent>
+            </MaxWidth>
+          </PageContent>
+        )}
         {rapporter.length > 0 && (
           <div className="bg-white">
             <PageContent color="white">
-              <div className="py-8">
-                <MaxWidth size="large">
-                  <h2 className="pb-8 md:py-8">{dict.general.rapporter}</h2>
-                  <div className="flex flex-col gap-8">
+              <MaxWidth size="large">
+                <div className="py-8 md:py-16">
+                  <h2 className="pb-8">{dict.general.rapporter}</h2>
+                  <div className="grid grid-cols-1 gap-8 md:auto-rows-[minmax(320px,auto)]">
                     {rapporter.map((rapport, i) => (
                       <ReportCard
                         key={i}
                         author={`${dict.general.by}: ${rapport.author}`}
                         buttonLabel={dict.general.read_report}
-                        description="I 2025 ble det utført 5 200 mandeloperasjoner – en økning fra 10 til 40 prosent siden 2015, med tydelige geografiske forskjeller."
+                        description={rapport.summary}
                         imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
                         isNew={false}
                         targetGroup={undefined}
@@ -208,8 +211,8 @@ export default async function KompendiumPage(props: {
                       />
                     ))}
                   </div>
-                </MaxWidth>
-              </div>
+                </div>
+              </MaxWidth>
             </PageContent>
           </div>
         )}

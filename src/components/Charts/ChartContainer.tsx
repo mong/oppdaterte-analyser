@@ -56,7 +56,7 @@ import {
 import AnalyseDemography from "./AnalyseDemography";
 import { Analyser } from "@/payload-types";
 
-const BACKGROUND_COLOR = "#F8F8FF";
+const BACKGROUND_COLOR = "white";
 
 export type VariableSelectorProps = {
   analyse: Analyser["data"];

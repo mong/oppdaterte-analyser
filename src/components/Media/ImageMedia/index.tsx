@@ -59,7 +59,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
 
   return (
-    <picture>
+    <picture className="rounded-2xl overflow-hidden bg-white p-4">
       <NextImage
         alt={alt || ''}
         height={height}

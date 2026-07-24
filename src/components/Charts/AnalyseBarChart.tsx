@@ -55,7 +55,7 @@ export const AnalyseBarChart = ({
         valueFormatter: valueFmt,
         stack: "yes",
         id: `${i}`,
-        color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
+        color: `var(--bar-${variables.length-i})` //`rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
       }))}
       yAxis={[
         {
@@ -74,7 +74,9 @@ export const AnalyseBarChart = ({
       ]}
       layout="horizontal"
       slots={{
-        bar: ({ ownerState, ...otherProps }) => (
+        bar: ({ ownerState, ...otherProps }) => {
+          console.log(ownerState)
+          return (
           <BarElementPath
             {...otherProps}
             ownerState={{
@@ -83,10 +85,10 @@ export const AnalyseBarChart = ({
                 ? `rgba(120, 120, 140, ${0.85 * 0.65 ** Number(ownerState.id)})` // ownerState.id = series ID
                 : selection.has(data[ownerState.dataIndex]?.category)
                   ? `rgba(16, 100, 205, ${0.85 * 0.65 ** Number(ownerState.id)})`
-                  : `rgba(46, 150, 255, ${0.85 * 0.65 ** Number(ownerState.id)})`,
+                  : `var(--bar-${variables.length-Number(ownerState.id)})`,
             }}
           />
-        ),
+        )},
       }}
       slotProps={{
         legend: { hidden: variables.length < 2 },

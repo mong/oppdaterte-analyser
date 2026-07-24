@@ -189,7 +189,7 @@ export default async function AnalysePage(props: {
             </MaxWidth>
           </PageContent>
         </div>
-        <PageContent className="justify-center flex-col py-8">
+        <PageContent>
           <Suspense
             fallback={
               <Grid container justifyContent="center" sx={{ padding: 10 }}>
@@ -197,50 +197,51 @@ export default async function AnalysePage(props: {
               </Grid>
             }
           >
-
-            {analyse.data?.name && analyse.data.name === analyse.slug ? (
-              <MaxWidth size="medium">
-                <ChartContainer
-                  key={dataHash} // Providing key to update state when new files are uploaded in preview
-                  analyse={analyse}
-                  lang={lang}
-                  dict={dict}
-                />
-              </MaxWidth>
-            ) : (
-              <Alert severity="error">
-                {analyse.data?.name !== analyse.slug
-                  ? "Feil navn i JSON-fila (må være identisk med 'slug')"
-                  : "JSON-fil mangler eller inneholder feil"}
-              </Alert>
-            )}
-            <MaxWidth size="small">
-              <h3 className="mt-8">
-                {dict.analysebox.discussion}
-              </h3>
-              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-                <RichText data={analyse.discussion} enableGutter={true} />
-              </div>
-
-              <h3 className="mt-8">
-                {dict.analysebox.info}
-              </h3>
-              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-                <RichText data={analyse.about} enableGutter={true} />
-              </div>
-              <h3 className="mt-8">Data</h3>
-              <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
-                <div>
-                  <p>{dict.analysebox.download_data_text}</p>
+            <div className="py-8">
+              {analyse.data?.name && analyse.data.name === analyse.slug ? (
+                <MaxWidth size="medium">
+                  <ChartContainer
+                    key={dataHash} // Providing key to update state when new files are uploaded in preview
+                    analyse={analyse}
+                    lang={lang}
+                    dict={dict}
+                  />
+                </MaxWidth>
+              ) : (
+                <Alert severity="error">
+                  {analyse.data?.name !== analyse.slug
+                    ? "Feil navn i JSON-fila (må være identisk med 'slug')"
+                    : "JSON-fil mangler eller inneholder feil"}
+                </Alert>
+              )}
+              <MaxWidth size="small">
+                <h3 className="mt-8">
+                  {dict.analysebox.discussion}
+                </h3>
+                <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                  <RichText data={analyse.discussion} enableGutter={true} />
                 </div>
-              </div>
-              <Box sx={{ displayPrint: "none" }}>
-                <DownloadDataButton
-                  analyse={analyse.data}
-                  dict={dict}
-                />
-              </Box>
-            </MaxWidth>
+
+                <h3 className="mt-8">
+                  {dict.analysebox.info}
+                </h3>
+                <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                  <RichText data={analyse.about} enableGutter={true} />
+                </div>
+                <h3 className="mt-8">Data</h3>
+                <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                  <div>
+                    <p>{dict.analysebox.download_data_text}</p>
+                  </div>
+                </div>
+                <Box sx={{ displayPrint: "none" }}>
+                  <DownloadDataButton
+                    analyse={analyse.data}
+                    dict={dict}
+                  />
+                </Box>
+              </MaxWidth>
+            </div>
           </Suspense>
         </PageContent>
       </PageLayout>
