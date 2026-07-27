@@ -7,7 +7,7 @@ import { max, sum, min } from "d3-array";
 import { ColorLegend } from "./ColorLegend";
 import { AnnualVarLegend } from "./AnnualVarLegend";
 import { customFormat } from "../../helpers";
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 
 
 import { stack } from "d3-shape";

@@ -10,7 +10,7 @@ import { VscTable } from "react-icons/vsc";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
 
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 import { PopUp } from "../../PopUp";
 import { Box } from "@mui/material";
 

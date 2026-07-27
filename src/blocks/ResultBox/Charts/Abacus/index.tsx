@@ -2,7 +2,7 @@ import { AxisBottom } from "@visx/axis";
 import { scaleLinear } from "@visx/scale";
 import { Group } from "@visx/group";
 import { max } from "d3-array";
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 import { customFormat, nationalLabel } from "../../helpers";
 import { DataItemPoint } from "../../types";
 import { useSelection } from "@/lib/SelectionContext";

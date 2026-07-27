@@ -1,6 +1,6 @@
 import { ScaleLinear } from "d3-scale";
 
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 import { DefaultOutput } from "@visx/scale";
 type AnnualVarLegendPops = {
   colorFillScale: ScaleLinear<DefaultOutput, DefaultOutput, never>;

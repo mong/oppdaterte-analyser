@@ -1,4 +1,4 @@
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 
 type ColorLegendProps = {
   labels?: string[];

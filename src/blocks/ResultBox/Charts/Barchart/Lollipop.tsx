@@ -1,7 +1,7 @@
 import { Group } from "@visx/group";
 import { ScaleBand, ScaleLinear } from "d3-scale";
 import { DataItemPoint } from "../../types";
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 
 type LollipopProps = {
   data: DataItemPoint;

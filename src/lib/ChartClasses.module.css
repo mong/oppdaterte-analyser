@@ -24,17 +24,22 @@
   color: var(--bar-4);
 }
 
+.bar-5 {
+  fill: currentColor;
+  color: var(--bar-5);
+}
+
 .selected {
   fill: hsl(from currentColor h s calc(l * 0.75));
 }
 
 .national {
-  filter: grayscale(0.85) brightness(0.90);
+  filter: grayscale(0.7) brightness(0.9);
 }
 
 .abacusCircle.national {
   fill: var(--bar-2);
-  filter: grayscale(0.85) brightness(0.90);
+  filter: grayscale(0.9);
 }
 .abacusCircle.selected {
   fill: var(--bar-2);

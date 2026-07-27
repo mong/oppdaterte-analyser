@@ -3,7 +3,7 @@ import { scaleThreshold } from "d3-scale";
 import { DataItemPoint } from "../../types";
 import { customFormat, mapColors } from "../../helpers";
 import { useSelection } from "@/lib/SelectionContext";
-import classNames from "../Classes.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 
 type FeatureShape = {
   type: "Feature";
