@@ -12,15 +12,12 @@ import {
   ListSubheader,
   FormControlLabel,
   Switch,
-  ToggleButtonGroup,
-  ToggleButton,
   Slider,
   Zoom,
   Tab,
   Paper,
   Stack,
   styled,
-  toggleButtonGroupClasses,
   Tooltip,
   Menu,
   Snackbar,
@@ -36,6 +33,8 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import CloseIcon from "@mui/icons-material/Close";
+
+import { ToggleButtonGroup, ToggleButton } from "@mong/material-ui"
 
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { saveAs } from "file-saver";
@@ -78,7 +77,7 @@ function VariableSelector({
 }: VariableSelectorProps) {
 
   return (
-    <FormControl size="small" focused={false} sx={{display: views.length ? "block" : "none" }}>
+    <FormControl size="small" focused={false} sx={{ display: views.length ? "block" : "none" }}>
       <InputLabel id="select-variable-label">
         {dict.analysebox.choose_variable}
       </InputLabel>
@@ -245,13 +244,6 @@ function YearSelector({
     </div>
   );
 }
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)({
-  [`& .${toggleButtonGroupClasses.grouped}`]: {
-    textTransform: "none",
-  },
-  height: "44px",
-});
 
 type ScreenshotBoxProps = {
   analyse: Analyser;
@@ -683,20 +675,18 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           )}
         </Select>
       </FormControl>
-      <StyledToggleButtonGroup
-        color="primary"
-        value={level}
+      <ToggleButtonGroup
         exclusive
         onChange={() => setLevel(level === "sykehus" ? "region" : "sykehus")}
-        aria-label={dict.analysebox.area_select}
+        orientation="horizontal"
+        value={[ level ]}
       >
-        <ToggleButton value={"sykehus"}>{dict.analysebox.sykehus}</ToggleButton>
-        <ToggleButton value={"region"}>{dict.analysebox.region}</ToggleButton>
-      </StyledToggleButtonGroup>
+        <ToggleButton value="sykehus">{dict.analysebox.sykehus}</ToggleButton>
+        <ToggleButton value="region">{dict.analysebox.region}</ToggleButton>
+      </ToggleButtonGroup>
       {aggregeringTypes.size === 2 && (
-        <StyledToggleButtonGroup
-          color="primary"
-          value={aggregering}
+        <ToggleButtonGroup
+          value={[ aggregering] }
           exclusive
           onChange={() => {
             const newAggregering = aggregering === "kont" ? "pas" : "kont";
@@ -713,25 +703,24 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
             }
           }}
         >
-          <ToggleButton value={"kont"} sx={{ transition: "all 0.3s ease" }}>
+          <ToggleButton value="kont">
             {analyse.data.kontakt_begrep
               ? capitalize(analyse.data.kontakt_begrep[lang])
               : dict.analysebox.kontakter}
           </ToggleButton>
-          <ToggleButton value={"pas"} sx={{ transition: "all 0.3s ease" }}>
+          <ToggleButton value="pas">
             {dict.analysebox.pasienter}
           </ToggleButton>
-        </StyledToggleButtonGroup>
+        </ToggleButtonGroup>
       )}
-      <StyledToggleButtonGroup
-        color="primary"
-        value={verdiType}
+      <ToggleButtonGroup
+        value={[ verdiType ]}
         exclusive
         onChange={() => setVerdiType(verdiType === "rate" ? "n" : "rate")}
       >
         <ToggleButton value={"rate"}>Rate</ToggleButton>
         <ToggleButton value={"n"}>{dict.analysebox.antall}</ToggleButton>
-      </StyledToggleButtonGroup>
+      </ToggleButtonGroup>
     </div>
   );
 
@@ -976,9 +965,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           <TabPanel value="demografi" sx={{ paddingX: 0, paddingBottom: 0 }}>
             <div className="px-4 sm:px-8">
               <div className="flex flex-wrap gap-4 mb-4">
-                <StyledToggleButtonGroup
-                  color="primary"
-                  value={showGenders}
+                <ToggleButtonGroup
+                  value={[ showGenders ]}
                   exclusive
                   onChange={() => setShowGenders(!showGenders)}
                   disabled={analyse.data.kjonn !== "begge"}
@@ -989,10 +977,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   <ToggleButton value={true}>
                     {dict.analysebox.demography_split_gender}
                   </ToggleButton>
-                </StyledToggleButtonGroup>
-                <StyledToggleButtonGroup
-                  color="primary"
-                  value={demographyAndel}
+                </ToggleButtonGroup>
+                <ToggleButtonGroup
+                  value={[ demographyAndel ]}
                   exclusive
                   onChange={() => setDemographyAndel(!demographyAndel)}
                 >
@@ -1002,7 +989,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   <ToggleButton value={true}>
                     {dict.analysebox.andel}
                   </ToggleButton>
-                </StyledToggleButtonGroup>
+                </ToggleButtonGroup>
                 <VariableSelector
                   analyse={analyse.data}
                   views={analyse.data.views
@@ -1013,8 +1000,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   variable={demografiVariable}
                   onClick={(v) => setDemografiVariable(v)}
                 />
-                <StyledToggleButtonGroup
-                  color="primary"
+                <ToggleButtonGroup
                   value={allYears}
                   exclusive
                   onChange={() => setAllYears(!allYears)}
@@ -1025,8 +1011,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   <ToggleButton value={false}>
                     {dict.analysebox.choose_year}
                   </ToggleButton>
-                </StyledToggleButtonGroup>
-
+                </ToggleButtonGroup>
               </div>
               <Zoom in={!allYears}>
                 <div>
