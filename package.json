@@ -28,7 +28,7 @@
     "@mui/material": "7.3.11",
     "@mui/material-nextjs": "7.3.10",
     "@mui/system": "7.3.11",
-    "@mui/x-charts": "7.29.1",
+    "@mui/x-charts": "9.10.1",
     "@mui/x-tree-view": "^8.29.2",
     "@payloadcms/admin-bar": "^3.86.0",
     "@payloadcms/db-mongodb": "^3.86.0",
