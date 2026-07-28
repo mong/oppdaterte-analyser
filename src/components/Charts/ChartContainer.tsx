@@ -9,7 +9,6 @@ import {
   Box,
   Typography,
   IconButton,
-  ListSubheader,
   FormControlLabel,
   Switch,
   Slider,
@@ -34,7 +33,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { ToggleButtonGroup, ToggleButton } from "@mong/material-ui"
+import { ToggleButtonGroup, ToggleButton, Dropdown } from "@mong/material-ui"
 
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { saveAs } from "file-saver";
@@ -77,20 +76,22 @@ function VariableSelector({
 }: VariableSelectorProps) {
 
   return (
-    <FormControl size="small" focused={false} sx={{ display: views.length ? "block" : "none" }}>
-      <InputLabel id="select-variable-label">
-        {dict.analysebox.choose_variable}
-      </InputLabel>
-      <Select
-        labelId="select-variable-label"
-        id="select-variable"
-        value={
-          variable.viewName === "total"
-            ? ""
-            : (`${variable.viewName}.${variable.name}` as string)
-        }
-        label={dict.analysebox.choose_variable}
-        sx={{ width: { md: 250, sm: 220, xs: 200 }, height: "100%" }}
+    <div className="w-50 sm:w-55 md:w-62.5">
+      <Dropdown
+        items={{
+          groups: [{
+            items: [{
+              label: dict.analysebox.remove_choice,
+              value: 'fjern_valg'
+            }]
+          }].concat(views.map((v) => ({
+            groupLabel: v.title[lang],
+            items: v.variables.map((variable) => ({
+              label: variable[lang],
+              value: `${v.name}.${variable.name}`
+            }))
+          })))
+        }}
         onChange={(e) => {
           const [viewName, name] =
             e.target.value === "fjern_valg"
@@ -98,34 +99,14 @@ function VariableSelector({
               : e.target.value.split(".");
           onClick({ viewName, name });
         }}
-        MenuProps={{
-          sx: {
-            ["& .MuiList-root, & .MuiListSubheader-root"]: {
-              backgroundColor: BACKGROUND_COLOR,
-            },
-          },
-        }}
-      >
-        <MenuItem value={"fjern_valg"} disabled={variable.viewName === "total"}>
-          <em>{dict.analysebox.remove_choice}</em>
-        </MenuItem>
-        {views.map((v, i) => {
-          return [
-            <ListSubheader key={i}>{v.title[lang]}</ListSubheader>,
-          ].concat(
-            v.variables.map((variable, j) => (
-              <MenuItem
-                value={`${v.name}.${variable.name}`}
-                key={`${v.name}_${j}`}
-                sx={{ paddingLeft: 4 }}
-              >
-                {variable[lang]}
-              </MenuItem>
-            )),
-          );
-        })}
-      </Select>
-    </FormControl>
+        placeholder={dict.analysebox.choose_variable}
+        value={
+          variable.viewName === "total"
+            ? ""
+            : (`${variable.viewName}.${variable.name}` as string)
+        }
+      />
+    </div>
   );
 }
 
@@ -598,95 +579,67 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     [analyse],
   );
 
-  const [areasOpen, setAreasOpen] = React.useState(false);
-
   const chooseAreasText =
     dict.analysebox.choose_area +
     (selection[level].size ? ` (${selection[level].size})` : "");
 
   const areaAndAggregationSelect = (
     <div className="flex flex-wrap gap-4 px-4 sm:px-8 mb-4">
-      <FormControl size="small" focused={false} sx={{ width: 300 }} className="col-span-3 md:col-span-1">
-        <InputLabel htmlFor="grouped-select">{chooseAreasText}</InputLabel>
-        <Select
-          multiple
-          sx={{ height: "100%" }}
-          value={!areasOpen ? [] : Array.from(selection[level])}
-          id="grouped-select"
-          label={chooseAreasText}
-          open={areasOpen}
-          onClose={() => setAreasOpen(false)}
-          onOpen={() => setAreasOpen(true)}
+      <div className="w-50 sm:w-55 md:w-62.5">
+        <Dropdown
+          items={{
+            groups: [{
+              items: [{
+                label: dict.analysebox.remove_choice,
+                value: 'fjern_valg'
+              }]
+            }].concat(level === "region"
+              ? [{
+                items: Object.keys(hospitalStructure).map((region) => ({
+                  label: getAreaName(region, lang),
+                  value: region
+                }))
+              }]
+              : Object.keys(hospitalStructure).map((region) => ({
+                groupLabel: getAreaName(region, lang),
+                items: Array.from(hospitalStructure[region])
+                  .toSorted()
+                  .map((sykehus) => ({
+                    label: getAreaName(sykehus, lang),
+                    value: sykehus
+                  })),
+              }))
+            )
+          }}
           onChange={(e) => {
-            const changedArea = String(
-              Array.from(
-                selection[level].symmetricDifference(new Set(e.target.value)),
-              ).at(0),
-            );
-
-            if (changedArea === "fjern_valg") {
+            if (e.target.value === "fjern_valg") {
               setSelection(
                 new Selection({ region: new Set([]), sykehus: new Set([]) }),
               );
             } else {
               setSelection(
                 level === "region"
-                  ? selection.toggleRegion(changedArea)
-                  : selection.toggleSykehus(changedArea),
+                  ? selection.toggleRegion(e.target.value)
+                  : selection.toggleSykehus(e.target.value),
               );
             }
           }}
-          MenuProps={{
-            sx: {
-              ["& .MuiList-root, & .MuiListSubheader-root"]: {
-                backgroundColor: BACKGROUND_COLOR,
-              },
-            },
-            PaperProps: {
-              style: { maxHeight: 400, width: 300 },
-            },
-          }}
-        >
-          <MenuItem value="fjern_valg" disabled={selection[level].size === 0}>
-            <em>{dict.analysebox.remove_choice}</em>
-          </MenuItem>
-
-          {Object.keys(hospitalStructure).map((region) =>
-            level === "region" ? (
-              <MenuItem key={region} value={region}>
-                {getAreaName(region, lang)}
-              </MenuItem>
-            ) : (
-              [
-                <ListSubheader>{getAreaName(region, lang)}</ListSubheader>,
-                Array.from(hospitalStructure[region])
-                  .toSorted()
-                  .map((sykehus) => (
-                    <MenuItem
-                      key={sykehus}
-                      value={sykehus}
-                      sx={{ paddingLeft: 4 }}
-                    >
-                      {getAreaName(sykehus, lang)}
-                    </MenuItem>
-                  )),
-              ]
-            ),
-          )}
-        </Select>
-      </FormControl>
+          placeholder={chooseAreasText}
+          value=""
+        />
+      </div>
       <ToggleButtonGroup
         exclusive
         onChange={() => setLevel(level === "sykehus" ? "region" : "sykehus")}
         orientation="horizontal"
-        value={[ level ]}
+        value={[level]}
       >
         <ToggleButton value="sykehus">{dict.analysebox.sykehus}</ToggleButton>
         <ToggleButton value="region">{dict.analysebox.region}</ToggleButton>
       </ToggleButtonGroup>
       {aggregeringTypes.size === 2 && (
         <ToggleButtonGroup
-          value={[ aggregering] }
+          value={[aggregering]}
           exclusive
           onChange={() => {
             const newAggregering = aggregering === "kont" ? "pas" : "kont";
@@ -714,7 +667,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         </ToggleButtonGroup>
       )}
       <ToggleButtonGroup
-        value={[ verdiType ]}
+        value={[verdiType]}
         exclusive
         onChange={() => setVerdiType(verdiType === "rate" ? "n" : "rate")}
       >
@@ -778,52 +731,39 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               </Box>
               <TabPanel value="enkeltår" sx={{ paddingX: 0, paddingBottom: 0 }}>
                 <div className="px-4 sm:px-8 grid grid-cols-[max-content_1fr] sm:grid-cols-1 items-center gap-4">
-                  <div>
-                    <FormControl size="small" focused={false}>
-                      <InputLabel id="select-view-label">
-                        {dict.analysebox.choose_focus_area}
-                      </InputLabel>
-                      <Select
-                        labelId="select-view-label"
-                        id="select-view"
-                        value={viewName === "total" ? "" : viewName}
-                        label={dict.analysebox.choose_focus_area}
-                        sx={{ width: { md: 250, sm: 220, xs: 200 }, height: "100%" }}
-                        onChange={(e) => {
-                          setViewName(
-                            e.target.value === "fjern_valg"
-                              ? "total"
-                              : e.target.value,
-                          );
-                        }}
-                        MenuProps={{
-                          sx: {
-                            ["& .MuiList-root, & .MuiListSubheader-root"]: {
-                              backgroundColor: BACKGROUND_COLOR,
-                            },
+                  <div className="w-50 sm:w-55 md:w-62.5">
+                    <Dropdown
+                      items={{
+                        groups: [
+                          {
+                            items: [{
+                              label: dict.analysebox.remove_choice,
+                              value: 'fjern_valg'
+                            }].concat(
+                              analyse.data.views
+                                .filter(
+                                  (v) =>
+                                    v.type === "standard" &&
+                                    v.name !== "total" &&
+                                    ["begge", aggregering].includes(v.aggregering),
+                                )
+                                .map((view, i) => (
+                                  { label: view.title[lang], value: view.name }
+                                ))
+                            )
                           },
-                        }}
-                      >
-                        <MenuItem
-                          value={"fjern_valg"}
-                          disabled={viewName === "total"}
-                        >
-                          <em>{dict.analysebox.remove_choice}</em>
-                        </MenuItem>
-                        {analyse.data.views
-                          .filter(
-                            (v) =>
-                              v.type === "standard" &&
-                              v.name !== "total" &&
-                              ["begge", aggregering].includes(v.aggregering),
-                          )
-                          .map((view, i) => (
-                            <MenuItem key={i} value={view.name}>
-                              {view.title[lang]}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </FormControl>
+                        ]
+                      }}
+                      onChange={(e) => {
+                        setViewName(
+                          e.target.value === "fjern_valg"
+                            ? "total"
+                            : e.target.value,
+                        );
+                      }}
+                      placeholder={dict.analysebox.choose_focus_area}
+                      value={viewName === "total" ? "" : viewName}
+                    />
                   </div>
                   <div>
                     <YearSelector
@@ -966,7 +906,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
             <div className="px-4 sm:px-8">
               <div className="flex flex-wrap gap-4 mb-4">
                 <ToggleButtonGroup
-                  value={[ showGenders ]}
+                  value={[showGenders]}
                   exclusive
                   onChange={() => setShowGenders(!showGenders)}
                   disabled={analyse.data.kjonn !== "begge"}
@@ -979,7 +919,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                   </ToggleButton>
                 </ToggleButtonGroup>
                 <ToggleButtonGroup
-                  value={[ demographyAndel ]}
+                  value={[demographyAndel]}
                   exclusive
                   onChange={() => setDemographyAndel(!demographyAndel)}
                 >

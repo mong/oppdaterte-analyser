@@ -34,7 +34,7 @@
 }
 
 .national {
-  filter: grayscale(0.7) brightness(0.9);
+  filter: grayscale(0.9);
 }
 
 .abacusCircle.national {
