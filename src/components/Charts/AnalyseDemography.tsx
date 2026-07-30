@@ -3,6 +3,7 @@ import { LineChart } from "@mui/x-charts";
 import { Lang } from "@/types";
 import { formatNumber } from "@/lib/helpers";
 import { Analyser } from "@/payload-types";
+import { legendClasses } from '@mui/x-charts/ChartsLegend';
 
 type AnalyseDemographyProps = {
   analyse: Analyser["data"];
@@ -35,19 +36,19 @@ const AnalyseDemography = ({
         aldre.map((alder) => {
           const kvinner =
             analyse.data.demografi[year][variable.viewName][alder][
-              variable.name
+            variable.name
             ]["kvinner"];
           const kvinner_pop =
             analyse.data.demografi[year]["population"][alder]["population"][
-              "kvinner"
+            "kvinner"
             ];
           const menn =
             analyse.data.demografi[year][variable.viewName][alder][
-              variable.name
+            variable.name
             ]["menn"];
           const menn_pop =
             analyse.data.demografi[year]["population"][alder]["population"][
-              "menn"
+            "menn"
             ];
 
           return {
@@ -73,7 +74,7 @@ const AnalyseDemography = ({
         .map(
           (year) =>
             analyse.data.demografi[year][variable.viewName][alder][
-              variable.name
+            variable.name
             ]["kvinner"],
         )
         .reduce((a, b) => a + b, 0);
@@ -81,7 +82,7 @@ const AnalyseDemography = ({
         .map(
           (year) =>
             analyse.data.demografi[year]["population"][alder]["population"][
-              "kvinner"
+            "kvinner"
             ],
         )
         .reduce((a, b) => a + b, 0);
@@ -89,7 +90,7 @@ const AnalyseDemography = ({
         .map(
           (year) =>
             analyse.data.demografi[year][variable.viewName][alder][
-              variable.name
+            variable.name
             ]["menn"],
         )
         .reduce((a, b) => a + b, 0);
@@ -97,7 +98,7 @@ const AnalyseDemography = ({
         .map(
           (year) =>
             analyse.data.demografi[year]["population"][alder]["population"][
-              "menn"
+            "menn"
             ],
         )
         .reduce((a, b) => a + b, 0);
@@ -160,6 +161,7 @@ const AnalyseDemography = ({
   return (
     <LineChart
       dataset={demographyData[year]}
+      hideLegend={!showGenders || analyse.kjonn !== "begge"}
       xAxis={[
         {
           scaleType: "point",
@@ -179,13 +181,13 @@ const AnalyseDemography = ({
           max:
             (showGenders
               ? Math.max(
-                  (["begge", "kvinner"].includes(analyse.kjonn) &&
-                    maxValues[dataKeys[andelOrAntall]["kvinner"]]) ||
-                    0,
-                  (["begge", "menn"].includes(analyse.kjonn) &&
-                    maxValues[dataKeys[andelOrAntall]["menn"]]) ||
-                    0,
-                )
+                (["begge", "kvinner"].includes(analyse.kjonn) &&
+                  maxValues[dataKeys[andelOrAntall]["kvinner"]]) ||
+                0,
+                (["begge", "menn"].includes(analyse.kjonn) &&
+                  maxValues[dataKeys[andelOrAntall]["menn"]]) ||
+                0,
+              )
               : maxValues[dataKeys[andelOrAntall]["begge"]]) * 1.01,
           valueFormatter: (value: number | null) =>
             andel
@@ -195,15 +197,15 @@ const AnalyseDemography = ({
       ]}
       series={(showGenders
         ? [
-            ...((["begge", "kvinner"].includes(analyse.kjonn) && [
-              { dataKey: dataKeys[andelOrAntall]["kvinner"], label: "Kvinner" },
-            ]) ||
-              []),
-            ...((["begge", "menn"].includes(analyse.kjonn) && [
-              { dataKey: dataKeys[andelOrAntall]["menn"], label: "Menn" },
-            ]) ||
-              []),
-          ]
+          ...((["begge", "kvinner"].includes(analyse.kjonn) && [
+            { dataKey: dataKeys[andelOrAntall]["kvinner"], label: "Kvinner" },
+          ]) ||
+            []),
+          ...((["begge", "menn"].includes(analyse.kjonn) && [
+            { dataKey: dataKeys[andelOrAntall]["menn"], label: "Menn" },
+          ]) ||
+            []),
+        ]
         : [{ dataKey: dataKeys[andelOrAntall]["begge"], label: "Begge kjønn" }]
       ).map((series, i) => ({
         ...series,
@@ -215,21 +217,17 @@ const AnalyseDemography = ({
             ? formatNumber((value || 0) / 100, lang, { style: "percent" })
             : formatNumber(value || 0, lang, { maximumFractionDigits: 0 }),
       }))}
-      margin={{
-        left: 60,
-        top: 60,
-        bottom: 25,
-      }}
       slotProps={{
         legend: {
-          itemMarkHeight: 5,
-          itemMarkWidth: 17,
-          hidden: !showGenders || analyse.kjonn !== "begge",
-        },
-      }}
-      sx={{
-        "& .MuiLineElement-root": {
-          strokeWidth: "3px",
+          sx: {
+            [`.${legendClasses.mark}`]: {
+              width: 20,
+              ["& path"]: { strokeWidth: 4 }
+            },
+            [`.${legendClasses.label}`]: {
+              fontSize: 14
+            }
+          }
         },
       }}
     />

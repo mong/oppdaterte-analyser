@@ -56,9 +56,9 @@ export default function AdminBar({ preview }: AdminBarProps) {
               <Avatar sx={{ bgcolor: colors.green["A200"], marginX: 1 }}>
                 <VerifiedUserIcon sx={{ color: "#000" }} />
               </Avatar>
-              <Typography variant="h6" color="inherit" component="div">
+              <h6 className="line-clamp-3">
                 {user?.name} / {user?.email}
-              </Typography>
+              </h6>
             </div>
             {preview &&
               pathName.match(/\/(en|no)\/(rapporter|analyse)\/.+/) && (

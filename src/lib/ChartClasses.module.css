@@ -1,3 +1,7 @@
+.barElement {
+  stroke: #fff;
+  stroke-width: 1px;
+}
 .bar-1 {
   fill: currentColor;
   color: var(--bar-1);
@@ -41,6 +45,7 @@
   fill: var(--bar-2);
   filter: grayscale(0.9);
 }
+
 .abacusCircle.selected {
   fill: var(--bar-2);
 }
@@ -165,6 +170,7 @@
   transition: ease-out 200ms;
   offset: unset;
 }
+
 .bullet:hover,
 .bullet:focus {
   border: 0.0625rem solid #033f85;
@@ -173,8 +179,8 @@
 .active {
   background-color: #033f85;
 }
+
 .active:hover,
 .active:focus {
   border: 0.0625rem solid #033f85;
 }
-

@@ -1,13 +1,14 @@
 import { BarChart, barClasses } from "@mui/x-charts/BarChart";
 import type { BarProps } from '@mui/x-charts/BarChart';
 import classNames from "@/lib/ChartClasses.module.css";
+import { legendClasses } from '@mui/x-charts/ChartsLegend';
 
 import React from "react";
 
 import { useAnimateBar } from '@mui/x-charts/hooks';
 
 function AnimatedBar(props: BarProps & { special_bars: Set<number>, selected_bars: Set<number> }) {
-  const { ownerState, ...other } = props;
+  const { ownerState, seriesId, dataIndex, xOrigin, yOrigin, skipAnimation, ...other } = props;
   const animatedProps = useAnimateBar(props);
 
   return (
@@ -15,6 +16,7 @@ function AnimatedBar(props: BarProps & { special_bars: Set<number>, selected_bar
       {...other}
       className={
         `${other.className}
+        ${classNames.barElement}
         ${props.special_bars.has(props.dataIndex) ? classNames.national : ""}
         ${props.selected_bars.has(props.dataIndex) ? classNames.selected : ""}
         cursor-pointer
@@ -103,7 +105,15 @@ export const AnalyseBarChart = ({
         bar: {
           special_bars: new Set(data.flatMap((value, i) => special_values.has(value.category) ? [i] : [])),
           selected_bars: new Set(data.flatMap((value, i) => selection.has(value.category) ? [i] : []))
-        } as any
+        } as any,
+        legend: {
+          toggleVisibilityOnClick: true,
+          sx: {
+            [`.${legendClasses.label}`]: {
+              fontSize: 14
+            }
+          },
+        },
       }}
       sx={{
         [`& .${barClasses.element}`]: {

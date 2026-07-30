@@ -240,7 +240,12 @@ export const Barchart = ({
                         y={yScale(barData.data[y].toString())}
                         width={xScale(Math.abs(barData[0] - barData[1]))}
                         height={yScale.bandwidth()}
-                        className={`${classNames[`bar-${series.length-n}`]} ${selection.has(areaName) ? classNames.selected : ""} ${areaName === national ? classNames.national : ""}`}
+                        className={`
+                          ${classNames.barElement}
+                          ${classNames[`bar-${series.length - n}`]}
+                          ${selection.has(areaName) ? classNames.selected : ""}
+                          ${areaName === national ? classNames.national : ""}
+                          `}
                         style={{
                           cursor: areaName != national ? "pointer" : "auto",
                         }}
