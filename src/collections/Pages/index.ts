@@ -103,6 +103,11 @@ export const Pages: CollectionConfig = {
       }),
     },
     {
+      name: 'bilde',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
       type: 'tabs',
       tabs: [
         {

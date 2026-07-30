@@ -536,6 +536,7 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
+  bilde?: (number | null) | Media;
   layout: (ContentBlock | MediaBlock | RawHTMLBlock)[];
   meta?: {
     title?: string | null;
@@ -853,6 +854,7 @@ export interface AnalyserSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  bilde?: T;
   layout?:
     | T
     | {
