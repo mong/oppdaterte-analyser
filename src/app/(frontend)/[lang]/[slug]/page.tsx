@@ -10,8 +10,6 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
-import { getDictionary } from '@/lib/dictionaries'
-
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 
@@ -80,14 +78,14 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   if (!page) return notFound();
 
-  const dict = await getDictionary(lang);
-
   const breadcrumbs = [
     {
       href: `/${lang}/${slug}`,
       name: page.title,
     },
   ];
+
+  console.log(page.bilde)
 
   return (
     <>
@@ -106,7 +104,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PageLayout>
         <HeroBanner
           description={convertLexicalToPlaintext({ data: page.description! })}
-          image="/background.jpeg"
+          image={typeof page.bilde === "object" && page.bilde?.url || "/background.jpeg"}
           title={page.title}
         />
         <PageContent>
