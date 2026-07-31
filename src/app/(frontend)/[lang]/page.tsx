@@ -68,12 +68,11 @@ export default async function MainPage(props: MainPageProps) {
       <Header
         lang={lang}
         langChoices={[
-          { code: 'no', url: '/no' },
+          { code: 'no', url: '/' },
           { code: 'en', url: '/en' },
         ]}
       />
       <Breadcrumbs explicitTrail={breadcrumbs} />
-
       <PageLayout>
         <HeroBanner
           description={dict.frontpage.introduction}

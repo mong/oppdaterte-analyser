@@ -85,8 +85,6 @@ export default async function Page({ params: paramsPromise }: Args) {
     },
   ];
 
-  console.log(page.bilde)
-
   return (
     <>
       {draft && <LivePreviewListener />}

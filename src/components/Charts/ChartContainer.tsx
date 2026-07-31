@@ -75,26 +75,22 @@ function VariableSelector({
   lang,
 }: VariableSelectorProps) {
 
-  return (
+  return ( views.length > 0 &&
     <div className="w-50 sm:w-55 md:w-62.5">
       <Dropdown
+        removeAll={dict.analysebox.remove_choice}
         items={{
-          groups: [{
-            items: [{
-              label: dict.analysebox.remove_choice,
-              value: 'fjern_valg'
-            }]
-          }].concat(views.map((v) => ({
+          groups: views.map((v) => ({
             groupLabel: v.title[lang],
             items: v.variables.map((variable) => ({
               label: variable[lang],
               value: `${v.name}.${variable.name}`
             }))
-          })))
+          }))
         }}
         onChange={(e) => {
           const [viewName, name] =
-            e.target.value === "fjern_valg"
+            e.target.value === ""
               ? ["total", analyse.name]
               : e.target.value.split(".");
           onClick({ viewName, name });
@@ -355,13 +351,13 @@ export function ScreenshotBox({
           >
             <Box
               component="img"
-              alt="SKDE Logo."
+              alt={`${analyse.author} logo`}
               src={analyse.author === "SKDE" ? "/img/logo-skde-graa.svg" : "/img/helse-forde-graa.svg"}
               sx={{
                 width: "15vw",
-                maxWidth: 125,
+                maxWidth: analyse.author === "SKDE" ? 100 : 150,
                 position: "absolute",
-                bottom: 40,
+                bottom: 55,
                 right: 30,
                 printColorAdjust: "exact",
                 "@media print": { bottom: 110 },
@@ -587,13 +583,10 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
     <div className="flex flex-wrap gap-4 px-4 sm:px-8 mb-4">
       <div className="w-50 sm:w-55 md:w-62.5">
         <Dropdown
+          multiple
+          removeAll={dict.analysebox.remove_choice}
           items={{
-            groups: [{
-              items: [{
-                label: dict.analysebox.remove_choice,
-                value: 'fjern_valg'
-              }]
-            }].concat(level === "region"
+            groups: level === "region"
               ? [{
                 items: Object.keys(hospitalStructure).map((region) => ({
                   label: getAreaName(region, lang),
@@ -609,23 +602,23 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     value: sykehus
                   })),
               }))
-            )
           }}
           onChange={(e) => {
-            if (e.target.value === "fjern_valg") {
+            if (e.target.value.length === 0) {
               setSelection(
                 new Selection({ region: new Set([]), sykehus: new Set([]) }),
               );
             } else {
+              let SelectedValue = Array.from(new Set(e.target.value).symmetricDifference(selection[level]))[0];
               setSelection(
                 level === "region"
-                  ? selection.toggleRegion(e.target.value)
-                  : selection.toggleSykehus(e.target.value),
+                  ? selection.toggleRegion(SelectedValue)
+                  : selection.toggleSykehus(SelectedValue),
               );
             }
           }}
           placeholder={chooseAreasText}
-          value=""
+          value={Array.from(selection[level])}
         />
       </div>
       <ToggleButtonGroup
@@ -733,30 +726,23 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 <div className="px-4 sm:px-8 grid grid-cols-[max-content_1fr] sm:grid-cols-1 items-center gap-4">
                   <div className="w-50 sm:w-55 md:w-62.5">
                     <Dropdown
+                      removeAll={dict.analysebox.remove_choice}
                       items={{
-                        groups: [
-                          {
-                            items: [{
-                              label: dict.analysebox.remove_choice,
-                              value: 'fjern_valg'
-                            }].concat(
-                              analyse.data.views
-                                .filter(
-                                  (v) =>
-                                    v.type === "standard" &&
-                                    v.name !== "total" &&
-                                    ["begge", aggregering].includes(v.aggregering),
-                                )
-                                .map((view, i) => (
-                                  { label: view.title[lang], value: view.name }
-                                ))
-                            )
-                          },
-                        ]
+                        groups: [{
+                          items:
+                            analyse.data.views
+                              .filter(
+                                (v) =>
+                                  v.type === "standard" &&
+                                  v.name !== "total" &&
+                                  ["begge", aggregering].includes(v.aggregering))
+                              .map((view) => (
+                                { label: view.title[lang], value: view.name }))
+                        }]
                       }}
                       onChange={(e) => {
                         setViewName(
-                          e.target.value === "fjern_valg"
+                          e.target.value === ""
                             ? "total"
                             : e.target.value,
                         );
@@ -905,19 +891,20 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
           <TabPanel value="demografi" sx={{ paddingX: 0, paddingBottom: 0 }}>
             <div className="px-4 sm:px-8">
               <div className="flex flex-wrap gap-4 mb-4">
-                <ToggleButtonGroup
-                  value={[showGenders]}
-                  exclusive
-                  onChange={() => setShowGenders(!showGenders)}
-                  disabled={analyse.data.kjonn !== "begge"}
-                >
-                  <ToggleButton value={false}>
-                    {dict.analysebox.alle}
-                  </ToggleButton>
-                  <ToggleButton value={true}>
-                    {dict.analysebox.demography_split_gender}
-                  </ToggleButton>
-                </ToggleButtonGroup>
+                {analyse.data.kjonn === "begge" &&
+                  <ToggleButtonGroup
+                    value={[showGenders]}
+                    exclusive
+                    onChange={() => setShowGenders(!showGenders)}
+                    disabled={analyse.data.kjonn !== "begge"}
+                  >
+                    <ToggleButton value={false}>
+                      {dict.analysebox.alle}
+                    </ToggleButton>
+                    <ToggleButton value={true}>
+                      {dict.analysebox.demography_split_gender}
+                    </ToggleButton>
+                  </ToggleButtonGroup>}
                 <ToggleButtonGroup
                   value={[demographyAndel]}
                   exclusive

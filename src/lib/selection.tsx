@@ -48,7 +48,6 @@ export class Selection {
   }
   toggleSykehus(sykehus: string): Selection {
     const newSykehus = this.sykehus.symmetricDifference(new Set([sykehus]));
-
     return new Selection({
       region: new Set(
         Object.keys(hospitalStructure).filter((region) =>
