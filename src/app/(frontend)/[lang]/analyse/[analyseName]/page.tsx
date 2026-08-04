@@ -108,7 +108,8 @@ export default async function AnalysePage(props: {
     .update(JSON.stringify(oldAnalyse && oldAnalyse.data || ""))
     .digest("hex");
 
-  const dict = await getDictionary(lang === "no" && analyse.norskType === "nn" ? "nn" : lang);
+  const nynorsk = lang === "no" && analyse.norskType === "nn";
+  const dict = await getDictionary(nynorsk ? "nn" : lang);
 
   const breadcrumbs = [
     {
@@ -205,6 +206,7 @@ export default async function AnalysePage(props: {
                     analyse={analyse}
                     lang={lang}
                     dict={dict}
+                    nynorsk={nynorsk}
                   />
                 </MaxWidth>
               ) : (

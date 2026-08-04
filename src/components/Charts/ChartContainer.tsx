@@ -48,6 +48,7 @@ import { getAreaName, hospitalStructure, Selection } from "@/lib/selection";
 import {
   capitalize,
   formatNumber,
+  getCategory,
   getDescription,
   getVariableText,
 } from "@/lib/helpers";
@@ -75,8 +76,8 @@ function VariableSelector({
   lang,
 }: VariableSelectorProps) {
 
-  return ( views.length > 0 &&
-    <div className="w-50 sm:w-55 md:w-62.5">
+  return (views.length > 0 &&
+    <div className="w-45 sm:w-55 md:w-62.5">
       <Dropdown
         removeAll={dict.analysebox.remove_choice}
         items={{
@@ -131,27 +132,22 @@ function YearSelector({
   }, [animating]);
 
   return (
-    <div>
-      <div className="py-4 block sm:hidden">
-        <FormControl size="small">
-          <InputLabel id="demo-simple-select-label">{dict.analysebox.choose_year}</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={year}
-            label={dict.analysebox.choose_year}
-            onChange={(e) => setYear(e.target.value as number)}
-
-          >
-            {years.toReversed().map((y) => (
-              <MenuItem key={y} value={y}>
-                {y}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    <>
+      <div className="block sm:hidden">
+        <Dropdown
+          items={{
+            groups: [{
+              items: years.toReversed().map((y) => (
+                { label: y.toString(), value: y.toString() }
+              ))
+            }]
+          }}
+          onChange={(e) => setYear(Number(e.target.value))}
+          placeholder={dict.analysebox.choose_year}
+          value={year.toString()}
+        />
       </div>
-      <div className="py-4 hidden sm:block">
+      <div className="hidden sm:block basis-full">
         <Stack direction="row">
           <Box>
             {animating ? (
@@ -218,7 +214,7 @@ function YearSelector({
           </Box>
         </Stack>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -412,10 +408,10 @@ export type ChartContainerProps = {
   analyse: Analyser;
   lang: Lang;
   dict: { [k: string]: { [k: string]: string } };
+  nynorsk: boolean;
 };
 
-export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
-
+export function ChartContainer({ analyse, lang, dict, nynorsk = false }: ChartContainerProps) {
   const [showNorway, setShowNorway] = React.useState(false);
   const [verdiType, setVerdiType] = React.useState<"rate" | "n">("rate");
 
@@ -485,6 +481,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
         (_, i) => year_range[0] + i,
       );
   };
+
+  const kategori = getCategory(analyse.data, nynorsk);
 
   const years = getYears(viewName);
   const lastYear = years.at(-1) as number;
@@ -581,7 +579,7 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
 
   const areaAndAggregationSelect = (
     <div className="flex flex-wrap gap-4 px-4 sm:px-8 mb-4">
-      <div className="w-50 sm:w-55 md:w-62.5">
+      <div className="w-45 sm:w-55 md:w-62.5">
         <Dropdown
           multiple
           removeAll={dict.analysebox.remove_choice}
@@ -723,8 +721,8 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 </MyTabList>
               </Box>
               <TabPanel value="enkeltår" sx={{ paddingX: 0, paddingBottom: 0 }}>
-                <div className="px-4 sm:px-8 grid grid-cols-[max-content_1fr] sm:grid-cols-1 items-center gap-4">
-                  <div className="w-50 sm:w-55 md:w-62.5">
+                <div className="px-4 sm:px-8 flex flex-wrap gap-4 mb-4">
+                  <div className="w-45 sm:w-55 md:w-62.5">
                     <Dropdown
                       removeAll={dict.analysebox.remove_choice}
                       items={{
@@ -751,23 +749,21 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                       value={viewName === "total" ? "" : viewName}
                     />
                   </div>
-                  <div>
-                    <YearSelector
-                      years={years as number[]}
-                      lastYear={lastYear}
-                      year={year}
-                      setYear={setYear}
-                      dict={dict}
-                      speed={600}
-                    />
-                  </div>
+                  <YearSelector
+                    years={years as number[]}
+                    lastYear={lastYear}
+                    year={year}
+                    setYear={setYear}
+                    dict={dict}
+                    speed={600}
+                  />
                 </div>
                 <div >
                   <ScreenshotBox
                     analyse={analyse}
                     dict={dict}
                     filename={`${analyse.data.name}_${currentView.title[lang].toLowerCase().replace(" ", "_")}_${year}.png`}
-                    description={getDescription(analyse.data, lang, verdiType, aggregering)}
+                    description={getDescription(analyse.data, lang, verdiType, aggregering, undefined, nynorsk)}
                   >
                     <AnalyseBarChart
                       categories={Object.keys(
@@ -815,46 +811,40 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                 </div>
               </TabPanel>
               <TabPanel value="tidstrend" sx={{ paddingX: 0, paddingBottom: 0 }}>
-                <div className="px-4 sm:px-8">
-                  <Stack
-                    direction="row"
-                    spacing={3}
-                    sx={{ paddingY: 1, height: 60 }}
-                  >
-                    <VariableSelector
-                      analyse={analyse.data}
-                      views={analyse.data.views
-                        .filter((v) =>
-                          ["begge", aggregering].includes(v.aggregering),
-                        )
-                        .slice(1)}
-                      dict={dict}
-                      lang={lang}
-                      variable={tidstrendVariable}
-                      onClick={(v) => setTidstrendVariable(v)}
+                <div className="px-4 sm:px-8 flex flex-row gap-4 flex-wrap">
+                  <VariableSelector
+                    analyse={analyse.data}
+                    views={analyse.data.views
+                      .filter((v) =>
+                        ["begge", aggregering].includes(v.aggregering),
+                      )
+                      .slice(1)}
+                    dict={dict}
+                    lang={lang}
+                    variable={tidstrendVariable}
+                    onClick={(v) => setTidstrendVariable(v)}
+                  />
+                  {verdiType === "n" && (
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={showNorway}
+                          onChange={() => setShowNorway(!showNorway)}
+                        />
+                      }
+                      label={
+                        <Typography variant="body2" sx={{ display: "inline" }}>
+                          {dict.analysebox.show_norway}
+                        </Typography>
+                      }
                     />
-                    {verdiType === "n" && (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={showNorway}
-                            onChange={() => setShowNorway(!showNorway)}
-                          />
-                        }
-                        label={
-                          <Typography variant="body2" sx={{ display: "inline" }}>
-                            {dict.analysebox.show_norway}
-                          </Typography>
-                        }
-                      />
-                    )}
-                  </Stack>
+                  )}
                 </div>
                 <ScreenshotBox
                   analyse={analyse}
                   dict={dict}
                   filename={`${analyse.data.name}_tidstrend.png`}
-                  description={getDescription(analyse.data, lang, verdiType, aggregering, tidstrendVariable.name !== analyse.data.name ? tidstrendVariable : undefined)}
+                  description={getDescription(analyse.data, lang, verdiType, aggregering, tidstrendVariable.name !== analyse.data.name ? tidstrendVariable : undefined, nynorsk)}
                 >
                   <AnalyseLineChart
                     analyse={analyse.data}
@@ -884,7 +874,6 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     }
                   />
                 </ScreenshotBox>
-
               </TabPanel>
             </TabContext>
           </TabPanel>
@@ -939,19 +928,15 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
                     {dict.analysebox.choose_year}
                   </ToggleButton>
                 </ToggleButtonGroup>
+                {!allYears && <YearSelector
+                  years={years as number[]}
+                  lastYear={lastYear}
+                  year={year}
+                  setYear={setYear}
+                  dict={dict}
+                  speed={1000}
+                />}
               </div>
-              <Zoom in={!allYears}>
-                <div>
-                  {!allYears && <YearSelector
-                    years={years as number[]}
-                    lastYear={lastYear}
-                    year={year}
-                    setYear={setYear}
-                    dict={dict}
-                    speed={1000}
-                  />}
-                </div>
-              </Zoom>
             </div>
             <ScreenshotBox
               analyse={analyse}
@@ -960,16 +945,9 @@ export function ChartContainer({ analyse, lang, dict }: ChartContainerProps) {
               description={(
                 <Typography variant="body2">
                   {demographyAndel
-                    ? dict.analysebox[
-                    showGenders
-                      ? "demography_proportion_gender"
-                      : "demography_proportion"
-                    ]
-                    : dict.analysebox[
-                    showGenders
-                      ? "demography_n_people_gender"
-                      : "demography_n_people"
-                    ]}
+                    ? `${dict.analysebox.andel} ${lang === "en" ? "in" : "i"} ${dict.analysebox[analyse.data.kjonn === "begge" && showGenders ? "gender_age_group" : "age_group"]}`
+                    : `${dict.analysebox.antall}${{en: " of", no: ""}[lang]} ${kategori.special ? kategori[lang] : dict.analysebox.people} ${{en: "in", no: "i"}[lang]} ${dict.analysebox[analyse.data.kjonn === "begge"  && showGenders ? "gender_age_group" : "age_group"]}`
+                  }
                   {demografiVariable.name !== analyse.data.name &&
                     getVariableText(analyse.data, lang, demografiVariable)}
                 </Typography>

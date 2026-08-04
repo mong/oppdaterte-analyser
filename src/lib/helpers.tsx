@@ -48,7 +48,7 @@ export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getCategory(analyse: Analyser["data"]) {
+export function getCategory(analyse: Analyser["data"], nynorsk=false) {
   if (analyse.kategori_begrep) {
     return {
       ...analyse.kategori_begrep,
@@ -58,7 +58,7 @@ export function getCategory(analyse: Analyser["data"]) {
     return {
       begge: { en: "children", no: "barn", special: true },
       kvinner: { en: "girls", no: "jenter", special: true },
-      menn: { en: "boys", no: "gutter", special: true },
+      menn: { en: "boys", no: nynorsk ? "gutar" : "gutter", special: true },
     }[analyse.kjonn];
   } else if (new Set(["kvinner", "menn"]).has(analyse.kjonn)) {
     return {
@@ -66,7 +66,7 @@ export function getCategory(analyse: Analyser["data"]) {
       menn: { en: "men", no: "menn", special: true },
     }[analyse.kjonn as "menn" | "kvinner"];
   } else {
-    return { en: "inhabitants", no: "innbyggere", special: false };
+    return { en: "inhabitants", no: nynorsk ? "innbyggjarar" : "innbyggere", special: false };
   }
 }
 
@@ -96,6 +96,7 @@ export function getDescription(
   type: "rate" | "n",
   aggregering: "kont" | "pas",
   variable?: { viewName: string; name: string },
+  nynorsk: boolean = false,
 ) {
   const age_range = getAgeRange(analyse, lang);
   const age = age_range ? `, ${age_range}` : "";
@@ -104,13 +105,13 @@ export function getDescription(
 
   let kontaktType = {
     kont: { no: "kontakter", en: "contacts" },
-    pas: { no: "pasienter", en: "patients" },
+    pas: { no: nynorsk ? "pasientar" : "pasienter", en: "patients" },
   }[aggregering][lang];
   if (aggregering === "kont" && analyse.kontakt_begrep) {
     kontaktType = analyse.kontakt_begrep[lang];
   }
 
-  const kategori = getCategory(analyse)[lang];
+  const kategori = getCategory(analyse, nynorsk)[lang];
 
   return (
     <Typography variant="body2">
@@ -125,7 +126,7 @@ export function getDescription(
         <>
           {analyse.description[lang]}
           {age}
-          {variableText} – {{ en: "number of", no: "antall" }[lang]}{" "}
+          {variableText} – {{ en: "number of", no: nynorsk ? "antal" : "antall" }[lang]}{" "}
           {kontaktType}
         </>
       )}
@@ -133,9 +134,9 @@ export function getDescription(
   );
 }
 
-export function getSubHeader(analyse: Analyser["data"], lang: Lang) {
+export function getSubHeader(analyse: Analyser["data"], lang: Lang, nynorsk=false) {
   const age_range = getAgeRange(analyse, lang);
-  const category = getCategory(analyse);
+  const category = getCategory(analyse, nynorsk);
 
   const parts = [
     category.special && capitalize(category[lang]),
