@@ -945,8 +945,8 @@ export function ChartContainer({ analyse, lang, dict, nynorsk = false }: ChartCo
               description={(
                 <Typography variant="body2">
                   {demographyAndel
-                    ? `${dict.analysebox.andel} ${lang === "en" ? "in" : "i"} ${dict.analysebox[analyse.data.kjonn === "begge" && showGenders ? "gender_age_group" : "age_group"]}`
-                    : `${dict.analysebox.antall}${{en: " of", no: ""}[lang]} ${kategori.special ? kategori[lang] : dict.analysebox.people} ${{en: "in", no: "i"}[lang]} ${dict.analysebox[analyse.data.kjonn === "begge"  && showGenders ? "gender_age_group" : "age_group"]}`
+                    ? `${dict.analysebox.andel} ${lang === "en" ? "of" : "av"} ${dict.analysebox[analyse.data.kjonn === "begge" && showGenders ? "gender_age_group" : "age_group"]}`
+                    : `${dict.analysebox.antall}${{ en: " of", no: "" }[lang]} ${kategori.special ? kategori[lang] : dict.analysebox.people} ${{ en: "in", no: "i" }[lang]} ${dict.analysebox[analyse.data.kjonn === "begge" && showGenders ? "gender_age_group" : "age_group"]}`
                   }
                   {demografiVariable.name !== analyse.data.name &&
                     getVariableText(analyse.data, lang, demografiVariable)}
