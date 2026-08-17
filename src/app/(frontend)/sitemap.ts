@@ -1,11 +1,15 @@
+import { Analyser, Rapporter } from "@/payload-types";
 import { getAnalyser, getKompendier, getRapporter } from "@/services/payload";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const kompendier = await getKompendier({ lang: "no" });
   const analyser = await getAnalyser({ lang: "no" });
+
   const rapporter = await getRapporter({ lang: "no" });
   const rapporter_en = new Set((await getRapporter({ lang: "en", select: { slug: true } })).map(r => r.slug!));
+
+  const documents = (analyser as (Analyser | Rapporter)[]).concat(rapporter);
 
   return [
     {
@@ -42,14 +46,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .concat(
       kompendier.map((komp) => ({
         url: `https://analyser.skde.no/no/fag/${komp.identifier}`,
-        lastModified: analyser
-          .filter((analyse) =>
-            analyse.tags
+        lastModified: documents
+          .filter((doc) =>
+            doc.tags
               ?.filter((tag) => typeof tag === "object")
               .map((tag) => tag.identifier)
               .includes(komp.identifier),
           )
-          .map((analyse) => analyse.publishedAt || analyse.createdAt)
+          .map((doc ) => doc.publishedAt || doc.createdAt)
           .reduce(
             (acc, val) => (acc > new Date(val) ? acc : new Date(val)),
             new Date(0),
