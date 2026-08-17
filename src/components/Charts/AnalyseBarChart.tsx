@@ -8,7 +8,7 @@ import React from "react";
 import { useAnimateBar } from '@mui/x-charts/hooks';
 
 function AnimatedBar(props: BarProps & { special_bars: Set<number>, selected_bars: Set<number> }) {
-  const { ownerState, seriesId, dataIndex, xOrigin, yOrigin, skipAnimation, ...other } = props;
+  const { ownerState, seriesId, dataIndex, xOrigin, yOrigin, skipAnimation, special_bars, selected_bars, ...other } = props;
   const animatedProps = useAnimateBar(props);
 
   return (
@@ -17,12 +17,11 @@ function AnimatedBar(props: BarProps & { special_bars: Set<number>, selected_bar
       className={
         `${other.className}
         ${classNames.barElement}
-        ${props.special_bars.has(props.dataIndex) ? classNames.national : ""}
-        ${props.selected_bars.has(props.dataIndex) ? classNames.selected : ""}
+        ${special_bars.has(props.dataIndex) ? classNames.national : ""}
+        ${selected_bars.has(props.dataIndex) ? classNames.selected : ""}
         cursor-pointer
         `}
       {...animatedProps}
-      fill={ownerState.color}
     />
   );
 }
@@ -116,9 +115,9 @@ export const AnalyseBarChart = ({
         },
       }}
       sx={{
-        [`& .${barClasses.element}`]: {
-          // Speeds up or slows down the CSS transitions applied to the bars
-          transition: 'all .24s cubic-bezier(0, 0.8, 0.3, 1)',
+        [`& rect.${barClasses.element}`]: {
+          // This fixes blinking bars in Chrome during transition when selecting an area
+          transitionProperty: 'none',
         },
       }}
       onAxisClick={(_, params) => onClick(String(params?.axisValue))}
