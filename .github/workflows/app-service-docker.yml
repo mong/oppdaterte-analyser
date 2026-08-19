@@ -21,10 +21,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
+      
     steps:
       - uses: actions/checkout@v6
 
@@ -46,6 +43,7 @@ jobs:
             "payload_secret=${{ secrets.PAYLOAD_SECRET }}"
             "preview_secret=${{ secrets.PREVIEW_SECRET }}"
             "postgres_uri=${{ secrets.POSTGRES_URI }}"
+            "node_auth_token=${{ secrets.NODE_AUTH_TOKEN }}"
 
   deploy:
     runs-on: ubuntu-latest

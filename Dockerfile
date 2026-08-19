@@ -38,6 +38,7 @@ RUN \
     --mount=type=secret,id=payload_secret,env=PAYLOAD_SECRET \
     --mount=type=secret,id=preview_secret,env=PREVIEW_SECRET \
     --mount=type=secret,id=postgres_uri,env=POSTGRES_URI \
+    --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
