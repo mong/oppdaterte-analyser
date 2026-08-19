@@ -34,9 +34,6 @@ export const getKompendier = cache(async ({ lang }: { lang: Lang }) => {
     locale: lang,
     pagination: false,
     sort: "title",
-    where: {
-      isKompendium: { equals: true },
-    },
   });
 
   return result.docs as Tag[];
