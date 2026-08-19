@@ -93,7 +93,7 @@ function VariableSelector({
           const [viewName, name] =
             e.target.value === ""
               ? ["total", analyse.name]
-              : e.target.value.split(".");
+              : (e.target.value as string).split(".");
           onClick({ viewName, name });
         }}
         placeholder={dict.analysebox.choose_variable}
@@ -607,7 +607,7 @@ export function ChartContainer({ analyse, lang, dict, nynorsk = false }: ChartCo
                 new Selection({ region: new Set([]), sykehus: new Set([]) }),
               );
             } else {
-              let SelectedValue = Array.from(new Set(e.target.value).symmetricDifference(selection[level]))[0];
+              const SelectedValue = Array.from(new Set(e.target.value).symmetricDifference(selection[level]))[0];
               setSelection(
                 level === "region"
                   ? selection.toggleRegion(SelectedValue)
@@ -742,7 +742,7 @@ export function ChartContainer({ analyse, lang, dict, nynorsk = false }: ChartCo
                         setViewName(
                           e.target.value === ""
                             ? "total"
-                            : e.target.value,
+                            : e.target.value as string,
                         );
                       }}
                       placeholder={dict.analysebox.choose_focus_area}

@@ -116,6 +116,7 @@ export const ResultBox = ({
     <div className="py-4">
     <Accordion
       gap="2"
+      keyId="resultbox"
       type="collapseOthers"
       variant="compact"
     >

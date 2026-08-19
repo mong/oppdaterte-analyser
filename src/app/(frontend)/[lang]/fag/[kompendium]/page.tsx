@@ -159,6 +159,7 @@ export default async function KompendiumPage(props: {
                       imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
                       isNew
                       isPromo
+                      // @ts-expect-error: Type mismatch
                       targetGroup={undefined}
                       targetUrl={`/${lang}/rapporter/${rapport.slug}`}
                       title={rapport.title}
@@ -206,6 +207,7 @@ export default async function KompendiumPage(props: {
                         description={rapport.summary}
                         imageUrl={typeof rapport.bilde === "object" && rapport.bilde?.sizes?.small?.url || ""}
                         isNew={false}
+                        // @ts-expect-error: Type mismatch
                         targetGroup={undefined}
                         targetUrl={`/${lang}/rapporter/${rapport.slug}`}
                         title={rapport.title}
