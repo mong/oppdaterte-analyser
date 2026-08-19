@@ -83,7 +83,7 @@ export default async function MainPage(props: MainPageProps) {
           <MaxWidth size="large">
             <div className="py-8 md:py-16">
               <h2 className="mb-8">{dict.frontpage.fagområder}</h2>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 auto-rows-[100px] md:auto-rows-[150px] pb-4">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(215px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 auto-rows-[90px] md:auto-rows-[155px] pb-4">
                 {(kompendier.new || [])
                   .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
                   .concat(kompendier.old || []).map((komp) => {
@@ -100,8 +100,7 @@ export default async function MainPage(props: MainPageProps) {
                         />
                       </Link>
                     );
-                  }
-                  )}
+                  })}
               </div>
             </div>
           </MaxWidth>
