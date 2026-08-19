@@ -12,6 +12,8 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* pnpm-workspace.yaml ./
 
 RUN \
+    --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
+    --mount=type=secret,id=npmrc,target=/app/.npmrc \
     if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
     elif [ -f package-lock.json ]; then npm ci; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
