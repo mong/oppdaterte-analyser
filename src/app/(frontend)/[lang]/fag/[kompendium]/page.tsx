@@ -140,9 +140,11 @@ export default async function KompendiumPage(props: {
             <MaxWidth size="x-small">
               <div className="text-center">
                 <h1>{tag.title}</h1>
-                <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
+                <br />
+                {/* Fjerner midlertidig description i en overgangsfase */}
+                {/* <div className="prose max-w-none prose-li:marker:text-black prose-li:my-0">
                   <RichText data={tag.description!} enableGutter={true} />
-                </div>
+                </div> */}
               </div>
             </MaxWidth>
             <MaxWidth size="large">
