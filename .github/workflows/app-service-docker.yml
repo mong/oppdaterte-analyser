@@ -22,6 +22,9 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
     steps:
       - uses: actions/checkout@v6
 
