@@ -9,7 +9,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY package.json yarn.lock* package-lock.json* .npmrc pnpm-lock.yaml* pnpm-workspace.yaml ./
 
 RUN \
     --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
