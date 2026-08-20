@@ -1,14 +1,12 @@
-import classNames from "./ChartLegend.module.css";
+import classNames from "@/lib/ChartClasses.module.css";
 
 type ColorLegendProps = {
-  colorScale: (args: string) => string;
   labels?: string[];
   onClick?: () => void;
   values: string[];
 };
 
 export const ColorLegend = ({
-  colorScale,
   labels,
   values,
 }: ColorLegendProps) => {
@@ -20,14 +18,12 @@ export const ColorLegend = ({
             <div
               className={classNames.legendColorOuter}
               style={{
-                border: `0.125rem solid ${colorScale(val)}`,
+                border: `0.125rem solid var(--bar-${values.length - i})`,
               }}
             >
               <div
-                className={classNames.legendColorInner}
-                style={{
-                  backgroundColor: colorScale(val),
-                }}
+                className={`${classNames.legendColorInner}`}
+                style={{ backgroundColor: `var(--bar-${values.length - i})` }}
               ></div>
             </div>
             {labels ? labels[i] : val}

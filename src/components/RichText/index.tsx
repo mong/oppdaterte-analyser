@@ -88,14 +88,16 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
         const full_id = parentHeading ? `${sanitizeID(headerNodeToPlaintext(parentHeading))}_${id}` : id;
 
         const Tag = node.tag;
-        return <Tag id={full_id}>{text}</Tag>;
+        return <div className="not-prose"><Tag id={full_id}>{text}</Tag></div>;
       },
       table: (props) => {
         const { node, nodesToJSX } = props;
         const content = nodesToJSX({ nodes: node.children })
         return (
           <table className="leading-none [&_td]:p-2! [&_p]:m-0 text-base overflow-auto border-collapse">
-            {content}
+            <tbody>
+              {content}
+            </tbody>
           </table>
         )
       },

@@ -1,18 +1,19 @@
-import { Container, Typography } from "@mui/material";
-import Header from "@/components/Header";
-import {
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
 import { Lang } from "@/types";
 import { getDictionary } from "@/lib/dictionaries";
 import { notFound } from "next/navigation";
-import { BreadCrumbStop } from "@/components/Header/SkdeBreadcrumbs";
-import { markdownToHtml, stripMarkdown } from "@/lib/getMarkdown";
-import { getSubHeader } from "@/lib/helpers";
-import { getAnalyser, getKompendier } from "@/services/payload";
+import { getKompendier } from "@/services/payload";
+import Link from "next/link";
+import {
+  Header,
+  Breadcrumbs,
+  HeroBanner,
+  PageLayout,
+  PageContent,
+  SubjectAreaCard,
+} from "@mong/material-ui";
+import { Analyser, Rapporter, Tag } from "@/payload-types";
+import { MaxWidth } from "@/components/MaxWidth"
+import { isNewRapport } from "@/lib/helpers";
 
 export const dynamic = 'force-static';
 export const revalidate = 60;
@@ -28,8 +29,8 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const dict = await getDictionary(params.lang);
   return {
-    title: dict.frontpage.title,
-    description: await stripMarkdown(dict.frontpage.introduction_1),
+    title: dict.general.health_atlas,
+    description: dict.frontpage.introduction,
     keywords: dict.general.metadata_keywords,
   };
 }
@@ -49,109 +50,62 @@ export default async function MainPage(props: MainPageProps) {
   }
 
   const dict = await getDictionary(lang);
+  const kompendier = Object.groupBy(
+    (await getKompendier({ lang }))
+      .toSorted((a, b) => a.title.localeCompare(b.title, lang)),
+    ({ taggedRapporter }) => (taggedRapporter?.docs as Rapporter[])?.filter(d => d.publiseringsStatus === "published").some(
+      isNewRapport) ? "new" : "old"
+  )
 
-  const kompendier = await getKompendier({ lang });
-  const analyser = await getAnalyser({ lang });
 
-  const breadcrumbs: BreadCrumbStop[] = [
-    {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
-    },
-    {
-      link: "https://www.skde.no/helseatlas",
-      text: dict.general.health_atlas,
-    },
-    {
-      link: `/${lang}`,
-      text: dict.general.updated_health_atlas,
-    },
-  ];
+  const breadcrumbs = [{
+    href: `/${lang}`,
+    name: dict.general.health_atlas,
+  }];
 
   return (
     <>
       <Header
         lang={lang}
-        title={dict.general.updated_health_atlas}
-        breadcrumbs={breadcrumbs}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            "& > p": { margin: 0, marginY: 2 },
-            "& a": { color: "primary.main" },
-          }}
-          dangerouslySetInnerHTML={{
-            __html: await markdownToHtml(dict.frontpage.introduction_1),
-          }}
+        langChoices={[
+          { code: 'no', url: '/' },
+          { code: 'en', url: '/en' },
+        ]}
+      />
+      <Breadcrumbs explicitTrail={breadcrumbs} />
+      <PageLayout>
+        <HeroBanner
+          description={dict.frontpage.introduction}
+          image="/background.jpeg"
+          title={dict.general.health_atlas}
         />
-        <Typography
-          variant="body1"
-          component="div"
-          sx={{
-            "& > p": { margin: 0 },
-            "& a": { color: "primary.main" },
-          }}
-          dangerouslySetInnerHTML={{
-            __html: await markdownToHtml(dict.frontpage.introduction_2),
-          }}
-        />
-      </Header>
-      <main>
-        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 4 }}>
-          <Typography variant="h3">{dict.frontpage.fagområder}</Typography>
-          <br />
-          <Typography>{dict.frontpage.fagområder_text}</Typography>
-          <List dense>
-            {kompendier.map((komp, i) => (
-              <ListItemButton
-                key={i}
-                LinkComponent={"a"}
-                href={`/${lang}/fag/${komp.identifier}`}
-              >
-                <ListItemIcon>•</ListItemIcon>
-                <ListItemText
-                  primary={`${komp.title} (${
-                    analyser
-                      .map((analyse) => analyse.tags || [])
-                      .filter((tags) =>
-                        tags.some((tag) =>
-                          typeof tag !== "object"
-                            ? false
-                            : tag.identifier === komp.identifier,
-                        ),
-                      ).length
-                  })`}
-                />
-              </ListItemButton>
-            ))}
-          </List>
-          <br />
-          <Typography variant="h3">{dict.frontpage.all_analyses}</Typography>
-          <br />
-          <Typography>
-            {dict.frontpage.all_analyses_text.replace(
-              "<n>",
-              analyser.length.toString(),
-            )}
-          </Typography>
-          <List dense>
-            {analyser.map((analyse, i) => (
-              <ListItemButton
-                key={i}
-                LinkComponent={"a"}
-                href={`/${lang}/analyse/${analyse.slug}`}
-              >
-                <ListItemIcon>•</ListItemIcon>
-                <ListItemText
-                  primary={analyse.title}
-                  secondary={getSubHeader(analyse.data, lang)}
-                />
-              </ListItemButton>
-            ))}
-          </List>
-        </Container>
-      </main>
+        <PageContent>
+          <MaxWidth size="large">
+            <div className="py-8 md:py-16">
+              <h2 className="mb-8">{dict.frontpage.fagområder}</h2>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(215px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 auto-rows-[90px] md:auto-rows-[155px] pb-4">
+                {(kompendier.new || [])
+                  .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
+                  .concat(kompendier.old || []).map((komp) => {
+                    const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
+                    const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
+
+                    return (
+                      <Link href={`/${lang}/fag/${komp.identifier}`} className="no-underline" key={komp.identifier}>
+                        <SubjectAreaCard
+                          isNew={komp.new === true}
+                          leftLabelText={n_rapporter && `${n_rapporter} ${n_rapporter === 1 ? dict.general.rapport : dict.general.rapporter}`.toLowerCase() || undefined}
+                          rightLabelText={n_analyser && `${n_analyser} ${n_analyser === 1 ? dict.general.analyse : dict.general.analyser}`.toLowerCase() || undefined}
+                          title={komp.title}
+                        />
+                      </Link>
+                    );
+                  })}
+              </div>
+            </div>
+          </MaxWidth>
+        </PageContent>
+      </PageLayout>
     </>
   );
 }

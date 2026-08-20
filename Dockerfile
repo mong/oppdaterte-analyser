@@ -9,9 +9,10 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY package.json yarn.lock* package-lock.json* .npmrc pnpm-lock.yaml* pnpm-workspace.yaml ./
 
 RUN \
+    --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
     if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
     elif [ -f package-lock.json ]; then npm ci; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
@@ -38,6 +39,7 @@ RUN \
     --mount=type=secret,id=payload_secret,env=PAYLOAD_SECRET \
     --mount=type=secret,id=preview_secret,env=PREVIEW_SECRET \
     --mount=type=secret,id=postgres_uri,env=POSTGRES_URI \
+    --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \
     elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \

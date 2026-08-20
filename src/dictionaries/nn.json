@@ -1,0 +1,53 @@
+{
+  "analysebox": {
+    "area_select": "Geografisk område",
+    "all_years": "Alle år",
+    "single_year": "Enkeltår",
+    "time_series": "Tidstrend",
+    "demography": "Alder og kjønn",
+    "demography_split_gender": "Del etter kjønn",
+    "gender_age_group": "kjønns- og aldersgruppe",
+    "people": "personar",
+    "age_group": "aldersgruppe",
+    "sykehus": "Helseføretak",
+    "region": "Region",
+    "choose_area": "Vel opptaksområde",
+    "show_norway": "Vis Noreg",
+    "info": "Om analysen",
+    "download_data": "Last ned data",
+    "download_data_text": "Alle dataane som er brukte i figurane for denne analysen kan lastast ned i JSON-format.",
+    "copy_graph": "Kopier til utklippstavla",
+    "copy_graph_tooltip": "Kopier figur",
+    "copy_graph_snackbar_message": "Figur kopiert til utklippstavla",
+    "download_graph": "Last ned figur (PNG)",
+    "discussion": "Diskusjon",
+    "kontakter": "Kontaktar",
+    "pasienter": "Pasientar",
+    "alle": "Alle",
+    "andel": "Andel",
+    "antall": "Antal",
+    "choose_year": "Vel år",
+    "choose_variable": "Vel variabel",
+    "remove_choice": "Fjern val",
+    "choose_focus_area": "Vel fokusområde"
+  },
+  "general": {
+    "health_atlas": "Helseatlas",
+    "updated_health_atlas": "Oppdaterte helseatlas",
+    "rapporter": "Rapportar",
+    "analyser": "Analysar",
+    "rapport": "Rapport",
+    "analyse": "Analyse",
+    "published": "Publisert",
+    "read_report": "Les rapport",
+    "read_analysis": "Les analyse",
+    "by": "Av",
+    "updated": "Oppdatert",
+    "author": "Forfattar",
+    "metadata_keywords": "geografisk variasjon, SKDE, helseatlas, oppdaterte helseatlas"
+  },
+  "frontpage": {
+    "introduction": "Vel ønskt fagområde for å finne rapportar og analysar om behandlingstilbodet i helsetenesta, og korleis det varierer mellom regionar og aldersgrupper.",
+    "fagområder": "Utforsk fagområde"
+  }
+}

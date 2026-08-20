@@ -34,9 +34,6 @@ export const getKompendier = cache(async ({ lang }: { lang: Lang }) => {
     locale: lang,
     pagination: false,
     sort: "title",
-    where: {
-      isKompendium: { equals: true },
-    },
   });
 
   return result.docs as Tag[];
@@ -63,7 +60,11 @@ export const getTags = cache(
   },
 );
 
-export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
+export const getAnalyser = cache(async (
+  { lang, select }:
+  { lang: Lang;
+    select?: { [k in keyof Analyser]?: true }
+  }) => {
 
   const payload = await getPayload({ config: config });
 
@@ -77,13 +78,14 @@ export const getAnalyser = cache(async ({ lang }: { lang: Lang }) => {
     where: {
       publiseringsStatus: { equals: "published" },
     },
+    select,
   });
 
   return result.docs as Analyser[];
 });
 
 export const getAnalyserByTag = cache(
-  async ({ identifier, lang }: { identifier: string; lang: Lang }) => {
+  async ({ identifier, lang, select }: { identifier: string; lang: Lang; select?: { [k in keyof Analyser]?: true } }) => {
 
     const payload = await getPayload({ config: config });
 
@@ -101,9 +103,35 @@ export const getAnalyserByTag = cache(
         tags: { contains: tag.id },
         publiseringsStatus: { equals: "published" },
       },
+      select,
     });
 
     return result.docs as Analyser[];
+  },
+);
+
+export const getRapporterByTag = cache(
+  async ({ identifier, lang, select, sort="title" }: { identifier: string; lang: Lang; select?: { [k in keyof Rapporter]?: true }; sort?: string }) => {
+    const payload = await getPayload({ config: config });
+
+    const tag = await getTag({ identifier, lang });
+
+    const result = await payload.find({
+      collection: "rapporter",
+      limit: 0,
+      locale: lang,
+      pagination: false,
+      fallbackLocale: false,
+      sort,
+      depth: 1,
+      where: {
+        tags: { contains: tag.id },
+        publiseringsStatus: { equals: "published" },
+      },
+      select,
+    });
+
+    return result.docs as Rapporter[];
   },
 );
 

@@ -50,19 +50,19 @@ export default function AdminBar({ preview }: AdminBarProps) {
   return user && (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ margin: 0 }}>
-        <Container maxWidth="xxl" disableGutters={false} sx={{ padding: 0 }}>
+        <Container maxWidth="xl" disableGutters={false} sx={{ padding: 0 }}>
           <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: "flex" }}>
-              <Avatar sx={{ bgcolor: colors.green["A200"], marginRight: 1 }}>
+            <div className="flex grow gap-2 items-center">
+              <Avatar sx={{ bgcolor: colors.green["A200"], marginX: 1 }}>
                 <VerifiedUserIcon sx={{ color: "#000" }} />
               </Avatar>
-              <Typography variant="h6" color="inherit" component="div">
+              <h6 className="line-clamp-3">
                 {user?.name} / {user?.email}
-              </Typography>
-            </Box>
+              </h6>
+            </div>
             {preview &&
               pathName.match(/\/(en|no)\/(rapporter|analyse)\/.+/) && (
-                <Box sx={{ flexGrow: 0, marginX: 5 }}>
+                <div className="mx-8 grow-0">
                   <Button
                     sx={{ textTransform: "none", color: "white" }}
                     variant="outlined"
@@ -73,7 +73,7 @@ export default function AdminBar({ preview }: AdminBarProps) {
                   >
                     Forlat forhåndsvisning
                   </Button>
-                </Box>
+                </div>
               )}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">

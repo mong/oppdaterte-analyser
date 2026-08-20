@@ -2,8 +2,8 @@ import { Lang } from "@/types";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { Selection } from "@/lib/selection";
 import React from "react";
-import { formatNumber } from "@/lib/helpers";
 import { Analyser } from "@/payload-types";
+import { legendClasses } from '@mui/x-charts/ChartsLegend';
 
 const linechart_colors: {
   sykehus: { [k: string]: string };
@@ -93,7 +93,7 @@ export const AnalyseLineChart = ({
               area,
               Number(
                 analyse.data[variable.viewName][year][level][area][
-                  variable.name
+                variable.name
                 ][inflection],
               ),
             ],
@@ -108,17 +108,12 @@ export const AnalyseLineChart = ({
 
   return (
     <LineChart
-      margin={{
-        left: 60,
-        top: 60 + 5 * selectionIDs.length,
-        bottom: 25,
-      }}
       dataset={dataset}
       xAxis={[
         {
           scaleType: "point",
           dataKey: "year",
-          valueFormatter: (value) => `${value}`,
+          valueFormatter: (value) => `${value}`
         },
       ]}
       yAxis={[{ min: 0, max: maxValue * 1.01 }]}
@@ -133,30 +128,24 @@ export const AnalyseLineChart = ({
           label: categoryFmt(area),
           color: linechart_colors[level][area],
         }))}
+      localeText={{
+        noData: {
+          no: "Ingen opptaksområder valgt",
+          en: "No referrral areas chosen",
+        }[lang]
+      }}
       slotProps={{
         legend: {
-          padding: {
-            top: 10,
-            left: 10,
-            bottom: 20,
-            right: 20,
+          sx: {
+            padding: 2,
+            [`.${legendClasses.mark}`]: {
+              width: 5 + Math.round(15 * smallFactor),
+              ["& path"]: { strokeWidth: 5 }
+            },
+            [`.${legendClasses.label}`]: {
+              fontSize: 6 + Math.round(8 * smallFactor)
+            }
           },
-          itemMarkHeight: 5,
-          itemMarkWidth: 5 + Math.round(15 * smallFactor),
-          labelStyle: {
-            fontSize: 6 + Math.round(12 * smallFactor),
-          },
-        },
-        noDataOverlay: {
-          message: {
-            no: "Ingen opptaksområder valgt",
-            en: "No referrral areas chosen",
-          }[lang],
-        },
-      }}
-      sx={{
-        "& .MuiLineElement-root": {
-          strokeWidth: "3px",
         },
       }}
     />

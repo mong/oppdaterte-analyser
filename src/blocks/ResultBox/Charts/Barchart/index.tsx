@@ -7,6 +7,7 @@ import { max, sum, min } from "d3-array";
 import { ColorLegend } from "./ColorLegend";
 import { AnnualVarLegend } from "./AnnualVarLegend";
 import { customFormat } from "../../helpers";
+import classNames from "@/lib/ChartClasses.module.css";
 
 
 import { stack } from "d3-shape";
@@ -29,14 +30,10 @@ export const toBarchart = (data: DataItemPoint[], dataKeys: string[]) => {
  * @returns A comparator function that can be used to sort an array of objects.
  */
 
-
 import { AnnualVariation } from "./AnnualVariation";
 import { Lollipop, LollipopLegend } from "./Lollipop";
 import { ErrorBars } from "./errorBars";
 import {
-  mainBarColors,
-  nationBarColors,
-  selectedBarColors,
   nationalLabel,
 } from "../../helpers";
 import { Box } from "@mui/material";
@@ -132,23 +129,6 @@ export const Barchart = ({
     ...series.flat().flat().flat(),
   ];
   const xMaxValue = xMax ? xMax : max(values);
-
-  const colors = mainBarColors;
-  const nationColors = nationBarColors;
-  const selectedColors = selectedBarColors;
-
-  const colorScale = scaleOrdinal({
-    domain: series.map((s) => s.key),
-    range: [...colors],
-  });
-  const nationColorScale = scaleOrdinal({
-    domain: series.map((s) => s.key),
-    range: [...nationColors],
-  });
-  const selectedColorScale = scaleOrdinal({
-    domain: series.map((s) => s.key),
-    range: [...selectedColors],
-  });
 
   const xScale = scaleLinear<number>({
     domain: [xMin, xMaxValue!],
@@ -248,9 +228,9 @@ export const Barchart = ({
             />
           </Group>
           <Group left={margin.left} top={margin.top}>
-            {series.map((d, i) => {
+            {series.map((d, n) => {
               const bars = (
-                <Group fill={colorScale(d["key"])} key={`${i}`}>
+                <Group key={`${n}`}>
                   {d.map((barData, i) => {
                     const areaName = barData.data[y].toString();
                     return (
@@ -260,19 +240,12 @@ export const Barchart = ({
                         y={yScale(barData.data[y].toString())}
                         width={xScale(Math.abs(barData[0] - barData[1]))}
                         height={yScale.bandwidth()}
-                        fill={
-                          selection.has(areaName)
-                            ? x.length === 1
-                              ? selectedColors[0]
-                              : selectedColorScale(d["key"])
-                            : areaName === national
-                              ? x.length === 1
-                                ? nationColors[0]
-                                : nationColorScale(d["key"])
-                              : x.length === 1
-                                ? colors[0]
-                                : colorScale(d["key"])
-                        }
+                        className={`
+                          ${classNames.barElement}
+                          ${classNames[`bar-${series.length - n}`]}
+                          ${selection.has(areaName) ? classNames.selected : ""}
+                          ${areaName === national ? classNames.national : ""}
+                          `}
                         style={{
                           cursor: areaName != national ? "pointer" : "auto",
                         }}
@@ -341,7 +314,6 @@ export const Barchart = ({
       {lollipopVar && <LollipopLegend label={lollipopLabel![lang]} />}
       {x.length > 1 && (
         <ColorLegend
-          colorScale={colorScale}
           labels={xLegend![lang]}
           values={x}
         />

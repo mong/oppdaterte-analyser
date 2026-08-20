@@ -88,6 +88,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/en/rapporter",
+        destination: "/en",
+        permanent: true,
+      },
+      {
+        source: "/no/rapporter",
+        destination: "/",
+        permanent: true,
+      },
+      {
         // Redirect for gamle URL-er til kompendier
         source: "/:lang/:slug(barn|dagkirurgi|eldre|gynekologi|hjerte|ore-nese-hals|ortopedi|oye)",
         destination: "/:lang/fag/:slug",

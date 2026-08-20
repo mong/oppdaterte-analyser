@@ -7,16 +7,21 @@ import React, { cache } from 'react'
 import RichText, { headerNodeToPlaintext } from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { Container } from '@mui/material'
 import { SelectionProvider } from '@/lib/SelectionContext'
 import { notFound } from 'next/navigation'
 import { Lang } from '@/types'
 
-import { BreadCrumbStop } from '@/components/Header/SkdeBreadcrumbs'
 import { getDictionary } from '@/lib/dictionaries'
-import Header from '@/components/Header'
 import { TableOfContents } from '@/components/TableOfContents'
 import { SerializedBlockNode, SerializedHeadingNode } from '@payloadcms/richtext-lexical'
+import { MaxWidth } from "@/components/MaxWidth";
+
+import {
+  Header,
+  Breadcrumbs,
+  PageLayout,
+  PageContent,
+} from "@mong/material-ui";
 
 import type { ResultBoxBlock as ResultBoxBlockProps } from '@/payload-types'
 import { makeDateElem } from '@/lib/helpers'
@@ -108,72 +113,78 @@ export default async function Rapport({ params: paramsPromise }: Args) {
     select: {},
   })).docs.length > 0;
 
-  if (!rapport) return notFound();
+  if (!rapport || rapport.publiseringsStatus === "hidden") return notFound();
 
   const dict = await getDictionary(lang);
 
-  const breadcrumbs: BreadCrumbStop[] = [
+  const breadcrumbs = [
     {
-      link: "https://www.skde.no",
-      text: dict.general.homepage,
+      href: `/${lang}`,
+      name: dict.general.health_atlas,
     },
     {
-      link: `/${lang}`,
-      text: dict.general.health_atlas,
-    },
-    {
-      link: `/${lang}/rapporter`,
-      text: dict.general.reports,
-    },
-    {
-      link: `/${lang}/rapporter/${rapport.slug}`,
-      text: rapport.title,
+      href: `/${lang}/rapporter/${rapport.slug}`,
+      name: rapport.title,
     },
   ];
 
 
-  const headerData = rapport.content.root.children.filter(
+  const headerData = rapport.content?.root.children.filter(
     (child) => child.type === 'heading'
       || (child.type === 'block' && (child.fields as any)?.blockType === 'resultBox')
-  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[]
+  ) as (SerializedBlockNode<ResultBoxBlockProps> | SerializedHeadingNode)[] || [];
 
   const tocData = buildTocData(headerData);
 
   return (
     <>
       {draft && <LivePreviewListener />}
-      <Header title={rapport.title} breadcrumbs={breadcrumbs} lang={otherLang ? lang : undefined}>
-        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-10">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.author}</p>
-              <p className="m-0">{rapport.author}</p>
-            </div>
-          </div>
-          {rapport.publishedAt && (
-            <div className="flex flex-col gap-1">
-              <p className="text-sm">{dict.general.published}</p>
-              {makeDateElem(rapport.publishedAt, lang)}
-            </div>
-          )}
-        </div>
-      </Header>
 
-      <Container maxWidth="xxl">
-        <div className="flex flex-col lg:flex-row">
-          {tocData.length > 0 && <TableOfContents tocData={tocData} />}
-          <article className="shrink min-w-0 pb-8 lg:pt-8">
-            <SelectionProvider>
-              <RichText
-                lang={lang === "en" ? "en" : rapport.norskType}
-                author={rapport.author}
-                data={rapport.content}
-                enableGutter={true}
-              />
-            </SelectionProvider>
-          </article>
+      <Header
+        lang={lang}
+        langChoices={otherLang ? [
+          { code: 'no', url: `/no/rapporter/${rapport.slug}` },
+          { code: 'en', url: `/en/rapporter/${rapport.slug}` },
+        ] : undefined}
+      />
+      <Breadcrumbs
+        explicitTrail={breadcrumbs}
+      />
+      <PageLayout>
+        <div className="bg-white py-8">
+          <PageContent color="white">
+            <MaxWidth size="small">
+              <h1 className="my-4">{rapport.title}</h1>
+              <div className="flex gap-x-12 gap-y-4 flex-wrap text-small">
+                <span>{dict.general.by}: {rapport.author}</span>
+                <span>
+                  {dict.general.published}{" "}
+                  {makeDateElem(rapport.publishedAt || rapport.createdAt, lang)}
+                </span>
+              </div>
+            </MaxWidth>
+          </PageContent>
         </div>
-      </Container>
+        <PageContent>
+          <MaxWidth size="large">
+          <div className="flex flex-col lg:flex-row">
+            {tocData.length > 0 && <TableOfContents tocData={tocData} />}
+            <article className="shrink min-w-0 pb-8 lg:pt-8">
+              <SelectionProvider>
+                <div className="prose max-w-none prose-li:marker:text-black">
+                  <RichText
+                    lang={lang === "en" ? "en" : rapport.norskType}
+                    author={rapport.author}
+                    data={rapport.content}
+                    enableGutter={true}
+                  />
+                </div>
+              </SelectionProvider>
+            </article>
+          </div>
+          </MaxWidth>
+        </PageContent>
+      </PageLayout>
     </>
   );
 }

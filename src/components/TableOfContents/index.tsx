@@ -84,9 +84,9 @@ export const TableOfContents = ({
         <div className={styles.toc_small_content}>
           <Accordion
             sx={{
-              backgroundColor: "white",
+              backgroundColor: "var(--neutral-100)",
               boxShadow: 0,
-              border: "0.0625rem solid #034584",
+              border: "0.0625rem solid var(--brand-primary-400)",
             }}
             expanded={expanded}
             onChange={() => handleChange()}
@@ -94,13 +94,10 @@ export const TableOfContents = ({
             <AccordionSummary
               sx={{
                 fontWeight: "600",
-                color: "#034584",
-                borderRadius: "4px",
-                ":hover": {
-                  backgroundColor: "background.paper",
-                },
+                color: "var(--brand-primary-500)",
+                borderRadius: "8px",
               }}
-              expandIcon={<BsCaretDownFill color="#034584" fontSize="large" />}
+              expandIcon={<BsCaretDownFill color="var(--brand-primary-500)" fontSize="large" />}
               aria-controls={`toc-content`}
               id={`toc-header`}
               data-testid={`toc-header`}

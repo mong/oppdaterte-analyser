@@ -1,9 +1,32 @@
-
-import { BarChart, BarElementPath } from "@mui/x-charts/BarChart";
+import { BarChart, barClasses } from "@mui/x-charts/BarChart";
+import type { BarProps } from '@mui/x-charts/BarChart';
+import classNames from "@/lib/ChartClasses.module.css";
+import { legendClasses } from '@mui/x-charts/ChartsLegend';
 
 import React from "react";
 
-type AnalyseBarChartProps = {
+import { useAnimateBar } from '@mui/x-charts/hooks';
+
+function AnimatedBar(props: BarProps & { special_bars: Set<number>, selected_bars: Set<number> }) {
+  const { ownerState, seriesId, dataIndex, xOrigin, yOrigin, skipAnimation, special_bars, selected_bars, ...other } = props;
+  const animatedProps = useAnimateBar(props);
+
+  return (
+    <rect
+      {...other}
+      className={
+        `${other.className}
+        ${classNames.barElement}
+        ${special_bars.has(props.dataIndex) ? classNames.national : ""}
+        ${selected_bars.has(props.dataIndex) ? classNames.selected : ""}
+        cursor-pointer
+        `}
+      {...animatedProps}
+    />
+  );
+}
+
+interface AnalyseBarChartProps {
   categories: string[];
   categoryFmt: (category: string) => string;
   variables: string[];
@@ -15,7 +38,7 @@ type AnalyseBarChartProps = {
   selection: Set<string>;
   onClick: (category: string) => void;
   maxValue: number;
-};
+}
 
 export const AnalyseBarChart = ({
   categories,
@@ -47,15 +70,15 @@ export const AnalyseBarChart = ({
 
   return (
     <BarChart
-      margin={{ left: 120, bottom: 25 }}
       dataset={data}
+      hideLegend={variables.length < 2}
       series={variables.map((variable, i) => ({
         dataKey: variable,
         label: variableFmt(variable),
         valueFormatter: valueFmt,
         stack: "yes",
         id: `${i}`,
-        color: `rgba(46, 150, 255, ${0.85 * 0.65 ** i})`,
+        color: `var(--bar-${variables.length - i})`
       }))}
       yAxis={[
         {
@@ -63,6 +86,7 @@ export const AnalyseBarChart = ({
           dataKey: "category",
           tickPlacement: "middle",
           valueFormatter: categoryFmt,
+          width: 110,
         },
       ]}
       xAxis={[
@@ -74,25 +98,29 @@ export const AnalyseBarChart = ({
       ]}
       layout="horizontal"
       slots={{
-        bar: ({ ownerState, ...otherProps }) => (
-          <BarElementPath
-            {...otherProps}
-            ownerState={{
-              ...ownerState,
-              color: special_values.has(data[ownerState.dataIndex]?.category)
-                ? `rgba(120, 120, 140, ${0.85 * 0.65 ** Number(ownerState.id)})` // ownerState.id = series ID
-                : selection.has(data[ownerState.dataIndex]?.category)
-                  ? `rgba(16, 100, 205, ${0.85 * 0.65 ** Number(ownerState.id)})`
-                  : `rgba(46, 150, 255, ${0.85 * 0.65 ** Number(ownerState.id)})`,
-            }}
-          />
-        ),
+        bar: AnimatedBar as any
       }}
       slotProps={{
-        legend: { hidden: variables.length < 2 },
+        bar: {
+          special_bars: new Set(data.flatMap((value, i) => special_values.has(value.category) ? [i] : [])),
+          selected_bars: new Set(data.flatMap((value, i) => selection.has(value.category) ? [i] : []))
+        } as any,
+        legend: {
+          toggleVisibilityOnClick: true,
+          sx: {
+            [`.${legendClasses.label}`]: {
+              fontSize: 14
+            }
+          },
+        },
+      }}
+      sx={{
+        [`& rect.${barClasses.element}`]: {
+          // This fixes blinking bars in Chrome during transition when selecting an area
+          transitionProperty: 'none',
+        },
       }}
       onAxisClick={(_, params) => onClick(String(params?.axisValue))}
     />
   );
-
 };

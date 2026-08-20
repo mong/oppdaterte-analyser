@@ -2,8 +2,8 @@ import { AxisBottom } from "@visx/axis";
 import { scaleLinear } from "@visx/scale";
 import { Group } from "@visx/group";
 import { max } from "d3-array";
-import classNames from "../Barchart/ChartLegend.module.css";
-import { abacusColors, customFormat, nationalLabel } from "../../helpers";
+import classNames from "@/lib/ChartClasses.module.css";
+import { customFormat, nationalLabel } from "../../helpers";
 import { DataItemPoint } from "../../types";
 import { useSelection } from "@/lib/SelectionContext";
 
@@ -61,7 +61,6 @@ export const Abacus = ({
   const values = [...figData.flatMap((dt) => dt[x] as number)];
   const xMaxVal = xMax ? xMax : max(values)! * 1.1;
   const innerWidth = width - margin.left - margin.right;
-  const colors = abacusColors;
 
   const selectedText = {
     en: "Selected",
@@ -114,13 +113,7 @@ export const Abacus = ({
               key={`${d[x]}${i}`}
               r={20}
               cx={xScale(d[x] as number)}
-              fill={
-                selection.has(d["area"] as string)
-                  ? colors[2]
-                  : d["area"] === national
-                    ? colors[1]
-                    : colors[0]
-              }
+              className={`${classNames.abacusCircle} ${selection.has(d["area"] as string) ? classNames.selected : ""} ${d["area"] === national ? classNames.national : ""}`}
               onClick={(event) => {
                 // Add HF to query param if clicked on.
                 // Remove HF from query param if it already is selected.
@@ -137,7 +130,7 @@ export const Abacus = ({
           <li key={"hf"} className={classNames.legendLI}>
             <div className={classNames.legendAnnualVar}>
               <svg width="20px" height="20px">
-                <circle r={7} cx={10} cy={10} fill={colors[0]} />
+                <circle r={7} cx={10} cy={10} className={classNames.abacusCircle} />
               </svg>
             </div>
             {areaName}
@@ -145,7 +138,7 @@ export const Abacus = ({
           <li key={"national"} className={classNames.legendLI}>
             <div className={classNames.legendAnnualVar}>
               <svg width="20px" height="20px">
-                <circle r={7} cx={10} cy={10} fill={colors[1]} />
+                <circle r={7} cx={10} cy={10} className={classNames.abacusCircle + " " + classNames.national} />
               </svg>
             </div>
             {nationalLabel[lang]}
@@ -155,7 +148,7 @@ export const Abacus = ({
               <>
                 <div className={classNames.legendAnnualVar}>
                   <svg width="20px" height="20px">
-                    <circle r={7} cx={10} cy={10} fill={colors[2]} />
+                    <circle r={7} cx={10} cy={10} className={classNames.abacusCircle + " " + classNames.selected} />
                   </svg>
                 </div>
                 {selection.size === 1

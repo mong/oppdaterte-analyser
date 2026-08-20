@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
-import { Box, CssBaseline } from "@mui/material";
-import skdeTheme from "@/themes/SkdeTheme";
-import Footer from "@/components/Footer";
+
 import MatomoTracker from "../MatomoTracker";
 import AdminBar from "@/components/AdminBar";
 import { draftMode } from "next/headers";
+import {
+  SkdeThemeProvider,
+  MainLayout,
+  Footer,
+} from "@mong/material-ui";
 
 import './globals.css'
 
@@ -26,23 +27,13 @@ export default async function RootLayout(props: {
     <html lang={lang}>
       <MatomoTracker />
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={skdeTheme}>
-            <CssBaseline />
-
-            <AdminBar preview={isEnabled} />
-            <Box
-              sx={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              {props.children}
-              <Footer />
-            </Box>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <AdminBar preview={isEnabled} />
+        <SkdeThemeProvider>
+          <MainLayout>
+            {props.children}
+            <Footer lang={lang} />
+          </MainLayout>
+        </SkdeThemeProvider>
       </body>
     </html>
   );
