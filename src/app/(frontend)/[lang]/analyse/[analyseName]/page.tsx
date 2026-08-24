@@ -113,7 +113,7 @@ export default async function AnalysePage(props: {
 
   const breadcrumbs = [
     {
-      href: `/${lang}`,
+      href: lang === "en" ? "/en" : "/",
       name: dict.general.health_atlas,
     },
     {

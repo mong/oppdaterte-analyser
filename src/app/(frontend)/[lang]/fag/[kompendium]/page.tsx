@@ -112,7 +112,7 @@ export default async function KompendiumPage(props: {
 
   const breadcrumbs = [
     {
-      href: `/${lang}`,
+      href: lang === "en" ? "/en" : "/",
       name: dict.general.health_atlas,
     },
     {

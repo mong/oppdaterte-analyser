@@ -119,7 +119,7 @@ export default async function Rapport({ params: paramsPromise }: Args) {
 
   const breadcrumbs = [
     {
-      href: `/${lang}`,
+      href: lang === "en" ? "/en" : "/",
       name: dict.general.health_atlas,
     },
     {
