@@ -191,11 +191,12 @@ export default async function AnalysePage(props: {
           </PageContent>
         </div>
         <PageContent>
+
           <Suspense
             fallback={
-              <Grid container justifyContent="center" sx={{ padding: 10 }}>
+              <div className="my-32 justify-center flex">
                 <CircularProgress />
-              </Grid>
+              </div>
             }
           >
             <div className="py-8">
