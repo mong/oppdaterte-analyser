@@ -108,7 +108,7 @@ const jsxConverters: (lang: "en" | "nb" | "nn", author: "SKDE" | "Helse Førde")
           const full_id = parentHeading ? `${sanitizeID(headerNodeToPlaintext(parentHeading))}_${id}` : id;
           return (
             <div id={full_id}>
-              <Suspense fallback={<Grid container justifyContent="center" sx={{ padding: 10 }}><CircularProgress /></Grid>}>
+              <Suspense fallback={<div className="my-32 justify-center flex"><CircularProgress /></div>}>
                 <ResultBoxBlock lang={lang} author={author} {...node.fields} />
               </Suspense>
             </div>
