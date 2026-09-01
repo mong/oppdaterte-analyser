@@ -178,8 +178,8 @@ importers:
         specifier: 1.17.0
         version: 1.17.0(react@19.2.7)
       mongoose:
-        specifier: ~9.7.4
-        version: 9.7.4
+        specifier: ~9.9.0
+        version: 9.9.4
       next:
         specifier: 15.5.21
         version: 15.5.21(@babel/core@7.29.7(supports-color@8.1.1))(babel-plugin-macros@3.1.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.77.4)
@@ -4926,15 +4926,15 @@ packages:
       socks:
         optional: true
 
-  mongodb@7.2.0:
-    resolution: {integrity: sha512-F/2+BMZtLVhY30ioZp0dAmZ+IRZMBqI+nrv6t5+9/1AIwCa8sMRC3jBf81lpxMhnZgqq8CoUD503Z1oZWq1/sw==}
+  mongodb@7.5.0:
+    resolution: {integrity: sha512-5FnrEDLnvp6ycUOGLNLLU33BfCx2qmp2mJjGPDwKLruYsVzXVSK5fsGpoDXvsXJwBfBsD7ebMRdawbDxC2814g==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.806.0
       '@mongodb-js/zstd': ^7.0.0
       gcp-metadata: ^7.0.1
       kerberos: ^7.0.0
-      mongodb-client-encryption: '>=7.0.0 <7.1.0'
+      mongodb-client-encryption: ^7.2.0
       snappy: ^7.3.2
       socks: ^2.8.6
     peerDependenciesMeta:
@@ -4967,8 +4967,8 @@ packages:
     resolution: {integrity: sha512-UpHBA0l5kHyKJQFjmBaFYQFo5sgz1DK0TRqDkOyBLYbqiIbKKhIvBpHWBXqeo0rgW4kGI1UhhAw+kTQZoj1BdA==}
     engines: {node: '>=16.20.1'}
 
-  mongoose@9.7.4:
-    resolution: {integrity: sha512-nuSYGUWWzNd4EAbGYxE469wPTL+kmxb5+91YvCvMkJ08rvNRht/usZUU3LuFuk7rDutF2QWBZHPHuzM8TxXApA==}
+  mongoose@9.9.4:
+    resolution: {integrity: sha512-Gc7buf0ExrOZ3t8MD8tVzTek7Qr5d+tEwj4GRFmHCtTZvpaDb38EVsXgCkYacPL9ICAftgS+FGe+dQHLRLHhcw==}
     engines: {node: '>=20.19.0'}
 
   mpath@0.8.4:
@@ -11593,7 +11593,7 @@ snapshots:
       bson: 6.10.4
       mongodb-connection-string-url: 3.0.2
 
-  mongodb@7.2.0:
+  mongodb@7.5.0:
     dependencies:
       '@mongodb-js/saslprep': 1.5.0
       bson: 7.3.2
@@ -11629,11 +11629,11 @@ snapshots:
       - socks
       - supports-color
 
-  mongoose@9.7.4:
+  mongoose@9.9.4:
     dependencies:
       '@standard-schema/spec': 1.1.0
       kareem: 3.3.0
-      mongodb: 7.2.0
+      mongodb: 7.5.0
       mpath: 0.9.0
       mquery: 6.0.0
       ms: 2.1.3
