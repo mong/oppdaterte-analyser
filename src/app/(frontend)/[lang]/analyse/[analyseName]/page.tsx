@@ -29,6 +29,8 @@ import {
 } from "@mong/material-ui";
 
 import { createHash } from "crypto";
+
+
 export const dynamic = 'force-static';
 export const revalidate = 60;
 

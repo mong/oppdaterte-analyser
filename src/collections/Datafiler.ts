@@ -24,7 +24,7 @@ export const Datafiler: CollectionConfig = {
     update: authenticated,
   },
   hooks: {
-    afterChange: [() => revalidateTag("datafil")],
+    afterChange: [() => revalidateTag("datafil", "max")],
   },
   fields: [],
   upload: {

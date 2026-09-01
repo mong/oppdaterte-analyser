@@ -11,6 +11,7 @@ import {
 
 import './globals.css'
 
+
 export const metadata: Metadata = {
   title: "Helseatlas oppdaterte analyser",
   description: "Visning av oppdaterte analyser fra Helseatlas",

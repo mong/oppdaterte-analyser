@@ -27,6 +27,8 @@ import type { ResultBoxBlock as ResultBoxBlockProps } from '@/payload-types'
 import { makeDateElem } from '@/lib/helpers'
 
 
+
+
 export const dynamic = 'force-static';
 export const revalidate = 60;
 
