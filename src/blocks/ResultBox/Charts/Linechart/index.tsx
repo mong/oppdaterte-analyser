@@ -1,4 +1,5 @@
 import { Grid, Axis, LineSeries, XYChart, Tooltip } from "@visx/xychart";
+import { ParentSize } from '@visx/responsive';
 import { scaleOrdinal } from "@visx/scale";
 import { ColorLegend } from "./ColorLegend";
 import { Box } from "@mui/material";
@@ -74,6 +75,7 @@ export const Linechart = ({
 
   return (
     <Box style={{ width: "100%" }}>
+
       <Box
         sx={{
           backgroundImage: `url(${{
@@ -84,103 +86,113 @@ export const Linechart = ({
           backgroundRepeat: "no-repeat",
           backgroundSize: lang === "nn" ? "max(5rem, 20%)" : "max(3rem, 10%)",
           backgroundPosition: "top 2.25rem right 5%",
+          width: "100%",
+          height: "500px",
         }}
       >
-        <XYChart
-          height={500}
-          xScale={{ type: "band", paddingOuter: 0 }}
-          yScale={{ type: "linear" }}
-          margin={{
-            top: 70,
-            right: 50,
-            bottom: 50,
-            left: 55 + yvaluesMaxTextLength,
-          }}
-        >
-          <Axis
-            orientation="bottom"
-            label={xLabel![lang]}
-            labelProps={{
-              fontSize: 14,
-              textAnchor: "middle",
-              fontWeight: "bold",
-            }}
-            tickLabelProps={() => ({
-              fontSize: 14,
-              fill: "black",
-            })}
-            tickFormat={(val) =>
-              format_x === "month"
-                ? new Date(2020, val - 1).toLocaleString(lang, {
-                  month: "short",
-                })
-                : val
-            }
-            numTicks={11}
-          />
-          <Axis
-            orientation="left"
-            tickLabelProps={() => ({
-              fontSize: 14,
-              fill: "black",
-              textAnchor: "end",
-            })}
-            numTicks={4}
-            label={yLabel![lang]}
-            labelProps={{
-              fontSize: 14,
-              textAnchor: "start",
-              fontWeight: "bold",
-              x: -50,
-              y: 25,
-              transform: "",
-            }}
-            stroke="black"
-            tickFormat={(val) =>
-              format_y ? customFormat(format_y, lang)(val) : val.toString()
-            }
-          />
-          <Grid columns={false} numTicks={4} />
-          {values.map((plots, i) => (
-            <LineSeries
-              strokeWidth={2}
-              dataKey={plots.linevar}
-              data={plots.points}
-              xAccessor={(d) => d.x}
-              yAccessor={(d) => d.y}
-              key={i}
-              colorAccessor={colorScale}
-            />
-          ))}
-          <Tooltip
-            snapTooltipToDatumX
-            snapTooltipToDatumY
-            showVerticalCrosshair
-            showSeriesGlyphs
-            glyphStyle={{ fill: linechartColors[0] }}
-            renderTooltip={({ tooltipData }) => (
-              <>
-                {xLabel![lang].split(/[^A-Za-zæøåÆØÅ]/)[0]}
-                {": "}
-                {accessors.xAccessor(tooltipData!.nearestDatum!.datum)}
-                {Object.keys(tooltipData!.datumByKey)
-                  .filter((value) => linevars.includes(value))
-                  .map((d) => {
-                    return (
-                      <div key={d}>
-                        <div style={{ color: colorScale(d) }}>
-                          {getLinevarLabel(d)}
-                          {": "}
-                          {accessors.yAccessor(tooltipData!.datumByKey[d].datum)}
-                        </div>
-                      </div>
-                    );
-                  })}
-              </>
-            )}
-          />
-        </XYChart>
+        <ParentSize>
+          {({ width }) => (
+            <XYChart
+              height={500}
+              width={width}
+              xScale={{ type: "band", paddingOuter: 0 }}
+              yScale={{ type: "linear" }}
+              margin={{
+                top: 70,
+                right: 50,
+                bottom: 50,
+                left: 55 + yvaluesMaxTextLength,
+              }}
+            >
+              <Axis
+                orientation="bottom"
+                label={xLabel![lang]}
+                labelProps={{
+                  fontSize: 14,
+                  textAnchor: "middle",
+                  fontWeight: "bold",
+                }}
+                tickLabelProps={() => ({
+                  fontSize: 14,
+                  fill: "black",
+                })}
+                tickFormat={(val) =>
+                  format_x === "month"
+                    ? new Date(2020, val - 1).toLocaleString(lang, {
+                      month: "short",
+                    })
+                    : val
+                }
+                numTicks={11}
+              />
+              <Axis
+                orientation="left"
+                tickLabelProps={() => ({
+                  fontSize: 14,
+                  fill: "black",
+                  textAnchor: "end",
+                })}
+                numTicks={4}
+                label={yLabel![lang]}
+                labelProps={{
+                  fontSize: 14,
+                  textAnchor: "start",
+                  fontWeight: "bold",
+                  x: -50,
+                  y: 25,
+                  transform: "",
+                }}
+                stroke="black"
+                tickFormat={(val) =>
+                  format_y ? customFormat(format_y, lang)(val) : val.toString()
+                }
+              />
+              <Grid columns={false} numTicks={4} />
+              {values.map((plots, i) => (
+                <LineSeries
+                  strokeWidth={2}
+                  dataKey={plots.linevar}
+                  data={plots.points}
+                  xAccessor={(d) => d.x}
+                  yAccessor={(d) => d.y}
+                  key={i}
+                  colorAccessor={colorScale}
+                />
+              ))}
+              <Tooltip
+                snapTooltipToDatumX
+                snapTooltipToDatumY
+                showVerticalCrosshair
+                showSeriesGlyphs
+                glyphStyle={{ fill: linechartColors[0] }}
+                renderTooltip={({ tooltipData }) => (
+                  <>
+                    {xLabel![lang].split(/[^A-Za-zæøåÆØÅ]/)[0]}
+                    {": "}
+                    {accessors.xAccessor(tooltipData!.nearestDatum!.datum)}
+                    {Object.keys(tooltipData!.datumByKey)
+                      .filter((value) => linevars.includes(value))
+                      .map((d) => {
+                        return (
+                          <div key={d}>
+                            <div style={{ color: colorScale(d) }}>
+                              {getLinevarLabel(d)}
+                              {": "}
+                              {accessors.yAccessor(tooltipData!.datumByKey[d].datum)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </>
+                )}
+              />
+            </XYChart>
+          )
+          }
+        </ParentSize>
       </Box>
+
+
       <ColorLegend
         colorScale={colorScale}
         values={linevars}
