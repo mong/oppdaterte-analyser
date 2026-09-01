@@ -3,5 +3,11 @@
   "extends": [
     "config:recommended"
   ],
-  "minimumReleaseAge": "1 day"
+  "minimumReleaseAge": "1 day",
+  "hostRules": [
+    {
+      "matchHost": "npm.pkg.github.com",
+      "token": "{{ secrets.NODE_AUTH_TOKEN }}"
+    }
+  ]
 }
