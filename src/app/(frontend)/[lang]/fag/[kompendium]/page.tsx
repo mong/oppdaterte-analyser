@@ -25,6 +25,7 @@ import { getPayload } from "payload";
 import configPromise from "@payload-config";
 import { Analyser } from "@/payload-types";
 
+
 export const dynamic = 'force-static';
 export const revalidate = 60;
 

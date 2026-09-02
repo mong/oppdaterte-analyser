@@ -15,6 +15,7 @@ import { Analyser, Rapporter, Tag } from "@/payload-types";
 import { MaxWidth } from "@/components/MaxWidth"
 import { isNewRapport } from "@/lib/helpers";
 
+
 export const dynamic = 'force-static';
 export const revalidate = 60;
 
@@ -85,7 +86,10 @@ export default async function MainPage(props: MainPageProps) {
               <h2 className="mb-8">{dict.frontpage.fagområder}</h2>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(215px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 auto-rows-[90px] md:auto-rows-[155px] pb-4">
                 {(kompendier.new || [])
-                  .map(komp => ({ ...komp, new: true }) as Tag & { new?: boolean })
+                  .map(komp => (({
+                  ...komp,
+                  new: true
+                }) as Tag & { new?: boolean }))
                   .concat(kompendier.old || []).map((komp) => {
                     const n_analyser = komp.taggedAnalyser?.docs?.filter((d => (d as Analyser).publiseringsStatus === "published")).length || 0;
                     const n_rapporter = komp.taggedRapporter?.docs?.filter((d => (d as Rapporter).publiseringsStatus === "published")).length || 0;
