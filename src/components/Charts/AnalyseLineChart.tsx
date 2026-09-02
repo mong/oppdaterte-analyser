@@ -113,10 +113,11 @@ export const AnalyseLineChart = ({
         {
           scaleType: "point",
           dataKey: "year",
-          valueFormatter: (value) => `${value}`
+          valueFormatter: (value) => `${value}`,
+          height: 'auto'
         },
       ]}
-      yAxis={[{ min: 0, max: maxValue * 1.01 }]}
+      yAxis={[{ min: 0, max: maxValue * 1.01, width: 'auto' }]}
       series={selectionIDs
         .filter((area) => area !== "Norge" || showNorway)
         .map((area) => ({

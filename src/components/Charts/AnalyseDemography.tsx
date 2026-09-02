@@ -173,6 +173,7 @@ const AnalyseDemography = ({
             (context.location === "tooltip"
               ? { no: " år", en: " years" }[lang]
               : ""),
+          height: 'auto'
         },
       ]}
       yAxis={[
@@ -193,6 +194,7 @@ const AnalyseDemography = ({
             andel
               ? formatNumber((value || 0) / 100, lang, { style: "percent" })
               : formatNumber(value || 0, lang),
+          width: 'auto',
         },
       ]}
       series={(showGenders

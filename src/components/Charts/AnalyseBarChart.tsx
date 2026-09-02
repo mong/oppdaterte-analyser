@@ -86,7 +86,7 @@ export const AnalyseBarChart = ({
           dataKey: "category",
           tickPlacement: "middle",
           valueFormatter: categoryFmt,
-          width: 110,
+          width: 'auto',
         },
       ]}
       xAxis={[
@@ -94,6 +94,7 @@ export const AnalyseBarChart = ({
           min: 0,
           max: maxValue,
           valueFormatter: valueAxisFmt,
+          height: 'auto',
         },
       ]}
       layout="horizontal"
