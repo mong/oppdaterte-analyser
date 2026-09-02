@@ -117,7 +117,7 @@ export const AnalyseLineChart = ({
           height: 'auto'
         },
       ]}
-      yAxis={[{ min: 0, max: maxValue * 1.01, width: 'auto' }]}
+      yAxis={[{ min: 0, max: maxValue * 1.01 }]}
       series={selectionIDs
         .filter((area) => area !== "Norge" || showNorway)
         .map((area) => ({
