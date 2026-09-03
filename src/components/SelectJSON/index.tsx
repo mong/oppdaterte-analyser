@@ -4,8 +4,9 @@ import { JSONField, useForm } from "@payloadcms/ui";
 import type { JSONFieldClientComponent } from "payload";
 import { useField } from "@payloadcms/ui";
 import { Button, styled } from "@mui/material";
-import { CloudUploadIcon } from "lucide-react";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Analyser } from "@/payload-types";
+
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -20,7 +21,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export const SelectJSON: JSONFieldClientComponent = (props) => {
-  const { value, setValue, valid, showError, errorMessage } =
+  const { value, setValue, showError, errorMessage } =
     useField<Analyser["data"]>();
   const [edit, setEdit] = React.useState(false);
   const { dispatchFields } = useForm();
