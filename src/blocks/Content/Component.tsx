@@ -1,4 +1,3 @@
-import { cn } from '@/utilities/ui'
 import React from 'react'
 import RichText from '@/components/RichText'
 
@@ -25,7 +24,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
 
             return (
               <div
-                className={cn(`col-span-6 ${colsSpanClasses[size!]}`)}
+                className={`col-span-6 ${colsSpanClasses[size!]}`}
                 key={index}
               >
                 {richText &&
