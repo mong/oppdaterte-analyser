@@ -12,17 +12,12 @@ const nextConfig = {
         const url = new URL(item)
         return {
           hostname: url.hostname,
-          protocol: url.protocol.replace(':', ''),
+          protocol: url.protocol.replace(':', '')
         }
       }),
     ],
-    // unoptimized: true,
     qualities: [25, 50, 75, 100],
-    // localPatterns: [
-    //   {
-    //     pathname: '/api/media/**',
-    //   },
-    // ],
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
   },
   experimental: {
     serverActions: {
