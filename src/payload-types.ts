@@ -1288,16 +1288,6 @@ export interface CodeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CSVTreeView".
- */
-export interface CSVTreeView {
-  csv: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'csvTreeView';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
