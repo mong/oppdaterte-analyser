@@ -15,7 +15,6 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { ResultBox } from '../../blocks/ResultBox/config'
 import { FactBox } from '../../blocks/FactBox/config'
 import { Table } from '../../blocks/Table/config'
-import { Code } from '../../blocks/Code/config'
 import { RawHTML } from '@/blocks/RawHTML/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
@@ -108,7 +107,7 @@ export const Rapporter: CollectionConfig = {
           return [
             ...rootFeatures,
             HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
-            BlocksFeature({ blocks: [ResultBox, FactBox, Table, Code, MediaBlock, RawHTML] }),
+            BlocksFeature({ blocks: [ResultBox, FactBox, Table, MediaBlock, RawHTML] }),
             FixedToolbarFeature(),
             InlineToolbarFeature(),
             HorizontalRuleFeature(),
