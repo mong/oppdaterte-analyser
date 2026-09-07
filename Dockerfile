@@ -2,6 +2,9 @@
 
 FROM node:24-alpine AS base
 
+# Enable corepack so pnpm is available in all stages
+RUN corepack enable pnpm
+
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -12,7 +15,7 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* .npmrc pnpm-lock.yaml* pnpm-workspace.yaml ./
 
 RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
-    corepack enable pnpm && pnpm config set "//npm.pkg.github.com/:_authToken" "${NODE_AUTH_TOKEN}"
+    pnpm config set "//npm.pkg.github.com/:_authToken" "${NODE_AUTH_TOKEN}"
 
 RUN \
     if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
