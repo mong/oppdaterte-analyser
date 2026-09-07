@@ -45,7 +45,7 @@ type CarouselProps = {
   lang?: "nb" | "en" | "nn";
 };
 
-export const Carousel = ({
+const Carousel = ({
   boxData,
   chartElems,
   utvalg,

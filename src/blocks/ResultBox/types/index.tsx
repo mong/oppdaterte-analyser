@@ -1,4 +1,4 @@
-export type Atlas = {
+type Atlas = {
     lang: "nb" | "en" | "nn";
     date: Date;
     filename: string;
@@ -10,24 +10,24 @@ export type Atlas = {
     publisert: boolean;
 };
 
-export type ChapterType = {
+type ChapterType = {
     overskrift?: string;
     innhold: (Tekst | Faktaboks | Resultatboks)[];
 };
 
-export type Tekst = {
+type Tekst = {
     type: "tekst";
     beskrivelse?: string;
     tekst: string;
 };
 
-export type Faktaboks = {
+type Faktaboks = {
     type: "faktaboks";
     overskrift: string;
     tekst: string;
 };
 
-export type Resultatboks = {
+type Resultatboks = {
     type: "resultatboks";
     overskrift: string;
     data: string;
@@ -39,10 +39,6 @@ export type Resultatboks = {
     kart?: string;
 };
 
-export type AtlasData = {
-    innhold: AtlasDataItem[];
-};
-
 export type AtlasDataItem =
     | LinechartItem
     | BarchartItem
@@ -50,7 +46,7 @@ export type AtlasDataItem =
     | MapItem
     | DataItem;
 
-export type LinechartItem = {
+type LinechartItem = {
     type: "linechart";
     data: string;
     x: string[];
@@ -69,7 +65,7 @@ export type BarchartItem = {
     yLabel: { en: string; nb: string; nn?: string };
 };
 
-export type TableItem = {
+type TableItem = {
     type: "table";
     data: string;
     caption: { [k: string]: string };
@@ -82,7 +78,7 @@ export type TableItem = {
     }[];
 };
 
-export type MapItem = {
+type MapItem = {
     type: "map";
     data: string;
     x: string;

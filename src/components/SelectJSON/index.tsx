@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export const SelectJSON: JSONFieldClientComponent = (props) => {
+const SelectJSON: JSONFieldClientComponent = (props) => {
   const { value, setValue, showError, errorMessage } =
     useField<Analyser["data"]>();
   const [edit, setEdit] = React.useState(false);

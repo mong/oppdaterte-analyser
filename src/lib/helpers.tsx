@@ -32,7 +32,7 @@ export function formatNumber(
   }).format(number);
 }
 
-export function getAgeRange(analyse: Analyser["data"], lang: Lang) {
+function getAgeRange(analyse: Analyser["data"], lang: Lang) {
   const [min_age, max_age] = analyse.age_range;
   switch (true) {
     case min_age === 0 && max_age > 100:

@@ -57,7 +57,7 @@ import { Analyser } from "@/payload-types";
 
 const BACKGROUND_COLOR = "white";
 
-export type VariableSelectorProps = {
+type VariableSelectorProps = {
   analyse: Analyser["data"];
   views: View[];
   dict: { [k: string]: { [k: string]: string } };
@@ -107,7 +107,7 @@ function VariableSelector({
   );
 }
 
-export type YearSelectorProps = {
+type YearSelectorProps = {
   years: number[];
   lastYear: number;
   year: number;
@@ -225,7 +225,7 @@ type ScreenshotBoxProps = {
   description: JSX.Element;
 };
 
-export function ScreenshotBox({
+function ScreenshotBox({
   children,
   analyse,
   dict,

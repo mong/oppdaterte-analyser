@@ -56,7 +56,7 @@ type AnalyseLineChartProps = {
   lang: Lang;
 };
 
-export const useWindowWidth = () => {
+const useWindowWidth = () => {
   const [width, setWidth] = React.useState(window.innerWidth);
 
   React.useEffect(() => {

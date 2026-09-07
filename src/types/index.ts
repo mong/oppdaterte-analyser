@@ -1,5 +1,5 @@
 export type Lang = "no" | "en";
-export interface Text {
+interface Text {
   no: string;
   en: string;
 }

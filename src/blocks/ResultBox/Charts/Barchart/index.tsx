@@ -1,6 +1,5 @@
-import React from "react";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { scaleLinear, scaleOrdinal, scaleBand } from "@visx/scale";
+import { scaleLinear, scaleBand } from "@visx/scale";
 import { Group } from "@visx/group";
 import { max, sum, min } from "d3-array";
 
@@ -12,7 +11,7 @@ import classNames from "@/lib/ChartClasses.module.css";
 
 import { stack } from "d3-shape";
 
-export const toBarchart = (data: DataItemPoint[], dataKeys: string[]) => {
+const toBarchart = (data: DataItemPoint[], dataKeys: string[]) => {
   const stackGen = stack().keys(dataKeys);
   const stackData = stackGen(data as { [k: string]: number }[]).map(
     (d) => (d.forEach((v: any) => (v["key"] = d.key)), d),

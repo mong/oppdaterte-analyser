@@ -1,6 +1,6 @@
 import { Lang } from "@/types";
 
-export const names: { [region: string]: string } = {
+const names: { [region: string]: string } = {
   Helse_SørØst: "Helse Sør-Øst",
   Helse_Vest: "Helse Vest",
   Helse_MidtNorge: "Helse Midt-Norge",

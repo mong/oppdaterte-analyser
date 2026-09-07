@@ -2,7 +2,7 @@ import type { CollectionConfig } from "payload";
 
 import { authenticated } from "../../access/authenticated";
 
-export async function loginCredentials(headers: Headers) {
+async function loginCredentials(headers: Headers) {
   if (process.env.NODE_ENV === "development") {
     return { userName: "Example user", email: "example@example.test" };
   }

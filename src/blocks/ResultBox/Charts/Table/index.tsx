@@ -14,7 +14,7 @@ import { DataItemPoint } from "../../types";
 import { customFormat } from "../../helpers";
 import { useSelection } from "@/lib/SelectionContext";
 
-export function getOrderComparator<
+function getOrderComparator<
   D extends { [n: string]: string | number },
   K extends string & keyof D,
 >(order: "asc" | "desc", orderBy: K, varType: D[K]) {

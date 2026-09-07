@@ -16,7 +16,7 @@ import React, { useRef } from "react";
  * @param handler The function to call when the event is triggered
  * @param targetElement The element to listen on. Defaults to the global object (window in a browser)
  */
-export const useKeys = (
+const useKeys = (
   key: string[],
   handler: (event: KeyboardEvent) => void,
   targetElement = global,
@@ -51,7 +51,7 @@ export const useKeys = (
  * @param {boolean} active - Whether the effect should be active or not.
  * @returns {React.MutableRefObject<T>} - The ref that should be passed to the element.
  */
-export const useOnClickOutside = (
+const useOnClickOutside = (
   handler: () => void,
   active: boolean,
 ) => {

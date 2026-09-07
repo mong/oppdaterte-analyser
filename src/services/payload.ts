@@ -39,27 +39,6 @@ export const getKompendier = cache(async ({ lang }: { lang: Lang }) => {
   return result.docs as Tag[];
 });
 
-export const getTags = cache(
-  async ({ tags, lang }: { tags: string[]; lang: Lang }) => {
-    const payload = await getPayload({ config: config });
-
-    const result = await payload.find({
-      collection: "tags",
-      limit: 0,
-      locale: lang,
-      pagination: false,
-      sort: "title",
-      where: {
-        identifier: { in: tags },
-      },
-    });
-
-    return Object.fromEntries(
-      (result.docs as Tag[]).map((tag) => [tag.identifier, tag]),
-    );
-  },
-);
-
 export const getAnalyser = cache(async (
   { lang, select }:
   { lang: Lang;

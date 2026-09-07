@@ -12,7 +12,7 @@ import style from "./ListItem.module.css";
  * @returns {boolean} True if the element is visible in the viewport, false
  *   otherwise
  */
-export const useIntersectionByID = (elementID: string, rootMargin: string) => {
+const useIntersectionByID = (elementID: string, rootMargin: string) => {
   const [isVisible, setVisibility] = useState<boolean>(false);
 
   useEffect(() => {

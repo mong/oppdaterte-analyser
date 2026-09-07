@@ -2,10 +2,10 @@
 
 import React, { ActionDispatch, Context, createContext, useContext, useReducer } from 'react';
 
-export const SelectionContext: Context<Selection> = createContext({});
-export const ToggleSelectionContext = createContext<ActionDispatch<[area: { areaType: string; name: string; }]>>(() => null);
+const SelectionContext: Context<Selection> = createContext({});
+const ToggleSelectionContext = createContext<ActionDispatch<[area: { areaType: string; name: string; }]>>(() => null);
 
-export type Selection = {
+type Selection = {
   [areaType: string]: Set<string>;
 };
 
